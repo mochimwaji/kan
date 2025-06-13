@@ -132,7 +132,11 @@ const Comment = ({
         )}
       </div>
       {!isEditing ? (
-        <p className="mt-2 text-sm">{comment}</p>
+        <ContentEditable
+          html={comment ?? ""}
+          disabled={true}
+          className="mt-2 text-sm"
+        />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <ContentEditable
