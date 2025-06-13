@@ -2,7 +2,7 @@ services:
   web:
     image: ghcr.io/kanbn/kan:latest
     ports:
-      - "3001:3000"
+      - "${WEB_PORT:-3001}:3000"
     networks:
       - dokploy-network
     build:
