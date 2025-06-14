@@ -75,6 +75,5 @@ ARG PORT=3000
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-# Run migration on start for now (until we have a better way to handle this)
-CMD ["sh", "-c", "cd /app && pnpm db:migrate && cd /app/apps/web && pnpm start"]
+CMD ["./entrypoint.sh"]
 

@@ -47,34 +47,67 @@ See our [roadmap](https://kan.bn/kan/roadmap) for upcoming features.
 
 ## Self Hosting 🐳
 
-### PostgreSQL Database Setup
+The easiest way to self-host Kan is with Docker Compose. This will set up everything for you including your postgres database.
 
-Kan requires a PostgreSQL database. You can run one using the official PostgreSQL Docker image:
+1. Create a new file called `docker-compose.yml` and paste the following configuration:
 
-```bash
-# Run PostgreSQL in a container using the official postgres image
-docker run -d \
-  --name kan-db \
-  -e POSTGRES_DB=kan \
-  -e POSTGRES_USER=kan_user \
-  -e POSTGRES_PASSWORD=your_secure_password \
-  -p 5432:5432 \
-  -v kan_postgres_data:/var/lib/postgresql/data \
-  postgres:15
+```yaml
+services:
+  web:
+    image: ghcr.io/kanbn/kan:latest
+    container_name: kan-web
+    ports:
+      - "3000:3000"
+    networks:
+      - kan-network
+    environment:
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: your_auth_secret
+      POSTGRES_URL: postgresql://kan:your_postgres_password@postgres:5432/kan_db
+      NEXT_PUBLIC_ALLOW_CREDENTIALS: true
+    depends_on:
+      - postgres
+    restart: unless-stopped
 
-# Your POSTGRES_URL should be:
-# postgres://kan_user:your_secure_password@your_host:5432/kan
+  postgres:
+    image: postgres:15
+    container_name: kan-db
+    environment:
+      POSTGRES_DB: kan_db
+      POSTGRES_USER: kan
+      POSTGRES_PASSWORD: your_postgres_password
+    ports:
+      - 5432:5432
+    volumes:
+      - kan_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - kan-network
+
+networks:
+  kan-network:
+
+volumes:
+  postgres_data:
 ```
 
-### Kan Application Deployment
-
-Deploy Kan with Docker using our pre-built image:
+2. Start the containers in detached mode:
 
 ```bash
-docker pull ghcr.io/kanbn/kan:latest && docker run -it -p 3000:3000 --env-file .env ghcr.io/kanbn/kan:latest
+docker compose up -d
 ```
 
-Make sure to create a `.env` file with the required environment variables (see the Environment Variables section below).
+3. Access Kan at http://localhost:3000
+
+The application will be running in the background. You can manage the containers using these commands:
+
+- To stop the containers: `docker compose down`
+- To view logs: `docker compose logs -f`
+- To restart the containers: `docker compose restart`
+
+For the complete Docker Compose configuration, see [docker-compose.yml](./docker-compose.yml) in the repository.
+
+> **Note**: The Docker Compose configuration shown above is a minimal example. For a complete setup with all features (email, OAuth, file uploads, etc.), you'll need to create a `.env` file with the required environment variables. See the Environment Variables section below for the full list of available options.
 
 ## Local Development 🧑‍💻
 

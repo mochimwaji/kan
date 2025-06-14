@@ -17,8 +17,11 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_TRUSTED_ORIGINS: z
       .string()
-      .refine((s) =>
-        s.split(",").every((l) => z.string().url().safeParse(l).success),
+      .transform((s) => (s === "" ? undefined : s))
+      .refine(
+        (s) =>
+          !s ||
+          s.split(",").every((l) => z.string().url().safeParse(l).success),
       )
       .optional(),
     POSTGRES_URL: z.string().url(),
@@ -82,11 +85,17 @@ export const env = createEnv({
     NEXT_PUBLIC_STORAGE_DOMAIN: z.string().optional(),
     NEXT_PUBLIC_ALLOW_CREDENTIALS: z
       .string()
-      .refine((s) => s.toLowerCase() === "true" || s.toLowerCase() === "false")
+      .transform((s) => (s === "" ? undefined : s))
+      .refine(
+        (s) => !s || s.toLowerCase() === "true" || s.toLowerCase() === "false",
+      )
       .optional(),
     NEXT_PUBLIC_DISABLE_SIGN_UP: z
       .string()
-      .refine((s) => s.toLowerCase() === "true" || s.toLowerCase() === "false")
+      .transform((s) => (s === "" ? undefined : s))
+      .refine(
+        (s) => !s || s.toLowerCase() === "true" || s.toLowerCase() === "false",
+      )
       .optional(),
   },
   /**

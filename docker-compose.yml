@@ -1,29 +1,49 @@
 services:
   web:
     image: ghcr.io/kanbn/kan:latest
+    container_name: kan-web
     ports:
-      - "${WEB_PORT:-3001}:3000"
+      - "${WEB_PORT:-3000}:3000"
     networks:
+      - kan-network
       - dokploy-network
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
     env_file:
       - .env
-    command: ["pnpm", "start"]
     environment:
-      - EMAIL_FROM=${EMAIL_FROM}
+      # Required environment variables
+      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - POSTGRES_URL=${POSTGRES_URL}
+
+      # SMTP (optional)
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
-      - BETTER_AUTH_TRUSTED_ORIGINS=${BETTER_AUTH_TRUSTED_ORIGINS}
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
-      - POSTGRES_URL=${POSTGRES_URL}
+      - EMAIL_FROM=${EMAIL_FROM}
+
+      # S3 storage (optional)
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+      - S3_REGION=${S3_REGION}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - NEXT_PUBLIC_STORAGE_URL=${NEXT_PUBLIC_STORAGE_URL}
+      - NEXT_PUBLIC_AVATAR_BUCKET_NAME=${NEXT_PUBLIC_AVATAR_BUCKET_NAME}
+      - NEXT_PUBLIC_STORAGE_DOMAIN=${NEXT_PUBLIC_STORAGE_DOMAIN}
+
+      # Auth config (optional)
+      - NEXT_PUBLIC_ALLOW_CREDENTIALS=${NEXT_PUBLIC_ALLOW_CREDENTIALS}
+      - NEXT_PUBLIC_DISABLE_SIGN_UP=${NEXT_PUBLIC_DISABLE_SIGN_UP}
+
+      # Integration providers (optional)
       - TRELLO_APP_API_KEY=${TRELLO_APP_API_KEY}
       - TRELLO_APP_SECRET=${TRELLO_APP_SECRET}
+
+      # OAuth providers (optional)
+      - BETTER_AUTH_TRUSTED_ORIGINS=${BETTER_AUTH_TRUSTED_ORIGINS}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
@@ -61,18 +81,35 @@ services:
       - APPLE_CLIENT_ID=${APPLE_CLIENT_ID}
       - APPLE_CLIENT_SECRET=${APPLE_CLIENT_SECRET}
       - APPLE_APP_BUNDLE_IDENTIFIER=${APPLE_APP_BUNDLE_IDENTIFIER}
-      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
-      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
-      - S3_REGION=${S3_REGION}
-      - S3_ENDPOINT=${S3_ENDPOINT}
+
+      # Cloud (not required)
       - NEXT_PUBLIC_KAN_ENV=${NEXT_PUBLIC_KAN_ENV}
-      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
-      - NEXT_PUBLIC_STORAGE_URL=${NEXT_PUBLIC_STORAGE_URL}
-      - NEXT_PUBLIC_AVATAR_BUCKET_NAME=${NEXT_PUBLIC_AVATAR_BUCKET_NAME}
-      - NEXT_PUBLIC_STORAGE_DOMAIN=${NEXT_PUBLIC_STORAGE_DOMAIN}
       - NEXT_PUBLIC_UMAMI_ID=${NEXT_PUBLIC_UMAMI_ID}
-      - NEXT_PUBLIC_ALLOW_CREDENTIALS=${NEXT_PUBLIC_ALLOW_CREDENTIALS}
-      - NEXT_PUBLIC_DISABLE_SIGN_UP=${NEXT_PUBLIC_DISABLE_SIGN_UP}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    container_name: kan-db
+    environment:
+      - POSTGRES_DB=kan_db
+      - POSTGRES_USER=kan
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - kan_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - kan-network
+
 networks:
+  kan-network:
   dokploy-network:
     external: true
+
+volumes:
+  kan_postgres_data:
