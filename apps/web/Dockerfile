@@ -53,7 +53,13 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfi
 # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 
+
 RUN pnpm build --filter=${PROJECT}
+
+# Copy static files to standalone directory
+RUN mkdir -p apps/web/.next/standalone/.next && \
+mv apps/web/public apps/web/.next/standalone/ && \
+mv apps/web/.next/static apps/web/.next/standalone/.next/
 
 # 4. Final image - runner stage to run the application
 FROM base AS runner
@@ -75,5 +81,5 @@ ARG PORT=3000
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-CMD ["./entrypoint.sh"]
+CMD ["/bin/sh", "./entrypoint.sh"]
 
