@@ -42,6 +42,7 @@
     "next-runtime-env": "^1.7.2",
     "nextjs-cors": "^2.2.0",
     "pino": "^9.6.0",
+    "posthog-js": "^1.254.0",
     "react": "catalog:react18",
     "react-beautiful-dnd": "^13.1.1",
     "react-contenteditable": "^3.3.7",

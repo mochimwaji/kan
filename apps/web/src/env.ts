@@ -79,6 +79,8 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_KAN_ENV: z.string().optional(),
     NEXT_PUBLIC_UMAMI_ID: z.string().optional(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
     NEXT_PUBLIC_BASE_URL: z.string().url(),
     NEXT_PUBLIC_STORAGE_URL: z.string().url().optional(),
     NEXT_PUBLIC_AVATAR_BUCKET_NAME: z.string().optional(),
@@ -105,6 +107,8 @@ export const env = createEnv({
     NEXT_PUBLIC_KAN_ENV: process.env.NEXT_PUBLIC_KAN_ENV,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_UMAMI_ID: process.env.NEXT_PUBLIC_UMAMI_ID,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_STORAGE_URL: process.env.NEXT_PUBLIC_STORAGE_URL,
     NEXT_PUBLIC_AVATAR_BUCKET_NAME: process.env.NEXT_PUBLIC_AVATAR_BUCKET_NAME,
