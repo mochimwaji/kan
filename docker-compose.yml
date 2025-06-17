@@ -1,7 +1,7 @@
 services:
   web:
     image: ghcr.io/kanbn/kan:latest
-    container_name: kan-web
+    container_name: ${CONTAINER_NAME:-kan-web}
     ports:
       - "${WEB_PORT:-3000}:3000"
     networks:
