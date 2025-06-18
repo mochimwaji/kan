@@ -12,5 +12,12 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "\nStarting Next.js application..."
-# Start the Next.js application from the web app's directory
-exec node .next/standalone/apps/web/server.js
+
+# Check if we should use standalone mode
+if [ "$NEXT_PUBLIC_USE_STANDALONE_OUTPUT" = "true" ]; then
+  echo "Starting in standalone mode..."
+  exec node .next/standalone/apps/web/server.js
+else
+  echo "Starting in standard mode..."
+  exec pnpm start
+fi
