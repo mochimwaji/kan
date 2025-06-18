@@ -10,7 +10,10 @@ configureRuntimeEnv();
 
 /** @type {import("next").NextConfig} */
 const config = {
-  // output: "standalone",
+  output:
+    env("NEXT_PUBLIC_USE_STANDALONE_OUTPUT") === "true"
+      ? "standalone"
+      : "export",
   reactStrictMode: true,
 
   /** Enables hot reloading for local packages without a build step */

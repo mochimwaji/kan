@@ -81,6 +81,7 @@ export const env = createEnv({
     NEXT_PUBLIC_UMAMI_ID: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
+    NEXT_PUBLIC_USE_STANDALONE_OUTPUT: z.string().optional(),
     NEXT_PUBLIC_BASE_URL: z.string().url(),
     NEXT_PUBLIC_STORAGE_URL: z.string().url().optional(),
     NEXT_PUBLIC_AVATAR_BUCKET_NAME: z.string().optional(),
@@ -115,6 +116,8 @@ export const env = createEnv({
     NEXT_PUBLIC_STORAGE_DOMAIN: process.env.NEXT_PUBLIC_STORAGE_DOMAIN,
     NEXT_PUBLIC_ALLOW_CREDENTIALS: process.env.NEXT_PUBLIC_ALLOW_CREDENTIALS,
     NEXT_PUBLIC_DISABLE_SIGN_UP: process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
+    NEXT_PUBLIC_USE_STANDALONE_OUTPUT:
+      process.env.NEXT_PUBLIC_USE_STANDALONE_OUTPUT,
   },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",
