@@ -13,7 +13,7 @@ const config = {
   output:
     env("NEXT_PUBLIC_USE_STANDALONE_OUTPUT") === "true"
       ? "standalone"
-      : "export",
+      : undefined,
   reactStrictMode: true,
 
   /** Enables hot reloading for local packages without a build step */
