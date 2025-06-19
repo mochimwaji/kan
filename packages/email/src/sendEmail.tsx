@@ -29,22 +29,34 @@ export const sendEmail = async (
   template: Templates,
   data: Record<string, string>,
 ) => {
-  const EmailTemplate = emailTemplates[template];
+  try {
+    const EmailTemplate = emailTemplates[template];
 
-  const html = await render(<EmailTemplate {...data} />, { pretty: true });
+    const html = await render(<EmailTemplate {...data} />, { pretty: true });
 
-  const options = {
-    from: process.env.EMAIL_FROM,
-    to,
-    subject,
-    html,
-  };
+    const options = {
+      from: process.env.EMAIL_FROM,
+      to,
+      subject,
+      html,
+    };
 
-  const response = await transporter.sendMail(options);
+    const response = await transporter.sendMail(options);
 
-  if (!response.accepted.length) {
-    throw new Error(`Failed to send email: ${response.response}`);
+    if (!response.accepted.length) {
+      throw new Error(`Failed to send email: ${response.response}`);
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Email sending failed:", {
+      to,
+      from: process.env.EMAIL_FROM,
+      subject,
+      template,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    throw error;
   }
-
-  return response;
 };
