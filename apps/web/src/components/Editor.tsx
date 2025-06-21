@@ -5,6 +5,7 @@ import type {
 } from "@tiptap/suggestion";
 import type { Instance as TippyInstance } from "tippy.js";
 import { Button } from "@headlessui/react";
+import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import {
   BubbleMenu,
@@ -298,6 +299,16 @@ export default function Editor({
           placeholder: readOnly
             ? ""
             : "Add description... (type '/' to open commands)",
+        }),
+        Link.configure({
+          openOnClick: true,
+          HTMLAttributes: {
+            class: "text-blue-600 hover:text-blue-800 underline cursor-pointer",
+            target: "_blank",
+            rel: "noopener noreferrer",
+          },
+          validate: (href) => /^https?:\/\//.test(href),
+          autolink: true,
         }),
         SlashCommands.configure({
           commandItems: CommandItems,
