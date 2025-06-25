@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { t } from "@lingui/core/macro";
 import { useForm } from "react-hook-form";
 import { IoChevronForwardSharp } from "react-icons/io5";
 
 import Avatar from "~/components/Avatar";
+import Editor from "~/components/Editor";
 import { LabelForm } from "~/components/LabelForm";
 import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
@@ -23,7 +25,6 @@ import LabelSelector from "./components/LabelSelector";
 import ListSelector from "./components/ListSelector";
 import MemberSelector from "./components/MemberSelector";
 import NewCommentForm from "./components/NewCommentForm";
-import Editor from "~/components/Editor";
 
 interface FormValues {
   cardId: string;
@@ -111,8 +112,8 @@ export default function CardPage() {
   const updateCard = api.card.update.useMutation({
     onError: () => {
       showPopup({
-        header: "Unable to update card",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to update card`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -144,7 +145,7 @@ export default function CardPage() {
   return (
     <>
       <PageHead
-        title={`${card?.title ?? "Card"} | ${board?.name ?? "Board"}`}
+        title={t`${card?.title ?? "Card"} | ${board?.name ?? "Board"}`}
       />
       <div className="flex h-full flex-1 flex-row">
         <div className="flex h-full w-full flex-col overflow-hidden">
@@ -189,7 +190,7 @@ export default function CardPage() {
               )}
               {!card && !isLoading && (
                 <p className="block p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
-                  Card not found
+                  {t`Card not found`}
                 </p>
               )}
             </div>
@@ -211,7 +212,7 @@ export default function CardPage() {
                 </div>
                 <div className="border-t-[1px] border-light-600 pt-12 dark:border-dark-400">
                   <h2 className="text-md pb-4 font-medium text-light-900 dark:text-dark-1000">
-                    Activity
+                    {t`Activity`}
                   </h2>
                   <div>
                     <ActivityList
@@ -231,7 +232,7 @@ export default function CardPage() {
         </div>
         <div className="w-[475px] border-l-[1px] border-light-600 bg-light-200 p-8 text-light-900 dark:border-dark-400 dark:bg-dark-100 dark:text-dark-900">
           <div className="mb-4 flex w-full">
-            <p className="my-2 w-[100px] text-sm">List</p>
+            <p className="my-2 w-[100px] text-sm">{t`List`}</p>
             <ListSelector
               cardPublicId={cardId}
               lists={formattedLists}
@@ -239,7 +240,7 @@ export default function CardPage() {
             />
           </div>
           <div className="mb-4 flex w-full">
-            <p className="my-2 w-[100px] text-sm">Labels</p>
+            <p className="my-2 w-[100px] text-sm">{t`Labels`}</p>
             <LabelSelector
               cardPublicId={cardId}
               labels={formattedLabels}
@@ -247,7 +248,7 @@ export default function CardPage() {
             />
           </div>
           <div className="flex w-full">
-            <p className="my-2 w-[100px] text-sm">Members</p>
+            <p className="my-2 w-[100px] text-sm">{t`Members`}</p>
             <MemberSelector
               cardPublicId={cardId}
               members={formattedMembers}

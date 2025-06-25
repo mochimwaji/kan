@@ -1,0 +1,1443 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-06-24 22:31+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: es\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/views/card/components/Comment.tsx:121
+msgid " (edited)"
+msgstr " (editado)"
+
+#: src/components/FeedbackButton.tsx:123
+msgid ", or see our"
+msgstr ", o consulta nuestra"
+
+#. placeholder {0}: card?.title ?? "Card"
+#. placeholder {1}: board?.name ?? "Board"
+#: src/views/card/index.tsx:148
+msgid "{0} | {1}"
+msgstr "{0} | {1}"
+
+#. placeholder {0}: labelPublicIds.length
+#: src/views/board/components/NewCardForm.tsx:365
+msgid "{0} labels"
+msgstr "{0} etiquetas"
+
+#: src/views/boards/components/ImportBoardsForm.tsx:299
+msgid "{boardCount, plural, one {Import board (1)} other {Import boards ({boardCount})}}"
+msgstr "{boardCount, plural, one {Importar tablero (1)} other {Importar tableros ({boardCount})}}"
+
+#: src/views/home/index.tsx:51
+msgid "#1 Hacker News"
+msgstr "#1 Hacker News"
+
+#: src/views/home/components/Pricing.tsx:36
+msgid "1 user"
+msgstr "1 usuario"
+
+#: src/views/home/index.tsx:71
+msgid "A powerful, flexible kanban app that helps you organise work, track progress, and deliver results—all in one place."
+msgstr "Una aplicación kanban potente y flexible que te ayuda a organizar el trabajo, seguir el progreso y entregar resultados, todo en un solo lugar."
+
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:27
+msgid "Account deleted"
+msgstr "Cuenta eliminada"
+
+#: src/views/public/board/CardModal.tsx:104
+#: src/views/card/index.tsx:215
+msgid "Activity"
+msgstr "Actividad"
+
+#: src/views/home/components/Features.tsx:103
+msgid "Activity logs"
+msgstr "Registros de actividad"
+
+#: src/views/board/components/List.tsx:110
+msgid "Add a card"
+msgstr "Añadir una tarjeta"
+
+#: src/views/card/components/NewCommentForm.tsx:57
+#: src/views/card/components/Comment.tsx:144
+msgid "Add a comment..."
+msgstr "Añadir un comentario..."
+
+#: src/components/Editor.tsx:302
+msgid "Add description... (type '/' to open commands)"
+msgstr "Añadir descripción... (escribe '/' para abrir comandos)"
+
+#: src/views/card/components/LabelSelector.tsx:110
+#: src/views/card/components/LabelSelector.tsx:118
+msgid "Add label"
+msgstr "Añadir etiqueta"
+
+#: src/views/members/components/InviteMemberForm.tsx:50
+#: src/views/card/components/MemberSelector.tsx:130
+msgid "Add member"
+msgstr "Añadir miembro"
+
+#: src/views/card/components/ActivityList.tsx:56
+msgid "added a label to the card"
+msgstr "añadió una etiqueta a la tarjeta"
+
+#: src/views/card/components/ActivityList.tsx:58
+msgid "added a member to the card"
+msgstr "añadió un miembro a la tarjeta"
+
+#: src/views/card/components/ActivityList.tsx:110
+msgid "added label <0>{label}</0>"
+msgstr "añadió la etiqueta <0>{label}</0>"
+
+#: src/views/home/components/Pricing.tsx:55
+msgid "Admin roles"
+msgstr "Roles de administrador"
+
+#: src/views/home/components/Pricing.tsx:97
+msgid "All seats are free during the beta until Sept 1st!"
+msgstr "¡Todos los puestos son gratuitos durante la beta hasta el 1 de septiembre!"
+
+#: src/views/home/components/Footer.tsx:18
+msgid "All systems operational"
+msgstr "Todos los sistemas operativos"
+
+#: src/views/auth/signup/index.tsx:86
+msgid "Already have an account? <0><1>Sign in</1></0>"
+msgstr "¿Ya tienes una cuenta? <0><1>Iniciar sesión</1></0>"
+
+#: src/views/settings/index.tsx:77
+msgid "An error occurred while disconnecting your Trello account."
+msgstr "Ocurrió un error al desconectar tu cuenta de Trello."
+
+#: src/views/settings/index.tsx:229
+msgid "API keys"
+msgstr "Claves API"
+
+#: src/views/home/components/Footer.tsx:31
+msgid "API Reference"
+msgstr "Referencia de API"
+
+#: src/views/members/components/DeleteMemberConfirmation.tsx:47
+msgid "Are you sure want to remove {entityLabel}?"
+msgstr "¿Estás seguro de que quieres eliminar {entityLabel}?"
+
+#. placeholder {0}: workspace.name
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:62
+msgid "Are you sure you want to delete the workspace {0}?"
+msgstr "¿Estás seguro de que quieres eliminar el espacio de trabajo {0}?"
+
+#: src/views/card/components/DeleteCardConfirmation.tsx:75
+msgid "Are you sure you want to delete this card?"
+msgstr "¿Estás seguro de que quieres eliminar esta tarjeta?"
+
+#: src/views/card/components/DeleteCommentConfirmation.tsx:65
+msgid "Are you sure you want to delete this comment?"
+msgstr "¿Estás seguro de que quieres eliminar este comentario?"
+
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:54
+msgid "Are you sure you want to delete your account?"
+msgstr "¿Estás seguro de que quieres eliminar tu cuenta?"
+
+#: src/views/card/components/ActivityList.tsx:92
+msgid "assigned <0>{memberName}</0> to the card"
+msgstr "asignó a <0>{memberName}</0> a la tarjeta"
+
+#: src/views/settings/index.tsx:168
+msgid "Billing"
+msgstr "Facturación"
+
+#: src/views/settings/index.tsx:178
+msgid "Billing portal"
+msgstr "Portal de facturación"
+
+#: src/views/board/index.tsx:239
+msgid "Board"
+msgstr "Tablero"
+
+#: src/views/board/index.tsx:265
+msgid "Board not found"
+msgstr "Tablero no encontrado"
+
+#: src/views/board/components/UpdateBoardSlugForm.tsx:45
+msgid "Board URL can only contain letters, numbers, and hyphens"
+msgstr "La URL del tablero solo puede contener letras, números y guiones"
+
+#: src/views/board/components/UpdateBoardSlugForm.tsx:43
+msgid "Board URL cannot exceed 60 characters"
+msgstr "La URL del tablero no puede exceder los 60 caracteres"
+
+#: src/views/public/board/index.tsx:53
+msgid "Board URL copied to clipboard"
+msgstr "URL del tablero copiada al portapapeles"
+
+#: src/views/board/components/UpdateBoardSlugForm.tsx:41
+msgid "Board URL must be at least 3 characters long"
+msgstr "La URL del tablero debe tener al menos 3 caracteres"
+
+#: src/views/home/components/Features.tsx:78
+msgid "Board visibility"
+msgstr "Visibilidad del tablero"
+
+#: src/views/board/components/VisibilityButton.tsx:45
+msgid "Board visibility updated"
+msgstr "Visibilidad del tablero actualizada"
+
+#: src/views/boards/index.tsx:25
+#: src/components/SideNavigation.tsx:39
+msgid "Boards"
+msgstr "Tableros"
+
+#. placeholder {0}: workspace.name ?? "Workspace"
+#: src/views/boards/index.tsx:21
+msgid "Boards | {0}"
+msgstr "Tableros | {0}"
+
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:98
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:88
+#: src/views/settings/components/CustomURLConfirmation.tsx:50
+#: src/views/members/components/DeleteMemberConfirmation.tsx:55
+#: src/views/card/components/DeleteCommentConfirmation.tsx:76
+#: src/views/card/components/DeleteCardConfirmation.tsx:86
+#: src/views/card/components/Comment.tsx:156
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/views/card/index.tsx:193
+msgid "Card not found"
+msgstr "Tarjeta no encontrada"
+
+#: src/views/board/components/NewCardForm.tsx:254
+msgid "Card title"
+msgstr "Título de la tarjeta"
+
+#: src/views/settings/index.tsx:160
+msgid "Change the language of the app."
+msgstr "Cambiar el idioma de la aplicación."
+
+#: src/views/auth/signup/index.tsx:67
+#: src/views/auth/login/index.tsx:41
+msgid "Check your inbox"
+msgstr "Revisa tu bandeja de entrada"
+
+#: src/views/board/components/Filters.tsx:155
+msgid "Clear filters"
+msgstr "Borrar filtros"
+
+#: src/views/auth/signup/index.tsx:72
+#: src/views/auth/login/index.tsx:46
+msgid "Click on the link we've sent to {magicLinkRecipient} to sign in."
+msgstr "Haz clic en el enlace que hemos enviado a {magicLinkRecipient} para iniciar sesión."
+
+#: src/views/home/components/Features.tsx:84
+msgid "Collaborate seamlessly with your team."
+msgstr "Colabora sin problemas con tu equipo."
+
+#: src/views/home/components/Features.tsx:66
+msgid "Coming soon"
+msgstr "Próximamente"
+
+#: src/views/home/components/Features.tsx:98
+msgid "Comments"
+msgstr "Comentarios"
+
+#: src/views/home/components/Footer.tsx:94
+msgid "Company"
+msgstr "Empresa"
+
+#: src/views/home/components/Pricing.tsx:70
+msgid "Complete control and ownership:"
+msgstr "Control y propiedad completos:"
+
+#: src/views/settings/components/CustomURLConfirmation.tsx:42
+msgid "Confirm URL change"
+msgstr "Confirmar cambio de URL"
+
+#: src/views/settings/index.tsx:205
+#: src/views/boards/components/ImportBoardsForm.tsx:157
+msgid "Connect Trello"
+msgstr "Conectar Trello"
+
+#: src/views/home/components/Features.tsx:115
+msgid "Connect your favorite tools to streamline your workflow."
+msgstr "Conecta tus herramientas favoritas para agilizar tu flujo de trabajo."
+
+#: src/views/settings/index.tsx:192
+msgid "Connect your Trello account to import boards."
+msgstr "Conecta tu cuenta de Trello para importar tableros."
+
+#: src/views/home/components/Footer.tsx:38
+msgid "Contact"
+msgstr "Contacto"
+
+#: src/components/FeedbackButton.tsx:121
+msgid "Contact us"
+msgstr "Contáctanos"
+
+#: src/components/AuthForm.tsx:334
+msgid "Continue with "
+msgstr "Continuar con "
+
+#. placeholder {0}: provider.name
+#: src/components/AuthForm.tsx:268
+msgid "Continue with {0}"
+msgstr "Continuar con {0}"
+
+#: src/views/home/components/Features.tsx:79
+msgid "Control who can view and edit your boards."
+msgstr "Controla quién puede ver y editar tus tableros."
+
+#: src/views/board/components/NewListForm.tsx:140
+#: src/views/board/components/NewCardForm.tsx:391
+#: src/components/LabelForm.tsx:212
+msgid "Create another"
+msgstr "Crear otro"
+
+#: src/views/boards/components/NewBoardForm.tsx:77
+msgid "Create board"
+msgstr "Crear tablero"
+
+#: src/views/board/components/NewCardForm.tsx:401
+msgid "Create card"
+msgstr "Crear tarjeta"
+
+#: src/components/LabelForm.tsx:233
+msgid "Create label"
+msgstr "Crear etiqueta"
+
+#: src/views/board/components/NewListForm.tsx:148
+msgid "Create list"
+msgstr "Crear lista"
+
+#: src/views/boards/components/BoardsList.tsx:42
+msgid "Create new board"
+msgstr "Crear nuevo tablero"
+
+#: src/views/settings/components/CreateAPIKeyForm.tsx:54
+msgid "Create new key"
+msgstr "Crear nueva clave"
+
+#: src/views/card/components/LabelSelector.tsx:98
+#: src/views/board/components/NewCardForm.tsx:327
+msgid "Create new label"
+msgstr "Crear nueva etiqueta"
+
+#: src/views/board/index.tsx:327
+msgid "Create new list"
+msgstr "Crear nueva lista"
+
+#: src/components/WorkspaceMenu.tsx:85
+#: src/components/NewWorkspaceForm.tsx:91
+msgid "Create workspace"
+msgstr "Crear espacio de trabajo"
+
+#: src/views/card/components/ActivityList.tsx:52
+msgid "created the card"
+msgstr "creó la tarjeta"
+
+#: src/views/home/components/Pricing.tsx:74
+msgid "Custom domain"
+msgstr "Dominio personalizado"
+
+#: src/views/settings/components/CustomURLConfirmation.tsx:45
+msgid "Custom URLs are a premium feature. You'll be directed to upgrade your account."
+msgstr "Las URL personalizadas son una función premium. Serás dirigido a actualizar tu cuenta."
+
+#: src/components/UserMenu.tsx:112
+msgid "Dark"
+msgstr "Oscuro"
+
+#: src/views/card/components/DeleteCommentConfirmation.tsx:82
+#: src/views/card/components/DeleteCardConfirmation.tsx:92
+#: src/components/LabelForm.tsx:226
+msgid "Delete"
+msgstr "Eliminar"
+
+#: src/views/settings/index.tsx:260
+#: src/views/settings/index.tsx:270
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:96
+msgid "Delete account"
+msgstr "Eliminar cuenta"
+
+#: src/views/board/components/BoardDropdown.tsx:20
+msgid "Delete board"
+msgstr "Eliminar tablero"
+
+#: src/views/card/components/Dropdown.tsx:14
+msgid "Delete card"
+msgstr "Eliminar tarjeta"
+
+#: src/views/card/components/Comment.tsx:89
+msgid "Delete comment"
+msgstr "Eliminar comentario"
+
+#: src/views/board/components/List.tsx:117
+msgid "Delete list"
+msgstr "Eliminar lista"
+
+#: src/views/settings/index.tsx:242
+#: src/views/settings/index.tsx:253
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:106
+msgid "Delete workspace"
+msgstr "Eliminar espacio de trabajo"
+
+#: src/views/settings/index.tsx:220
+msgid "Disconnect Trello"
+msgstr "Desconectar Trello"
+
+#: src/views/home/components/Features.tsx:99
+msgid "Discuss and collaborate on cards."
+msgstr "Discute y colabora en las tarjetas."
+
+#: src/views/settings/index.tsx:123
+msgid "Display name"
+msgstr "Nombre visible"
+
+#: src/views/settings/components/UpdateDisplayNameForm.tsx:22
+msgid "Display name cannot exceed 280 characters"
+msgstr "El nombre visible no puede exceder los 280 caracteres"
+
+#: src/views/settings/components/UpdateDisplayNameForm.tsx:19
+msgid "Display name must be at least 3 characters long"
+msgstr "El nombre visible debe tener al menos 3 caracteres"
+
+#: src/views/settings/components/UpdateDisplayNameForm.tsx:41
+msgid "Display name updated"
+msgstr "Nombre visible actualizado"
+
+#: src/views/home/components/Faqs.tsx:83
+msgid "Do you offer a free plan?"
+msgstr "¿Ofrecen un plan gratuito?"
+
+#: src/components/FeedbackButton.tsx:130
+msgid "docs"
+msgstr "documentos"
+
+#: src/views/home/components/Header.tsx:16
+msgid "Docs"
+msgstr "Documentos"
+
+#: src/views/home/components/Footer.tsx:77
+msgid "Documentation"
+msgstr "Documentación"
+
+#: src/views/auth/login/index.tsx:61
+msgid "Don't have an account? <0><1>Sign up</1></0>"
+msgstr "¿No tienes una cuenta? <0><1>Regístrate</1></0>"
+
+#: src/views/board/components/UpdateBoardSlugForm.tsx:115
+#: src/views/board/components/BoardDropdown.tsx:15
+msgid "Edit board URL"
+msgstr "Editar URL del tablero"
+
+#: src/views/card/components/Comment.tsx:80
+msgid "Edit comment"
+msgstr "Editar comentario"
+
+#: src/components/LabelForm.tsx:118
+msgid "Edit label"
+msgstr "Editar etiqueta"
+
+#: src/components/AuthForm.tsx:336
+msgid "email"
+msgstr "correo electrónico"
+
+#: src/views/members/components/InviteMemberForm.tsx:64
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: src/components/AuthForm.tsx:301
+msgid "Enter your email address"
+msgstr "Introduce tu dirección de correo electrónico"
+
+#: src/components/AuthForm.tsx:289
+msgid "Enter your name"
+msgstr "Introduce tu nombre"
+
+#: src/components/AuthForm.tsx:314
+msgid "Enter your password"
+msgstr "Introduce tu contraseña"
+
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:39
+msgid "Error deleting account"
+msgstr "Error al eliminar la cuenta"
+
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:45
+msgid "Error deleting workspace"
+msgstr "Error al eliminar el espacio de trabajo"
+
+#: src/views/settings/index.tsx:76
+msgid "Error disconnecting Trello"
+msgstr "Error al desconectar Trello"
+
+#: src/views/settings/components/UpdateDisplayNameForm.tsx:54
+msgid "Error updating display name"
+msgstr "Error al actualizar el nombre visible"
+
+#: src/views/settings/components/Avatar.tsx:37
+msgid "Error updating profile image"
+msgstr "Error al actualizar la imagen de perfil"
+
+#: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:61
+msgid "Error updating workspace description"
+msgstr "Error al actualizar la descripción del espacio de trabajo"
+
+#: src/views/settings/components/UpdateWorkspaceNameForm.tsx:56
+msgid "Error updating workspace name"
+msgstr "Error al actualizar el nombre del espacio de trabajo"
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:73
+msgid "Error updating workspace URL"
+msgstr "Error al actualizar la URL del espacio de trabajo"
+
+#: src/views/settings/components/Avatar.tsx:54
+#: src/views/settings/components/Avatar.tsx:95
+msgid "Error uploading profile image"
+msgstr "Error al subir la imagen de perfil"
+
+#: src/views/home/components/Pricing.tsx:52
+msgid "Everything in the free plan, plus:"
+msgstr "Todo lo que hay en el plan gratuito, más:"
+
+#: src/views/home/components/Pricing.tsx:33
+msgid "Everything you need, free forever. Unlimited boards, unlimited lists, unlimited cards. Upgrade any time."
+msgstr "Todo lo que necesitas, gratis para siempre. Tableros ilimitados, listas ilimitadas, tarjetas ilimitadas. Actualiza en cualquier momento."
+
+#. placeholder {0}: provider.at(0)?.toUpperCase() + provider.slice(1)
+#: src/components/AuthForm.tsx:241
+msgid "Failed to login with {0}. Please try again."
+msgstr "Error al iniciar sesión con {0}. Por favor, inténtalo de nuevo."
+
+#: src/views/home/components/Footer.tsx:51
+#: src/views/home/components/Faqs.tsx:143
+msgid "FAQs"
+msgstr "Preguntas frecuentes"
+
+#: src/views/home/components/Header.tsx:14
+#: src/views/home/components/Footer.tsx:49
+#: src/views/home/components/Features.tsx:125
+msgid "Features"
+msgstr "Características"
+
+#: src/components/FeedbackButton.tsx:78
+msgid "Feedback"
+msgstr "Comentarios"
+
+#: src/components/FeedbackButton.tsx:38
+msgid "Feedback sent"
+msgstr "Comentarios enviados"
+
+#: src/views/board/components/Filters.tsx:149
+msgid "Filter"
+msgstr "Filtrar"
+
+#: src/views/home/components/Faqs.tsx:150
+msgid "Find answers to common questions about the project. Can't find what you're looking for? Feel free to <0>contact us</0>."
+msgstr "Encuentra respuestas a preguntas frecuentes sobre el proyecto. ¿No encuentras lo que buscas? No dudes en <0>contactarnos</0>."
+
+#: src/views/home/components/Faqs.tsx:41
+msgid "For long-term sustainability, we recognise all good open source projects need a source of revenue. Ours comes from the paid cloud offering for workspaces with multiple users (free during the beta) and for custom workspace slugs. There's no obligation to use it, and you can self-host the software on your own infrastructure free of charge."
+msgstr "Para la sostenibilidad a largo plazo, reconocemos que todos los buenos proyectos de código abierto necesitan una fuente de ingresos. La nuestra proviene de la oferta de pago en la nube para espacios de trabajo con múltiples usuarios (gratuita durante la beta) y para slugs personalizados de espacios de trabajo. No hay obligación de usarla, y puedes autoalojar el software en tu propia infraestructura sin costo alguno."
+
+#: src/views/home/components/Pricing.tsx:32
+#: src/views/home/components/Pricing.tsx:32
+msgid "Free"
+msgstr "Gratis"
+
+#: src/views/home/components/Pricing.tsx:34
+msgid "Free, forever"
+msgstr "Gratis, para siempre"
+
+#: src/views/home/components/Header.tsx:102
+#: src/views/home/components/Header.tsx:141
+#: src/views/home/components/Cta.tsx:61
+#: src/views/auth/signup/index.tsx:67
+msgid "Get started"
+msgstr "Comenzar"
+
+#: src/views/home/components/Pricing.tsx:31
+#: src/views/home/components/Pricing.tsx:49
+msgid "Get Started"
+msgstr "Comenzar"
+
+#: src/views/boards/components/BoardsList.tsx:38
+msgid "Get started by creating a new board"
+msgstr "Comienza creando un nuevo tablero"
+
+#: src/views/board/index.tsx:319
+msgid "Get started by creating a new list"
+msgstr "Comienza creando una nueva lista"
+
+#: src/views/home/components/Cta.tsx:54
+msgid "Get started for free today"
+msgstr "Comienza gratis hoy mismo"
+
+#: src/views/home/components/Pricing.tsx:92
+msgid "Get started for free, with no usage limits. For collaboration, upgrade to a plan that fits the size of your team."
+msgstr "Comienza gratis, sin límites de uso. Para colaboración, actualiza a un plan que se ajuste al tamaño de tu equipo."
+
+#: src/views/home/index.tsx:75
+msgid "Get started on Cloud"
+msgstr "Comenzar en la nube"
+
+#: src/views/home/components/Footer.tsx:25
+msgid "Getting started"
+msgstr "Primeros pasos"
+
+#: src/views/home/components/Footer.tsx:37
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/views/home/components/Header.tsx:96
+#: src/views/home/components/Header.tsx:133
+msgid "Go to app"
+msgstr "Ir a la aplicación"
+
+#: src/views/home/components/Pricing.tsx:69
+msgid "Host Kan on your own infrastructure. Ideal for organisations that need complete control over their data."
+msgstr "Aloja Kan en tu propia infraestructura. Ideal para organizaciones que necesitan control completo sobre sus datos."
+
+#: src/views/home/components/Faqs.tsx:64
+msgid "How do I get a custom URL?"
+msgstr "¿Cómo obtengo una URL personalizada?"
+
+#: src/views/home/components/Faqs.tsx:46
+msgid "How do I import my Trello boards?"
+msgstr "¿Cómo importo mis tableros de Trello?"
+
+#: src/views/home/components/Faqs.tsx:108
+msgid "How do I invite team members?"
+msgstr "¿Cómo invito a miembros del equipo?"
+
+#: src/views/home/components/Faqs.tsx:124
+msgid "How do I self-host?"
+msgstr "¿Cómo puedo autoalojar?"
+
+#: src/views/home/components/Faqs.tsx:38
+msgid "How is the project funded?"
+msgstr "¿Cómo se financia el proyecto?"
+
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:82
+msgid "I acknowledge that all of my account data will be permanently deleted and want to proceed."
+msgstr "Reconozco que todos los datos de mi cuenta serán eliminados permanentemente y quiero continuar."
+
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:92
+msgid "I acknowledge that all of the workspace data will be permanently deleted and want to proceed."
+msgstr "Reconozco que todos los datos del espacio de trabajo serán eliminados permanentemente y quiero continuar."
+
+#: src/components/FeedbackButton.tsx:98
+msgid "Ideas to improve this page..."
+msgstr "Ideas para mejorar esta página..."
+
+#: src/views/boards/index.tsx:39
+msgid "Import"
+msgstr "Importar"
+
+#: src/views/boards/components/ImportBoardsForm.tsx:191
+msgid "Import complete"
+msgstr "Importación completada"
+
+#: src/views/boards/components/ImportBoardsForm.tsx:204
+msgid "Import failed"
+msgstr "Importación fallida"
+
+#: src/views/home/components/Features.tsx:89
+msgid "Import your Trello boards and hit the ground running."
+msgstr "Importa tus tableros de Trello y comienza a trabajar de inmediato."
+
+#: src/views/home/components/Footer.tsx:27
+msgid "Importing from Trello"
+msgstr "Importando desde Trello"
+
+#: src/views/home/components/Faqs.tsx:49
+msgid "Importing your Trello boards into Kan is easy. You can follow our step-by-step guide <0>here</0>."
+msgstr "Importar tus tableros de Trello a Kan es fácil. Puedes seguir nuestra guía paso a paso <0>aquí</0>."
+
+#: src/views/home/components/Pricing.tsx:28
+msgid "Individuals"
+msgstr "Individuos"
+
+#: src/views/home/components/Features.tsx:114
+msgid "Integrations"
+msgstr "Integraciones"
+
+#: src/views/members/index.tsx:156
+msgid "Invite"
+msgstr "Invitar"
+
+#: src/views/members/components/InviteMemberForm.tsx:82
+#: src/views/card/components/MemberSelector.tsx:112
+msgid "Invite member"
+msgstr "Invitar miembro"
+
+#: src/views/home/components/Pricing.tsx:51
+msgid "Kanban is better with a team. Perfect for small and growing teams looking to collaborate."
+msgstr "Kanban es mejor con un equipo. Perfecto para equipos pequeños y en crecimiento que buscan colaborar."
+
+#: src/views/home/components/Features.tsx:129
+msgid "Kanban reimagined"
+msgstr "Kanban reinventado"
+
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:67
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:57
+msgid "Keep in mind that this action is irreversible."
+msgstr "Ten en cuenta que esta acción es irreversible."
+
+#: src/views/card/index.tsx:243
+#: src/views/board/components/NewCardForm.tsx:331
+#: src/views/board/components/Filters.tsx:101
+msgid "Labels"
+msgstr "Etiquetas"
+
+#: src/views/home/components/Features.tsx:93
+msgid "Labels & Filters"
+msgstr "Etiquetas y filtros"
+
+#: src/views/settings/index.tsx:157
+msgid "Language"
+msgstr "Idioma"
+
+#: src/views/home/components/Footer.tsx:130
+msgid "Legal"
+msgstr "Legal"
+
+#: src/views/home/components/Footer.tsx:44
+msgid "License"
+msgstr "Licencia"
+
+#: src/components/UserMenu.tsx:126
+msgid "Light"
+msgstr "Claro"
+
+#: src/views/public/board/index.tsx:51
+msgid "Link copied"
+msgstr "Enlace copiado"
+
+#: src/views/card/index.tsx:235
+msgid "List"
+msgstr "Lista"
+
+#: src/views/board/components/NewListForm.tsx:128
+msgid "List name"
+msgstr "Nombre de la lista"
+
+#: src/views/auth/login/index.tsx:31
+msgid "Login | kan.bn"
+msgstr "Iniciar sesión | kan.bn"
+
+#: src/components/UserMenu.tsx:136
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: src/components/AuthForm.tsx:337
+msgid "magic link"
+msgstr "enlace mágico"
+
+#: src/views/members/index.tsx:148
+#: src/views/card/index.tsx:251
+#: src/views/board/components/NewCardForm.tsx:290
+#: src/views/board/components/Filters.tsx:93
+#: src/components/SideNavigation.tsx:44
+msgid "Members"
+msgstr "Miembros"
+
+#. placeholder {0}: workspace.name ?? "Workspace"
+#: src/views/members/index.tsx:144
+msgid "Members | {0}"
+msgstr "Miembros | {0}"
+
+#: src/views/home/components/Pricing.tsx:14
+msgid "Monthly"
+msgstr "Mensual"
+
+#: src/views/card/components/ActivityList.tsx:81
+msgid "moved the card from <0>{fromList}</0> to<1>{toList}</1>"
+msgstr "movió la tarjeta de <0>{fromList}</0> a<1>{toList}</1>"
+
+#: src/views/card/components/ActivityList.tsx:55
+msgid "moved the card to another list"
+msgstr "movió la tarjeta a otra lista"
+
+#: src/views/boards/components/NewBoardForm.tsx:63
+#: src/components/LabelForm.tsx:134
+msgid "Name"
+msgstr "Nombre"
+
+#: src/components/FeedbackButton.tsx:116
+msgid "Need help?"
+msgstr "¿Necesitas ayuda?"
+
+#: src/views/boards/index.tsx:52
+msgid "New"
+msgstr "Nuevo"
+
+#: src/views/boards/components/NewBoardForm.tsx:49
+msgid "New board"
+msgstr "Nuevo tablero"
+
+#: src/views/board/components/NewCardForm.tsx:237
+msgid "New card"
+msgstr "Nueva tarjeta"
+
+#: src/views/boards/components/ImportBoardsForm.tsx:322
+msgid "New import"
+msgstr "Nueva importación"
+
+#: src/components/LabelForm.tsx:118
+msgid "New label"
+msgstr "Nueva etiqueta"
+
+#: src/views/board/index.tsx:296
+#: src/views/board/components/NewListForm.tsx:112
+msgid "New list"
+msgstr "Nueva lista"
+
+#: src/components/NewWorkspaceForm.tsx:62
+msgid "New workspace"
+msgstr "Nuevo espacio de trabajo"
+
+#: src/views/boards/components/BoardsList.tsx:35
+msgid "No boards"
+msgstr "Sin tableros"
+
+#: src/views/boards/components/ImportBoardsForm.tsx:242
+msgid "No boards found"
+msgstr "No se encontraron tableros"
+
+#: src/views/home/index.tsx:85
+msgid "No credit card required"
+msgstr "No se requiere tarjeta de crédito"
+
+#: src/views/board/index.tsx:316
+msgid "No lists"
+msgstr "Sin listas"
+
+#: src/views/settings/index.tsx:263
+msgid "Once you delete your account, there is no going back. This action cannot be undone."
+msgstr "Una vez que elimines tu cuenta, no hay vuelta atrás. Esta acción no se puede deshacer."
+
+#: src/views/settings/index.tsx:245
+msgid "Once you delete your workspace, there is no going back. This action cannot be undone."
+msgstr "Una vez que elimines tu espacio de trabajo, no hay vuelta atrás. Esta acción no se puede deshacer."
+
+#: src/components/AuthForm.tsx:279
+msgid "or"
+msgstr "o"
+
+#: src/views/home/components/Features.tsx:94
+msgid "Organize and find cards quickly with powerful filtering tools."
+msgstr "Organiza y encuentra tarjetas rápidamente con potentes herramientas de filtrado."
+
+#: src/views/home/components/Pricing.tsx:73
+msgid "Own your data"
+msgstr "Sé dueño de tus datos"
+
+#: src/views/home/components/Pricing.tsx:101
+msgid "Payment frequency"
+msgstr "Frecuencia de pago"
+
+#: src/views/members/index.tsx:107
+msgid "Pending"
+msgstr "Pendiente"
+
+#: src/views/home/components/Pricing.tsx:15
+#: src/views/home/components/Pricing.tsx:20
+msgid "per user/month"
+msgstr "por usuario/mes"
+
+#: src/components/AuthForm.tsx:305
+msgid "Please enter a valid email address"
+msgstr "Por favor, introduce una dirección de correo electrónico válida"
+
+#: src/components/AuthForm.tsx:293
+msgid "Please enter a valid name"
+msgstr "Por favor, introduce un nombre válido"
+
+#: src/components/AuthForm.tsx:318
+msgid "Please enter a valid password"
+msgstr "Por favor, introduce una contraseña válida"
+
+#: src/views/settings/components/Avatar.tsx:55
+msgid "Please select a file to upload."
+msgstr "Por favor selecciona un archivo para subir."
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:74
+#: src/views/settings/components/UpdateWorkspaceNameForm.tsx:57
+#: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:62
+#: src/views/settings/components/UpdateDisplayNameForm.tsx:55
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:46
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:40
+#: src/views/settings/components/Avatar.tsx:38
+#: src/views/settings/components/Avatar.tsx:96
+#: src/views/members/components/DeleteMemberConfirmation.tsx:28
+#: src/views/card/index.tsx:116
+#: src/views/card/components/NewCommentForm.tsx:31
+#: src/views/card/components/MemberSelector.tsx:80
+#: src/views/card/components/ListSelector.tsx:53
+#: src/views/card/components/LabelSelector.tsx:73
+#: src/views/card/components/DeleteCommentConfirmation.tsx:45
+#: src/views/card/components/DeleteCardConfirmation.tsx:52
+#: src/views/card/components/Comment.tsx:62
+#: src/views/boards/components/ImportBoardsForm.tsx:205
+#: src/views/board/index.tsx:133
+#: src/views/board/index.tsx:189
+#: src/views/board/components/VisibilityButton.tsx:53
+#: src/views/board/components/UpdateBoardSlugForm.tsx:72
+#: src/views/board/components/NewListForm.tsx:78
+#: src/views/board/components/NewCardForm.tsx:128
+#: src/components/NewWorkspaceForm.tsx:39
+#: src/components/FeedbackButton.tsx:46
+msgid "Please try again later, or contact customer support."
+msgstr "Por favor, inténtalo de nuevo más tarde o contacta con atención al cliente."
+
+#: src/views/home/components/Pricing.tsx:85
+#: src/views/home/components/Header.tsx:15
+#: src/views/home/components/Footer.tsx:50
+msgid "Pricing"
+msgstr "Precios"
+
+#: src/views/home/components/Pricing.tsx:56
+msgid "Priority email support"
+msgstr "Soporte prioritario por email"
+
+#: src/views/home/components/Footer.tsx:42
+msgid "Privacy policy"
+msgstr "Política de privacidad"
+
+#: src/views/board/components/VisibilityButton.tsx:73
+msgid "Private"
+msgstr "Privado"
+
+#: src/views/settings/components/Avatar.tsx:24
+msgid "Profile image updated"
+msgstr "Imagen de perfil actualizada"
+
+#: src/views/settings/index.tsx:118
+msgid "Profile picture"
+msgstr "Foto de perfil"
+
+#: src/views/board/components/VisibilityButton.tsx:68
+msgid "Public"
+msgstr "Público"
+
+#: src/views/home/components/Faqs.tsx:147
+msgid "Questions?"
+msgstr "¿Preguntas?"
+
+#: src/views/members/components/DeleteMemberConfirmation.tsx:58
+msgid "Remove"
+msgstr "Eliminar"
+
+#: src/views/members/index.tsx:120
+msgid "Remove member"
+msgstr "Eliminar miembro"
+
+#: src/views/card/components/ActivityList.tsx:57
+msgid "removed a label from the card"
+msgstr "eliminó una etiqueta de la tarjeta"
+
+#: src/views/card/components/ActivityList.tsx:59
+msgid "removed a member from the card"
+msgstr "eliminó un miembro de la tarjeta"
+
+#: src/views/card/components/ActivityList.tsx:118
+msgid "removed label <0>{label}</0>"
+msgstr "eliminó la etiqueta <0>{label}</0>"
+
+#: src/views/home/components/Footer.tsx:113
+msgid "Resources"
+msgstr "Recursos"
+
+#: src/views/settings/components/CreateAPIKeyForm.tsx:49
+msgid "Revoke"
+msgstr "Revocar"
+
+#: src/views/home/components/Header.tsx:13
+#: src/views/home/components/Footer.tsx:36
+msgid "Roadmap"
+msgstr "Hoja de ruta"
+
+#: src/views/members/index.tsx:178
+msgid "Role"
+msgstr "Rol"
+
+#: src/views/home/components/Pricing.tsx:72
+msgid "Run on your own infrastructure"
+msgstr "Ejecuta en tu propia infraestructura"
+
+#: src/views/card/components/Comment.tsx:163
+msgid "Save"
+msgstr "Guardar"
+
+#: src/views/home/components/Features.tsx:109
+msgid "Save time with reusable board templates."
+msgstr "Ahorra tiempo con plantillas de tableros reutilizables."
+
+#: src/views/boards/components/ImportBoardsForm.tsx:274
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+#: src/views/boards/components/ImportBoardsForm.tsx:157
+msgid "Select source"
+msgstr "Seleccionar origen"
+
+#: src/views/home/components/Pricing.tsx:64
+msgid "Self Host"
+msgstr "Autoalojamiento"
+
+#: src/views/home/index.tsx:81
+msgid "Self host with Github"
+msgstr "Autoalojamiento con Github"
+
+#: src/views/card/components/ActivityList.tsx:89
+msgid "self-assigned the card"
+msgstr "se autoasignó la tarjeta"
+
+#: src/components/FeedbackButton.tsx:137
+msgid "Send"
+msgstr "Enviar"
+
+#: src/views/settings/index.tsx:112
+#: src/components/SideNavigation.tsx:49
+msgid "Settings"
+msgstr "Configuración"
+
+#. placeholder {0}: workspace.name ?? "Workspace"
+#: src/views/settings/index.tsx:108
+msgid "Settings | {0}"
+msgstr "Configuración | {0}"
+
+#: src/views/home/components/Header.tsx:100
+#: src/views/home/components/Header.tsx:138
+msgid "Sign in"
+msgstr "Iniciar sesión"
+
+#: src/views/auth/signup/index.tsx:32
+#: src/views/auth/signup/index.tsx:57
+msgid "Sign up | kan.bn"
+msgstr "Registrarse | kan.bn"
+
+#: src/views/auth/signup/index.tsx:42
+msgid "Sign up disabled"
+msgstr "Registro deshabilitado"
+
+#: src/views/auth/signup/index.tsx:45
+msgid "Sign up is currently disabled. Please try again later."
+msgstr "El registro está actualmente deshabilitado. Por favor, inténtalo de nuevo más tarde."
+
+#: src/components/AuthForm.tsx:334
+msgid "Sign up with "
+msgstr "Registrarse con "
+
+#: src/views/home/components/Pricing.tsx:89
+msgid "Simple pricing"
+msgstr "Precios simples"
+
+#: src/views/home/components/Features.tsx:132
+msgid "Simple, visual task management that just works. Drag and drop cards, collaborate with your team, and get more done."
+msgstr "Gestión de tareas visual y sencilla que simplemente funciona. Arrastra y suelta tarjetas, colabora con tu equipo y logra más."
+
+#: src/views/home/index.tsx:37
+msgid "Star on Github"
+msgstr "Estrella en Github"
+
+#: src/components/AuthForm.tsx:188
+#: src/components/AuthForm.tsx:205
+msgid "Success"
+msgstr "Éxito"
+
+#: src/views/home/components/Pricing.tsx:57
+msgid "Support the development of the project"
+msgstr "Apoya el desarrollo del proyecto"
+
+#: src/components/UserMenu.tsx:98
+msgid "System"
+msgstr "Sistema"
+
+#: src/views/home/components/Pricing.tsx:46
+msgid "Teams"
+msgstr "Equipos"
+
+#: src/views/home/components/Features.tsx:108
+msgid "Templates"
+msgstr "Plantillas"
+
+#: src/views/home/components/Footer.tsx:41
+msgid "Terms of service"
+msgstr "Términos de servicio"
+
+#: src/components/FeedbackButton.tsx:39
+msgid "Thank you for your feedback!"
+msgstr "¡Gracias por tus comentarios!"
+
+#: src/views/home/components/Faqs.tsx:33
+msgid "The main difference between Kan and Trello is that Kan is open source, allowing anyone to view, modify, and contribute to our code. Our cloud offering also offers no restrictions on features for individual use, whereas Trello locks basic features such as the number of boards you can create behind a paywall."
+msgstr "La principal diferencia entre Kan y Trello es que Kan es de código abierto, permitiendo a cualquiera ver, modificar y contribuir a nuestro código. Nuestra oferta en la nube también ofrece funciones sin restricciones para uso individual, mientras que Trello bloquea características básicas como el número de tableros que puedes crear detrás de un muro de pago."
+
+#: src/views/home/index.tsx:65
+msgid "The open source <0/> alternative to Trello"
+msgstr "La alternativa de código abierto <0/> a Trello"
+
+#. placeholder {0}: isPublic ? "public" : "private"
+#: src/views/board/components/VisibilityButton.tsx:46
+msgid "The visibility of your board has been set to {0}."
+msgstr "La visibilidad de tu tablero ha sido establecida a {0}."
+
+#: src/components/UserMenu.tsx:85
+msgid "Theme"
+msgstr "Tema"
+
+#: src/views/members/components/DeleteMemberConfirmation.tsx:50
+msgid "They won't be able to access this workspace."
+msgstr "No podrán acceder a este espacio de trabajo."
+
+#: src/views/card/components/DeleteCommentConfirmation.tsx:68
+#: src/views/card/components/DeleteCardConfirmation.tsx:78
+msgid "This action can't be undone."
+msgstr "Esta acción no se puede deshacer."
+
+#: src/views/board/components/UpdateBoardSlugForm.tsx:135
+msgid "This board URL has already been taken"
+msgstr "Esta URL de tablero ya ha sido utilizada"
+
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:70
+msgid "This will result in the permanent deletion of all data associated with this workspace."
+msgstr "Esto resultará en la eliminación permanente de todos los datos asociados con este espacio de trabajo."
+
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:60
+msgid "This will result in the permanent deletion of all data associated with your account."
+msgstr "Esto resultará en la eliminación permanente de todos los datos asociados con tu cuenta."
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:123
+msgid "This workspace username has already been taken"
+msgstr "Este nombre de usuario del espacio de trabajo ya ha sido tomado"
+
+#: src/views/home/components/Header.tsx:73
+msgid "Toggle menu"
+msgstr "Alternar menú"
+
+#: src/views/home/components/Features.tsx:104
+msgid "Track all card changes with detailed activity history."
+msgstr "Rastrea todos los cambios en las tarjetas con un historial de actividad detallado."
+
+#: src/views/settings/index.tsx:69
+msgid "Trello disconnected"
+msgstr "Trello desconectado"
+
+#: src/views/home/components/Features.tsx:88
+msgid "Trello imports"
+msgstr "Importaciones de Trello"
+
+#: src/views/card/components/NewCommentForm.tsx:30
+msgid "Unable to add comment"
+msgstr "No se puede añadir el comentario"
+
+#: src/views/board/components/NewCardForm.tsx:125
+msgid "Unable to create card"
+msgstr "No se puede crear la tarjeta"
+
+#: src/views/board/components/NewListForm.tsx:77
+msgid "Unable to create list"
+msgstr "No se puede crear la lista"
+
+#: src/components/NewWorkspaceForm.tsx:38
+msgid "Unable to create workspace"
+msgstr "No se puede crear el espacio de trabajo"
+
+#: src/views/card/components/DeleteCardConfirmation.tsx:51
+msgid "Unable to delete card"
+msgstr "No se puede eliminar la tarjeta"
+
+#: src/views/card/components/DeleteCommentConfirmation.tsx:44
+msgid "Unable to delete comment"
+msgstr "No se puede eliminar el comentario"
+
+#: src/views/members/components/DeleteMemberConfirmation.tsx:27
+msgid "Unable to remove member"
+msgstr "No se puede eliminar al miembro"
+
+#: src/components/FeedbackButton.tsx:45
+msgid "Unable to send feedback"
+msgstr "No se pudieron enviar los comentarios"
+
+#: src/views/board/components/UpdateBoardSlugForm.tsx:71
+msgid "Unable to update board URL"
+msgstr "No se puede actualizar la URL del tablero"
+
+#: src/views/board/components/VisibilityButton.tsx:52
+msgid "Unable to update board visibility"
+msgstr "No se puede actualizar la visibilidad del tablero"
+
+#: src/views/card/index.tsx:115
+#: src/views/board/index.tsx:188
+msgid "Unable to update card"
+msgstr "No se puede actualizar la tarjeta"
+
+#: src/views/card/components/Comment.tsx:61
+msgid "Unable to update comment"
+msgstr "No se puede actualizar el comentario"
+
+#: src/views/card/components/LabelSelector.tsx:72
+msgid "Unable to update labels"
+msgstr "No se pueden actualizar las etiquetas"
+
+#: src/views/card/components/ListSelector.tsx:52
+#: src/views/board/index.tsx:132
+msgid "Unable to update list"
+msgstr "No se puede actualizar la lista"
+
+#: src/views/card/components/MemberSelector.tsx:79
+msgid "Unable to update members"
+msgstr "No se pueden actualizar los miembros"
+
+#: src/views/card/components/ActivityList.tsx:102
+msgid "unassigned <0>{memberName}</0> from the card"
+msgstr "desasignó a <0>{memberName}</0> de la tarjeta"
+
+#: src/views/card/components/ActivityList.tsx:99
+msgid "unassigned themselves from the card"
+msgstr "se desasignó de la tarjeta"
+
+#: src/views/home/components/Pricing.tsx:41
+msgid "Unlimited activity log"
+msgstr "Registro de actividad ilimitado"
+
+#: src/views/home/components/Pricing.tsx:37
+msgid "Unlimited boards"
+msgstr "Tableros ilimitados"
+
+#: src/views/home/components/Cta.tsx:57
+msgid "Unlimited boards, unlimited lists, unlimited cards. No credit card required."
+msgstr "Tableros ilimitados, listas ilimitadas, tarjetas ilimitadas. No se requiere tarjeta de crédito."
+
+#: src/views/home/components/Pricing.tsx:39
+msgid "Unlimited cards"
+msgstr "Tarjetas ilimitadas"
+
+#: src/views/home/components/Pricing.tsx:40
+msgid "Unlimited comments"
+msgstr "Comentarios ilimitados"
+
+#: src/views/home/components/Pricing.tsx:38
+msgid "Unlimited lists"
+msgstr "Listas ilimitadas"
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:154
+#: src/views/settings/components/UpdateWorkspaceNameForm.tsx:82
+#: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:90
+#: src/views/settings/components/UpdateDisplayNameForm.tsx:79
+#: src/views/board/components/UpdateBoardSlugForm.tsx:166
+msgid "Update"
+msgstr "Actualizar"
+
+#: src/components/LabelForm.tsx:233
+msgid "Update label"
+msgstr "Actualizar etiqueta"
+
+#: src/views/card/components/ActivityList.tsx:54
+msgid "updated the description"
+msgstr "actualizó la descripción"
+
+#: src/views/card/components/ActivityList.tsx:53
+msgid "updated the title"
+msgstr "actualizó el título"
+
+#: src/views/card/components/ActivityList.tsx:73
+msgid "updated the title to <0>{toTitle}</0>"
+msgstr "actualizó el título a <0>{toTitle}</0>"
+
+#: src/views/settings/components/CustomURLConfirmation.tsx:52
+msgid "Upgrade"
+msgstr "Actualizar"
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:36
+msgid "URL can only contain letters, numbers, and hyphens"
+msgstr "La URL solo puede contener letras, números y guiones"
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:34
+msgid "URL cannot exceed 24 characters"
+msgstr "La URL no puede exceder los 24 caracteres"
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:32
+msgid "URL must be at least 3 characters long"
+msgstr "La URL debe tener al menos 3 caracteres"
+
+#: src/views/members/index.tsx:172
+msgid "User"
+msgstr "Usuario"
+
+#: src/views/settings/index.tsx:232
+msgid "View and manage your API keys."
+msgstr "Ver y gestionar tus claves API."
+
+#: src/views/settings/index.tsx:171
+msgid "View and manage your billing and subscription."
+msgstr "Ver y gestionar tu facturación y suscripción."
+
+#: src/views/home/components/Pricing.tsx:67
+msgid "View docs"
+msgstr "Ver documentación"
+
+#: src/views/home/components/Features.tsx:147
+msgid "View our roadmap."
+msgstr "Ver nuestra hoja de ruta."
+
+#: src/views/board/components/VisibilityButton.tsx:91
+msgid "Visibility"
+msgstr "Visibilidad"
+
+#: src/views/home/components/Faqs.tsx:94
+msgid "We are using the <0>AGPL-3.0 license</0>."
+msgstr "Estamos usando la <0>licencia AGPL-3.0</0>."
+
+#: src/views/home/components/Features.tsx:145
+msgid "We're just getting started. "
+msgstr "Apenas estamos comenzando. "
+
+#: src/views/auth/login/index.tsx:41
+msgid "Welcome back"
+msgstr "Bienvenido de nuevo"
+
+#: src/views/home/components/Faqs.tsx:91
+msgid "What license are you using?"
+msgstr "¿Qué licencia están usando?"
+
+#: src/views/home/components/Faqs.tsx:30
+msgid "What's the difference between Kan and Trello?"
+msgstr "¿Cuál es la diferencia entre Kan y Trello?"
+
+#: src/views/home/components/Faqs.tsx:25
+msgid "When Trello launched in 2011, it blew everyone away with its carefully designed simplicity, but over time (and atlassification) it lost its magic and grew into something closer to \"Jira Lite\". This project is our attempt to recapture the original magic of Trello's simplicity, in open source."
+msgstr "Cuando Trello se lanzó en 2011, impresionó a todos con su simplicidad cuidadosamente diseñada, pero con el tiempo (y la atlassificación) perdió su magia y se convirtió en algo más cercano a \"Jira Lite\". Este proyecto es nuestro intento de recuperar la magia original de la simplicidad de Trello, en código abierto."
+
+#: src/views/home/components/Faqs.tsx:22
+msgid "Why make an open source Trello?"
+msgstr "¿Por qué crear un Trello de código abierto?"
+
+#: src/views/board/index.tsx:239
+msgid "Workspace"
+msgstr "Espacio de trabajo"
+
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:26
+msgid "Workspace deleted"
+msgstr "Espacio de trabajo eliminado"
+
+#: src/views/settings/index.tsx:147
+msgid "Workspace description"
+msgstr "Descripción del espacio de trabajo"
+
+#: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:28
+msgid "Workspace description cannot exceed 280 characters"
+msgstr "La descripción del espacio de trabajo no puede exceder los 280 caracteres"
+
+#: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:25
+msgid "Workspace description must be at least 3 characters long"
+msgstr "La descripción del espacio de trabajo debe tener al menos 3 caracteres"
+
+#: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:48
+msgid "Workspace description updated"
+msgstr "Descripción del espacio de trabajo actualizada"
+
+#: src/views/home/components/Pricing.tsx:54
+#: src/views/home/components/Features.tsx:83
+msgid "Workspace members"
+msgstr "Miembros del espacio de trabajo"
+
+#: src/views/settings/index.tsx:130
+#: src/components/NewWorkspaceForm.tsx:78
+msgid "Workspace name"
+msgstr "Nombre del espacio de trabajo"
+
+#: src/views/settings/components/UpdateWorkspaceNameForm.tsx:15
+msgid "Workspace name cannot exceed 24 characters"
+msgstr "El nombre del espacio de trabajo no puede exceder los 24 caracteres"
+
+#: src/views/settings/components/UpdateWorkspaceNameForm.tsx:14
+msgid "Workspace name must be at least 3 characters long"
+msgstr "El nombre del espacio de trabajo debe tener al menos 3 caracteres"
+
+#: src/views/settings/components/UpdateWorkspaceNameForm.tsx:43
+msgid "Workspace name updated"
+msgstr "Nombre del espacio de trabajo actualizado"
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:60
+msgid "Workspace slug updated"
+msgstr "Slug del espacio de trabajo actualizado"
+
+#: src/views/settings/index.tsx:138
+msgid "Workspace URL"
+msgstr "URL del espacio de trabajo"
+
+#: src/views/home/components/Pricing.tsx:19
+msgid "Yearly"
+msgstr "Anual"
+
+#: src/views/home/components/Faqs.tsx:86
+msgid "Yes, we offer an forever free plan for individual use. No restrictions, no paywalls, no limits."
+msgstr "Sí, ofrecemos un plan gratuito para siempre para uso individual. Sin restricciones, sin muros de pago, sin límites."
+
+#: src/views/home/components/Faqs.tsx:67
+msgid "You can get a custom workspace URL, like <0>kan.bn/kan</0>, by going into your <1>workspace settings</1> and purchasing a pro workspace subscription. All subscriptions help fund the development of the project!"
+msgstr "Puedes obtener una URL personalizada para tu espacio de trabajo, como <0>kan.bn/kan</0>, yendo a la <1>configuración de tu espacio de trabajo</1> y comprando una suscripción pro. ¡Todas las suscripciones ayudan a financiar el desarrollo del proyecto!"
+
+#: src/views/home/components/Faqs.tsx:111
+msgid "You can invite team members by clicking the \"Invite\" button in the top right corner of the <0>members page</0> and entering their email address. They will receive an email with a link to join the workspace."
+msgstr "Puedes invitar a miembros del equipo haciendo clic en el botón \"Invitar\" en la esquina superior derecha de la <0>página de miembros</0> e introduciendo su dirección de correo electrónico. Recibirán un email con un enlace para unirse al espacio de trabajo."
+
+#: src/views/home/components/Faqs.tsx:127
+msgid "You can self-host by following the instructions in our <0>repo</0>."
+msgstr "Puedes autoalojar siguiendo las instrucciones en nuestro <0>repositorio</0>."
+
+#: src/components/AuthForm.tsx:206
+msgid "You have been logged in successfully."
+msgstr "Has iniciado sesión correctamente."
+
+#: src/components/AuthForm.tsx:189
+msgid "You have been signed up successfully."
+msgstr "Te has registrado correctamente."
+
+#: src/views/settings/components/DeleteAccountConfirmation.tsx:28
+msgid "Your account has been deleted."
+msgstr "Tu cuenta ha sido eliminada."
+
+#: src/views/boards/components/ImportBoardsForm.tsx:192
+msgid "Your boards have been imported."
+msgstr "Tus tableros han sido importados."
+
+#: src/views/settings/components/UpdateDisplayNameForm.tsx:42
+msgid "Your display name has been updated."
+msgstr "Tu nombre de visualización ha sido actualizado."
+
+#: src/views/settings/components/Avatar.tsx:25
+msgid "Your profile image has been updated."
+msgstr "Tu imagen de perfil ha sido actualizada."
+
+#: src/views/settings/index.tsx:70
+msgid "Your Trello account has been disconnected."
+msgstr "Tu cuenta de Trello ha sido desconectada."
+
+#: src/views/settings/index.tsx:214
+msgid "Your Trello account is connected."
+msgstr "Tu cuenta de Trello está conectada."
+
+#: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:49
+msgid "Your workspace description has been updated."
+msgstr "La descripción de tu espacio de trabajo ha sido actualizada."
+
+#: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:27
+msgid "Your workspace has been deleted."
+msgstr "Tu espacio de trabajo ha sido eliminado."
+
+#: src/views/settings/components/UpdateWorkspaceNameForm.tsx:44
+msgid "Your workspace name has been updated."
+msgstr "El nombre de tu espacio de trabajo ha sido actualizado."
+
+#: src/views/settings/components/UpdateWorkspaceUrlForm.tsx:61
+msgid "Your workspace slug has been updated."
+msgstr "El slug de tu espacio de trabajo ha sido actualizado."

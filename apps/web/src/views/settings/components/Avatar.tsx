@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useState } from "react";
 
@@ -20,8 +21,8 @@ export default function Avatar({
   const updateUser = api.user.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: "Profile image updated",
-        message: "Your profile image has been updated.",
+        header: t`Profile image updated`,
+        message: t`Your profile image has been updated.`,
         icon: "success",
       });
       try {
@@ -33,8 +34,8 @@ export default function Avatar({
     },
     onError: () => {
       showPopup({
-        header: "Error updating profile image",
-        message: "Please try again later, or contact customer support.",
+        header: t`Error updating profile image`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -50,8 +51,8 @@ export default function Avatar({
 
       if (!file || !userId) {
         return showPopup({
-          header: "Error uploading profile image",
-          message: "Please select a file to upload.",
+          header: t`Error uploading profile image`,
+          message: t`Please select a file to upload.`,
           icon: "error",
         });
       }
@@ -91,8 +92,8 @@ export default function Avatar({
     } catch (error) {
       console.error(error);
       showPopup({
-        header: "Error uploading profile image",
-        message: "Please try again later, or contact customer support.",
+        header: t`Error uploading profile image`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     } finally {

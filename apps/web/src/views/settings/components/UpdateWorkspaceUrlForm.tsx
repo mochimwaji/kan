@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useForm } from "react-hook-form";
 import { HiCheck, HiMiniStar } from "react-icons/hi2";
@@ -10,20 +11,6 @@ import { useDebounce } from "~/hooks/useDebounce";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
-
-const schema = z.object({
-  slug: z
-    .string()
-    .min(3, {
-      message: "URL must be at least 3 characters long",
-    })
-    .max(24, { message: "URL cannot exceed 24 characters" })
-    .regex(/^(?![-]+$)[a-zA-Z0-9-]+$/, {
-      message: "URL can only contain letters, numbers, and hyphens",
-    }),
-});
-
-type FormValues = z.infer<typeof schema>;
 
 const UpdateWorkspaceUrlForm = ({
   workspacePublicId,
@@ -37,6 +24,21 @@ const UpdateWorkspaceUrlForm = ({
   const utils = api.useUtils();
   const { showPopup } = usePopup();
   const { openModal } = useModal();
+
+  const schema = z.object({
+    slug: z
+      .string()
+      .min(3, {
+        message: t`URL must be at least 3 characters long`,
+      })
+      .max(24, { message: t`URL cannot exceed 24 characters` })
+      .regex(/^(?![-]+$)[a-zA-Z0-9-]+$/, {
+        message: t`URL can only contain letters, numbers, and hyphens`,
+      }),
+  });
+
+  type FormValues = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
@@ -55,8 +57,8 @@ const UpdateWorkspaceUrlForm = ({
   const updateWorkspaceSlug = api.workspace.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: "Workspace slug updated",
-        message: "Your workspace slug has been updated.",
+        header: t`Workspace slug updated`,
+        message: t`Your workspace slug has been updated.`,
         icon: "success",
       });
       try {
@@ -68,8 +70,8 @@ const UpdateWorkspaceUrlForm = ({
     },
     onError: () => {
       showPopup({
-        header: "Error updating workspace URL",
-        message: "Please try again later, or contact customer support.",
+        header: t`Error updating workspace URL`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -118,7 +120,7 @@ const UpdateWorkspaceUrlForm = ({
           errorMessage={
             errors.slug?.message ||
             (isWorkspaceSlugAvailable?.isAvailable === false
-              ? "This workspace username has already been taken"
+              ? t`This workspace username has already been taken`
               : undefined)
           }
           prefix={
@@ -149,7 +151,7 @@ const UpdateWorkspaceUrlForm = ({
           }
           isLoading={updateWorkspaceSlug.isPending}
         >
-          Update
+          {t`Update`}
         </Button>
       </div>
     </div>

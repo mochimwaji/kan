@@ -1,5 +1,7 @@
 import type { SocialProvider } from "better-auth/social-providers";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { env } from "next-runtime-env";
 import { useState } from "react";
@@ -183,8 +185,8 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           {
             onSuccess: () =>
               showPopup({
-                header: "Success",
-                message: "You have been signed up successfully.",
+                header: t`Success`,
+                message: t`You have been signed up successfully.`,
                 icon: "success",
               }),
             onError: ({ error }) => setLoginError(error.message),
@@ -200,8 +202,8 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           {
             onSuccess: () =>
               showPopup({
-                header: "Success",
-                message: "You have been logged in successfully.",
+                header: t`Success`,
+                message: t`You have been logged in successfully.`,
                 icon: "success",
               }),
             onError: ({ error }) => setLoginError(error.message),
@@ -236,7 +238,7 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
 
     if (error) {
       setLoginError(
-        `Failed to login with ${provider.at(0)?.toUpperCase() + provider.slice(1)}. Please try again.`,
+        t`Failed to login with ${provider.at(0)?.toUpperCase() + provider.slice(1)}. Please try again.`,
       );
     }
   };
@@ -263,7 +265,7 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
                 fullWidth
                 size="lg"
               >
-                Continue with {provider.name}
+                <Trans>Continue with {provider.name}</Trans>
               </Button>
             );
           })}
@@ -274,7 +276,7 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           <div className="mb-[1.5rem] flex w-full items-center gap-4">
             <div className="h-[1px] w-full bg-light-600 dark:bg-dark-600" />
             <span className="text-sm text-light-900 dark:text-dark-900">
-              or
+              {t`or`}
             </span>
             <div className="h-[1px] w-full bg-light-600 dark:bg-dark-600" />
           </div>
@@ -284,11 +286,11 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
             <div>
               <Input
                 {...register("name", { required: true })}
-                placeholder="Enter your name"
+                placeholder={t`Enter your name`}
               />
               {errors.name && (
                 <p className="mt-2 text-xs text-red-400">
-                  Please enter a valid name
+                  {t`Please enter a valid name`}
                 </p>
               )}
             </div>
@@ -296,11 +298,11 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           <div>
             <Input
               {...register("email", { required: true })}
-              placeholder="Enter your email address"
+              placeholder={t`Enter your email address`}
             />
             {errors.email && (
               <p className="mt-2 text-xs text-red-400">
-                Please enter a valid email address
+                {t`Please enter a valid email address`}
               </p>
             )}
           </div>
@@ -309,11 +311,11 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
               <Input
                 type="password"
                 {...register("password", { required: true })}
-                placeholder="Enter your password"
+                placeholder={t`Enter your password`}
               />
               {errors.password && (
                 <p className="mt-2 text-xs text-red-400">
-                  Please enter a valid password
+                  {t`Please enter a valid password`}
                 </p>
               )}
             </div>
@@ -329,10 +331,10 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
             size="lg"
             variant="secondary"
           >
-            {isSignUp ? "Sign up with " : "Continue with "}
+            {isSignUp ? t`Sign up with ` : t`Continue with `}
             {!isCredentialsEnabled || (password && password.length !== 0)
-              ? "email"
-              : "magic link"}
+              ? t`email`
+              : t`magic link`}
           </Button>
         </div>
       </form>

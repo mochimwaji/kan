@@ -1,108 +1,104 @@
 import Link from "next/link";
 import { Radio, RadioGroup } from "@headlessui/react";
+import { t } from "@lingui/core/macro";
 import { useState } from "react";
 import { HiCheckCircle } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
 type Frequency = "monthly" | "annually";
 
-const frequencies = [
-  {
-    value: "monthly" as Frequency,
-    label: "Monthly",
-    priceSuffix: "per user/month",
-  },
-  {
-    value: "annually" as Frequency,
-    label: "Yearly",
-    priceSuffix: "per user/month",
-  },
-];
-
-const tiers = [
-  {
-    name: "Individuals",
-    id: "tier-individuals",
-    href: "signup",
-    buttonText: "Get Started",
-    price: { monthly: "Free", annually: "Free" },
-    description:
-      "Everything you need, free forever. Unlimited boards, unlimited lists, unlimited cards. Upgrade any time.",
-    featureHeader: "Free, forever",
-    features: [
-      "1 user",
-      "Unlimited boards",
-      "Unlimited lists",
-      "Unlimited cards",
-      "Unlimited comments",
-      "Unlimited activity log",
-    ],
-    showPrice: true,
-  },
-  {
-    name: "Teams",
-    id: "tier-teams",
-    href: "signup",
-    buttonText: "Get Started",
-    price: { monthly: "$10.00", annually: "$8.00" },
-    description:
-      "Kanban is better with a team. Perfect for small and growing teams looking to collaborate.",
-    featureHeader: "Everything in the free plan, plus:",
-    features: [
-      "Workspace members",
-      "Admin roles",
-      "Priority email support",
-      "Support the development of the project",
-    ],
-    highlighted: true,
-    showPrice: true,
-    showPriceSuffix: true,
-  },
-  {
-    name: "Self Host",
-    id: "tier-self-host",
-    href: "https://github.com/kanbn/kan",
-    buttonText: "View docs",
-    price: { monthly: "-", annually: "-" },
-    description:
-      "Host Kan on your own infrastructure. Ideal for organisations that need complete control over their data.",
-    featureHeader: "Complete control and ownership:",
-    features: [
-      "Run on your own infrastructure",
-      "Own your data",
-      "Custom domain",
-    ],
-    mostPopular: false,
-    showPrice: false,
-  },
-];
-
 const Pricing = () => {
-  const initialFrequency = frequencies[1]!;
-  const [frequency, setFrequency] = useState(initialFrequency);
+  const frequencies = [
+    {
+      value: "monthly" as Frequency,
+      label: t`Monthly`,
+      priceSuffix: t`per user/month`,
+    },
+    {
+      value: "annually" as Frequency,
+      label: t`Yearly`,
+      priceSuffix: t`per user/month`,
+    },
+  ];
+
+  const [frequency, setFrequency] = useState(frequencies[1]);
+
+  const tiers = [
+    {
+      name: t`Individuals`,
+      id: "tier-individuals",
+      href: "signup",
+      buttonText: t`Get Started`,
+      price: { monthly: t`Free`, annually: t`Free` },
+      description: t`Everything you need, free forever. Unlimited boards, unlimited lists, unlimited cards. Upgrade any time.`,
+      featureHeader: t`Free, forever`,
+      features: [
+        t`1 user`,
+        t`Unlimited boards`,
+        t`Unlimited lists`,
+        t`Unlimited cards`,
+        t`Unlimited comments`,
+        t`Unlimited activity log`,
+      ],
+      showPrice: true,
+    },
+    {
+      name: t`Teams`,
+      id: "tier-teams",
+      href: "signup",
+      buttonText: t`Get Started`,
+      price: { monthly: "$10.00", annually: "$8.00" },
+      description: t`Kanban is better with a team. Perfect for small and growing teams looking to collaborate.`,
+      featureHeader: t`Everything in the free plan, plus:`,
+      features: [
+        t`Workspace members`,
+        t`Admin roles`,
+        t`Priority email support`,
+        t`Support the development of the project`,
+      ],
+      highlighted: true,
+      showPrice: true,
+      showPriceSuffix: true,
+    },
+    {
+      name: t`Self Host`,
+      id: "tier-self-host",
+      href: "https://github.com/kanbn/kan",
+      buttonText: t`View docs`,
+      price: { monthly: "-", annually: "-" },
+      description: t`Host Kan on your own infrastructure. Ideal for organisations that need complete control over their data.`,
+      featureHeader: t`Complete control and ownership:`,
+      features: [
+        t`Run on your own infrastructure`,
+        t`Own your data`,
+        t`Custom domain`,
+      ],
+      mostPopular: false,
+      showPrice: false,
+    },
+  ];
 
   return (
     <>
       <div className="flex flex-col items-center justify-center px-4 pb-10">
         <div className="flex items-center gap-2 rounded-full border bg-light-50 px-4 py-1 text-center text-xs text-light-1000 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900 lg:text-sm">
-          <p>Pricing</p>
+          <p>{t`Pricing`}</p>
         </div>
 
         <p className="mt-2 text-center text-3xl font-bold text-light-1000 dark:text-dark-1000 lg:text-4xl">
-          Simple pricing
+          {t`Simple pricing`}
         </p>
         <p className="text:md lg:text-md mt-3 max-w-[500px] text-center text-dark-900">
-          Get started for free, with no usage limits. For collaboration, upgrade
-          to a plan that fits the size of your team.
+          {t`Get started for free, with no usage limits. For collaboration, upgrade to a plan that fits the size of your team.`}
         </p>
 
         {/* Beta free pricing pill */}
         <div className="mt-4 flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800 dark:bg-green-700 dark:text-green-100">
-          All seats are free during the beta until Sept 1st!
+          {t`All seats are free during the beta until Sept 1st!`}
         </div>
 
         <div className="mt-16 flex justify-center">
-          <fieldset aria-label="Payment frequency">
+          <fieldset aria-label={t`Payment frequency`}>
             <RadioGroup
               value={frequency}
               onChange={(value) => setFrequency(value)}
@@ -145,7 +141,7 @@ const Pricing = () => {
               >
                 {tier.name}
               </h3>
-              {tier.highlighted && frequency.value === "annually" ? (
+              {tier.highlighted && frequency?.value === "annually" ? (
                 <p className="rounded-full bg-light-50 px-2.5 py-1 text-[12px] font-semibold text-dark-500 dark:bg-dark-1000 dark:text-dark-50">
                   -20%
                 </p>
@@ -169,11 +165,11 @@ const Pricing = () => {
                   !tier.showPrice && "opacity-0",
                 )}
               >
-                {tier.price[frequency.value]}
+                {tier.price[frequency?.value || "monthly"]}
               </span>
               {tier.showPriceSuffix && (
                 <span className="text-sm/6 font-semibold text-light-50 dark:text-dark-900">
-                  {frequency.priceSuffix}
+                  {frequency?.priceSuffix}
                 </span>
               )}
             </p>

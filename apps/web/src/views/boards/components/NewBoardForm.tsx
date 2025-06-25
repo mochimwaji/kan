@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
@@ -45,7 +46,7 @@ export function NewBoardForm() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="text-neutral-9000 flex w-full items-center justify-between pb-4 dark:text-dark-1000">
-          <h2 className="text-sm font-bold">New board</h2>
+          <h2 className="text-sm font-bold">{t`New board`}</h2>
           <button
             type="button"
             className="hover:bg-li ght-300 rounded p-1 focus:outline-none dark:hover:bg-dark-300"
@@ -59,7 +60,7 @@ export function NewBoardForm() {
         </div>
         <Input
           id="name"
-          placeholder="Name"
+          placeholder={t`Name`}
           {...register("name", { required: true })}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
@@ -73,7 +74,7 @@ export function NewBoardForm() {
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <div>
           <Button type="submit" isLoading={createBoard.isPending}>
-            Create board
+            {t`Create board`}
           </Button>
         </div>
       </div>

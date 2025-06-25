@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
@@ -46,7 +47,7 @@ export function InviteMemberForm() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="text-neutral-9000 flex w-full items-center justify-between pb-4 dark:text-dark-1000">
-          <h2 className="text-sm font-bold">Add member</h2>
+          <h2 className="text-sm font-bold">{t`Add member`}</h2>
           <button
             type="button"
             className="hover:bg-li ght-300 rounded p-1 focus:outline-none dark:hover:bg-dark-300"
@@ -60,7 +61,7 @@ export function InviteMemberForm() {
         </div>
         <Input
           id="email"
-          placeholder="Email"
+          placeholder={t`Email`}
           {...register("email", { required: true })}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
@@ -78,7 +79,7 @@ export function InviteMemberForm() {
             isLoading={createBoard.isPending}
             className="inline-flex w-full justify-center rounded-md bg-light-1000 px-3 py-2 text-sm font-semibold text-light-50 shadow-sm focus-visible:outline-none dark:bg-dark-1000 dark:text-dark-50"
           >
-            Invite member
+            {t`Invite member`}
           </Button>
         </div>
       </div>

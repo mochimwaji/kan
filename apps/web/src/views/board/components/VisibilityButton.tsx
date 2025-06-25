@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect, useState } from "react";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
@@ -41,15 +42,15 @@ const VisibilityButton = ({
   const updateBoardVisibility = api.board.update.useMutation({
     onSuccess: () => {
       showPopup({
-        header: "Board visibility updated",
-        message: `The visibility of your board has been set to ${isPublic ? "public" : "private"}.`,
+        header: t`Board visibility updated`,
+        message: t`The visibility of your board has been set to ${isPublic ? "public" : "private"}.`,
         icon: "success",
       });
     },
     onError: () => {
       showPopup({
-        header: "Unable to update board visibility",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to update board visibility`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -64,12 +65,12 @@ const VisibilityButton = ({
         items={[
           {
             key: "public",
-            value: "Public",
+            value: t`Public`,
             selected: isPublic,
           },
           {
             key: "private",
-            value: "Private",
+            value: t`Private`,
             selected: !isPublic,
           },
         ]}
@@ -87,7 +88,7 @@ const VisibilityButton = ({
           iconLeft={isPublic ? <HiOutlineEye /> : <HiOutlineEyeSlash />}
           disabled={isLoading || !isAdmin}
         >
-          Visibility
+          {t`Visibility`}
         </Button>
       </CheckboxDropdown>
     </div>

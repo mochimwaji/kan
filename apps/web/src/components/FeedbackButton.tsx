@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";
+import { t } from "@lingui/core/macro";
 import { Fragment, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -34,15 +35,15 @@ const FeedbackButton: React.FC = () => {
     onSuccess: async () => {
       reset();
       showPopup({
-        header: "Feedback sent",
-        message: "Thank you for your feedback!",
+        header: t`Feedback sent`,
+        message: t`Thank you for your feedback!`,
         icon: "success",
       });
     },
     onError: async () => {
       showPopup({
-        header: "Unable to send feedback",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to send feedback`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -74,7 +75,7 @@ const FeedbackButton: React.FC = () => {
               json={activeTheme === "dark" ? chatIconDark : chatIconLight}
               isPlaying={isHovered}
             />
-            <span className="ml-1">Feedback</span>
+            <span className="ml-1">{t`Feedback`}</span>
           </Menu.Button>
         </div>
 
@@ -94,7 +95,7 @@ const FeedbackButton: React.FC = () => {
           >
             <form onSubmit={handleSubmit(onSubmit)} className="p-1">
               <Input
-                placeholder="Ideas to improve this page..."
+                placeholder={t`Ideas to improve this page...`}
                 onChange={(e) => {
                   setValue("feedback", e.target.value);
                 }}
@@ -112,28 +113,28 @@ const FeedbackButton: React.FC = () => {
               <div className="flex flex-row items-center justify-between pt-2">
                 <div>
                   <p className="ml-2 text-xs text-neutral-900 dark:text-dark-1000">
-                    Need help?{" "}
+                    {t`Need help?`}{" "}
                     <Link
                       href="mailto:support@kan.bn"
                       className="text-blue-600 underline dark:text-blue-300"
                     >
-                      Contact us
+                      {t`Contact us`}
                     </Link>
-                    , or see our{" "}
+                    {t`, or see our`}{" "}
                     <Link
                       href="https://docs.kan.bn"
                       target="_blank"
                       rel="noreferrer"
                       className="text-blue-600 underline dark:text-blue-300"
                     >
-                      docs
+                      {t`docs`}
                     </Link>
                     .
                   </p>
                 </div>
                 <div className="justify-end">
                   <Button size="sm" isLoading={createFeedback.isPending}>
-                    Send
+                    {t`Send`}
                   </Button>
                 </div>
               </div>

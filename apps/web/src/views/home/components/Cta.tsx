@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { t } from "@lingui/core/macro";
 import { useEffect, useState } from "react";
 
 import Button from "~/components/Button";
@@ -50,15 +51,14 @@ const Cta = ({ theme }: { theme: string }) => {
             <p>kan.bn/{currentWorkspaceSlug}</p>
           </div>
           <h2 className="text-balance text-4xl font-bold tracking-tight text-light-1000 dark:text-dark-1000 sm:text-4xl">
-            Get started for free today
+            {t`Get started for free today`}
           </h2>
           <p className="text-md/8 mx-auto mt-6 max-w-[375px] text-pretty text-light-900 dark:text-dark-900">
-            Unlimited boards, unlimited lists, unlimited cards. No credit card
-            required.
+            {t`Unlimited boards, unlimited lists, unlimited cards. No credit card required.`}
           </p>
           <Link href="/signup">
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button size="lg">Get started</Button>
+              <Button size="lg">{t`Get started`}</Button>
             </div>
           </Link>
         </div>

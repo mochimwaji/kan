@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -11,20 +12,6 @@ import { useDebounce } from "~/hooks/useDebounce";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
-
-const schema = z.object({
-  slug: z
-    .string()
-    .min(3, {
-      message: "Board URL must be at least 3 characters long",
-    })
-    .max(60, { message: "Board URL cannot exceed 60 characters" })
-    .regex(/^(?![-]+$)[a-zA-Z0-9-]+$/, {
-      message: "Board URL can only contain letters, numbers, and hyphens",
-    }),
-});
-
-type FormValues = z.infer<typeof schema>;
 
 interface QueryParams {
   boardPublicId: string;
@@ -47,6 +34,20 @@ export function UpdateBoardSlugForm({
   const { showPopup } = usePopup();
   const utils = api.useUtils();
 
+  const schema = z.object({
+    slug: z
+      .string()
+      .min(3, {
+        message: t`Board URL must be at least 3 characters long`,
+      })
+      .max(60, { message: t`Board URL cannot exceed 60 characters` })
+      .regex(/^(?![-]+$)[a-zA-Z0-9-]+$/, {
+        message: t`Board URL can only contain letters, numbers, and hyphens`,
+      }),
+  });
+
+  type FormValues = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
@@ -67,8 +68,8 @@ export function UpdateBoardSlugForm({
   const updateBoardSlug = api.board.update.useMutation({
     onError: () => {
       showPopup({
-        header: "Unable to update board URL",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to update board URL`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -78,17 +79,15 @@ export function UpdateBoardSlugForm({
     },
   });
 
-  const checkBoardSlugAvailability =
-    api.board.checkSlugAvailability.useQuery(
-      {
-        boardSlug: debouncedSlug,
-        boardPublicId,
-      },
-      {
-        enabled:
-          !!debouncedSlug && debouncedSlug !== boardSlug && !errors.slug,
-      },
-    );
+  const checkBoardSlugAvailability = api.board.checkSlugAvailability.useQuery(
+    {
+      boardSlug: debouncedSlug,
+      boardPublicId,
+    },
+    {
+      enabled: !!debouncedSlug && debouncedSlug !== boardSlug && !errors.slug,
+    },
+  );
 
   const isBoardSlugAvailable = checkBoardSlugAvailability.data;
 
@@ -100,7 +99,7 @@ export function UpdateBoardSlugForm({
 
   const onSubmit = (data: FormValues) => {
     if (!isBoardSlugAvailable) return;
-    if (isBoardSlugAvailable?.isReserved) return;
+    if (isBoardSlugAvailable.isReserved) return;
 
     updateBoardSlug.mutate({
       slug: data.slug,
@@ -113,7 +112,7 @@ export function UpdateBoardSlugForm({
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4">
           <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
-            Edit board URL
+            {t`Edit board URL`}
           </h2>
           <button
             type="button"
@@ -130,9 +129,12 @@ export function UpdateBoardSlugForm({
         <Input
           id="board-slug"
           {...register("slug")}
-          errorMessage={errors.slug?.message || (isBoardSlugAvailable?.isReserved
-            ? "This board URL has already been taken"
-            : undefined)}
+          errorMessage={
+            errors.slug?.message ||
+            (isBoardSlugAvailable?.isReserved
+              ? t`This board URL has already been taken`
+              : undefined)
+          }
           prefix={`${env("NEXT_PUBLIC_BASE_URL")}/${workspaceSlug}/`}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
@@ -161,7 +163,7 @@ export function UpdateBoardSlugForm({
               isBoardSlugAvailable?.isReserved
             }
           >
-            Update
+            {t`Update`}
           </Button>
         </div>
       </div>

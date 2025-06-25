@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { t } from "@lingui/core/macro";
 
 import boardsIconDark from "~/assets/boards-dark.json";
 import boardsIconLight from "~/assets/boards-light.json";
@@ -35,17 +36,17 @@ export default function SideNavigation({
 
   const navigation = [
     {
-      name: "Boards",
+      name: t`Boards`,
       href: "/boards",
       icon: isDarkMode ? boardsIconDark : boardsIconLight,
     },
     {
-      name: "Members",
+      name: t`Members`,
       href: "/members",
       icon: isDarkMode ? membersIconDark : membersIconLight,
     },
     {
-      name: "Settings",
+      name: t`Settings`,
       href: "/settings",
       icon: isDarkMode ? settingsIconDark : settingsIconLight,
     },

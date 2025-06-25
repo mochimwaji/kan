@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+
 import { authClient } from "@kan/auth/client";
 
 import Button from "~/components/Button";
@@ -44,12 +46,12 @@ const CreateAPIKeyForm = ({
           </div>
           <div>
             <Button variant="danger" onClick={handleRevokeAPIKey}>
-              Revoke
+              {t`Revoke`}
             </Button>
           </div>
         </div>
       ) : (
-        <Button onClick={handleCreateAPIKey}>Create new key</Button>
+        <Button onClick={handleCreateAPIKey}>{t`Create new key`}</Button>
       )}
     </div>
   );

@@ -1,7 +1,9 @@
-import { authClient } from "@kan/auth/client";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { t } from "@lingui/core/macro";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+
+import { authClient } from "@kan/auth/client";
 
 import Button from "~/components/Button";
 import { useModal } from "~/providers/modal";
@@ -22,20 +24,20 @@ export function DeleteAccountConfirmation() {
     onSuccess: async () => {
       closeModal();
       showPopup({
-        header: "Account deleted",
-        message: "Your account has been deleted.",
+        header: t`Account deleted`,
+        message: t`Your account has been deleted.`,
         icon: "success",
       });
 
       utils.invalidate();
-      
+
       router.push("/");
     },
     onError: () => {
       closeModal();
       showPopup({
-        header: "Error deleting account",
-        message: "Please try again later, or contact customer support.",
+        header: t`Error deleting account`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -49,14 +51,13 @@ export function DeleteAccountConfirmation() {
     <div className="p-5">
       <div className="flex w-full flex-col justify-between pb-4">
         <h2 className="text-md pb-4 font-medium text-neutral-900 dark:text-dark-1000">
-          {`Are you sure you want to delete your account?`}
+          {t`Are you sure you want to delete your account?`}
         </h2>
         <p className="mb-4 text-sm text-light-900 dark:text-dark-900">
-          Keep in mind that this action is irreversible.
+          {t`Keep in mind that this action is irreversible.`}
         </p>
         <p className="text-sm text-light-900 dark:text-dark-900">
-          This will result in the permanent deletion of all data associated with
-          your account.
+          {t`This will result in the permanent deletion of all data associated with your account.`}
         </p>
       </div>
       <div className="relative flex items-start">
@@ -78,14 +79,13 @@ export function DeleteAccountConfirmation() {
             id="comments-description"
             className="text-light-900 dark:text-dark-1000"
           >
-            I acknowledge that all of my account data will be permanently
-            deleted and want to proceed.
+            {t`I acknowledge that all of my account data will be permanently deleted and want to proceed.`}
           </p>
         </div>
       </div>
       <div className="mt-5 flex justify-end space-x-2 sm:mt-6">
         <Button variant="secondary" onClick={() => closeModal()}>
-          Cancel
+          {t`Cancel`}
         </Button>
         <Button
           variant="danger"
@@ -93,7 +93,7 @@ export function DeleteAccountConfirmation() {
           disabled={!isAcknowledgmentChecked}
           isLoading={deleteAccountMutation.isPending}
         >
-          Delete account
+          {t`Delete account`}
         </Button>
       </div>
     </div>

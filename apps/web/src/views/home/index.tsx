@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { IoLogoGithub, IoLogoHackernews } from "react-icons/io";
 
 import Button from "~/components/Button";
@@ -32,7 +34,7 @@ export default function HomeView() {
                     target="_blank"
                     className="flex items-center gap-2 px-4 py-1 text-center text-xs text-light-1000 dark:text-dark-1000 lg:text-sm"
                   >
-                    Star on Github
+                    {t`Star on Github`}
                     <IoLogoGithub size={20} />
                   </Link>
                 </div>
@@ -46,7 +48,7 @@ export default function HomeView() {
                     target="_blank"
                     className="flex items-center gap-2 px-4 py-1 text-center text-xs text-light-1000 dark:text-dark-1000 lg:text-sm"
                   >
-                    #1 Hacker News
+                    {t`#1 Hacker News`}
                     <div className="relative">
                       <div className="absolute inset-1 bg-white" />
                       <IoLogoHackernews
@@ -60,27 +62,27 @@ export default function HomeView() {
             </div>
 
             <p className="mt-2 text-center text-4xl font-bold text-light-1000 dark:text-dark-1000 lg:text-5xl">
-              The open source <br />
-              alternative to Trello
+              <Trans>
+                The open source <br /> alternative to Trello
+              </Trans>
             </p>
 
             <p className="text-md mt-3 max-w-[450px] text-center text-dark-900 lg:max-w-[600px] lg:text-lg">
-              A powerful, flexible kanban app that helps you organise work,
-              track progress, and deliver results—all in one place.
+              {t`A powerful, flexible kanban app that helps you organise work, track progress, and deliver results—all in one place.`}
             </p>
 
             <div className="mt-6 flex gap-2">
-              <Button href="/signup">Get started on Cloud</Button>
+              <Button href="/signup">{t`Get started on Cloud`}</Button>
               <Button
                 variant="secondary"
                 href="https://github.com/kanbn/kan"
                 openInNewTab
               >
-                Self host with Github
+                {t`Self host with Github`}
               </Button>
             </div>
             <p className="mt-4 text-center text-sm text-dark-900">
-              No credit card required
+              {t`No credit card required`}
             </p>
           </div>
         </div>

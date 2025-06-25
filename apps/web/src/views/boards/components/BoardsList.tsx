@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { t } from "@lingui/core/macro";
 import { HiOutlineRectangleStack } from "react-icons/hi2";
 
 import Button from "~/components/Button";
@@ -18,7 +19,7 @@ export function BoardsList() {
 
   if (isLoading)
     return (
-      <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-7">
+      <div className="xxl:grid-cols-7 grid w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <div className="mr-5 flex h-[150px] w-full animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
         <div className="mr-5 flex h-[150px] w-full animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
         <div className="mr-5 flex h-[150px] w-full animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
@@ -31,13 +32,15 @@ export function BoardsList() {
         <div className="flex flex-col items-center">
           <HiOutlineRectangleStack className="h-10 w-10 text-light-800 dark:text-dark-800" />
           <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
-            No boards
+            {t`No boards`}
           </p>
           <p className="text-[14px] text-light-900 dark:text-dark-900">
-            Get started by creating a new board
+            {t`Get started by creating a new board`}
           </p>
         </div>
-        <Button onClick={() => openModal("NEW_BOARD")}>Create new board</Button>
+        <Button onClick={() => openModal("NEW_BOARD")}>
+          {t`Create new board`}
+        </Button>
       </div>
     );
 

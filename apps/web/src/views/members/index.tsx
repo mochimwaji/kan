@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { HiEllipsisHorizontal, HiOutlinePlusSmall } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
@@ -103,7 +104,7 @@ export default function MembersPage() {
               </span>
               {memberStatus === "invited" && (
                 <span className="ml-2 inline-flex items-center rounded-md bg-gray-500/10 px-1.5 py-0.5 text-[11px] font-medium text-gray-400 ring-1 ring-inset ring-gray-500/20">
-                  Pending
+                  {t`Pending`}
                 </span>
               )}
             </div>
@@ -116,7 +117,7 @@ export default function MembersPage() {
               <Dropdown
                 items={[
                   {
-                    label: "Remove member",
+                    label: t`Remove member`,
                     action: () =>
                       openModal(
                         "REMOVE_MEMBER",
@@ -140,11 +141,11 @@ export default function MembersPage() {
 
   return (
     <>
-      <PageHead title={`Members | ${workspace.name ?? "Workspace"}`} />
+      <PageHead title={t`Members | ${workspace.name ?? "Workspace"}`} />
       <div className="m-auto max-w-[1600px] px-28 py-12">
         <div className="mb-8 flex w-full justify-between">
           <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
-            Members
+            {t`Members`}
           </h1>
           <div className="flex">
             <Button
@@ -152,7 +153,7 @@ export default function MembersPage() {
               iconLeft={<HiOutlinePlusSmall className="h-4 w-4" />}
               disabled={workspace.role !== "admin"}
             >
-              Invite
+              {t`Invite`}
             </Button>
           </div>
         </div>
@@ -168,13 +169,13 @@ export default function MembersPage() {
                         scope="col"
                         className="w-[65%] rounded-tl-lg py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-900 dark:text-dark-900 sm:pl-6"
                       >
-                        User
+                        {t`User`}
                       </th>
                       <th
                         scope="col"
                         className="w-[35%] rounded-tr-lg px-3 py-3.5 text-left text-sm font-semibold text-light-900 dark:text-dark-900"
                       >
-                        Role
+                        {t`Role`}
                       </th>
                     </tr>
                   </thead>

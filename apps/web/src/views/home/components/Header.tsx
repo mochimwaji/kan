@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { t } from "@lingui/core/macro";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -9,10 +10,10 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = [
-    { label: "Roadmap", href: "/kan/roadmap", openInNewTab: true },
-    { label: "Features", href: "#features" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Docs", href: "https://docs.kan.bn", openInNewTab: true },
+    { label: t`Roadmap`, href: "/kan/roadmap", openInNewTab: true },
+    { label: t`Features`, href: "#features" },
+    { label: t`Pricing`, href: "#pricing" },
+    { label: t`Docs`, href: "https://docs.kan.bn", openInNewTab: true },
   ];
 
   useEffect(() => {
@@ -69,7 +70,7 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             <button
               onClick={toggleMenu}
               className="z-50 p-2 lg:hidden"
-              aria-label="Toggle menu"
+              aria-label={t`Toggle menu`}
             >
               <div
                 className={twMerge(
@@ -92,13 +93,13 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </button>
             <div className="hidden w-[200px] justify-end gap-2 lg:flex">
               {isLoggedIn ? (
-                <Button href="/boards">Go to app</Button>
+                <Button href="/boards">{t`Go to app`}</Button>
               ) : (
                 <>
                   <Button href="/login" variant="ghost">
-                    Sign in
+                    {t`Sign in`}
                   </Button>
-                  <Button href="/signup">Get started</Button>
+                  <Button href="/signup">{t`Get started`}</Button>
                 </>
               )}
             </div>
@@ -129,15 +130,15 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             <div className="mt-8 flex flex-col gap-4">
               {isLoggedIn ? (
                 <Button href="/boards" onClick={toggleMenu}>
-                  Go to app
+                  {t`Go to app`}
                 </Button>
               ) : (
                 <>
                   <Button href="/login" variant="ghost" onClick={toggleMenu}>
-                    Sign in
+                    {t`Sign in`}
                   </Button>
                   <Button href="/signup" onClick={toggleMenu}>
-                    Get started
+                    {t`Get started`}
                   </Button>
                 </>
               )}

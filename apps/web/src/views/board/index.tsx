@@ -2,6 +2,7 @@ import type { DropResult } from "react-beautiful-dnd";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { t } from "@lingui/core/macro";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
@@ -128,8 +129,8 @@ export default function BoardPage() {
     onError: (_error, _newList, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: "Unable to update list",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to update list`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -184,8 +185,8 @@ export default function BoardPage() {
     onError: (_error, _newList, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: "Unable to update card",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to update card`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -235,7 +236,7 @@ export default function BoardPage() {
   return (
     <>
       <PageHead
-        title={`${boardData?.name ?? "Board"} | ${workspace.name ?? "Workspace"}`}
+        title={`${boardData?.name ?? t`Board`} | ${workspace.name ?? t`Workspace`}`}
       />
       <div className="relative flex h-full flex-col">
         <PatternedBackground />
@@ -261,7 +262,7 @@ export default function BoardPage() {
           )}
           {!boardData && !isLoading && (
             <p className="block p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
-              Board not found
+              {t`Board not found`}
             </p>
           )}
 
@@ -292,7 +293,7 @@ export default function BoardPage() {
               }}
               disabled={!boardData}
             >
-              New list
+              {t`New list`}
             </Button>
             <BoardDropdown isLoading={!boardData} />
           </div>
@@ -307,15 +308,15 @@ export default function BoardPage() {
             </div>
           ) : boardData ? (
             <>
-              {boardData?.lists.length === 0 ? (
+              {boardData.lists.length === 0 ? (
                 <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-8 pb-[150px]">
                   <div className="flex flex-col items-center">
                     <HiOutlineSquare3Stack3D className="h-10 w-10 text-light-800 dark:text-dark-800" />
                     <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
-                      No lists
+                      {t`No lists`}
                     </p>
                     <p className="text-[14px] text-light-900 dark:text-dark-900">
-                      Get started by creating a new list
+                      {t`Get started by creating a new list`}
                     </p>
                   </div>
                   <Button
@@ -323,7 +324,7 @@ export default function BoardPage() {
                       if (boardId) openNewListForm(boardId);
                     }}
                   >
-                    Create new list
+                    {t`Create new list`}
                   </Button>
                 </div>
               ) : (
@@ -340,7 +341,7 @@ export default function BoardPage() {
                         {...provided.droppableProps}
                       >
                         <div className="min-w-[2rem]" />
-                        {boardData?.lists.map((list, index) => (
+                        {boardData.lists.map((list, index) => (
                           <List
                             index={index}
                             key={index}

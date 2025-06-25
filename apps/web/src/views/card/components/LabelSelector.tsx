@@ -1,4 +1,5 @@
 import { Menu } from "@headlessui/react";
+import { t } from "@lingui/core/macro";
 import { HiMiniPlus } from "react-icons/hi2";
 
 import Badge from "~/components/Badge";
@@ -68,8 +69,8 @@ export default function LabelSelector({
     onError: (_error, _newList, context) => {
       utils.card.byId.setData({ cardPublicId }, context?.previousCard);
       showPopup({
-        header: "Unable to update labels",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to update labels`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -94,7 +95,7 @@ export default function LabelSelector({
           }}
           handleEdit={(labelPublicId) => openModal("EDIT_LABEL", labelPublicId)}
           handleCreate={() => openModal("NEW_LABEL")}
-          createNewItemLabel="Create new label"
+          createNewItemLabel={t`Create new label`}
           asChild
         >
           {selectedLabels.length ? (
@@ -105,13 +106,16 @@ export default function LabelSelector({
                 </Menu.Button>
               ))}
               <Menu.Button>
-                <Badge value="Add label" iconLeft={<HiMiniPlus size={14} />} />
+                <Badge
+                  value={t`Add label`}
+                  iconLeft={<HiMiniPlus size={14} />}
+                />
               </Menu.Button>
             </div>
           ) : (
             <Menu.Button className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-200 pl-2 text-left text-sm text-neutral-900 hover:bg-light-300 dark:border-dark-100 dark:text-dark-1000 dark:hover:border-dark-300 dark:hover:bg-dark-200">
               <HiMiniPlus size={22} className="pr-2" />
-              Add label
+              {t`Add label`}
             </Menu.Button>
           )}
         </CheckboxDropdown>

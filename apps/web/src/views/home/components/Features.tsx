@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { t } from "@lingui/core/macro";
 import { useState } from "react";
 
 import activityLogsIconDark from "~/assets/activity-logs-dark.json";
@@ -62,7 +63,7 @@ const FeatureItem = ({
 
       {feature.comingSoon && (
         <div className="absolute right-4 top-4 rounded-full border border-light-300 px-2 py-1 text-[10px] text-light-1000 dark:border-dark-600 dark:bg-dark-50 dark:text-dark-900">
-          Coming soon
+          {t`Coming soon`}
         </div>
       )}
     </div>
@@ -71,47 +72,47 @@ const FeatureItem = ({
 
 const Features = ({ theme }: { theme: "light" | "dark" }) => {
   const isDark = theme === "dark";
+
   const features = [
     {
-      title: "Board visibility",
-      description: "Control who can view and edit your boards.",
+      title: t`Board visibility`,
+      description: t`Control who can view and edit your boards.`,
       icon: isDark ? boardVisibilityIconDark : boardVisibilityIconLight,
     },
     {
-      title: "Workspace members",
-      description: "Collaborate seamlessly with your team.",
+      title: t`Workspace members`,
+      description: t`Collaborate seamlessly with your team.`,
       icon: isDark ? membersIconDark : membersIconLight,
     },
     {
-      title: "Trello imports",
-      description: "Import your Trello boards and hit the ground running.",
+      title: t`Trello imports`,
+      description: t`Import your Trello boards and hit the ground running.`,
       icon: isDark ? importsIconDark : importsIconLight,
     },
     {
-      title: "Labels & Filters",
-      description:
-        "Organize and find cards quickly with powerful filtering tools.",
+      title: t`Labels & Filters`,
+      description: t`Organize and find cards quickly with powerful filtering tools.`,
       icon: isDark ? labelsIconDark : labelsIconLight,
     },
     {
-      title: "Comments",
-      description: "Discuss and collaborate on cards.",
+      title: t`Comments`,
+      description: t`Discuss and collaborate on cards.`,
       icon: isDark ? commentsIconDark : commentsIconLight,
     },
     {
-      title: "Activity logs",
-      description: "Track all card changes with detailed activity history.",
+      title: t`Activity logs`,
+      description: t`Track all card changes with detailed activity history.`,
       icon: isDark ? activityLogsIconDark : activityLogsIconLight,
     },
     {
-      title: "Templates",
-      description: "Save time with reusable board templates.",
+      title: t`Templates`,
+      description: t`Save time with reusable board templates.`,
       icon: isDark ? templatesIconDark : templatesIconLight,
       comingSoon: true,
     },
     {
-      title: "Integrations",
-      description: "Connect your favorite tools to streamline your workflow.",
+      title: t`Integrations`,
+      description: t`Connect your favorite tools to streamline your workflow.`,
       icon: isDark ? integrationsIconDark : integrationsIconLight,
       comingSoon: true,
     },
@@ -121,15 +122,14 @@ const Features = ({ theme }: { theme: "light" | "dark" }) => {
     <>
       <div className="flex flex-col items-center justify-center px-4 pb-24">
         <div className="flex items-center gap-2 rounded-full border bg-light-50 px-4 py-1 text-center text-xs text-light-1000 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900 lg:text-sm">
-          <p>Features</p>
+          <p>{t`Features`}</p>
         </div>
 
         <p className="mt-2 text-center text-3xl font-bold text-light-1000 dark:text-dark-1000 lg:text-4xl">
-          Kanban reimagined
+          {t`Kanban reimagined`}
         </p>
         <p className="text-md lg:text-md mt-3 max-w-[500px] text-center text-dark-900">
-          Simple, visual task management that just works. Drag and drop cards,
-          collaborate with your team, and get more done.
+          {t`Simple, visual task management that just works. Drag and drop cards, collaborate with your team, and get more done.`}
         </p>
         <div className="mx-auto mt-16 w-full max-w-7xl">
           <div className="grid w-full grid-cols-1 gap-4 [mask-image:linear-gradient(to_bottom,black_92%,transparent_100%)] sm:grid-cols-2 md:grid-cols-3 md:[mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] lg:grid-cols-4 lg:[mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]">
@@ -142,9 +142,9 @@ const Features = ({ theme }: { theme: "light" | "dark" }) => {
         <div>
           <div className="mt-8 flex items-center gap-2 rounded-full border bg-light-50 px-4 py-1 text-center text-sm text-light-1000 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900">
             <p className="text-xs lg:text-sm">
-              {`We're just getting started. `}
+              {t`We're just getting started. `}
               <Link href="/kan/roadmap" className="underline">
-                View our roadmap.
+                {t`View our roadmap.`}
               </Link>
             </p>
           </div>

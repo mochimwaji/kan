@@ -1,37 +1,8 @@
 import Link from "next/link";
+import { t } from "@lingui/core/macro";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 
-const navigation = {
-  documentation: [
-    { name: "Getting started", href: "https://docs.kan.bn/introduction" },
-    {
-      name: "Importing from Trello",
-      href: "https://docs.kan.bn/imports/trello",
-    },
-    {
-      name: "API Reference",
-      href: "https://docs.kan.bn/api-reference/introduction",
-    },
-  ],
-  company: [
-    { name: "Roadmap", href: "/kan/roadmap" },
-    { name: "GitHub", href: "https://github.com/kanbn/kan" },
-    { name: "Contact", href: "mailto:support@kan.bn" },
-  ],
-  legal: [
-    { name: "Terms of service", href: "/terms" },
-    { name: "Privacy policy", href: "/privacy" },
-    {
-      name: "License",
-      href: "https://github.com/kanbn/kan?tab=AGPL-3.0-1-ov-file#readme",
-    },
-  ],
-  resources: [
-    { name: "Features", href: "/#features" },
-    { name: "Pricing", href: "/#pricing" },
-    { name: "FAQs", href: "/#faq" },
-  ],
-};
+import { LanguageSelector } from "~/components/LanguageSelector";
 
 const StatusMarker = () => (
   <Link
@@ -44,11 +15,43 @@ const StatusMarker = () => (
       <span className="absolute -inset-[1px] animate-[ping_1s_infinite] rounded-full bg-green-500/30"></span>
       <span className="absolute inset-0 rounded-full bg-green-500"></span>
     </span>
-    All systems operational
+    {t`All systems operational`}
   </Link>
 );
 
 const Footer = () => {
+  const navigation = {
+    documentation: [
+      { name: t`Getting started`, href: "https://docs.kan.bn/introduction" },
+      {
+        name: t`Importing from Trello`,
+        href: "https://docs.kan.bn/imports/trello",
+      },
+      {
+        name: t`API Reference`,
+        href: "https://docs.kan.bn/api-reference/introduction",
+      },
+    ],
+    company: [
+      { name: t`Roadmap`, href: "/kan/roadmap" },
+      { name: t`GitHub`, href: "https://github.com/kanbn/kan" },
+      { name: t`Contact`, href: "mailto:support@kan.bn" },
+    ],
+    legal: [
+      { name: t`Terms of service`, href: "/terms" },
+      { name: t`Privacy policy`, href: "/privacy" },
+      {
+        name: t`License`,
+        href: "https://github.com/kanbn/kan?tab=AGPL-3.0-1-ov-file#readme",
+      },
+    ],
+    resources: [
+      { name: t`Features`, href: "/#features" },
+      { name: t`Pricing`, href: "/#pricing" },
+      { name: t`FAQs`, href: "/#faq" },
+    ],
+  };
+
   return (
     <footer className="z-10 w-full border-t border-light-300 bg-light-50 py-8 dark:border-dark-300 dark:bg-dark-50">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-24">
@@ -64,13 +67,14 @@ const Footer = () => {
             </div>
 
             <StatusMarker />
+            <LanguageSelector />
           </div>
 
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
                 <h3 className="text-sm/6 font-semibold text-light-1000 dark:text-dark-1000">
-                  Documentation
+                  {t`Documentation`}
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.documentation.map((item) => (
@@ -87,7 +91,7 @@ const Footer = () => {
               </div>
               <div>
                 <h3 className="mt-10 text-sm/6 font-semibold text-light-1000 dark:text-dark-1000 md:mt-0">
-                  Company
+                  {t`Company`}
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.company.map((item) => (
@@ -106,7 +110,7 @@ const Footer = () => {
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
                 <h3 className="text-sm/6 font-semibold text-light-1000 dark:text-dark-1000">
-                  Resources
+                  {t`Resources`}
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.resources.map((item) => (
@@ -123,7 +127,7 @@ const Footer = () => {
               </div>
               <div>
                 <h3 className="mt-10 text-sm/6 font-semibold text-light-1000 dark:text-dark-1000 md:mt-0">
-                  Legal
+                  {t`Legal`}
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.legal.map((item) => (

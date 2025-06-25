@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { t } from "@lingui/core/macro";
 import { Draggable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import {
@@ -106,14 +107,14 @@ export default function List({
                 <Dropdown
                   items={[
                     {
-                      label: "Add a card",
+                      label: t`Add a card`,
                       action: () => openNewCardForm(list.publicId),
                       icon: (
                         <HiOutlineSquaresPlus className="h-[18px] w-[18px] text-dark-900" />
                       ),
                     },
                     {
-                      label: "Delete list",
+                      label: t`Delete list`,
                       action: handleOpenDeleteListConfirmation,
                       icon: (
                         <HiOutlineTrash className="h-[18px] w-[18px] text-dark-900" />

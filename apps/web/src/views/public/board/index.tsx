@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { t } from "@lingui/core/macro";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { HiLink } from "react-icons/hi2";
@@ -47,9 +48,9 @@ export default function PublicBoardView() {
           }
 
           showPopup({
-            header: "Link copied",
+            header: t`Link copied`,
             icon: "success",
-            message: "Board URL copied to clipboard",
+            message: t`Board URL copied to clipboard`,
           });
         }}
         className="rounded p-1.5 transition-all hover:bg-light-200 dark:hover:bg-dark-100"
@@ -82,7 +83,7 @@ export default function PublicBoardView() {
   return (
     <>
       <PageHead
-        title={`${data?.name ?? "Board"} | ${data?.workspace?.name ?? "Workspace"}`}
+        title={`${data?.name ?? "Board"} | ${data?.workspace.name ?? "Workspace"}`}
       />
       <style jsx global>{`
         html {
@@ -137,7 +138,7 @@ export default function PublicBoardView() {
                       {list.cards.map((card) => (
                         <Link
                           key={card.publicId}
-                          href={`/${data.workspace?.slug}/${data.slug}/${card.publicId}`}
+                          href={`/${data.workspace.slug}/${data.slug}/${card.publicId}`}
                           className={`mb-2 flex !cursor-pointer flex-col`}
                           shallow={true}
                           onClick={() => {
@@ -177,7 +178,7 @@ export default function PublicBoardView() {
       <Modal modalSize={"md"} positionFromTop={"sm"}>
         <CardModal
           cardPublicId={cardPublicId}
-          workspaceSlug={data?.workspace?.slug}
+          workspaceSlug={data?.workspace.slug}
           boardSlug={data?.slug}
         />
       </Modal>

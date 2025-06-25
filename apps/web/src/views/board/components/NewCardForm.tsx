@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -90,9 +92,14 @@ export function NewCardForm({
                 args.labelPublicIds.includes(label.publicId),
               ),
               members:
-                oldBoard.workspace.members.filter((member) =>
-                  args.memberPublicIds.includes(member.publicId),
-                ) ?? [],
+                oldBoard.workspace.members
+                  .filter((member) =>
+                    args.memberPublicIds.includes(member.publicId),
+                  )
+                  .map((member) => ({
+                    ...member,
+                    deletedAt: null,
+                  })) ?? [],
               _filteredLabels: labelPublicIds.map((id) => ({ publicId: id })),
               _filteredMembers: memberPublicIds.map((id) => ({ publicId: id })),
               index: position === "start" ? 0 : list.cards.length,
@@ -115,10 +122,10 @@ export function NewCardForm({
     onError: (error, _newList, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: "Unable to create card",
+        header: t`Unable to create card`,
         message: error.data?.zodError?.fieldErrors.title?.[0]
           ? `${error.data.zodError.fieldErrors.title[0].replace("String", "Title")}`
-          : "Please try again later, or contact customer support.",
+          : t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -166,6 +173,7 @@ export function NewCardForm({
         member.user?.name ?? null,
         member.user?.email ?? member.email,
       ),
+      selected: memberPublicIds.includes(member.publicId),
       leftIcon: (
         <Avatar
           size="xs"
@@ -226,7 +234,7 @@ export function NewCardForm({
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-5">
           <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
-            New card
+            {t`New card`}
           </h2>
           <button
             type="button"
@@ -243,7 +251,7 @@ export function NewCardForm({
         <div>
           <Input
             id="title"
-            placeholder="Card title"
+            placeholder={t`Card title`}
             {...register("title")}
             onKeyDown={async (e) => {
               if (e.key === "Enter") {
@@ -279,7 +287,7 @@ export function NewCardForm({
             >
               <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-600 bg-light-200 px-2 py-1 text-left text-xs text-light-800 hover:bg-light-300 dark:border-dark-600 dark:bg-dark-400 dark:text-dark-1000 dark:hover:bg-dark-500">
                 {!memberPublicIds.length ? (
-                  "Members"
+                  t`Members`
                 ) : (
                   <div className="flex -space-x-1 overflow-hidden">
                     {memberPublicIds.map((memberPublicId) => {
@@ -316,11 +324,11 @@ export function NewCardForm({
                 openModal("EDIT_LABEL", labelPublicId)
               }
               handleCreate={() => openModal("NEW_LABEL")}
-              createNewItemLabel="Create new label"
+              createNewItemLabel={t`Create new label`}
             >
               <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-600 bg-light-200 px-2 py-1 text-left text-xs text-light-800 hover:bg-light-300 dark:border-dark-600 dark:bg-dark-400 dark:text-dark-1000 dark:hover:bg-dark-500">
                 {!labelPublicIds.length ? (
-                  "Labels"
+                  t`Labels`
                 ) : (
                   <>
                     <div
@@ -353,7 +361,9 @@ export function NewCardForm({
                       })}
                     </div>
                     {labelPublicIds.length > 1 && (
-                      <div className="ml-1">{`${labelPublicIds.length} labels`}</div>
+                      <div className="ml-1">
+                        <Trans>{`${labelPublicIds.length} labels`}</Trans>
+                      </div>
                     )}
                   </>
                 )}
@@ -378,7 +388,7 @@ export function NewCardForm({
 
       <div className="mt-5 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <Toggle
-          label="Create another"
+          label={t`Create another`}
           isChecked={isCreateAnotherEnabled}
           onChange={handleToggleCreateAnother}
         />
@@ -388,7 +398,7 @@ export function NewCardForm({
             type="submit"
             disabled={title.length === 0 || createCard.isPending}
           >
-            Create card
+            {t`Create card`}
           </Button>
         </div>
       </div>

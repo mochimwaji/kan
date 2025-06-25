@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { t } from "@lingui/core/macro";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -6,19 +7,6 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
-
-const schema = z.object({
-  description: z
-    .string()
-    .min(3, {
-      message: "Workspace description must be at least 3 characters long",
-    })
-    .max(280, {
-      message: "Workspace description cannot exceed 280 characters",
-    }),
-});
-
-type FormValues = z.infer<typeof schema>;
 
 const UpdateWorkspaceDescriptionForm = ({
   workspacePublicId,
@@ -29,6 +17,20 @@ const UpdateWorkspaceDescriptionForm = ({
 }) => {
   const utils = api.useUtils();
   const { showPopup } = usePopup();
+
+  const schema = z.object({
+    description: z
+      .string()
+      .min(3, {
+        message: t`Workspace description must be at least 3 characters long`,
+      })
+      .max(280, {
+        message: t`Workspace description cannot exceed 280 characters`,
+      }),
+  });
+
+  type FormValues = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
@@ -43,8 +45,8 @@ const UpdateWorkspaceDescriptionForm = ({
   const updateWorkspaceDescription = api.workspace.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: "Workspace description updated",
-        message: "Your workspace description has been updated.",
+        header: t`Workspace description updated`,
+        message: t`Your workspace description has been updated.`,
         icon: "success",
       });
       try {
@@ -56,8 +58,8 @@ const UpdateWorkspaceDescriptionForm = ({
     },
     onError: () => {
       showPopup({
-        header: "Error updating workspace description",
-        message: "Please try again later, or contact customer support.",
+        header: t`Error updating workspace description`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -85,7 +87,7 @@ const UpdateWorkspaceDescriptionForm = ({
           disabled={!isDirty || updateWorkspaceDescription.isPending}
           isLoading={updateWorkspaceDescription.isPending}
         >
-          Update
+          {t`Update`}
         </Button>
       </div>
     </div>

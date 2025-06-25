@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { t } from "@lingui/core/macro";
 import {
   HiMiniXMark,
   HiOutlineTag,
@@ -89,7 +90,7 @@ const Filters = ({
       ? [
           {
             key: "members",
-            label: "Members",
+            label: t`Members`,
             icon: <HiOutlineUserCircle size={16} />,
             items: formattedMembers,
           },
@@ -97,7 +98,7 @@ const Filters = ({
       : []),
     {
       key: "labels",
-      label: "Labels",
+      label: t`Labels`,
       icon: <HiOutlineTag size={16} />,
       items: formattedLabels,
     },
@@ -145,13 +146,13 @@ const Filters = ({
           disabled={isLoading}
           iconLeft={<IoFilterOutline />}
         >
-          Filter
+          {t`Filter`}
         </Button>
         {numOfFilters > 0 && (
           <button
             type="button"
             onClick={clearFilters}
-            aria-label="Clear filters"
+            aria-label={t`Clear filters`}
             className="group absolute -right-[8px] -top-[8px] flex h-5 w-5 items-center justify-center rounded-full border-2 border-light-100 bg-light-1000 text-[8px] font-[700] text-light-600 dark:border-dark-50 dark:bg-dark-1000 dark:text-dark-600"
           >
             <span className="group-hover:hidden">{numOfFilters}</span>

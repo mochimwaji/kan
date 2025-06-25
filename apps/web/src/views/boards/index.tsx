@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { HiArrowDownTray, HiOutlinePlusSmall } from "react-icons/hi2";
 
 import Modal from "~/components/modal";
@@ -17,11 +18,11 @@ export default function BoardsPage() {
 
   return (
     <>
-      <PageHead title={`Boards | ${workspace.name ?? "Workspace"}`} />
+      <PageHead title={t`Boards | ${workspace.name ?? "Workspace"}`} />
       <div className="h-full p-8">
         <div className="mb-8 flex w-full justify-between">
           <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
-            Boards
+            {t`Boards`}
           </h1>
           <div className="flex">
             <button
@@ -35,7 +36,7 @@ export default function BoardsPage() {
                   aria-hidden="true"
                 />
               </div>
-              Import
+              {t`Import`}
             </button>
             <button
               type="button"
@@ -48,7 +49,7 @@ export default function BoardsPage() {
                   aria-hidden="true"
                 />
               </div>
-              New
+              {t`New`}
             </button>
           </div>
         </div>

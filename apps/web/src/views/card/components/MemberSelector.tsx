@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { Menu } from "@headlessui/react";
+import { t } from "@lingui/core/macro";
 import { HiMiniPlus } from "react-icons/hi2";
 
 import Avatar from "~/components/Avatar";
@@ -55,6 +56,8 @@ export default function MemberSelector({
               ...oldCard.members,
               {
                 publicId: update.workspaceMemberPublicId,
+                email: memberToAdd?.email ?? "",
+                deletedAt: null,
                 user: {
                   id: memberToAdd?.user?.id ?? "",
                   name: memberToAdd?.user?.name ?? "",
@@ -73,8 +76,8 @@ export default function MemberSelector({
     onError: (_error, _newList, context) => {
       utils.card.byId.setData({ cardPublicId }, context?.previousCard);
       showPopup({
-        header: "Unable to update members",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to update members`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -106,7 +109,7 @@ export default function MemberSelector({
             });
           }}
           handleCreate={handleInviteMember}
-          createNewItemLabel="Invite member"
+          createNewItemLabel={t`Invite member`}
           asChild
         >
           <Menu.Button className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-200 py-1 pl-2 text-left text-sm text-neutral-900 hover:bg-light-300 dark:border-dark-100 dark:text-dark-1000 dark:hover:border-dark-300 dark:hover:bg-dark-200">
@@ -124,7 +127,7 @@ export default function MemberSelector({
             ) : (
               <>
                 <HiMiniPlus size={22} className="pr-2" />
-                {"Add member"}
+                {t`Add member`}
               </>
             )}
           </Menu.Button>

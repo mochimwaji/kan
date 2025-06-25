@@ -1,4 +1,5 @@
 import "~/styles/globals.css";
+import "~/utils/i18n";
 
 import type { AppType } from "next/app";
 import { Plus_Jakarta_Sans } from "next/font/google";
@@ -8,6 +9,7 @@ import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { useEffect } from "react";
 
+import { LinguiProviderWrapper } from "~/providers/lingui";
 import { ModalProvider } from "~/providers/modal";
 import { PopupProvider } from "~/providers/popup";
 import { ThemeProvider } from "~/providers/theme";
@@ -59,19 +61,21 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       )}
       <script src="/__ENV.js" />
       <main className="font-sans">
-        <ThemeProvider>
-          <ModalProvider>
-            <PopupProvider>
-              {posthogKey ? (
-                <PostHogProvider client={posthog}>
+        <LinguiProviderWrapper>
+          <ThemeProvider>
+            <ModalProvider>
+              <PopupProvider>
+                {posthogKey ? (
+                  <PostHogProvider client={posthog}>
+                    <Component {...pageProps} />
+                  </PostHogProvider>
+                ) : (
                   <Component {...pageProps} />
-                </PostHogProvider>
-              ) : (
-                <Component {...pageProps} />
-              )}
-            </PopupProvider>
-          </ModalProvider>
-        </ThemeProvider>
+                )}
+              </PopupProvider>
+            </ModalProvider>
+          </ThemeProvider>
+        </LinguiProviderWrapper>
       </main>
     </>
   );

@@ -5,6 +5,7 @@ import type {
 } from "@tiptap/suggestion";
 import type { Instance as TippyInstance } from "tippy.js";
 import { Button } from "@headlessui/react";
+import { t } from "@lingui/core/macro";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import {
@@ -298,7 +299,7 @@ export default function Editor({
         Placeholder.configure({
           placeholder: readOnly
             ? ""
-            : "Add description... (type '/' to open commands)",
+            : t`Add description... (type '/' to open commands)`,
         }),
         Link.configure({
           openOnClick: true,

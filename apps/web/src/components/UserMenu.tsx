@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Menu, Transition } from "@headlessui/react";
+import { t } from "@lingui/core/macro";
 import { Fragment } from "react";
 
 import { authClient } from "@kan/auth/client";
@@ -81,7 +82,7 @@ export default function UserMenu({
           <div className="flex flex-col text-neutral-900 dark:text-dark-1000">
             <div className="p-1">
               <div className="flex w-full items-center px-3 py-2 text-left text-xs">
-                <span>Theme</span>
+                <span>{t`Theme`}</span>
               </div>
               <Menu.Item>
                 <button
@@ -94,7 +95,7 @@ export default function UserMenu({
                       "mr-4 h-[6px] w-[6px] rounded-full bg-light-900 dark:bg-dark-900",
                     )}
                   />
-                  System
+                  {t`System`}
                 </button>
               </Menu.Item>
               <Menu.Item>
@@ -108,7 +109,7 @@ export default function UserMenu({
                       "mr-4 h-[6px] w-[6px] rounded-full bg-light-900 dark:bg-dark-900",
                     )}
                   />
-                  Dark
+                  {t`Dark`}
                 </button>
               </Menu.Item>
               <Menu.Item>
@@ -122,7 +123,7 @@ export default function UserMenu({
                       "mr-4 h-[6px] w-[6px] rounded-full bg-light-900 dark:bg-dark-900",
                     )}
                   />
-                  Light
+                  {t`Light`}
                 </button>
               </Menu.Item>
             </div>
@@ -132,7 +133,7 @@ export default function UserMenu({
                   onClick={handleLogout}
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
                 >
-                  Logout
+                  {t`Logout`}
                 </button>
               </Menu.Item>
             </div>

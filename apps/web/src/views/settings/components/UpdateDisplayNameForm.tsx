@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { t } from "@lingui/core/macro";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -7,22 +8,22 @@ import Input from "~/components/Input";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
 
-const schema = z.object({
-  name: z
-    .string()
-    .min(3, {
-      message: "Display namemust be at least 3 characters long",
-    })
-    .max(280, {
-      message: "Display name cannot exceed 280 characters",
-    }),
-});
-
-type FormValues = z.infer<typeof schema>;
-
 const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
   const utils = api.useUtils();
   const { showPopup } = usePopup();
+
+  const schema = z.object({
+    name: z
+      .string()
+      .min(3, {
+        message: t`Display name must be at least 3 characters long`,
+      })
+      .max(280, {
+        message: t`Display name cannot exceed 280 characters`,
+      }),
+  });
+
+  type FormValues = z.infer<typeof schema>;
   const {
     register,
     handleSubmit,
@@ -37,8 +38,8 @@ const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
   const updateDisplayName = api.user.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: "Display name updated",
-        message: "Your display name has been updated.",
+        header: t`Display name updated`,
+        message: t`Your display name has been updated.`,
         icon: "success",
       });
       try {
@@ -50,8 +51,8 @@ const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
     },
     onError: () => {
       showPopup({
-        header: "Error updating display name",
-        message: "Please try again later, or contact customer support.",
+        header: t`Error updating display name`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -75,7 +76,7 @@ const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
           disabled={!isDirty || updateDisplayName.isPending}
           isLoading={updateDisplayName.isPending}
         >
-          Update
+          {t`Update`}
         </Button>
       </div>
     </div>

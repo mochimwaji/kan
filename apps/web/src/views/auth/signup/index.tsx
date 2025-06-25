@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
+import { env } from "next-runtime-env";
 import { useState } from "react";
 
 import { authClient } from "@kan/auth/client";
@@ -7,34 +10,51 @@ import { authClient } from "@kan/auth/client";
 import { Auth } from "~/components/AuthForm";
 import { PageHead } from "~/components/PageHead";
 import PatternedBackground from "~/components/PatternedBackground";
-import { env } from "next-runtime-env";
 
-export default function SignupPage() {
+export default function SignUpPage() {
   const router = useRouter();
+  const isSignUpDisabled = env("NEXT_PUBLIC_DISABLE_SIGN_UP") === "true";
   const [isMagicLinkSent, setIsMagicLinkSent] = useState<boolean>(false);
   const [magicLinkRecipient, setMagicLinkRecipient] = useState<string>("");
+
+  const { data } = authClient.useSession();
+
+  if (data?.user.id) router.push("/boards");
 
   const handleMagicLinkSent = (value: boolean, recipient: string) => {
     setIsMagicLinkSent(value);
     setMagicLinkRecipient(recipient);
   };
 
-  const { data } = authClient.useSession();
-
-  if (data?.user.id) router.push("/boards");
-
-  if (env("NEXT_PUBLIC_DISABLE_SIGN_UP")?.toLowerCase() === "true") {
+  if (isSignUpDisabled) {
     return (
-      <div className="flex flex-col bg-light-100 dark:bg-dark-50 h-screen items-center justify-center">
-        <p className="mb-2 text-light-1000 dark:text-dark-1000 font-semibold text-sm">Sign up is disabled</p>
-        <Link href="/login" className="text-light-1000 dark:text-dark-1000 font-semibold text-sm rounded-md border border-light-900 dark:border-dark-900 px-4 py-2">Login</Link>
-      </div>
-    )
+      <>
+        <PageHead title={t`Sign up | kan.bn`} />
+        <main className="h-screen bg-light-100 pt-20 dark:bg-dark-50 sm:pt-0">
+          <div className="justify-top flex h-full flex-col items-center px-4 sm:justify-center">
+            <div className="z-10 flex w-full flex-col items-center">
+              <Link href="/">
+                <h1 className="mb-6 text-lg font-bold tracking-tight text-light-1000 dark:text-dark-1000">
+                  kan.bn
+                </h1>
+              </Link>
+              <p className="mb-10 text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
+                {t`Sign up disabled`}
+              </p>
+              <p className="text-md text-center text-light-1000 dark:text-dark-1000">
+                {t`Sign up is currently disabled. Please try again later.`}
+              </p>
+            </div>
+            <PatternedBackground />
+          </div>
+        </main>
+      </>
+    );
   }
 
   return (
     <>
-      <PageHead title="Sign up | kan.bn" />
+      <PageHead title={t`Sign up | kan.bn`} />
       <main className="h-screen bg-light-100 pt-20 dark:bg-dark-50 sm:pt-0">
         <div className="justify-top flex h-full flex-col items-center px-4 sm:justify-center">
           <div className="z-10 flex w-full flex-col items-center">
@@ -44,12 +64,15 @@ export default function SignupPage() {
               </h1>
             </Link>
             <p className="mb-10 text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
-              {isMagicLinkSent ? "Check your inbox" : "Create your account"}
+              {isMagicLinkSent ? t`Check your inbox` : t`Get started`}
             </p>
             {isMagicLinkSent ? (
               <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <p className="text-md mt-2 text-center text-light-1000 dark:text-dark-1000">
-                  {`Click on the link we've sent to ${magicLinkRecipient} to sign in.`}
+                  <Trans>
+                    Click on the link we've sent to {magicLinkRecipient} to sign
+                    in.
+                  </Trans>
                 </p>
               </div>
             ) : (
@@ -60,10 +83,12 @@ export default function SignupPage() {
               </div>
             )}
             <p className="mt-4 text-sm text-light-1000 dark:text-dark-1000">
-              Already have an account?{" "}
-              <span className="underline">
-                <Link href="/login">Sign in</Link>
-              </span>
+              <Trans>
+                Already have an account?{" "}
+                <span className="underline">
+                  <Link href="/login">Sign in</Link>
+                </span>
+              </Trans>
             </p>
           </div>
           <PatternedBackground />

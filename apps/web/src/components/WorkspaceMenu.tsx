@@ -1,4 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
+import { t } from "@lingui/core/macro";
 import { Fragment } from "react";
 import { HiCheck } from "react-icons/hi2";
 
@@ -81,7 +82,7 @@ export default function WorkspaceMenu() {
                 onClick={() => openModal("NEW_WORKSPACE")}
                 className="flex w-full items-center justify-between rounded-[5px] px-3 py-2 text-left text-xs text-neutral-900 hover:bg-light-200 dark:text-dark-1000 dark:hover:bg-dark-400"
               >
-                Create workspace
+                {t`Create workspace`}
               </button>
             </Menu.Item>
           </div>

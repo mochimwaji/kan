@@ -1,8 +1,10 @@
-import { authClient } from "@kan/auth/client";
 import { useRouter } from "next/router";
+import { t } from "@lingui/core/macro";
 import { HiXMark } from "react-icons/hi2";
-import Editor from "~/components/Editor";
 
+import { authClient } from "@kan/auth/client";
+
+import Editor from "~/components/Editor";
 import { useModal } from "~/providers/modal";
 import { api } from "~/utils/api";
 import ActivityList from "~/views/card/components/ActivityList";
@@ -99,7 +101,7 @@ export function CardModal({
           )}
           <div className="border-t-[1px] border-light-600 pb-4 pt-12 dark:border-dark-400">
             <h2 className="text-md pb-4 font-medium text-light-900 dark:text-dark-1000">
-              Activity
+              {t`Activity`}
             </h2>
             <div>
               {cardPublicId && (

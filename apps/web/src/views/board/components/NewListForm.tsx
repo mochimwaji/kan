@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
@@ -73,8 +74,8 @@ export function NewListForm({
     onError: (_error, _newList, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: "Unable to create list",
-        message: "Please try again later, or contact customer support.",
+        header: t`Unable to create list`,
+        message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -108,7 +109,7 @@ export function NewListForm({
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4">
           <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
-            New list
+            {t`New list`}
           </h2>
           <button
             type="button"
@@ -124,7 +125,7 @@ export function NewListForm({
 
         <Input
           id="list-name"
-          placeholder="List name"
+          placeholder={t`List name`}
           {...register("name")}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
@@ -136,7 +137,7 @@ export function NewListForm({
       </div>
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <Toggle
-          label="Create another"
+          label={t`Create another`}
           isChecked={isCreateAnotherEnabled}
           onChange={() =>
             setValue("isCreateAnotherEnabled", !isCreateAnotherEnabled)
@@ -144,7 +145,7 @@ export function NewListForm({
         />
 
         <div>
-          <Button type="submit">Create list</Button>
+          <Button type="submit">{t`Create list`}</Button>
         </div>
       </div>
     </form>

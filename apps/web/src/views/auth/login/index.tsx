@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { env } from "next-runtime-env";
 import { useState } from "react";
 
@@ -26,7 +28,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <PageHead title="Login | kan.bn" />
+      <PageHead title={t`Login | kan.bn`} />
       <main className="h-screen bg-light-100 pt-20 dark:bg-dark-50 sm:pt-0">
         <div className="justify-top flex h-full flex-col items-center px-4 sm:justify-center">
           <div className="z-10 flex w-full flex-col items-center">
@@ -36,12 +38,15 @@ export default function LoginPage() {
               </h1>
             </Link>
             <p className="mb-10 text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
-              {isMagicLinkSent ? "Check your inbox" : "Welcome back"}
+              {isMagicLinkSent ? t`Check your inbox` : t`Welcome back`}
             </p>
             {isMagicLinkSent ? (
               <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <p className="text-md mt-2 text-center text-light-1000 dark:text-dark-1000">
-                  {`Click on the link we've sent to ${magicLinkRecipient} to sign in.`}
+                  <Trans>
+                    Click on the link we've sent to {magicLinkRecipient} to sign
+                    in.
+                  </Trans>
                 </p>
               </div>
             ) : (
@@ -53,10 +58,12 @@ export default function LoginPage() {
             )}
             {!isSignUpDisabled && (
               <p className="mt-4 text-sm text-light-1000 dark:text-dark-1000">
-                Don't have an account?{" "}
-                <span className="underline">
-                  <Link href="/signup">Sign up</Link>
-                </span>
+                <Trans>
+                  Don't have an account?{" "}
+                  <span className="underline">
+                    <Link href="/signup">Sign up</Link>
+                  </span>
+                </Trans>
               </p>
             )}
           </div>

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { HiEllipsisHorizontal, HiOutlineTrash } from "react-icons/hi2";
 
 import Dropdown from "~/components/Dropdown";
@@ -10,7 +11,7 @@ export default function BoardDropdown() {
     <Dropdown
       items={[
         {
-          label: "Delete card",
+          label: t`Delete card`,
           action: () => openModal("DELETE_CARD"),
           icon: <HiOutlineTrash className="h-[16px] w-[16px] text-dark-900" />,
         },
