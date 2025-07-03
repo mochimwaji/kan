@@ -10,6 +10,7 @@ import {
 import { authClient } from "@kan/auth/client";
 
 import { useClickOutside } from "~/hooks/useClickOutside";
+import { useTheme } from "~/providers/theme";
 import FeedbackButton from "./FeedbackButton";
 import SideNavigation from "./SideNavigation";
 
@@ -24,6 +25,8 @@ export default function Dashboard({
   rightPanel,
   hasRightPanel = false,
 }: DashboardProps) {
+  const theme = useTheme();
+
   const { data: session, isPending: sessionLoading } = authClient.useSession();
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
@@ -65,16 +68,20 @@ export default function Dashboard({
     }
   });
 
+  const isDarkMode = theme.activeTheme === "dark";
+
   return (
     <>
       <style jsx global>{`
         html {
           height: 100vh;
           overflow: hidden;
+          min-width: 320px;
+          background-color: ${!isDarkMode ? "hsl(0deg 0% 97.3%)" : "#161616"};
         }
       `}</style>
-      <div className="h-screen flex-col items-center bg-light-100 dark:bg-dark-50 md:flex md:min-w-[800px]">
-        <div className="m-auto flex h-12 min-h-12 w-full justify-between border-b border-light-600 px-5 py-2 align-middle dark:border-dark-400 md:h-16 md:min-h-16">
+      <div className="flex h-screen flex-col items-center bg-light-100 dark:bg-dark-50 md:min-w-[800px]">
+        <div className="flex h-12 min-h-12 w-full justify-between border-b border-light-600 px-5 py-2 align-middle dark:border-dark-400 md:h-16 md:min-h-16">
           <div className="my-auto flex w-full items-center justify-between">
             <button
               ref={sideNavButtonRef}
@@ -127,10 +134,10 @@ export default function Dashboard({
           </div>
         </div>
 
-        <div className="flex h-full w-full">
+        <div className="flex h-full min-h-0 w-full">
           <div
             ref={sideNavRef}
-            className={`fixed left-0 z-50 h-[calc(100vh-3rem)] transform transition-transform duration-300 ease-in-out md:relative md:h-[calc(100vh-4rem)] md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}
+            className={`fixed left-0 top-12 z-50 h-[calc(100dvh-3rem)] transform transition-transform duration-300 ease-in-out md:relative md:top-0 md:h-full md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}
           >
             <SideNavigation
               user={{ email: session?.user.email, image: session?.user.image }}
@@ -138,14 +145,14 @@ export default function Dashboard({
             />
           </div>
 
-          <div className="relative flex w-full overflow-hidden">
-            <div className="w-full overflow-hidden">{children}</div>
+          <div className="relative flex min-h-0 w-full overflow-hidden">
+            <div className="h-full w-full overflow-y-auto">{children}</div>
 
             {/* Mobile Right Panel */}
             {hasRightPanel && rightPanel && (
               <div
                 ref={rightPanelRef}
-                className={`fixed right-0 top-12 z-50 h-[calc(100vh-3rem)] w-80 transform bg-light-200 transition-transform duration-300 ease-in-out dark:bg-dark-100 md:hidden ${
+                className={`fixed right-0 top-12 z-50 h-[calc(100dvh-3rem)] w-80 transform bg-light-200 transition-transform duration-300 ease-in-out dark:bg-dark-100 md:hidden ${
                   isRightPanelOpen ? "translate-x-0" : "translate-x-full"
                 }`}
               >

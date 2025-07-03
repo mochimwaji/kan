@@ -189,7 +189,7 @@ export default function CardPage() {
       />
       <div className="flex h-full flex-1 flex-row">
         <div className="flex h-full w-full flex-col overflow-hidden">
-          <div className="h-full max-h-[calc(100vh-4rem)] overflow-y-auto p-6 md:p-8">
+          <div className="h-full max-h-[calc(100dvh-3rem)] overflow-y-auto p-6 md:max-h-[calc(100dvh-4rem)] md:p-8">
             <div className="mb-8 flex w-full items-center justify-between">
               {!card && isLoading && (
                 <div className="flex space-x-2">

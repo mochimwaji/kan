@@ -104,7 +104,7 @@ export default function SettingsPage() {
   return (
     <>
       <div className="flex h-full w-full flex-col overflow-hidden">
-        <div className="h-full max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <div className="h-full max-h-[calc(100vdh-3rem)] overflow-y-auto md:max-h-[calc(100vdh-4rem)]">
           <PageHead title={t`Settings | ${workspace.name ?? "Workspace"}`} />
           <div className="m-auto max-w-[1600px] px-5 py-6 md:px-28 md:py-12">
             <div className="mb-8 flex w-full justify-between">
