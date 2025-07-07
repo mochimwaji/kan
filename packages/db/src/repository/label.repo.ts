@@ -23,7 +23,12 @@ export const create = async (
       createdBy: labelInput.createdBy,
       boardId: labelInput.boardId,
     })
-    .returning({ id: labels.id });
+    .returning({
+      id: labels.id,
+      publicId: labels.publicId,
+      name: labels.name,
+      colourCode: labels.colourCode,
+    });
 
   if (labelInput.cardId && result) {
     await db.insert(cardsToLabels).values({
@@ -91,6 +96,7 @@ export const update = async (
     .where(eq(labels.publicId, labelInput.labelPublicId))
     .returning({
       id: labels.id,
+      publicId: labels.publicId,
       name: labels.name,
       colourCode: labels.colourCode,
     });

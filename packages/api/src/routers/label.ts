@@ -8,6 +8,12 @@ import * as labelRepo from "@kan/db/repository/label.repo";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
 
+const labelSchema = z.object({
+  publicId: z.string(),
+  name: z.string(),
+  colourCode: z.string().nullable(),
+});
+
 export const labelRouter = createTRPCRouter({
   byPublicId: protectedProcedure
     .meta({
@@ -21,7 +27,7 @@ export const labelRouter = createTRPCRouter({
       },
     })
     .input(z.object({ labelPublicId: z.string().min(12) }))
-    .output(z.custom<Awaited<ReturnType<typeof labelRepo.getByPublicId>>>())
+    .output(labelSchema)
     .query(async ({ ctx, input }) => {
       const userId = ctx.user?.id;
 
@@ -52,7 +58,11 @@ export const labelRouter = createTRPCRouter({
           code: "NOT_FOUND",
         });
 
-      return result;
+      return {
+        publicId: result.publicId,
+        name: result.name,
+        colourCode: result.colourCode,
+      };
     }),
   create: protectedProcedure
     .meta({
@@ -72,7 +82,7 @@ export const labelRouter = createTRPCRouter({
         colourCode: z.string().length(7),
       }),
     )
-    .output(z.custom<Awaited<ReturnType<typeof labelRepo.create>>>())
+    .output(labelSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user?.id;
 
@@ -108,7 +118,11 @@ export const labelRouter = createTRPCRouter({
           code: "INTERNAL_SERVER_ERROR",
         });
 
-      return result;
+      return {
+        publicId: result.publicId,
+        name: result.name,
+        colourCode: result.colourCode,
+      };
     }),
   update: protectedProcedure
     .meta({
@@ -128,7 +142,7 @@ export const labelRouter = createTRPCRouter({
         colourCode: z.string().length(7),
       }),
     )
-    .output(z.custom<Awaited<ReturnType<typeof labelRepo.update>>>())
+    .output(labelSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user?.id;
 
@@ -153,7 +167,17 @@ export const labelRouter = createTRPCRouter({
 
       const result = await labelRepo.update(ctx.db, input);
 
-      return result;
+      if (!result)
+        throw new TRPCError({
+          message: `Failed to update label`,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+
+      return {
+        publicId: result.publicId,
+        name: result.name,
+        colourCode: result.colourCode,
+      };
     }),
   delete: protectedProcedure
     .meta({
