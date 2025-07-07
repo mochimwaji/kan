@@ -1,8 +1,8 @@
 import "~/styles/globals.css";
 import "~/utils/i18n";
 
+import type { Viewport } from "next";
 import type { AppType } from "next/app";
-import { Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
 import { env } from "next-runtime-env";

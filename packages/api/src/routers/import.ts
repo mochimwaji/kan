@@ -55,6 +55,7 @@ export const importRouter = createTRPCRouter({
           protect: true,
         },
       })
+      .input(z.void())
       .output(z.array(z.object({ id: z.string(), name: z.string() })))
       .query(async ({ ctx }) => {
         const apiKey = apiKeys.trello;

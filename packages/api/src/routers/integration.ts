@@ -15,22 +15,47 @@ export const apiKeys = {
 };
 
 export const integrationRouter = createTRPCRouter({
-  providers: protectedProcedure.query(async ({ ctx }) => {
-    const user = ctx.user;
+  providers: protectedProcedure
+    .meta({
+      openapi: {
+        summary: "Get integration providers",
+        method: "GET",
+        path: "/integration/providers",
+        description: "Retrieves all integration providers for the user",
+        tags: ["Integration"],
+        protect: true,
+      },
+    })
+    .input(z.void())
+    .output(
+      z.array(
+        z.object({
+          expiresAt: z.date(),
+          createdAt: z.date(),
+          updatedAt: z.date().nullable(),
+          userId: z.string(),
+          accessToken: z.string(),
+          refreshToken: z.string().nullable(),
+          provider: z.string(),
+        }),
+      ),
+    )
+    .query(async ({ ctx }) => {
+      const user = ctx.user;
 
-    if (!user)
-      throw new TRPCError({
-        message: "User not authenticated",
-        code: "UNAUTHORIZED",
-      });
+      if (!user)
+        throw new TRPCError({
+          message: "User not authenticated",
+          code: "UNAUTHORIZED",
+        });
 
-    const integrations = await integrationsRepo.getProvidersForUser(
-      ctx.db,
-      user.id,
-    );
+      const integrations = await integrationsRepo.getProvidersForUser(
+        ctx.db,
+        user.id,
+      );
 
-    return integrations;
-  }),
+      return integrations;
+    }),
   disconnect: protectedProcedure
     .meta({
       openapi: {
