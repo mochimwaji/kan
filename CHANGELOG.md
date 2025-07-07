@@ -5,7 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/kanbn/kan/compare/v0.2.2...HEAD)
+## [Unreleased](https://github.com/kanbn/kan/compare/v0.2.3...HEAD)
+
+## [0.2.3](https://github.com/kanbn/kan/compare/v0.2.2...v0.2.3) - 2025-07-07
+
+### Added
+
+- Mobile support with responsive navigation and layout
+- Template selection when creating new boards with predefined lists and labels
+- S3_FORCE_PATH_STYLE configuration for MinIO compatibility
+
+### Changed
+
+- Improved mobile UI styling and layout containers
+- Enhanced iOS mobile support with viewport fixes and zoom prevention
+- Improved card view layout for mobile devices
+
+### Fixed
+
+- Mobile dashboard min-width issues
+- Dynamic viewport height on mobile devices
+- Scroll functionality on card pages
 
 ## [0.2.2](https://github.com/kanbn/kan/compare/v0.2.1...v0.2.2) - 2025-06-28
 
