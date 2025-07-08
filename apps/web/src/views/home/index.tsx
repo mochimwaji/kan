@@ -40,7 +40,7 @@ export default function HomeView() {
                 </div>
               </div>
 
-              <div className="relative overflow-hidden rounded-full bg-gradient-to-b from-light-300 to-light-400 p-[2px] dark:from-dark-300 dark:to-dark-400">
+              {/* <div className="relative overflow-hidden rounded-full bg-gradient-to-b from-light-300 to-light-400 p-[2px] dark:from-dark-300 dark:to-dark-400">
                 <div className="relative z-10 rounded-full bg-light-50 dark:bg-dark-50">
                   <Link
                     href="https://news.ycombinator.com/item?id=44157177"
@@ -58,7 +58,7 @@ export default function HomeView() {
                     </div>
                   </Link>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <p className="mt-2 text-center text-4xl font-bold text-light-1000 dark:text-dark-1000 lg:text-5xl">
