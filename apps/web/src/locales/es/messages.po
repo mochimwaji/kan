@@ -23,7 +23,7 @@ msgstr ", o consulta nuestra"
 
 #. placeholder {0}: card?.title ?? "Card"
 #. placeholder {1}: board?.name ?? "Board"
-#: src/views/card/index.tsx:148
+#: src/views/card/index.tsx:188
 msgid "{0} | {1}"
 msgstr "{0} | {1}"
 
@@ -35,10 +35,6 @@ msgstr "{0} etiquetas"
 #: src/views/boards/components/ImportBoardsForm.tsx:299
 msgid "{boardCount, plural, one {Import board (1)} other {Import boards ({boardCount})}}"
 msgstr "{boardCount, plural, one {Importar tablero (1)} other {Importar tableros ({boardCount})}}"
-
-#: src/views/home/index.tsx:51
-msgid "#1 Hacker News"
-msgstr "#1 Hacker News"
 
 #: src/views/home/components/Pricing.tsx:36
 msgid "1 user"
@@ -53,7 +49,7 @@ msgid "Account deleted"
 msgstr "Cuenta eliminada"
 
 #: src/views/public/board/CardModal.tsx:104
-#: src/views/card/index.tsx:215
+#: src/views/card/index.tsx:255
 msgid "Activity"
 msgstr "Actividad"
 
@@ -112,11 +108,11 @@ msgstr "Todos los sistemas operativos"
 msgid "Already have an account? <0><1>Sign in</1></0>"
 msgstr "¿Ya tienes una cuenta? <0><1>Iniciar sesión</1></0>"
 
-#: src/views/settings/index.tsx:77
+#: src/views/settings/index.tsx:99
 msgid "An error occurred while disconnecting your Trello account."
 msgstr "Ocurrió un error al desconectar tu cuenta de Trello."
 
-#: src/views/settings/index.tsx:229
+#: src/views/settings/index.tsx:256
 msgid "API keys"
 msgstr "Claves API"
 
@@ -169,12 +165,12 @@ msgstr "Pendientes"
 msgid "Basic Kanban"
 msgstr "Kanban básico"
 
-#: src/views/settings/index.tsx:168
+#: src/views/settings/index.tsx:195
 #: src/views/boards/components/TemplateBoards.tsx:55
 msgid "Billing"
 msgstr "Facturación"
 
-#: src/views/settings/index.tsx:178
+#: src/views/settings/index.tsx:205
 msgid "Billing portal"
 msgstr "Portal de facturación"
 
@@ -182,7 +178,7 @@ msgstr "Portal de facturación"
 msgid "Blog Post"
 msgstr "Entrada de blog"
 
-#: src/views/board/index.tsx:239
+#: src/views/board/index.tsx:240
 msgid "Board"
 msgstr "Tablero"
 
@@ -194,7 +190,7 @@ msgstr "El nombre del tablero no puede exceder los 100 caracteres"
 msgid "Board name is required"
 msgstr "El nombre del tablero es obligatorio"
 
-#: src/views/board/index.tsx:265
+#: src/views/board/index.tsx:266
 msgid "Board not found"
 msgstr "Tablero no encontrado"
 
@@ -222,13 +218,13 @@ msgstr "Visibilidad del tablero"
 msgid "Board visibility updated"
 msgstr "Visibilidad del tablero actualizada"
 
-#: src/views/boards/index.tsx:25
+#: src/views/boards/index.tsx:26
 #: src/components/SideNavigation.tsx:39
 msgid "Boards"
 msgstr "Tableros"
 
 #. placeholder {0}: workspace.name ?? "Workspace"
-#: src/views/boards/index.tsx:21
+#: src/views/boards/index.tsx:22
 msgid "Boards | {0}"
 msgstr "Tableros | {0}"
 
@@ -254,7 +250,7 @@ msgstr "Informe de error"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/views/card/index.tsx:193
+#: src/views/card/index.tsx:233
 msgid "Card not found"
 msgstr "Tarjeta no encontrada"
 
@@ -262,7 +258,7 @@ msgstr "Tarjeta no encontrada"
 msgid "Card title"
 msgstr "Título de la tarjeta"
 
-#: src/views/settings/index.tsx:160
+#: src/views/settings/index.tsx:187
 msgid "Change the language of the app."
 msgstr "Cambiar el idioma de la aplicación."
 
@@ -312,7 +308,7 @@ msgstr "Control y propiedad completos:"
 msgid "Confirm URL change"
 msgstr "Confirmar cambio de URL"
 
-#: src/views/settings/index.tsx:205
+#: src/views/settings/index.tsx:232
 #: src/views/boards/components/ImportBoardsForm.tsx:157
 msgid "Connect Trello"
 msgstr "Conectar Trello"
@@ -321,7 +317,7 @@ msgstr "Conectar Trello"
 msgid "Connect your favorite tools to streamline your workflow."
 msgstr "Conecta tus herramientas favoritas para agilizar tu flujo de trabajo."
 
-#: src/views/settings/index.tsx:192
+#: src/views/settings/index.tsx:219
 msgid "Connect your Trello account to import boards."
 msgstr "Conecta tu cuenta de Trello para importar tableros."
 
@@ -385,12 +381,12 @@ msgstr "Crear nueva clave"
 msgid "Create new label"
 msgstr "Crear nueva etiqueta"
 
-#: src/views/board/index.tsx:327
+#: src/views/board/index.tsx:334
 msgid "Create new list"
 msgstr "Crear nueva lista"
 
 #: src/components/WorkspaceMenu.tsx:85
-#: src/components/NewWorkspaceForm.tsx:91
+#: src/components/NewWorkspaceForm.tsx:93
 msgid "Create workspace"
 msgstr "Crear espacio de trabajo"
 
@@ -424,8 +420,8 @@ msgstr "Oscuro"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: src/views/settings/index.tsx:260
-#: src/views/settings/index.tsx:270
+#: src/views/settings/index.tsx:287
+#: src/views/settings/index.tsx:297
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:96
 msgid "Delete account"
 msgstr "Eliminar cuenta"
@@ -446,8 +442,8 @@ msgstr "Eliminar comentario"
 msgid "Delete list"
 msgstr "Eliminar lista"
 
-#: src/views/settings/index.tsx:242
-#: src/views/settings/index.tsx:253
+#: src/views/settings/index.tsx:269
+#: src/views/settings/index.tsx:280
 #: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:106
 msgid "Delete workspace"
 msgstr "Eliminar espacio de trabajo"
@@ -456,7 +452,7 @@ msgstr "Eliminar espacio de trabajo"
 msgid "Design"
 msgstr "Diseño"
 
-#: src/views/settings/index.tsx:220
+#: src/views/settings/index.tsx:247
 msgid "Disconnect Trello"
 msgstr "Desconectar Trello"
 
@@ -464,7 +460,7 @@ msgstr "Desconectar Trello"
 msgid "Discuss and collaborate on cards."
 msgstr "Discute y colabora en las tarjetas."
 
-#: src/views/settings/index.tsx:123
+#: src/views/settings/index.tsx:148
 msgid "Display name"
 msgstr "Nombre visible"
 
@@ -521,6 +517,10 @@ msgstr "Editar comentario"
 msgid "Edit label"
 msgstr "Editar etiqueta"
 
+#: src/views/board/components/UpdateBoardSlugForm.tsx:161
+msgid "Edit workspace URL"
+msgstr "Editar URL del espacio de trabajo"
+
 #: src/views/boards/components/TemplateBoards.tsx:31
 msgid "Editing"
 msgstr "Editando"
@@ -557,7 +557,7 @@ msgstr "Error al eliminar la cuenta"
 msgid "Error deleting workspace"
 msgstr "Error al eliminar el espacio de trabajo"
 
-#: src/views/settings/index.tsx:76
+#: src/views/settings/index.tsx:98
 msgid "Error disconnecting Trello"
 msgstr "Error al desconectar Trello"
 
@@ -674,7 +674,7 @@ msgstr "Comenzar"
 msgid "Get started by creating a new board"
 msgstr "Comienza creando un nuevo tablero"
 
-#: src/views/board/index.tsx:319
+#: src/views/board/index.tsx:326
 msgid "Get started by creating a new list"
 msgstr "Comienza creando una nueva lista"
 
@@ -751,7 +751,7 @@ msgstr "Ideas"
 msgid "Ideas to improve this page..."
 msgstr "Ideas para mejorar esta página..."
 
-#: src/views/boards/index.tsx:39
+#: src/views/boards/index.tsx:37
 msgid "Import"
 msgstr "Importar"
 
@@ -797,7 +797,7 @@ msgstr "Integraciones"
 msgid "Interviewing"
 msgstr "Entrevistando"
 
-#: src/views/members/index.tsx:156
+#: src/views/members/index.tsx:168
 msgid "Invite"
 msgstr "Invitar"
 
@@ -823,7 +823,7 @@ msgstr "Kanban reinventado"
 msgid "Keep in mind that this action is irreversible."
 msgstr "Ten en cuenta que esta acción es irreversible."
 
-#: src/views/card/index.tsx:243
+#: src/views/card/index.tsx:112
 #: src/views/board/components/NewCardForm.tsx:331
 #: src/views/board/components/Filters.tsx:101
 msgid "Labels"
@@ -833,7 +833,7 @@ msgstr "Etiquetas"
 msgid "Labels & Filters"
 msgstr "Etiquetas y filtros"
 
-#: src/views/settings/index.tsx:157
+#: src/views/settings/index.tsx:184
 msgid "Language"
 msgstr "Idioma"
 
@@ -857,7 +857,7 @@ msgstr "Claro"
 msgid "Link copied"
 msgstr "Enlace copiado"
 
-#: src/views/card/index.tsx:235
+#: src/views/card/index.tsx:104
 msgid "List"
 msgstr "Lista"
 
@@ -889,8 +889,8 @@ msgstr "enlace mágico"
 msgid "Medium Priority"
 msgstr "Prioridad media"
 
-#: src/views/members/index.tsx:148
-#: src/views/card/index.tsx:251
+#: src/views/members/index.tsx:160
+#: src/views/card/index.tsx:120
 #: src/views/board/components/NewCardForm.tsx:290
 #: src/views/board/components/Filters.tsx:93
 #: src/components/SideNavigation.tsx:44
@@ -898,7 +898,7 @@ msgid "Members"
 msgstr "Miembros"
 
 #. placeholder {0}: workspace.name ?? "Workspace"
-#: src/views/members/index.tsx:144
+#: src/views/members/index.tsx:156
 msgid "Members | {0}"
 msgstr "Miembros | {0}"
 
@@ -923,7 +923,7 @@ msgstr "Nombre"
 msgid "Need help?"
 msgstr "¿Necesitas ayuda?"
 
-#: src/views/boards/index.tsx:52
+#: src/views/boards/index.tsx:47
 msgid "New"
 msgstr "Nuevo"
 
@@ -943,7 +943,7 @@ msgstr "Nueva importación"
 msgid "New label"
 msgstr "Nueva etiqueta"
 
-#: src/views/board/index.tsx:296
+#: src/views/board/index.tsx:303
 #: src/views/board/components/NewListForm.tsx:112
 msgid "New list"
 msgstr "Nueva lista"
@@ -952,7 +952,7 @@ msgstr "Nueva lista"
 msgid "New Ticket"
 msgstr "Nuevo ticket"
 
-#: src/components/NewWorkspaceForm.tsx:62
+#: src/components/NewWorkspaceForm.tsx:64
 msgid "New workspace"
 msgstr "Nuevo espacio de trabajo"
 
@@ -976,7 +976,7 @@ msgstr "No se encontraron tableros"
 msgid "No credit card required"
 msgstr "No se requiere tarjeta de crédito"
 
-#: src/views/board/index.tsx:316
+#: src/views/board/index.tsx:323
 msgid "No lists"
 msgstr "Sin listas"
 
@@ -988,11 +988,11 @@ msgstr "Oferta"
 msgid "Onboarding"
 msgstr "Incorporación"
 
-#: src/views/settings/index.tsx:263
+#: src/views/settings/index.tsx:290
 msgid "Once you delete your account, there is no going back. This action cannot be undone."
 msgstr "Una vez que elimines tu cuenta, no hay vuelta atrás. Esta acción no se puede deshacer."
 
-#: src/views/settings/index.tsx:245
+#: src/views/settings/index.tsx:272
 msgid "Once you delete your workspace, there is no going back. This action cannot be undone."
 msgstr "Una vez que elimines tu espacio de trabajo, no hay vuelta atrás. Esta acción no se puede deshacer."
 
@@ -1016,7 +1016,7 @@ msgstr "Tiempo parcial"
 msgid "Payment frequency"
 msgstr "Frecuencia de pago"
 
-#: src/views/members/index.tsx:107
+#: src/views/members/index.tsx:117
 msgid "Pending"
 msgstr "Pendiente"
 
@@ -1058,7 +1058,7 @@ msgstr "Por favor selecciona un archivo para subir."
 #: src/views/settings/components/Avatar.tsx:38
 #: src/views/settings/components/Avatar.tsx:96
 #: src/views/members/components/DeleteMemberConfirmation.tsx:28
-#: src/views/card/index.tsx:116
+#: src/views/card/index.tsx:158
 #: src/views/card/components/NewCommentForm.tsx:31
 #: src/views/card/components/MemberSelector.tsx:80
 #: src/views/card/components/ListSelector.tsx:53
@@ -1067,13 +1067,13 @@ msgstr "Por favor selecciona un archivo para subir."
 #: src/views/card/components/DeleteCardConfirmation.tsx:52
 #: src/views/card/components/Comment.tsx:62
 #: src/views/boards/components/ImportBoardsForm.tsx:205
-#: src/views/board/index.tsx:133
-#: src/views/board/index.tsx:189
+#: src/views/board/index.tsx:134
+#: src/views/board/index.tsx:190
 #: src/views/board/components/VisibilityButton.tsx:53
 #: src/views/board/components/UpdateBoardSlugForm.tsx:72
 #: src/views/board/components/NewListForm.tsx:78
 #: src/views/board/components/NewCardForm.tsx:128
-#: src/components/NewWorkspaceForm.tsx:39
+#: src/components/NewWorkspaceForm.tsx:41
 #: src/components/FeedbackButton.tsx:46
 msgid "Please try again later, or contact customer support."
 msgstr "Por favor, inténtalo de nuevo más tarde o contacta con atención al cliente."
@@ -1100,7 +1100,7 @@ msgstr "Privado"
 msgid "Profile image updated"
 msgstr "Imagen de perfil actualizada"
 
-#: src/views/settings/index.tsx:118
+#: src/views/settings/index.tsx:143
 msgid "Profile picture"
 msgstr "Foto de perfil"
 
@@ -1136,7 +1136,7 @@ msgstr "Remoto"
 msgid "Remove"
 msgstr "Eliminar"
 
-#: src/views/members/index.tsx:120
+#: src/views/members/index.tsx:131
 msgid "Remove member"
 msgstr "Eliminar miembro"
 
@@ -1177,7 +1177,7 @@ msgstr "Revocar"
 msgid "Roadmap"
 msgstr "Hoja de ruta"
 
-#: src/views/members/index.tsx:178
+#: src/views/members/index.tsx:190
 msgid "Role"
 msgstr "Rol"
 
@@ -1225,13 +1225,13 @@ msgstr "Enviar"
 msgid "Senior"
 msgstr "Senior"
 
-#: src/views/settings/index.tsx:112
+#: src/views/settings/index.tsx:137
 #: src/components/SideNavigation.tsx:49
 msgid "Settings"
 msgstr "Configuración"
 
 #. placeholder {0}: workspace.name ?? "Workspace"
-#: src/views/settings/index.tsx:108
+#: src/views/settings/index.tsx:133
 msgid "Settings | {0}"
 msgstr "Configuración | {0}"
 
@@ -1361,7 +1361,7 @@ msgstr "Alternar menú"
 msgid "Track all card changes with detailed activity history."
 msgstr "Rastrea todos los cambios en las tarjetas con un historial de actividad detallado."
 
-#: src/views/settings/index.tsx:69
+#: src/views/settings/index.tsx:91
 msgid "Trello disconnected"
 msgstr "Trello desconectado"
 
@@ -1385,7 +1385,7 @@ msgstr "No se puede crear la tarjeta"
 msgid "Unable to create list"
 msgstr "No se puede crear la lista"
 
-#: src/components/NewWorkspaceForm.tsx:38
+#: src/components/NewWorkspaceForm.tsx:40
 msgid "Unable to create workspace"
 msgstr "No se puede crear el espacio de trabajo"
 
@@ -1413,8 +1413,8 @@ msgstr "No se puede actualizar la URL del tablero"
 msgid "Unable to update board visibility"
 msgstr "No se puede actualizar la visibilidad del tablero"
 
-#: src/views/card/index.tsx:115
-#: src/views/board/index.tsx:188
+#: src/views/card/index.tsx:157
+#: src/views/board/index.tsx:189
 msgid "Unable to update card"
 msgstr "No se puede actualizar la tarjeta"
 
@@ -1427,7 +1427,7 @@ msgid "Unable to update labels"
 msgstr "No se pueden actualizar las etiquetas"
 
 #: src/views/card/components/ListSelector.tsx:52
-#: src/views/board/index.tsx:132
+#: src/views/board/index.tsx:133
 msgid "Unable to update list"
 msgstr "No se puede actualizar la lista"
 
@@ -1471,7 +1471,7 @@ msgstr "Listas ilimitadas"
 #: src/views/settings/components/UpdateWorkspaceNameForm.tsx:82
 #: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:90
 #: src/views/settings/components/UpdateDisplayNameForm.tsx:79
-#: src/views/board/components/UpdateBoardSlugForm.tsx:166
+#: src/views/board/components/UpdateBoardSlugForm.tsx:173
 msgid "Update"
 msgstr "Actualizar"
 
@@ -1516,7 +1516,7 @@ msgstr "La URL debe tener al menos 3 caracteres"
 msgid "Use template"
 msgstr "Usar plantilla"
 
-#: src/views/members/index.tsx:172
+#: src/views/members/index.tsx:184
 msgid "User"
 msgstr "Usuario"
 
@@ -1524,11 +1524,11 @@ msgstr "Usuario"
 msgid "Video"
 msgstr "Video"
 
-#: src/views/settings/index.tsx:232
+#: src/views/settings/index.tsx:259
 msgid "View and manage your API keys."
 msgstr "Ver y gestionar tus claves API."
 
-#: src/views/settings/index.tsx:171
+#: src/views/settings/index.tsx:198
 msgid "View and manage your billing and subscription."
 msgstr "Ver y gestionar tu facturación y suscripción."
 
@@ -1572,7 +1572,7 @@ msgstr "Cuando Trello se lanzó en 2011, impresionó a todos con su simplicidad 
 msgid "Why make an open source Trello?"
 msgstr "¿Por qué crear un Trello de código abierto?"
 
-#: src/views/board/index.tsx:239
+#: src/views/board/index.tsx:240
 msgid "Workspace"
 msgstr "Espacio de trabajo"
 
@@ -1580,7 +1580,7 @@ msgstr "Espacio de trabajo"
 msgid "Workspace deleted"
 msgstr "Espacio de trabajo eliminado"
 
-#: src/views/settings/index.tsx:147
+#: src/views/settings/index.tsx:174
 msgid "Workspace description"
 msgstr "Descripción del espacio de trabajo"
 
@@ -1601,8 +1601,8 @@ msgstr "Descripción del espacio de trabajo actualizada"
 msgid "Workspace members"
 msgstr "Miembros del espacio de trabajo"
 
-#: src/views/settings/index.tsx:130
-#: src/components/NewWorkspaceForm.tsx:78
+#: src/views/settings/index.tsx:155
+#: src/components/NewWorkspaceForm.tsx:80
 msgid "Workspace name"
 msgstr "Nombre del espacio de trabajo"
 
@@ -1622,7 +1622,7 @@ msgstr "Nombre del espacio de trabajo actualizado"
 msgid "Workspace slug updated"
 msgstr "Slug del espacio de trabajo actualizado"
 
-#: src/views/settings/index.tsx:138
+#: src/views/settings/index.tsx:164
 msgid "Workspace URL"
 msgstr "URL del espacio de trabajo"
 
@@ -1674,11 +1674,11 @@ msgstr "Tu nombre de visualización ha sido actualizado."
 msgid "Your profile image has been updated."
 msgstr "Tu imagen de perfil ha sido actualizada."
 
-#: src/views/settings/index.tsx:70
+#: src/views/settings/index.tsx:92
 msgid "Your Trello account has been disconnected."
 msgstr "Tu cuenta de Trello ha sido desconectada."
 
-#: src/views/settings/index.tsx:214
+#: src/views/settings/index.tsx:241
 msgid "Your Trello account is connected."
 msgstr "Tu cuenta de Trello está conectada."
 

@@ -1,6 +1,7 @@
+import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
 
 import Button from "~/components/Button";
@@ -27,6 +28,9 @@ export default function SettingsPage() {
   const { workspace } = useWorkspace();
   const utils = api.useUtils();
   const { showPopup } = usePopup();
+  const router = useRouter();
+  const workspaceUrlSectionRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const { data } = api.user.getUser.useQuery();
 
@@ -58,6 +62,24 @@ export default function SettingsPage() {
       window.removeEventListener("focus", handleFocus);
     };
   }, [refetchIntegrations]);
+
+  useEffect(() => {
+    if (
+      router.query.edit === "workspace_url" &&
+      workspaceUrlSectionRef.current &&
+      scrollContainerRef.current
+    ) {
+      const element = workspaceUrlSectionRef.current;
+      const container = scrollContainerRef.current;
+
+      container.scrollTop = element.offsetTop - 40;
+
+      const input = element.querySelector('input[type="text"]');
+      if (input instanceof HTMLInputElement) {
+        input.focus();
+      }
+    }
+  }, [router.query.edit]);
 
   const { mutateAsync: disconnectTrello } =
     api.integration.disconnect.useMutation({
@@ -104,7 +126,10 @@ export default function SettingsPage() {
   return (
     <>
       <div className="flex h-full w-full flex-col overflow-hidden">
-        <div className="h-full max-h-[calc(100vdh-3rem)] overflow-y-auto md:max-h-[calc(100vdh-4rem)]">
+        <div
+          ref={scrollContainerRef}
+          className="h-full max-h-[calc(100vdh-3rem)] overflow-y-auto md:max-h-[calc(100vdh-4rem)]"
+        >
           <PageHead title={t`Settings | ${workspace.name ?? "Workspace"}`} />
           <div className="m-auto max-w-[1600px] px-5 py-6 md:px-28 md:py-12">
             <div className="mb-8 flex w-full justify-between">
@@ -134,14 +159,16 @@ export default function SettingsPage() {
                 workspaceName={workspace.name}
               />
 
-              <h2 className="mb-4 mt-8 text-[14px] text-neutral-900 dark:text-dark-1000">
-                {t`Workspace URL`}
-              </h2>
-              <UpdateWorkspaceUrlForm
-                workspacePublicId={workspace.publicId}
-                workspaceUrl={workspace.slug ?? ""}
-                workspacePlan={workspace.plan ?? "free"}
-              />
+              <div ref={workspaceUrlSectionRef}>
+                <h2 className="mb-4 mt-8 text-[14px] text-neutral-900 dark:text-dark-1000">
+                  {t`Workspace URL`}
+                </h2>
+                <UpdateWorkspaceUrlForm
+                  workspacePublicId={workspace.publicId}
+                  workspaceUrl={workspace.slug ?? ""}
+                  workspacePlan={workspace.plan ?? "free"}
+                />
+              </div>
 
               <h2 className="mb-4 mt-8 text-[14px] text-neutral-900 dark:text-dark-1000">
                 {t`Workspace description`}

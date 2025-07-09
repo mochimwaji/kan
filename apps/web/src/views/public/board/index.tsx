@@ -105,13 +105,15 @@ export default function PublicBoardView() {
                 {data?.name}
               </h1>
             )}
-            <div className="flex items-center space-x-2">
-              <Filters
-                labels={data?.labels ?? []}
-                members={[]}
-                isLoading={isLoading}
-              />
-            </div>
+            {data && (
+              <div className="flex items-center space-x-2">
+                <Filters
+                  labels={data.labels ?? []}
+                  members={[]}
+                  isLoading={isLoading}
+                />
+              </div>
+            )}
           </div>
 
           <div className="scrollbar-w-none scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-h-[8px] relative flex-1 overflow-y-hidden overflow-x-scroll overscroll-contain scrollbar scrollbar-track-light-200 scrollbar-thumb-light-400 dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-300">

@@ -32,6 +32,7 @@ import Filters from "./components/Filters";
 import List from "./components/List";
 import { NewCardForm } from "./components/NewCardForm";
 import { NewListForm } from "./components/NewListForm";
+import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
 
@@ -267,6 +268,12 @@ export default function BoardPage() {
           )}
 
           <div className="order-1 mb-4 flex items-center justify-end space-x-2 md:order-2 md:mb-0">
+            <UpdateBoardSlugButton
+              handleOnClick={() => openModal("UPDATE_BOARD_SLUG")}
+              isLoading={isLoading}
+              workspaceSlug={workspace.slug ?? ""}
+              boardSlug={boardData?.slug ?? ""}
+            />
             <VisibilityButton
               visibility={boardData?.visibility ?? "private"}
               boardPublicId={boardId ?? ""}
