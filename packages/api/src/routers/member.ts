@@ -83,11 +83,18 @@ export const memberRouter = createTRPCRouter({
         callbackURL: `/boards?type=invite&memberPublicId=${invite.publicId}`,
       });
 
-      if (error)
+      if (error) {
+        console.error("Failed to send magic link invitation:", {
+          email: input.email,
+          callbackURL: `/boards?type=invite&memberPublicId=${invite.publicId}`,
+          error,
+        });
+
         throw new TRPCError({
-          message: `Failed to send magic link to user with email ${input.email}`,
+          message: `Failed to send magic link invitation to user with email ${input.email}.`,
           code: "INTERNAL_SERVER_ERROR",
         });
+      }
 
       return invite;
     }),
