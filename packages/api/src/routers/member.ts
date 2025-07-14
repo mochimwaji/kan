@@ -1,7 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { authClient } from "@kan/auth/client";
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
@@ -78,16 +77,15 @@ export const memberRouter = createTRPCRouter({
           code: "INTERNAL_SERVER_ERROR",
         });
 
-      const { error } = await authClient.signIn.magicLink({
+      const { status } = await ctx.auth.api.signInMagicLink({
         email: input.email,
         callbackURL: `/boards?type=invite&memberPublicId=${invite.publicId}`,
       });
 
-      if (error) {
+      if (!status) {
         console.error("Failed to send magic link invitation:", {
           email: input.email,
           callbackURL: `/boards?type=invite&memberPublicId=${invite.publicId}`,
-          error,
         });
 
         throw new TRPCError({

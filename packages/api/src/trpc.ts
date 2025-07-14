@@ -20,58 +20,73 @@ export interface User {
   stripeCustomerId?: string | null | undefined;
 }
 
+const createAuthWithHeaders = (
+  auth: ReturnType<typeof initAuth>,
+  headers: Headers,
+) => {
+  return {
+    api: {
+      getSession: () => auth.api.getSession({ headers }),
+      signInMagicLink: (input: { email: string; callbackURL: string }) =>
+        auth.api.signInMagicLink({
+          headers,
+          body: { email: input.email, callbackURL: input.callbackURL },
+        }),
+    },
+  };
+};
+
 interface CreateContextOptions {
   user: User | null | undefined;
   db: dbClient;
+  auth: ReturnType<typeof createAuthWithHeaders>;
 }
 
 export const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     user: opts.user,
     db: opts.db,
+    auth: opts.auth,
   };
 };
 
 export const createTRPCContext = async ({ req }: CreateNextContextOptions) => {
   const db = createDrizzleClient();
-  const auth = initAuth(db);
+  const baseAuth = initAuth(db);
+  const headers = new Headers(req.headers as Record<string, string>);
+  const auth = createAuthWithHeaders(baseAuth, headers);
 
-  const session = await auth.api.getSession({
-    // @ts-expect-error
-    headers: new Headers(req.headers),
-  });
+  const session = await auth.api.getSession();
 
-  return createInnerTRPCContext({ db, user: session?.user });
+  return createInnerTRPCContext({ db, user: session?.user, auth });
 };
 
 export const createNextApiContext = async (req: NextApiRequest) => {
   const db = createDrizzleClient();
-  const auth = initAuth(db);
+  const baseAuth = initAuth(db);
+  const headers = new Headers(req.headers as Record<string, string>);
+  const auth = createAuthWithHeaders(baseAuth, headers);
 
-  const session = await auth.api.getSession({
-    // @ts-expect-error
-    headers: new Headers(req.headers),
-  });
+  const session = await auth.api.getSession();
 
-  return createInnerTRPCContext({ db, user: session?.user });
+  return createInnerTRPCContext({ db, user: session?.user, auth });
 };
 
 export const createRESTContext = async ({ req }: CreateNextContextOptions) => {
   const db = createDrizzleClient();
-  const auth = initAuth(db);
+  const baseAuth = initAuth(db);
+  const headers = new Headers(req.headers as Record<string, string>);
+  const auth = createAuthWithHeaders(baseAuth, headers);
 
   let session;
   try {
-    session = await auth.api.getSession({
-      // @ts-expect-error
-      headers: new Headers(req.headers),
-    });
+    session = await auth.api.getSession();
   } catch (error) {
     console.error("Error getting session, ", error);
     throw error;
   }
 
-  return createInnerTRPCContext({ db, user: session?.user });
+  return createInnerTRPCContext({ db, user: session?.user, auth });
 };
 
 const t = initTRPC
