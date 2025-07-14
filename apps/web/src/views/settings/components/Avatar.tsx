@@ -3,6 +3,8 @@ import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useState } from "react";
 
+import { generateUID } from "@kan/shared/utils";
+
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
 import { getAvatarUrl } from "~/utils/helpers";
@@ -58,7 +60,7 @@ export default function Avatar({
       }
 
       const fileExt = file.name.split(".").pop();
-      const fileName = `${userId}/avatar.${fileExt}`;
+      const fileName = `${userId}/avatar-${generateUID()}.${fileExt}`;
 
       setUploading(true);
 
