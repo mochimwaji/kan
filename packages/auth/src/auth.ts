@@ -166,9 +166,19 @@ export const initAuth = (db: dbClient) => {
     databaseHooks: {
       user: {
         create: {
-          before() {
+          async before(user) {
             if (env("NEXT_PUBLIC_DISABLE_SIGN_UP")?.toLowerCase() === "true") {
-              return Promise.resolve(false);
+              const pendingInvitation = await memberRepo.getByEmailAndStatus(
+                db,
+                user.email,
+                "invited",
+              );
+
+              if (!pendingInvitation) {
+                return Promise.resolve(false);
+              }
+
+              return Promise.resolve(true);
             }
             return Promise.resolve(true);
           },
