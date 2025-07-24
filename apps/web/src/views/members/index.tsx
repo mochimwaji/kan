@@ -7,6 +7,7 @@ import { authClient } from "@kan/auth/client";
 import Avatar from "~/components/Avatar";
 import Button from "~/components/Button";
 import Dropdown from "~/components/Dropdown";
+import FeedbackModal from "~/components/FeedbackModal";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
@@ -154,7 +155,7 @@ export default function MembersPage() {
   return (
     <>
       <PageHead title={t`Members | ${workspace.name ?? "Workspace"}`} />
-      <div className="m-auto h-full max-w-[1600px] p-6 px-5 md:px-28 md:py-12">
+      <div className="m-auto h-full max-w-[1100px] p-6 px-5 md:px-28 md:py-12">
         <div className="mb-8 flex w-full justify-between">
           <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
             {t`Members`}
@@ -221,7 +222,8 @@ export default function MembersPage() {
           </div>
         </div>
 
-        <Modal>
+        <Modal modalSize={modalContentType === "NEW_FEEDBACK" ? "md" : "sm"}>
+          {modalContentType === "NEW_FEEDBACK" && <FeedbackModal />}
           {modalContentType === "NEW_WORKSPACE" && <NewWorkspaceForm />}
           {modalContentType === "INVITE_MEMBER" && <InviteMemberForm />}
           {modalContentType === "REMOVE_MEMBER" && <DeleteMemberConfirmation />}
