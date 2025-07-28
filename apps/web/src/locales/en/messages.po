@@ -28,7 +28,7 @@ msgid "{0} | {1}"
 msgstr "{0} | {1}"
 
 #. placeholder {0}: labelPublicIds.length
-#: src/views/board/components/NewCardForm.tsx:365
+#: src/views/board/components/NewCardForm.tsx:392
 msgid "{0} labels"
 msgstr "{0} labels"
 
@@ -78,7 +78,7 @@ msgstr "Add a card"
 msgid "Add a comment..."
 msgstr "Add a comment..."
 
-#: src/components/Editor.tsx:302
+#: src/components/Editor.tsx:303
 msgid "Add description... (type '/' to open commands)"
 msgstr "Add description... (type '/' to open commands)"
 
@@ -198,7 +198,7 @@ msgstr "Billing portal"
 msgid "Blog Post"
 msgstr "Blog Post"
 
-#: src/views/board/index.tsx:241
+#: src/views/board/index.tsx:332
 msgid "Board"
 msgstr "Board"
 
@@ -214,7 +214,8 @@ msgstr "Board name cannot exceed 100 characters"
 msgid "Board name is required"
 msgstr "Board name is required"
 
-#: src/views/board/index.tsx:267
+#: src/views/public/board/index.tsx:137
+#: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Board not found"
 
@@ -226,7 +227,7 @@ msgstr "Board URL can only contain letters, numbers, and hyphens"
 msgid "Board URL cannot exceed 60 characters"
 msgstr "Board URL cannot exceed 60 characters"
 
-#: src/views/public/board/index.tsx:53
+#: src/views/public/board/index.tsx:59
 msgid "Board URL copied to clipboard"
 msgstr "Board URL copied to clipboard"
 
@@ -282,7 +283,7 @@ msgstr "Cancel"
 msgid "Card not found"
 msgstr "Card not found"
 
-#: src/views/board/components/NewCardForm.tsx:254
+#: src/views/board/components/NewCardForm.tsx:278
 msgid "Card title"
 msgstr "Card title"
 
@@ -375,7 +376,7 @@ msgid "Control who can view and edit your boards."
 msgstr "Control who can view and edit your boards."
 
 #: src/views/board/components/NewListForm.tsx:140
-#: src/views/board/components/NewCardForm.tsx:391
+#: src/views/board/components/NewCardForm.tsx:418
 #: src/components/LabelForm.tsx:212
 msgid "Create another"
 msgstr "Create another"
@@ -392,15 +393,15 @@ msgstr "Create another"
 msgid "Create board"
 msgstr "Create board"
 
-#: src/views/board/components/NewCardForm.tsx:401
+#: src/views/board/components/NewCardForm.tsx:428
 msgid "Create card"
 msgstr "Create card"
 
-#: src/components/LabelForm.tsx:233
+#: src/components/LabelForm.tsx:236
 msgid "Create label"
 msgstr "Create label"
 
-#: src/views/board/components/NewListForm.tsx:148
+#: src/views/board/components/NewListForm.tsx:152
 msgid "Create list"
 msgstr "Create list"
 
@@ -413,11 +414,11 @@ msgid "Create new key"
 msgstr "Create new key"
 
 #: src/views/card/components/LabelSelector.tsx:98
-#: src/views/board/components/NewCardForm.tsx:327
+#: src/views/board/components/NewCardForm.tsx:354
 msgid "Create new label"
 msgstr "Create new label"
 
-#: src/views/board/index.tsx:335
+#: src/views/board/index.tsx:426
 msgid "Create new list"
 msgstr "Create new list"
 
@@ -713,7 +714,7 @@ msgstr "Get Started"
 msgid "Get started by creating a new board"
 msgstr "Get started by creating a new board"
 
-#: src/views/board/index.tsx:327
+#: src/views/board/index.tsx:418
 msgid "Get started by creating a new list"
 msgstr "Get started by creating a new list"
 
@@ -867,7 +868,7 @@ msgid "Keep in mind that this action is irreversible."
 msgstr "Keep in mind that this action is irreversible."
 
 #: src/views/card/index.tsx:113
-#: src/views/board/components/NewCardForm.tsx:331
+#: src/views/board/components/NewCardForm.tsx:358
 #: src/views/board/components/Filters.tsx:101
 msgid "Labels"
 msgstr "Labels"
@@ -896,7 +897,7 @@ msgstr "License"
 msgid "Light"
 msgstr "Light"
 
-#: src/views/public/board/index.tsx:51
+#: src/views/public/board/index.tsx:57
 msgid "Link copied"
 msgstr "Link copied"
 
@@ -934,7 +935,7 @@ msgstr "Medium Priority"
 
 #: src/views/members/index.tsx:161
 #: src/views/card/index.tsx:121
-#: src/views/board/components/NewCardForm.tsx:290
+#: src/views/board/components/NewCardForm.tsx:317
 #: src/views/board/components/Filters.tsx:93
 #: src/components/SideNavigation.tsx:73
 msgid "Members"
@@ -974,7 +975,7 @@ msgstr "New"
 msgid "New board"
 msgstr "New board"
 
-#: src/views/board/components/NewCardForm.tsx:237
+#: src/views/board/components/NewCardForm.tsx:261
 msgid "New card"
 msgstr "New card"
 
@@ -986,7 +987,7 @@ msgstr "New import"
 msgid "New label"
 msgstr "New label"
 
-#: src/views/board/index.tsx:304
+#: src/views/board/index.tsx:395
 #: src/views/board/components/NewListForm.tsx:112
 msgid "New list"
 msgstr "New list"
@@ -1023,7 +1024,7 @@ msgstr "No boards found"
 msgid "No credit card required"
 msgstr "No credit card required"
 
-#: src/views/board/index.tsx:324
+#: src/views/board/index.tsx:415
 msgid "No lists"
 msgstr "No lists"
 
@@ -1119,7 +1120,7 @@ msgstr "Please select a file to upload."
 #: src/views/board/components/VisibilityButton.tsx:53
 #: src/views/board/components/UpdateBoardSlugForm.tsx:72
 #: src/views/board/components/NewListForm.tsx:78
-#: src/views/board/components/NewCardForm.tsx:128
+#: src/views/board/components/NewCardForm.tsx:145
 #: src/components/NewWorkspaceForm.tsx:41
 #: src/components/FeedbackModal.tsx:41
 msgid "Please try again later, or contact customer support."
@@ -1387,6 +1388,10 @@ msgstr "They won't be able to access this workspace."
 msgid "This action can't be undone."
 msgstr "This action can't be undone."
 
+#: src/views/public/board/index.tsx:140
+msgid "This board is private or does not exist"
+msgstr "This board is private or does not exist"
+
 #: src/views/board/components/UpdateBoardSlugForm.tsx:135
 msgid "This board URL has already been taken"
 msgstr "This board URL has already been taken"
@@ -1436,7 +1441,7 @@ msgstr "Triaging"
 msgid "Unable to add comment"
 msgstr "Unable to add comment"
 
-#: src/views/board/components/NewCardForm.tsx:125
+#: src/views/board/components/NewCardForm.tsx:142
 msgid "Unable to create card"
 msgstr "Unable to create card"
 
@@ -1530,11 +1535,11 @@ msgstr "Unlimited lists"
 #: src/views/settings/components/UpdateWorkspaceNameForm.tsx:82
 #: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:90
 #: src/views/settings/components/UpdateDisplayNameForm.tsx:79
-#: src/views/board/components/UpdateBoardSlugForm.tsx:173
+#: src/views/board/components/UpdateBoardSlugForm.tsx:174
 msgid "Update"
 msgstr "Update"
 
-#: src/components/LabelForm.tsx:233
+#: src/components/LabelForm.tsx:236
 msgid "Update label"
 msgstr "Update label"
 
@@ -1599,6 +1604,10 @@ msgstr "View docs"
 msgid "View our roadmap."
 msgstr "View our roadmap."
 
+#: src/views/public/board/index.tsx:143
+msgid "View workspace"
+msgstr "View workspace"
+
 #: src/views/board/components/VisibilityButton.tsx:91
 msgid "Visibility"
 msgstr "Visibility"
@@ -1635,7 +1644,7 @@ msgstr "When Trello launched in 2011, it blew everyone away with its carefully d
 msgid "Why make an open source Trello?"
 msgstr "Why make an open source Trello?"
 
-#: src/views/board/index.tsx:241
+#: src/views/board/index.tsx:332
 msgid "Workspace"
 msgstr "Workspace"
 

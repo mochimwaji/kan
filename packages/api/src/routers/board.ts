@@ -111,15 +111,21 @@ export const boardRouter = createTRPCRouter({
     .meta({
       openapi: {
         method: "GET",
-        path: "/board/{boardSlug}",
+        path: "/workspaces/{workspaceSlug}/boards/{boardSlug}",
         summary: "Get board by slug",
-        description: "Retrieves a board by its slug",
+        description:
+          "Retrieves a board by its slug within a specific workspace",
         tags: ["Boards"],
         protect: false,
       },
     })
     .input(
       z.object({
+        workspaceSlug: z
+          .string()
+          .min(3)
+          .max(24)
+          .regex(/^(?![-]+$)[a-zA-Z0-9-]+$/),
         boardSlug: z
           .string()
           .min(3)
@@ -131,10 +137,26 @@ export const boardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof boardRepo.getBySlug>>>())
     .query(async ({ ctx, input }) => {
-      const result = await boardRepo.getBySlug(ctx.db, input.boardSlug, {
-        members: input.members ?? [],
-        labels: input.labels ?? [],
-      });
+      const workspace = await workspaceRepo.getBySlugWithBoards(
+        ctx.db,
+        input.workspaceSlug,
+      );
+
+      if (!workspace)
+        throw new TRPCError({
+          message: `Workspace with slug ${input.workspaceSlug} not found`,
+          code: "NOT_FOUND",
+        });
+
+      const result = await boardRepo.getBySlug(
+        ctx.db,
+        input.boardSlug,
+        workspace.id,
+        {
+          members: input.members ?? [],
+          labels: input.labels ?? [],
+        },
+      );
 
       return result;
     }),

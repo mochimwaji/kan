@@ -28,7 +28,7 @@ msgid "{0} | {1}"
 msgstr "{0} | {1}"
 
 #. placeholder {0}: labelPublicIds.length
-#: src/views/board/components/NewCardForm.tsx:365
+#: src/views/board/components/NewCardForm.tsx:392
 msgid "{0} labels"
 msgstr "{0} etichette"
 
@@ -66,7 +66,7 @@ msgstr "Aggiungi una carta"
 msgid "Add a comment..."
 msgstr "Aggiungi un commento..."
 
-#: src/components/Editor.tsx:302
+#: src/components/Editor.tsx:303
 msgid "Add description... (type '/' to open commands)"
 msgstr "Aggiungi descrizione... (digita '/' per aprire i comandi)"
 
@@ -178,7 +178,7 @@ msgstr "Portale di fatturazione"
 msgid "Blog Post"
 msgstr "Post del blog"
 
-#: src/views/board/index.tsx:241
+#: src/views/board/index.tsx:332
 msgid "Board"
 msgstr "Bacheca"
 
@@ -190,7 +190,8 @@ msgstr "Il nome della bacheca non può superare i 100 caratteri"
 msgid "Board name is required"
 msgstr "Il nome della bacheca è obbligatorio"
 
-#: src/views/board/index.tsx:267
+#: src/views/public/board/index.tsx:137
+#: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Bacheca non trovata"
 
@@ -202,7 +203,7 @@ msgstr "L'URL della bacheca può contenere solo lettere, numeri e trattini"
 msgid "Board URL cannot exceed 60 characters"
 msgstr "L'URL della bacheca non può superare i 60 caratteri"
 
-#: src/views/public/board/index.tsx:53
+#: src/views/public/board/index.tsx:59
 msgid "Board URL copied to clipboard"
 msgstr "URL della bacheca copiato negli appunti"
 
@@ -254,7 +255,7 @@ msgstr "Annulla"
 msgid "Card not found"
 msgstr "Carta non trovata"
 
-#: src/views/board/components/NewCardForm.tsx:254
+#: src/views/board/components/NewCardForm.tsx:278
 msgid "Card title"
 msgstr "Titolo della carta"
 
@@ -347,7 +348,7 @@ msgid "Control who can view and edit your boards."
 msgstr "Controlla chi può visualizzare e modificare le tue bacheche."
 
 #: src/views/board/components/NewListForm.tsx:140
-#: src/views/board/components/NewCardForm.tsx:391
+#: src/views/board/components/NewCardForm.tsx:418
 #: src/components/LabelForm.tsx:212
 msgid "Create another"
 msgstr "Crea un altro"
@@ -356,15 +357,15 @@ msgstr "Crea un altro"
 msgid "Create board"
 msgstr "Crea bacheca"
 
-#: src/views/board/components/NewCardForm.tsx:401
+#: src/views/board/components/NewCardForm.tsx:428
 msgid "Create card"
 msgstr "Crea carta"
 
-#: src/components/LabelForm.tsx:233
+#: src/components/LabelForm.tsx:236
 msgid "Create label"
 msgstr "Crea etichetta"
 
-#: src/views/board/components/NewListForm.tsx:148
+#: src/views/board/components/NewListForm.tsx:152
 msgid "Create list"
 msgstr "Crea lista"
 
@@ -377,11 +378,11 @@ msgid "Create new key"
 msgstr "Crea nuova chiave"
 
 #: src/views/card/components/LabelSelector.tsx:98
-#: src/views/board/components/NewCardForm.tsx:327
+#: src/views/board/components/NewCardForm.tsx:354
 msgid "Create new label"
 msgstr "Crea nuova etichetta"
 
-#: src/views/board/index.tsx:335
+#: src/views/board/index.tsx:426
 msgid "Create new list"
 msgstr "Crea nuova lista"
 
@@ -676,7 +677,7 @@ msgstr "Inizia ora"
 msgid "Get started by creating a new board"
 msgstr "Inizia creando una nuova bacheca"
 
-#: src/views/board/index.tsx:327
+#: src/views/board/index.tsx:418
 msgid "Get started by creating a new list"
 msgstr "Inizia creando una nuova lista"
 
@@ -826,7 +827,7 @@ msgid "Keep in mind that this action is irreversible."
 msgstr "Tieni presente che questa azione è irreversibile."
 
 #: src/views/card/index.tsx:113
-#: src/views/board/components/NewCardForm.tsx:331
+#: src/views/board/components/NewCardForm.tsx:358
 #: src/views/board/components/Filters.tsx:101
 msgid "Labels"
 msgstr "Etichette"
@@ -855,7 +856,7 @@ msgstr "Licenza"
 msgid "Light"
 msgstr "Chiaro"
 
-#: src/views/public/board/index.tsx:51
+#: src/views/public/board/index.tsx:57
 msgid "Link copied"
 msgstr "Link copiato"
 
@@ -893,7 +894,7 @@ msgstr "Media priorità"
 
 #: src/views/members/index.tsx:161
 #: src/views/card/index.tsx:121
-#: src/views/board/components/NewCardForm.tsx:290
+#: src/views/board/components/NewCardForm.tsx:317
 #: src/views/board/components/Filters.tsx:93
 #: src/components/SideNavigation.tsx:73
 msgid "Members"
@@ -933,7 +934,7 @@ msgstr "Nuovo"
 msgid "New board"
 msgstr "Nuova bacheca"
 
-#: src/views/board/components/NewCardForm.tsx:237
+#: src/views/board/components/NewCardForm.tsx:261
 msgid "New card"
 msgstr "Nuova carta"
 
@@ -945,7 +946,7 @@ msgstr "Nuova importazione"
 msgid "New label"
 msgstr "Nuova etichetta"
 
-#: src/views/board/index.tsx:304
+#: src/views/board/index.tsx:395
 #: src/views/board/components/NewListForm.tsx:112
 msgid "New list"
 msgstr "Nuova lista"
@@ -978,7 +979,7 @@ msgstr "Nessuna bacheca trovata"
 msgid "No credit card required"
 msgstr "Nessuna carta di credito richiesta"
 
-#: src/views/board/index.tsx:324
+#: src/views/board/index.tsx:415
 msgid "No lists"
 msgstr "Nessuna lista"
 
@@ -1074,7 +1075,7 @@ msgstr "Seleziona un file da caricare."
 #: src/views/board/components/VisibilityButton.tsx:53
 #: src/views/board/components/UpdateBoardSlugForm.tsx:72
 #: src/views/board/components/NewListForm.tsx:78
-#: src/views/board/components/NewCardForm.tsx:128
+#: src/views/board/components/NewCardForm.tsx:145
 #: src/components/NewWorkspaceForm.tsx:41
 #: src/components/FeedbackModal.tsx:41
 msgid "Please try again later, or contact customer support."
@@ -1338,6 +1339,10 @@ msgstr "Non potranno accedere a questo spazio di lavoro."
 msgid "This action can't be undone."
 msgstr "Questa azione non può essere annullata."
 
+#: src/views/public/board/index.tsx:140
+msgid "This board is private or does not exist"
+msgstr "Questa bacheca è privata o non esiste"
+
 #: src/views/board/components/UpdateBoardSlugForm.tsx:135
 msgid "This board URL has already been taken"
 msgstr "Questo URL della bacheca è già stato utilizzato"
@@ -1383,7 +1388,7 @@ msgstr "Smistamento"
 msgid "Unable to add comment"
 msgstr "Impossibile aggiungere il commento"
 
-#: src/views/board/components/NewCardForm.tsx:125
+#: src/views/board/components/NewCardForm.tsx:142
 msgid "Unable to create card"
 msgstr "Impossibile creare la scheda"
 
@@ -1477,11 +1482,11 @@ msgstr "Liste illimitate"
 #: src/views/settings/components/UpdateWorkspaceNameForm.tsx:82
 #: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:90
 #: src/views/settings/components/UpdateDisplayNameForm.tsx:79
-#: src/views/board/components/UpdateBoardSlugForm.tsx:173
+#: src/views/board/components/UpdateBoardSlugForm.tsx:174
 msgid "Update"
 msgstr "Aggiorna"
 
-#: src/components/LabelForm.tsx:233
+#: src/components/LabelForm.tsx:236
 msgid "Update label"
 msgstr "Aggiorna etichetta"
 
@@ -1546,6 +1551,10 @@ msgstr "Visualizza documenti"
 msgid "View our roadmap."
 msgstr "Visualizza la nostra roadmap."
 
+#: src/views/public/board/index.tsx:143
+msgid "View workspace"
+msgstr "Visualizza spazio di lavoro"
+
 #: src/views/board/components/VisibilityButton.tsx:91
 msgid "Visibility"
 msgstr "Visibilità"
@@ -1578,7 +1587,7 @@ msgstr "Quando Trello fu lanciato nel 2011, stupì tutti con la sua semplicità 
 msgid "Why make an open source Trello?"
 msgstr "Perché creare un Trello open source?"
 
-#: src/views/board/index.tsx:241
+#: src/views/board/index.tsx:332
 msgid "Workspace"
 msgstr "Spazio di lavoro"
 

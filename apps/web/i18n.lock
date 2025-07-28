@@ -308,6 +308,7 @@ checksums:
     Theme/singular: 21fe00b7a518089576fb83c08631107a
     They%20won't%20be%20able%20to%20access%20this%20workspace./singular: 93b740350fe3430319fbca85349e41d9
     This%20action%20can't%20be%20undone./singular: cb222ff89715d8c971e8c25d121e1dbd
+    This%20board%20is%20private%20or%20does%20not%20exist/singular: a217ff3f04463b4df8c86adb6f83c6bc
     This%20board%20URL%20has%20already%20been%20taken/singular: 1d8b40332a031b5b77a3658e48dd51ca
     This%20will%20result%20in%20the%20permanent%20deletion%20of%20all%20data%20associated%20with%20this%20workspace./singular: a31141558af793635c1ddd2fa0a33499
     This%20will%20result%20in%20the%20permanent%20deletion%20of%20all%20data%20associated%20with%20your%20account./singular: b49224632bd6c3b7f5e462912aeb1081
@@ -358,6 +359,7 @@ checksums:
     View%20and%20manage%20your%20billing%20and%20subscription./singular: 7469502543aac6f02149813546d1cb38
     View%20docs/singular: 43ce54f27bb1e3f1880b56e03ab38871
     View%20our%20roadmap./singular: 1dd7ec80e1635951b1c90d592d1d07dc
+    View%20workspace/singular: c9e4b789330b08c18ca8db7044409e5f
     Visibility/singular: 1ff412f8fcde0f460acbf11153649646
     We%20are%20using%20the%20%3C0%3EAGPL-3.0%20license%3C%2F0%3E./singular: 08c5ddd938a2a70f61d684e41e18697a
     We're%20just%20getting%20started.%20/singular: 2dfa121e0ff1914e08068308a81973c0

@@ -28,7 +28,7 @@ msgid "{0} | {1}"
 msgstr "{0} | {1}"
 
 #. placeholder {0}: labelPublicIds.length
-#: src/views/board/components/NewCardForm.tsx:365
+#: src/views/board/components/NewCardForm.tsx:392
 msgid "{0} labels"
 msgstr "{0} labels"
 
@@ -66,7 +66,7 @@ msgstr "Voeg een kaart toe"
 msgid "Add a comment..."
 msgstr "Voeg een reactie toe..."
 
-#: src/components/Editor.tsx:302
+#: src/components/Editor.tsx:303
 msgid "Add description... (type '/' to open commands)"
 msgstr "Voeg beschrijving toe... (typ '/' om commando's te openen)"
 
@@ -178,7 +178,7 @@ msgstr "Factureringsportaal"
 msgid "Blog Post"
 msgstr "Blogbericht"
 
-#: src/views/board/index.tsx:241
+#: src/views/board/index.tsx:332
 msgid "Board"
 msgstr "Bord"
 
@@ -190,7 +190,8 @@ msgstr "Bordnaam mag niet langer zijn dan 100 tekens"
 msgid "Board name is required"
 msgstr "Bordnaam is verplicht"
 
-#: src/views/board/index.tsx:267
+#: src/views/public/board/index.tsx:137
+#: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Bord niet gevonden"
 
@@ -202,7 +203,7 @@ msgstr "Board URL kan alleen letters, cijfers en koppeltekens bevatten"
 msgid "Board URL cannot exceed 60 characters"
 msgstr "Board URL mag niet langer zijn dan 60 tekens"
 
-#: src/views/public/board/index.tsx:53
+#: src/views/public/board/index.tsx:59
 msgid "Board URL copied to clipboard"
 msgstr "Board URL gekopieerd naar klembord"
 
@@ -254,7 +255,7 @@ msgstr "Annuleren"
 msgid "Card not found"
 msgstr "Kaart niet gevonden"
 
-#: src/views/board/components/NewCardForm.tsx:254
+#: src/views/board/components/NewCardForm.tsx:278
 msgid "Card title"
 msgstr "Kaarttitel"
 
@@ -347,7 +348,7 @@ msgid "Control who can view and edit your boards."
 msgstr "Bepaal wie je borden kan bekijken en bewerken."
 
 #: src/views/board/components/NewListForm.tsx:140
-#: src/views/board/components/NewCardForm.tsx:391
+#: src/views/board/components/NewCardForm.tsx:418
 #: src/components/LabelForm.tsx:212
 msgid "Create another"
 msgstr "Maak nog een"
@@ -356,15 +357,15 @@ msgstr "Maak nog een"
 msgid "Create board"
 msgstr "Maak bord"
 
-#: src/views/board/components/NewCardForm.tsx:401
+#: src/views/board/components/NewCardForm.tsx:428
 msgid "Create card"
 msgstr "Maak kaart"
 
-#: src/components/LabelForm.tsx:233
+#: src/components/LabelForm.tsx:236
 msgid "Create label"
 msgstr "Maak label"
 
-#: src/views/board/components/NewListForm.tsx:148
+#: src/views/board/components/NewListForm.tsx:152
 msgid "Create list"
 msgstr "Lijst maken"
 
@@ -377,11 +378,11 @@ msgid "Create new key"
 msgstr "Nieuwe sleutel aanmaken"
 
 #: src/views/card/components/LabelSelector.tsx:98
-#: src/views/board/components/NewCardForm.tsx:327
+#: src/views/board/components/NewCardForm.tsx:354
 msgid "Create new label"
 msgstr "Maak nieuw label"
 
-#: src/views/board/index.tsx:335
+#: src/views/board/index.tsx:426
 msgid "Create new list"
 msgstr "Maak nieuwe lijst"
 
@@ -676,7 +677,7 @@ msgstr "Aan de slag"
 msgid "Get started by creating a new board"
 msgstr "Begin door een nieuw bord te maken"
 
-#: src/views/board/index.tsx:327
+#: src/views/board/index.tsx:418
 msgid "Get started by creating a new list"
 msgstr "Begin door een nieuwe lijst te maken"
 
@@ -826,7 +827,7 @@ msgid "Keep in mind that this action is irreversible."
 msgstr "Houd er rekening mee dat deze actie onomkeerbaar is."
 
 #: src/views/card/index.tsx:113
-#: src/views/board/components/NewCardForm.tsx:331
+#: src/views/board/components/NewCardForm.tsx:358
 #: src/views/board/components/Filters.tsx:101
 msgid "Labels"
 msgstr "Labels"
@@ -855,7 +856,7 @@ msgstr "Licentie"
 msgid "Light"
 msgstr "Licht"
 
-#: src/views/public/board/index.tsx:51
+#: src/views/public/board/index.tsx:57
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
@@ -893,7 +894,7 @@ msgstr "Gemiddelde prioriteit"
 
 #: src/views/members/index.tsx:161
 #: src/views/card/index.tsx:121
-#: src/views/board/components/NewCardForm.tsx:290
+#: src/views/board/components/NewCardForm.tsx:317
 #: src/views/board/components/Filters.tsx:93
 #: src/components/SideNavigation.tsx:73
 msgid "Members"
@@ -933,7 +934,7 @@ msgstr "Nieuw"
 msgid "New board"
 msgstr "Nieuw bord"
 
-#: src/views/board/components/NewCardForm.tsx:237
+#: src/views/board/components/NewCardForm.tsx:261
 msgid "New card"
 msgstr "Nieuwe kaart"
 
@@ -945,7 +946,7 @@ msgstr "Nieuwe import"
 msgid "New label"
 msgstr "Nieuw label"
 
-#: src/views/board/index.tsx:304
+#: src/views/board/index.tsx:395
 #: src/views/board/components/NewListForm.tsx:112
 msgid "New list"
 msgstr "Nieuwe lijst"
@@ -978,7 +979,7 @@ msgstr "Geen borden gevonden"
 msgid "No credit card required"
 msgstr "Geen creditcard vereist"
 
-#: src/views/board/index.tsx:324
+#: src/views/board/index.tsx:415
 msgid "No lists"
 msgstr "Geen lijsten"
 
@@ -1074,7 +1075,7 @@ msgstr "Selecteer een bestand om te uploaden."
 #: src/views/board/components/VisibilityButton.tsx:53
 #: src/views/board/components/UpdateBoardSlugForm.tsx:72
 #: src/views/board/components/NewListForm.tsx:78
-#: src/views/board/components/NewCardForm.tsx:128
+#: src/views/board/components/NewCardForm.tsx:145
 #: src/components/NewWorkspaceForm.tsx:41
 #: src/components/FeedbackModal.tsx:41
 msgid "Please try again later, or contact customer support."
@@ -1338,6 +1339,10 @@ msgstr "Ze zullen geen toegang meer hebben tot deze werkruimte."
 msgid "This action can't be undone."
 msgstr "Deze actie kan niet ongedaan worden gemaakt."
 
+#: src/views/public/board/index.tsx:140
+msgid "This board is private or does not exist"
+msgstr "Dit bord is privé of bestaat niet"
+
 #: src/views/board/components/UpdateBoardSlugForm.tsx:135
 msgid "This board URL has already been taken"
 msgstr "Deze board URL is al in gebruik"
@@ -1383,7 +1388,7 @@ msgstr "Triage"
 msgid "Unable to add comment"
 msgstr "Kan geen reactie toevoegen"
 
-#: src/views/board/components/NewCardForm.tsx:125
+#: src/views/board/components/NewCardForm.tsx:142
 msgid "Unable to create card"
 msgstr "Kan kaart niet aanmaken"
 
@@ -1477,11 +1482,11 @@ msgstr "Onbeperkt aantal lijsten"
 #: src/views/settings/components/UpdateWorkspaceNameForm.tsx:82
 #: src/views/settings/components/UpdateWorkspaceDescriptionForm.tsx:90
 #: src/views/settings/components/UpdateDisplayNameForm.tsx:79
-#: src/views/board/components/UpdateBoardSlugForm.tsx:173
+#: src/views/board/components/UpdateBoardSlugForm.tsx:174
 msgid "Update"
 msgstr "Bijwerken"
 
-#: src/components/LabelForm.tsx:233
+#: src/components/LabelForm.tsx:236
 msgid "Update label"
 msgstr "Label bijwerken"
 
@@ -1546,6 +1551,10 @@ msgstr "Bekijk documentatie"
 msgid "View our roadmap."
 msgstr "Bekijk onze roadmap."
 
+#: src/views/public/board/index.tsx:143
+msgid "View workspace"
+msgstr "Werkruimte bekijken"
+
 #: src/views/board/components/VisibilityButton.tsx:91
 msgid "Visibility"
 msgstr "Zichtbaarheid"
@@ -1578,7 +1587,7 @@ msgstr "Toen Trello in 2011 werd gelanceerd, blies het iedereen omver met zijn z
 msgid "Why make an open source Trello?"
 msgstr "Waarom een open source Trello maken?"
 
-#: src/views/board/index.tsx:241
+#: src/views/board/index.tsx:332
 msgid "Workspace"
 msgstr "Werkruimte"
 

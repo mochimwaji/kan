@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { HiLink } from "react-icons/hi2";
+import { HiLink, HiOutlineLockClosed } from "react-icons/hi2";
 
+import Button from "~/components/Button";
 import Modal from "~/components/modal";
 import { PageHead } from "~/components/PageHead";
 import PatternedBackground from "~/components/PatternedBackground";
@@ -28,9 +29,14 @@ export default function PublicBoardView() {
     ? router.query.boardSlug[0]
     : router.query.boardSlug;
 
+  const workspaceSlug = Array.isArray(router.query.workspaceSlug)
+    ? router.query.workspaceSlug[0]
+    : router.query.workspaceSlug;
+
   const { data, isLoading } = api.board.bySlug.useQuery(
     {
       boardSlug: boardSlug ?? "",
+      workspaceSlug: workspaceSlug ?? "",
       members: formatToArray(router.query.members),
       labels: formatToArray(router.query.labels),
     },
@@ -116,17 +122,30 @@ export default function PublicBoardView() {
             )}
           </div>
 
-          <div className="scrollbar-w-none scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-h-[8px] relative flex-1 overflow-y-hidden overflow-x-scroll overscroll-contain scrollbar scrollbar-track-light-200 scrollbar-thumb-light-400 dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-300">
+          <div className="scrollbar-w-none scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-h-[8px] relative h-full flex-1 overflow-y-hidden overflow-x-scroll overscroll-contain scrollbar scrollbar-track-light-200 scrollbar-thumb-light-400 dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-300">
             {isLoading ? (
               <div className="ml-[2rem] flex">
                 <div className="0 mr-5 h-[500px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
                 <div className="0 mr-5 h-[275px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
                 <div className="0 mr-5 h-[375px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
               </div>
+            ) : !data ? (
+              <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-8 pb-[150px]">
+                <div className="flex flex-col items-center">
+                  <HiOutlineLockClosed className="h-10 w-10 text-light-800 dark:text-dark-800" />
+                  <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
+                    {t`Board not found`}
+                  </p>
+                  <p className="text-[14px] text-light-900 dark:text-dark-900">
+                    {t`This board is private or does not exist`}
+                  </p>
+                </div>
+                <Button href={`/${workspaceSlug}`}>{t`View workspace`}</Button>
+              </div>
             ) : (
               <div className="flex">
                 <div className="min-w-[2rem]" />
-                {data?.lists.map((list) => (
+                {data.lists.map((list) => (
                   <div
                     key={list.publicId}
                     className="dark-text-dark-1000 mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border border-light-400 bg-light-300 py-2 pl-2 pr-1 text-neutral-900 dark:border-dark-300 dark:bg-dark-100"

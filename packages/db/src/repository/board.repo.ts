@@ -201,6 +201,7 @@ export const getByPublicId = async (
 export const getBySlug = async (
   db: dbClient,
   boardSlug: string,
+  workspaceId: number,
   filters: {
     members: string[];
     labels: string[];
@@ -293,6 +294,7 @@ export const getBySlug = async (
     },
     where: and(
       eq(boards.slug, boardSlug),
+      eq(boards.workspaceId, workspaceId),
       isNull(boards.deletedAt),
       eq(boards.visibility, "public"),
     ),
