@@ -32,6 +32,7 @@ checksums:
     Are%20you%20sure%20you%20want%20to%20delete%20the%20workspace%20%7B0%7D%3F/singular: 27ba2854202dd77c51e78c64e5c93946
     Are%20you%20sure%20you%20want%20to%20delete%20this%20card%3F/singular: 131a5a7cccca7be8b32c987d9fa0b0c0
     Are%20you%20sure%20you%20want%20to%20delete%20this%20comment%3F/singular: 55fe6f1b52b71b91b2a079cfda3cc7fe
+    Are%20you%20sure%20you%20want%20to%20delete%20this%20label%3F/singular: 037fbaf1d04356937e6afb574714f51f
     Are%20you%20sure%20you%20want%20to%20delete%20your%20account%3F/singular: 428b74d781063224c3e63980e1094ec3
     assigned%20%3C0%3E%7BmemberName%7D%3C%2F0%3E%20to%20the%20card/singular: 4fb1c419a78a0f010a3e5790801551fc
     Awaiting%20Customer/singular: 122c108794f321c10e05a08f09b11457
@@ -127,8 +128,10 @@ checksums:
     Enter%20your%20name/singular: cd95fbdd0533f2c2e8edf9d9bd9aa8df
     Enter%20your%20password/singular: ea4fdd034522dead21bae0c0abb52eae
     Error%20deleting%20account/singular: d42965a9bc9e5ec4ed57890268924643
+    Error%20deleting%20label/singular: 94387e3a45ec768ae7715701ae00136e
     Error%20deleting%20workspace/singular: 0aec9bd8170bc84f5ea5c9a47c52ed26
     Error%20disconnecting%20Trello/singular: a8766853864eddc480113778a708871b
+    Error%20inviting%20member/singular: 91553b606a6ebed3534cd2e5635ce004
     Error%20updating%20display%20name/singular: 0d7979a25d290123ed8b8906bf468f1a
     Error%20updating%20profile%20image/singular: 462a56a6e574abc9e13cb48f1266adad
     Error%20updating%20workspace%20description/singular: 7a9fd7c69b90ab848ee1f1d4a4995381
@@ -185,7 +188,9 @@ checksums:
     Individuals/singular: 83bfc81f20e60556c44ec80c7d0603ec
     Integrations/singular: 0ccce343287704cd90150c32e2fcad36
     Interviewing/singular: 4ccdcdc784547e925077c3297bddee95
+    Invalid%20email%20address/singular: b2d9f25626f2d15c7c63e0281bccc247
     Invite/singular: 181884cea804cbde665f160811ee7ad0
+    Invite%20another/singular: acb543563dab7edbcf46060a53ade3a3
     Invite%20member/singular: ade922db1be6b26bc979565ce5de2bc7
     Junior/singular: ed1bd2c59a824fdcdd56fc8a0660fe9f
     Kanban%20is%20better%20with%20a%20team.%20Perfect%20for%20small%20and%20growing%20teams%20looking%20to%20collaborate./singular: a77bee43046b260797c8936ad23e9223
@@ -354,6 +359,7 @@ checksums:
     URL%20must%20be%20at%20least%203%20characters%20long/singular: 1b74ac9ec61fd34b16530ed599009ed1
     Use%20template/singular: 33f0ca0aa8f4b0de99aad267a61a094d
     User/singular: 61073457a5c3901084b557d065f876be
+    User%20is%20already%20a%20member%20of%20this%20workspace/singular: bc246386f0975f750f2133222bb4735e
     Video/singular: 8050c90e4289b105a0780f0fdda6ff66
     View%20and%20manage%20your%20API%20keys./singular: 88e23ee79056846dd9ce63ceee690549
     View%20and%20manage%20your%20billing%20and%20subscription./singular: 7469502543aac6f02149813546d1cb38

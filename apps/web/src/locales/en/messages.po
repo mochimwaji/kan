@@ -87,7 +87,7 @@ msgstr "Add description... (type '/' to open commands)"
 msgid "Add label"
 msgstr "Add label"
 
-#: src/views/members/components/InviteMemberForm.tsx:50
+#: src/views/members/components/InviteMemberForm.tsx:85
 #: src/views/card/components/MemberSelector.tsx:130
 msgid "Add member"
 msgstr "Add member"
@@ -160,6 +160,10 @@ msgstr "Are you sure you want to delete this card?"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:65
 msgid "Are you sure you want to delete this comment?"
 msgstr "Are you sure you want to delete this comment?"
+
+#: src/components/DeleteLabelConfirmation.tsx:39
+msgid "Are you sure you want to delete this label?"
+msgstr "Are you sure you want to delete this label?"
 
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:54
 msgid "Are you sure you want to delete your account?"
@@ -276,6 +280,7 @@ msgstr "Bug Report"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
 #: src/views/card/components/Comment.tsx:156
+#: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -454,6 +459,7 @@ msgstr "Dark"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:82
 #: src/views/card/components/DeleteCardConfirmation.tsx:92
 #: src/components/LabelForm.tsx:226
+#: src/components/DeleteLabelConfirmation.tsx:49
 msgid "Delete"
 msgstr "Delete"
 
@@ -567,7 +573,7 @@ msgstr "Editing"
 msgid "email"
 msgstr "email"
 
-#: src/views/members/components/InviteMemberForm.tsx:64
+#: src/views/members/components/InviteMemberForm.tsx:99
 msgid "Email"
 msgstr "Email"
 
@@ -591,6 +597,10 @@ msgstr "Enter your password"
 msgid "Error deleting account"
 msgstr "Error deleting account"
 
+#: src/components/DeleteLabelConfirmation.tsx:22
+msgid "Error deleting label"
+msgstr "Error deleting label"
+
 #: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:45
 msgid "Error deleting workspace"
 msgstr "Error deleting workspace"
@@ -598,6 +608,11 @@ msgstr "Error deleting workspace"
 #: src/views/settings/index.tsx:99
 msgid "Error disconnecting Trello"
 msgstr "Error disconnecting Trello"
+
+#: src/views/members/components/InviteMemberForm.tsx:57
+#: src/views/members/components/InviteMemberForm.tsx:63
+msgid "Error inviting member"
+msgstr "Error inviting member"
 
 #: src/views/settings/components/UpdateDisplayNameForm.tsx:54
 msgid "Error updating display name"
@@ -841,11 +856,19 @@ msgstr "Integrations"
 msgid "Interviewing"
 msgstr "Interviewing"
 
+#: src/views/members/components/InviteMemberForm.tsx:26
+msgid "Invalid email address"
+msgstr "Invalid email address"
+
 #: src/views/members/index.tsx:169
 msgid "Invite"
 msgstr "Invite"
 
-#: src/views/members/components/InviteMemberForm.tsx:82
+#: src/views/members/components/InviteMemberForm.tsx:113
+msgid "Invite another"
+msgstr "Invite another"
+
+#: src/views/members/components/InviteMemberForm.tsx:123
 #: src/views/card/components/MemberSelector.tsx:112
 msgid "Invite member"
 msgstr "Invite member"
@@ -1105,6 +1128,7 @@ msgstr "Please select a file to upload."
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:40
 #: src/views/settings/components/Avatar.tsx:40
 #: src/views/settings/components/Avatar.tsx:98
+#: src/views/members/components/InviteMemberForm.tsx:64
 #: src/views/members/components/DeleteMemberConfirmation.tsx:28
 #: src/views/card/index.tsx:159
 #: src/views/card/components/NewCommentForm.tsx:31
@@ -1123,6 +1147,7 @@ msgstr "Please select a file to upload."
 #: src/views/board/components/NewCardForm.tsx:145
 #: src/components/NewWorkspaceForm.tsx:41
 #: src/components/FeedbackModal.tsx:41
+#: src/components/DeleteLabelConfirmation.tsx:23
 msgid "Please try again later, or contact customer support."
 msgstr "Please try again later, or contact customer support."
 
@@ -1385,6 +1410,7 @@ msgstr "They won't be able to access this workspace."
 
 #: src/views/card/components/DeleteCommentConfirmation.tsx:68
 #: src/views/card/components/DeleteCardConfirmation.tsx:78
+#: src/components/DeleteLabelConfirmation.tsx:42
 msgid "This action can't be undone."
 msgstr "This action can't be undone."
 
@@ -1583,6 +1609,10 @@ msgstr "Use template"
 #: src/views/members/index.tsx:185
 msgid "User"
 msgstr "User"
+
+#: src/views/members/components/InviteMemberForm.tsx:58
+msgid "User is already a member of this workspace"
+msgstr "User is already a member of this workspace"
 
 #: src/views/boards/components/TemplateBoards.tsx:37
 msgid "Video"

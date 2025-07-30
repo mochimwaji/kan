@@ -1,26 +1,43 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "@lingui/core/macro";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
+import { z } from "zod";
 
 import type { InviteMemberInput } from "@kan/api/types";
 
 import Button from "~/components/Button";
 import Input from "~/components/Input";
+import Toggle from "~/components/Toggle";
 import { useModal } from "~/providers/modal";
+import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 
 export function InviteMemberForm() {
   const utils = api.useUtils();
+  const [isCreateAnotherEnabled, setIsCreateAnotherEnabled] = useState(false);
   const { closeModal } = useModal();
   const { workspace } = useWorkspace();
+  const { showPopup } = usePopup();
 
-  const { register, handleSubmit } = useForm<InviteMemberInput>({
+  const InviteMemberSchema = z.object({
+    email: z.string().email({ message: t`Invalid email address` }),
+    workspacePublicId: z.string(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<InviteMemberInput>({
     defaultValues: {
       email: "",
       workspacePublicId: workspace.publicId || "",
     },
+    resolver: zodResolver(InviteMemberSchema),
   });
 
   const refetchBoards = () => utils.board.all.refetch();
@@ -30,6 +47,24 @@ export function InviteMemberForm() {
       closeModal();
       await utils.workspace.byId.refetch();
       await refetchBoards();
+    },
+    onError: (error) => {
+      reset();
+      if (!isCreateAnotherEnabled) closeModal();
+
+      if (error.data?.code === "CONFLICT") {
+        showPopup({
+          header: t`Error inviting member`,
+          message: t`User is already a member of this workspace`,
+          icon: "error",
+        });
+      } else {
+        showPopup({
+          header: t`Error inviting member`,
+          message: t`Please try again later, or contact customer support.`,
+          icon: "error",
+        });
+      }
     },
   });
 
@@ -69,10 +104,16 @@ export function InviteMemberForm() {
               await handleSubmit(onSubmit)();
             }
           }}
+          errorMessage={errors.email?.message}
         />
       </div>
 
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
+        <Toggle
+          label={t`Invite another`}
+          isChecked={isCreateAnotherEnabled}
+          onChange={() => setIsCreateAnotherEnabled(!isCreateAnotherEnabled)}
+        />
         <div>
           <Button
             type="submit"

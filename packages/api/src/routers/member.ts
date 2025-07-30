@@ -56,7 +56,7 @@ export const memberRouter = createTRPCRouter({
       if (isInvitedEmailAlreadyMember) {
         throw new TRPCError({
           message: `User with email ${input.email} is already a member of this workspace`,
-          code: "BAD_REQUEST",
+          code: "CONFLICT",
         });
       }
 
@@ -86,6 +86,12 @@ export const memberRouter = createTRPCRouter({
         console.error("Failed to send magic link invitation:", {
           email: input.email,
           callbackURL: `/boards?type=invite&memberPublicId=${invite.publicId}`,
+        });
+
+        await memberRepo.softDelete(ctx.db, {
+          memberId: invite.id,
+          deletedAt: new Date(),
+          deletedBy: userId,
         });
 
         throw new TRPCError({

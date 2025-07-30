@@ -75,7 +75,7 @@ msgstr "Beschreibung hinzufügen... (tippe '/' um Befehle zu öffnen)"
 msgid "Add label"
 msgstr "Label hinzufügen"
 
-#: src/views/members/components/InviteMemberForm.tsx:50
+#: src/views/members/components/InviteMemberForm.tsx:85
 #: src/views/card/components/MemberSelector.tsx:130
 msgid "Add member"
 msgstr "Mitglied hinzufügen"
@@ -144,6 +144,10 @@ msgstr "Bist du sicher, dass du diese Karte löschen möchtest?"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:65
 msgid "Are you sure you want to delete this comment?"
 msgstr "Bist du sicher, dass du diesen Kommentar löschen möchtest?"
+
+#: src/components/DeleteLabelConfirmation.tsx:39
+msgid "Are you sure you want to delete this label?"
+msgstr "Sind Sie sicher, dass Sie dieses Label löschen möchten?"
 
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:54
 msgid "Are you sure you want to delete your account?"
@@ -248,6 +252,7 @@ msgstr "Fehlerbericht"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
 #: src/views/card/components/Comment.tsx:156
+#: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -418,6 +423,7 @@ msgstr "Dunkel"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:82
 #: src/views/card/components/DeleteCardConfirmation.tsx:92
 #: src/components/LabelForm.tsx:226
+#: src/components/DeleteLabelConfirmation.tsx:49
 msgid "Delete"
 msgstr "Löschen"
 
@@ -531,7 +537,7 @@ msgstr "Bearbeitung"
 msgid "email"
 msgstr "E-Mail"
 
-#: src/views/members/components/InviteMemberForm.tsx:64
+#: src/views/members/components/InviteMemberForm.tsx:99
 msgid "Email"
 msgstr "E-Mail"
 
@@ -555,6 +561,10 @@ msgstr "Gib dein Passwort ein"
 msgid "Error deleting account"
 msgstr "Fehler beim Löschen des Kontos"
 
+#: src/components/DeleteLabelConfirmation.tsx:22
+msgid "Error deleting label"
+msgstr "Fehler beim Löschen des Labels"
+
 #: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:45
 msgid "Error deleting workspace"
 msgstr "Fehler beim Löschen des Arbeitsbereichs"
@@ -562,6 +572,11 @@ msgstr "Fehler beim Löschen des Arbeitsbereichs"
 #: src/views/settings/index.tsx:99
 msgid "Error disconnecting Trello"
 msgstr "Fehler beim Trennen von Trello"
+
+#: src/views/members/components/InviteMemberForm.tsx:57
+#: src/views/members/components/InviteMemberForm.tsx:63
+msgid "Error inviting member"
+msgstr "Fehler beim Einladen des Mitglieds"
 
 #: src/views/settings/components/UpdateDisplayNameForm.tsx:54
 msgid "Error updating display name"
@@ -645,6 +660,7 @@ msgstr "Finden Sie Antworten auf häufige Fragen zum Projekt. Nicht gefunden, wo
 msgid "For long-term sustainability, we recognise all good open source projects need a source of revenue. Ours comes from the paid cloud offering for workspaces with multiple users (free during the beta) and for custom workspace slugs. There's no obligation to use it, and you can self-host the software on your own infrastructure free of charge."
 msgstr "Für langfristige Nachhaltigkeit erkennen wir an, dass alle guten Open-Source-Projekte eine Einnahmequelle benötigen. Unsere stammt aus dem kostenpflichtigen Cloud-Angebot für Workspaces mit mehreren Benutzern (kostenlos während der Beta-Phase) und für benutzerdefinierte Workspace-Slugs. Es besteht keine Verpflichtung, dieses Angebot zu nutzen, und Sie können die Software kostenlos auf Ihrer eigenen Infrastruktur selbst hosten."
 
+#: src/views/home/components/Pricing.tsx:32
 #: src/views/home/components/Pricing.tsx:32
 msgid "Free"
 msgstr "Kostenlos"
@@ -800,11 +816,19 @@ msgstr "Integrationen"
 msgid "Interviewing"
 msgstr "Vorstellungsgespräch"
 
+#: src/views/members/components/InviteMemberForm.tsx:26
+msgid "Invalid email address"
+msgstr "Ungültige E-Mail-Adresse"
+
 #: src/views/members/index.tsx:169
 msgid "Invite"
 msgstr "Einladen"
 
-#: src/views/members/components/InviteMemberForm.tsx:82
+#: src/views/members/components/InviteMemberForm.tsx:113
+msgid "Invite another"
+msgstr "Weitere Person einladen"
+
+#: src/views/members/components/InviteMemberForm.tsx:123
 #: src/views/card/components/MemberSelector.tsx:112
 msgid "Invite member"
 msgstr "Mitglied einladen"
@@ -1060,6 +1084,7 @@ msgstr "Bitte wähle eine Datei zum Hochladen aus."
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:40
 #: src/views/settings/components/Avatar.tsx:40
 #: src/views/settings/components/Avatar.tsx:98
+#: src/views/members/components/InviteMemberForm.tsx:64
 #: src/views/members/components/DeleteMemberConfirmation.tsx:28
 #: src/views/card/index.tsx:159
 #: src/views/card/components/NewCommentForm.tsx:31
@@ -1078,6 +1103,7 @@ msgstr "Bitte wähle eine Datei zum Hochladen aus."
 #: src/views/board/components/NewCardForm.tsx:145
 #: src/components/NewWorkspaceForm.tsx:41
 #: src/components/FeedbackModal.tsx:41
+#: src/components/DeleteLabelConfirmation.tsx:23
 msgid "Please try again later, or contact customer support."
 msgstr "Bitte versuche es später noch einmal oder kontaktiere den Kundensupport."
 
@@ -1336,6 +1362,7 @@ msgstr "Sie werden keinen Zugriff mehr auf diesen Workspace haben."
 
 #: src/views/card/components/DeleteCommentConfirmation.tsx:68
 #: src/views/card/components/DeleteCardConfirmation.tsx:78
+#: src/components/DeleteLabelConfirmation.tsx:42
 msgid "This action can't be undone."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
@@ -1530,6 +1557,10 @@ msgstr "Vorlage verwenden"
 #: src/views/members/index.tsx:185
 msgid "User"
 msgstr "Benutzer"
+
+#: src/views/members/components/InviteMemberForm.tsx:58
+msgid "User is already a member of this workspace"
+msgstr "Benutzer ist bereits Mitglied dieses Arbeitsbereichs"
 
 #: src/views/boards/components/TemplateBoards.tsx:37
 msgid "Video"
