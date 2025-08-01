@@ -27,6 +27,7 @@ const Comment = ({
   isAuthor,
   isAdmin,
   isEdited = false,
+  isViewOnly = false,
 }: {
   publicId: string | undefined;
   cardPublicId: string;
@@ -38,6 +39,7 @@ const Comment = ({
   isAuthor: boolean;
   isAdmin: boolean;
   isEdited: boolean;
+  isViewOnly: boolean;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const utils = api.useUtils();
@@ -124,7 +126,7 @@ const Comment = ({
           </p>
         </div>
 
-        {dropdownItems.length > 0 && (
+        {dropdownItems.length > 0 && !isViewOnly && (
           <div className="absolute right-4 top-4">
             <Dropdown items={dropdownItems}>
               <HiEllipsisHorizontal className="h-5 w-5 text-light-900 dark:text-dark-800" />

@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/views/card/components/Comment.tsx:121
+#: src/views/card/components/Comment.tsx:123
 msgid " (edited)"
 msgstr " (editado)"
 
@@ -48,7 +48,7 @@ msgstr "Una aplicación kanban potente y flexible que te ayuda a organizar el tr
 msgid "Account deleted"
 msgstr "Cuenta eliminada"
 
-#: src/views/public/board/CardModal.tsx:104
+#: src/views/public/board/CardModal.tsx:128
 #: src/views/card/index.tsx:256
 msgid "Activity"
 msgstr "Actividad"
@@ -62,7 +62,7 @@ msgid "Add a card"
 msgstr "Añadir una tarjeta"
 
 #: src/views/card/components/NewCommentForm.tsx:57
-#: src/views/card/components/Comment.tsx:144
+#: src/views/card/components/Comment.tsx:146
 msgid "Add a comment..."
 msgstr "Añadir un comentario..."
 
@@ -194,7 +194,7 @@ msgstr "El nombre del tablero no puede exceder los 100 caracteres"
 msgid "Board name is required"
 msgstr "El nombre del tablero es obligatorio"
 
-#: src/views/public/board/index.tsx:137
+#: src/views/public/board/index.tsx:143
 #: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Tablero no encontrado"
@@ -251,7 +251,7 @@ msgstr "Informe de error"
 #: src/views/members/components/DeleteMemberConfirmation.tsx:55
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
-#: src/views/card/components/Comment.tsx:156
+#: src/views/card/components/Comment.tsx:158
 #: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Cancelar"
@@ -441,7 +441,7 @@ msgstr "Eliminar tablero"
 msgid "Delete card"
 msgstr "Eliminar tarjeta"
 
-#: src/views/card/components/Comment.tsx:89
+#: src/views/card/components/Comment.tsx:91
 msgid "Delete comment"
 msgstr "Eliminar comentario"
 
@@ -517,7 +517,7 @@ msgstr "Terminado"
 msgid "Edit board URL"
 msgstr "Editar URL del tablero"
 
-#: src/views/card/components/Comment.tsx:80
+#: src/views/card/components/Comment.tsx:82
 msgid "Edit comment"
 msgstr "Editar comentario"
 
@@ -660,7 +660,6 @@ msgstr "Encuentra respuestas a preguntas frecuentes sobre el proyecto. ¿No encu
 msgid "For long-term sustainability, we recognise all good open source projects need a source of revenue. Ours comes from the paid cloud offering for workspaces with multiple users (free during the beta) and for custom workspace slugs. There's no obligation to use it, and you can self-host the software on your own infrastructure free of charge."
 msgstr "Para la sostenibilidad a largo plazo, reconocemos que todos los buenos proyectos de código abierto necesitan una fuente de ingresos. La nuestra proviene de la oferta de pago en la nube para espacios de trabajo con múltiples usuarios (gratuita durante la beta) y para slugs personalizados de espacios de trabajo. No hay obligación de usarla, y puedes autoalojar el software en tu propia infraestructura sin costo alguno."
 
-#: src/views/home/components/Pricing.tsx:32
 #: src/views/home/components/Pricing.tsx:32
 msgid "Free"
 msgstr "Gratis"
@@ -1093,7 +1092,7 @@ msgstr "Por favor selecciona un archivo para subir."
 #: src/views/card/components/LabelSelector.tsx:73
 #: src/views/card/components/DeleteCommentConfirmation.tsx:45
 #: src/views/card/components/DeleteCardConfirmation.tsx:52
-#: src/views/card/components/Comment.tsx:62
+#: src/views/card/components/Comment.tsx:64
 #: src/views/boards/components/ImportBoardsForm.tsx:205
 #: src/views/board/index.tsx:135
 #: src/views/board/index.tsx:191
@@ -1214,7 +1213,7 @@ msgstr "Rol"
 msgid "Run on your own infrastructure"
 msgstr "Ejecuta en tu propia infraestructura"
 
-#: src/views/card/components/Comment.tsx:163
+#: src/views/card/components/Comment.tsx:165
 msgid "Save"
 msgstr "Guardar"
 
@@ -1366,7 +1365,7 @@ msgstr "No podrán acceder a este espacio de trabajo."
 msgid "This action can't be undone."
 msgstr "Esta acción no se puede deshacer."
 
-#: src/views/public/board/index.tsx:140
+#: src/views/public/board/index.tsx:146
 msgid "This board is private or does not exist"
 msgstr "Este tablero es privado o no existe"
 
@@ -1456,7 +1455,7 @@ msgstr "No se puede actualizar la visibilidad del tablero"
 msgid "Unable to update card"
 msgstr "No se puede actualizar la tarjeta"
 
-#: src/views/card/components/Comment.tsx:61
+#: src/views/card/components/Comment.tsx:63
 msgid "Unable to update comment"
 msgstr "No se puede actualizar el comentario"
 
@@ -1578,11 +1577,15 @@ msgstr "Ver y gestionar tu facturación y suscripción."
 msgid "View docs"
 msgstr "Ver documentación"
 
+#: src/views/public/board/index.tsx:120
+msgid "View only"
+msgstr "Solo visualización"
+
 #: src/views/home/components/Features.tsx:147
 msgid "View our roadmap."
 msgstr "Ver nuestra hoja de ruta."
 
-#: src/views/public/board/index.tsx:143
+#: src/views/public/board/index.tsx:149
 msgid "View workspace"
 msgstr "Ver espacio de trabajo"
 

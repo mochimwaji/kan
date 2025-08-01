@@ -155,11 +155,13 @@ const ActivityList = ({
   cardPublicId,
   isLoading,
   isAdmin,
+  isViewOnly,
 }: {
   activities: NonNullable<GetCardByIdOutput>["activities"];
   cardPublicId: string;
   isLoading: boolean;
   isAdmin?: boolean;
+  isViewOnly?: boolean;
 }) => {
   const { data } = authClient.useSession();
   const { locale } = useLocalisation();
@@ -193,6 +195,7 @@ const ActivityList = ({
               isEdited={!!activity.comment?.updatedAt}
               isAuthor={activity.comment?.createdBy === data?.user.id}
               isAdmin={isAdmin ?? false}
+              isViewOnly={!!isViewOnly}
             />
           );
 

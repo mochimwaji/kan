@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
+import { useEffect, useRef, useState } from "react";
 import { HiXMark } from "react-icons/hi2";
 
-import { authClient } from "@kan/auth/client";
-
+import Badge from "~/components/Badge";
 import Editor from "~/components/Editor";
+import LabelIcon from "~/components/LabelIcon";
 import { useModal } from "~/providers/modal";
 import { api } from "~/utils/api";
 import ActivityList from "~/views/card/components/ActivityList";
@@ -20,7 +21,9 @@ export function CardModal({
 }) {
   const router = useRouter();
   const { closeModal, isOpen } = useModal();
-  const { data: session } = authClient.useSession();
+  const [showFade, setShowFade] = useState(false);
+  const [showTopFade, setShowTopFade] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { data, isLoading } = api.card.byId.useQuery(
     {
@@ -33,85 +36,115 @@ export function CardModal({
 
   const labels = data?.labels ?? [];
 
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5;
+    const isAtTop = scrollTop <= 5;
+
+    setShowFade(!isAtBottom);
+    setShowTopFade(!isAtTop);
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return;
+
+    handleScroll();
+
+    scrollElement.addEventListener("scroll", handleScroll);
+    return () => scrollElement.removeEventListener("scroll", handleScroll);
+  }, [data]);
+
   return (
     <div className="flex h-full flex-1 flex-row">
       <div className="flex h-full w-full flex-col overflow-hidden">
-        <div className="h-full max-h-[calc(100vh-4rem)] overflow-y-auto p-8">
-          <div className="flex w-full items-center justify-between">
-            <button
-              className="absolute right-[2rem] top-[2rem] rounded p-1 hover:bg-light-300 focus:outline-none dark:hover:bg-dark-300"
-              onClick={async (e) => {
-                e.preventDefault();
-                closeModal();
-                try {
-                  await router.replace(
-                    `/${workspaceSlug}/${boardSlug}`,
-                    undefined,
-                    {
-                      shallow: true,
-                    },
-                  );
-                } catch (error) {
-                  console.error(error);
-                }
-              }}
-            >
-              <HiXMark
-                size={18}
-                className="dark:text-dark-9000 text-light-900"
-              />
-            </button>
-            {isLoading ? (
-              <div className="flex space-x-2">
-                <div className="h-[2.3rem] w-[300px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
-              </div>
-            ) : (
-              <>
-                <h1 className="font-medium leading-[2.3rem] tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
-                  {data?.title}
-                </h1>
-              </>
-            )}
-          </div>
+        <div className="h-full p-8">
           <div className="mb-6">
-            {labels.map((label) => (
-              <div
-                key={label.publicId}
-                className="my-1 mr-1 inline-flex w-fit items-center gap-x-1.5 rounded-full px-2 py-1 text-[12px] font-medium text-light-800 ring-1 ring-inset ring-light-600 dark:text-dark-1000 dark:ring-dark-800"
+            <div className="flex w-full items-center justify-between">
+              <button
+                className="absolute right-[2rem] top-[2rem] rounded p-1 hover:bg-light-300 focus:outline-none dark:hover:bg-dark-300"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  closeModal();
+                  try {
+                    await router.replace(
+                      `/${workspaceSlug}/${boardSlug}`,
+                      undefined,
+                      {
+                        shallow: true,
+                      },
+                    );
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
               >
-                <svg
-                  fill={label.colourCode ?? "#3730a3"}
-                  className="h-2 w-2"
-                  viewBox="0 0 6 6"
-                  aria-hidden="true"
-                >
-                  <circle cx={3} cy={3} r={3} />
-                </svg>
-                <div>{label.name}</div>
-              </div>
-            ))}
-          </div>
-
-          {data?.description && (
-            <div className="mb-10 flex w-full max-w-2xl justify-between">
-              <div className="mt-2">
-                <Editor content={data.description} readOnly />
-              </div>
-            </div>
-          )}
-          <div className="border-t-[1px] border-light-600 pb-4 pt-12 dark:border-dark-400">
-            <h2 className="text-md pb-4 font-medium text-light-900 dark:text-dark-1000">
-              {t`Activity`}
-            </h2>
-            <div>
-              {cardPublicId && (
-                <ActivityList
-                  cardPublicId={cardPublicId}
-                  activities={data?.activities ?? []}
-                  isLoading={isLoading}
+                <HiXMark
+                  size={18}
+                  className="dark:text-dark-9000 text-light-900"
                 />
+              </button>
+              {isLoading ? (
+                <div className="flex space-x-2">
+                  <div className="h-[2.3rem] w-[300px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
+                </div>
+              ) : (
+                <>
+                  <h1 className="pr-8 font-bold leading-[2.3rem] tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
+                    {data?.title}
+                  </h1>
+                </>
               )}
             </div>
+            {labels.length > 0 && (
+              <div className="mt-2">
+                {labels.map((label) => (
+                  <Badge
+                    key={label.publicId}
+                    value={label.name}
+                    iconLeft={<LabelIcon colourCode={label.colourCode} />}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <div
+              ref={scrollRef}
+              className="h-full max-h-[425px] overflow-y-auto"
+            >
+              {data?.description && (
+                <div className="mb-10 flex w-full max-w-2xl justify-between">
+                  <div className="mt-2">
+                    <Editor content={data.description} readOnly />
+                  </div>
+                </div>
+              )}
+              <div className="border-t-[1px] border-light-600 pb-4 pt-12 dark:border-dark-400">
+                <h2 className="text-md pb-4 font-medium text-light-900 dark:text-dark-1000">
+                  {t`Activity`}
+                </h2>
+                <div>
+                  {cardPublicId && (
+                    <ActivityList
+                      cardPublicId={cardPublicId}
+                      activities={data?.activities ?? []}
+                      isLoading={isLoading}
+                      isViewOnly={true}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+            {showTopFade && (
+              <div className="pointer-events-none absolute left-0 right-0 top-0 h-6 bg-gradient-to-b from-white/80 to-transparent dark:from-dark-100/80" />
+            )}
+            {showFade && (
+              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white/80 to-transparent dark:from-dark-100/80" />
+            )}
           </div>
         </div>
       </div>

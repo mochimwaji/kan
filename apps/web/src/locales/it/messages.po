@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/views/card/components/Comment.tsx:121
+#: src/views/card/components/Comment.tsx:123
 msgid " (edited)"
 msgstr " (modificato)"
 
@@ -48,7 +48,7 @@ msgstr "Un'app kanban potente e flessibile che ti aiuta a organizzare il lavoro,
 msgid "Account deleted"
 msgstr "Account eliminato"
 
-#: src/views/public/board/CardModal.tsx:104
+#: src/views/public/board/CardModal.tsx:128
 #: src/views/card/index.tsx:256
 msgid "Activity"
 msgstr "Attività"
@@ -62,7 +62,7 @@ msgid "Add a card"
 msgstr "Aggiungi una carta"
 
 #: src/views/card/components/NewCommentForm.tsx:57
-#: src/views/card/components/Comment.tsx:144
+#: src/views/card/components/Comment.tsx:146
 msgid "Add a comment..."
 msgstr "Aggiungi un commento..."
 
@@ -194,7 +194,7 @@ msgstr "Il nome della bacheca non può superare i 100 caratteri"
 msgid "Board name is required"
 msgstr "Il nome della bacheca è obbligatorio"
 
-#: src/views/public/board/index.tsx:137
+#: src/views/public/board/index.tsx:143
 #: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Bacheca non trovata"
@@ -251,7 +251,7 @@ msgstr "Segnalazione bug"
 #: src/views/members/components/DeleteMemberConfirmation.tsx:55
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
-#: src/views/card/components/Comment.tsx:156
+#: src/views/card/components/Comment.tsx:158
 #: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Annulla"
@@ -441,7 +441,7 @@ msgstr "Elimina bacheca"
 msgid "Delete card"
 msgstr "Elimina carta"
 
-#: src/views/card/components/Comment.tsx:89
+#: src/views/card/components/Comment.tsx:91
 msgid "Delete comment"
 msgstr "Elimina commento"
 
@@ -517,7 +517,7 @@ msgstr "Fatto"
 msgid "Edit board URL"
 msgstr "Modifica URL della bacheca"
 
-#: src/views/card/components/Comment.tsx:80
+#: src/views/card/components/Comment.tsx:82
 msgid "Edit comment"
 msgstr "Modifica commento"
 
@@ -660,7 +660,6 @@ msgstr "Trova risposte alle domande comuni sul progetto. Non trovi quello che st
 msgid "For long-term sustainability, we recognise all good open source projects need a source of revenue. Ours comes from the paid cloud offering for workspaces with multiple users (free during the beta) and for custom workspace slugs. There's no obligation to use it, and you can self-host the software on your own infrastructure free of charge."
 msgstr "Per la sostenibilità a lungo termine, riconosciamo che tutti i buoni progetti open source necessitano di una fonte di entrate. La nostra proviene dall'offerta cloud a pagamento per workspace con più utenti (gratuita durante la beta) e per slug di workspace personalizzati. Non c'è alcun obbligo di utilizzarla, e puoi ospitare autonomamente il software sulla tua infrastruttura gratuitamente."
 
-#: src/views/home/components/Pricing.tsx:32
 #: src/views/home/components/Pricing.tsx:32
 msgid "Free"
 msgstr "Gratuito"
@@ -1093,7 +1092,7 @@ msgstr "Seleziona un file da caricare."
 #: src/views/card/components/LabelSelector.tsx:73
 #: src/views/card/components/DeleteCommentConfirmation.tsx:45
 #: src/views/card/components/DeleteCardConfirmation.tsx:52
-#: src/views/card/components/Comment.tsx:62
+#: src/views/card/components/Comment.tsx:64
 #: src/views/boards/components/ImportBoardsForm.tsx:205
 #: src/views/board/index.tsx:135
 #: src/views/board/index.tsx:191
@@ -1214,7 +1213,7 @@ msgstr "Ruolo"
 msgid "Run on your own infrastructure"
 msgstr "Esegui sulla tua infrastruttura"
 
-#: src/views/card/components/Comment.tsx:163
+#: src/views/card/components/Comment.tsx:165
 msgid "Save"
 msgstr "Salva"
 
@@ -1366,7 +1365,7 @@ msgstr "Non potranno accedere a questo spazio di lavoro."
 msgid "This action can't be undone."
 msgstr "Questa azione non può essere annullata."
 
-#: src/views/public/board/index.tsx:140
+#: src/views/public/board/index.tsx:146
 msgid "This board is private or does not exist"
 msgstr "Questa bacheca è privata o non esiste"
 
@@ -1456,7 +1455,7 @@ msgstr "Impossibile aggiornare la visibilità della bacheca"
 msgid "Unable to update card"
 msgstr "Impossibile aggiornare la scheda"
 
-#: src/views/card/components/Comment.tsx:61
+#: src/views/card/components/Comment.tsx:63
 msgid "Unable to update comment"
 msgstr "Impossibile aggiornare il commento"
 
@@ -1578,11 +1577,15 @@ msgstr "Visualizza e gestisci la tua fatturazione e abbonamento."
 msgid "View docs"
 msgstr "Visualizza documenti"
 
+#: src/views/public/board/index.tsx:120
+msgid "View only"
+msgstr "Solo visualizzazione"
+
 #: src/views/home/components/Features.tsx:147
 msgid "View our roadmap."
 msgstr "Visualizza la nostra roadmap."
 
-#: src/views/public/board/index.tsx:143
+#: src/views/public/board/index.tsx:149
 msgid "View workspace"
 msgstr "Visualizza spazio di lavoro"
 

@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/views/card/components/Comment.tsx:121
+#: src/views/card/components/Comment.tsx:123
 msgid " (edited)"
 msgstr " (bewerkt)"
 
@@ -48,7 +48,7 @@ msgstr "Een krachtige, flexibele kanban-app die je helpt werk te organiseren, vo
 msgid "Account deleted"
 msgstr "Account verwijderd"
 
-#: src/views/public/board/CardModal.tsx:104
+#: src/views/public/board/CardModal.tsx:128
 #: src/views/card/index.tsx:256
 msgid "Activity"
 msgstr "Activiteit"
@@ -62,7 +62,7 @@ msgid "Add a card"
 msgstr "Voeg een kaart toe"
 
 #: src/views/card/components/NewCommentForm.tsx:57
-#: src/views/card/components/Comment.tsx:144
+#: src/views/card/components/Comment.tsx:146
 msgid "Add a comment..."
 msgstr "Voeg een reactie toe..."
 
@@ -194,7 +194,7 @@ msgstr "Bordnaam mag niet langer zijn dan 100 tekens"
 msgid "Board name is required"
 msgstr "Bordnaam is verplicht"
 
-#: src/views/public/board/index.tsx:137
+#: src/views/public/board/index.tsx:143
 #: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Bord niet gevonden"
@@ -251,7 +251,7 @@ msgstr "Bugrapport"
 #: src/views/members/components/DeleteMemberConfirmation.tsx:55
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
-#: src/views/card/components/Comment.tsx:156
+#: src/views/card/components/Comment.tsx:158
 #: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Annuleren"
@@ -441,7 +441,7 @@ msgstr "Board verwijderen"
 msgid "Delete card"
 msgstr "Kaart verwijderen"
 
-#: src/views/card/components/Comment.tsx:89
+#: src/views/card/components/Comment.tsx:91
 msgid "Delete comment"
 msgstr "Reactie verwijderen"
 
@@ -517,7 +517,7 @@ msgstr "Klaar"
 msgid "Edit board URL"
 msgstr "Board URL bewerken"
 
-#: src/views/card/components/Comment.tsx:80
+#: src/views/card/components/Comment.tsx:82
 msgid "Edit comment"
 msgstr "Reactie bewerken"
 
@@ -660,7 +660,6 @@ msgstr "Vind antwoorden op veelgestelde vragen over het project. Kun je niet vin
 msgid "For long-term sustainability, we recognise all good open source projects need a source of revenue. Ours comes from the paid cloud offering for workspaces with multiple users (free during the beta) and for custom workspace slugs. There's no obligation to use it, and you can self-host the software on your own infrastructure free of charge."
 msgstr "Voor duurzaamheid op lange termijn erkennen we dat alle goede open source projecten een inkomstenbron nodig hebben. De onze komt van de betaalde cloudoplossing voor werkruimtes met meerdere gebruikers (gratis tijdens de bèta) en voor aangepaste werkruimte-slugs. Je bent niet verplicht om hiervan gebruik te maken en je kunt de software gratis op je eigen infrastructuur hosten."
 
-#: src/views/home/components/Pricing.tsx:32
 #: src/views/home/components/Pricing.tsx:32
 msgid "Free"
 msgstr "Gratis"
@@ -1093,7 +1092,7 @@ msgstr "Selecteer een bestand om te uploaden."
 #: src/views/card/components/LabelSelector.tsx:73
 #: src/views/card/components/DeleteCommentConfirmation.tsx:45
 #: src/views/card/components/DeleteCardConfirmation.tsx:52
-#: src/views/card/components/Comment.tsx:62
+#: src/views/card/components/Comment.tsx:64
 #: src/views/boards/components/ImportBoardsForm.tsx:205
 #: src/views/board/index.tsx:135
 #: src/views/board/index.tsx:191
@@ -1214,7 +1213,7 @@ msgstr "Rol"
 msgid "Run on your own infrastructure"
 msgstr "Draai op je eigen infrastructuur"
 
-#: src/views/card/components/Comment.tsx:163
+#: src/views/card/components/Comment.tsx:165
 msgid "Save"
 msgstr "Opslaan"
 
@@ -1366,7 +1365,7 @@ msgstr "Ze zullen geen toegang meer hebben tot deze werkruimte."
 msgid "This action can't be undone."
 msgstr "Deze actie kan niet ongedaan worden gemaakt."
 
-#: src/views/public/board/index.tsx:140
+#: src/views/public/board/index.tsx:146
 msgid "This board is private or does not exist"
 msgstr "Dit bord is privé of bestaat niet"
 
@@ -1456,7 +1455,7 @@ msgstr "Kan bordzichtbaarheid niet bijwerken"
 msgid "Unable to update card"
 msgstr "Kan kaart niet bijwerken"
 
-#: src/views/card/components/Comment.tsx:61
+#: src/views/card/components/Comment.tsx:63
 msgid "Unable to update comment"
 msgstr "Kan reactie niet bijwerken"
 
@@ -1578,11 +1577,15 @@ msgstr "Bekijk en beheer je facturering en abonnement."
 msgid "View docs"
 msgstr "Bekijk documentatie"
 
+#: src/views/public/board/index.tsx:120
+msgid "View only"
+msgstr "Alleen bekijken"
+
 #: src/views/home/components/Features.tsx:147
 msgid "View our roadmap."
 msgstr "Bekijk onze roadmap."
 
-#: src/views/public/board/index.tsx:143
+#: src/views/public/board/index.tsx:149
 msgid "View workspace"
 msgstr "Werkruimte bekijken"
 

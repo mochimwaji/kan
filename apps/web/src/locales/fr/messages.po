@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/views/card/components/Comment.tsx:121
+#: src/views/card/components/Comment.tsx:123
 msgid " (edited)"
 msgstr " (modifié)"
 
@@ -48,7 +48,7 @@ msgstr "Une application kanban puissante et flexible qui vous aide à organiser 
 msgid "Account deleted"
 msgstr "Compte supprimé"
 
-#: src/views/public/board/CardModal.tsx:104
+#: src/views/public/board/CardModal.tsx:128
 #: src/views/card/index.tsx:256
 msgid "Activity"
 msgstr "Activité"
@@ -62,7 +62,7 @@ msgid "Add a card"
 msgstr "Ajouter une carte"
 
 #: src/views/card/components/NewCommentForm.tsx:57
-#: src/views/card/components/Comment.tsx:144
+#: src/views/card/components/Comment.tsx:146
 msgid "Add a comment..."
 msgstr "Ajouter un commentaire..."
 
@@ -194,7 +194,7 @@ msgstr "Le nom du tableau ne peut pas dépasser 100 caractères"
 msgid "Board name is required"
 msgstr "Le nom du tableau est requis"
 
-#: src/views/public/board/index.tsx:137
+#: src/views/public/board/index.tsx:143
 #: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Tableau introuvable"
@@ -251,7 +251,7 @@ msgstr "Rapport de bug"
 #: src/views/members/components/DeleteMemberConfirmation.tsx:55
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
-#: src/views/card/components/Comment.tsx:156
+#: src/views/card/components/Comment.tsx:158
 #: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Annuler"
@@ -441,7 +441,7 @@ msgstr "Supprimer le tableau"
 msgid "Delete card"
 msgstr "Supprimer la carte"
 
-#: src/views/card/components/Comment.tsx:89
+#: src/views/card/components/Comment.tsx:91
 msgid "Delete comment"
 msgstr "Supprimer le commentaire"
 
@@ -517,7 +517,7 @@ msgstr "Fait"
 msgid "Edit board URL"
 msgstr "Modifier l'URL du tableau"
 
-#: src/views/card/components/Comment.tsx:80
+#: src/views/card/components/Comment.tsx:82
 msgid "Edit comment"
 msgstr "Modifier le commentaire"
 
@@ -660,7 +660,6 @@ msgstr "Trouvez des réponses aux questions fréquentes sur le projet. Vous ne t
 msgid "For long-term sustainability, we recognise all good open source projects need a source of revenue. Ours comes from the paid cloud offering for workspaces with multiple users (free during the beta) and for custom workspace slugs. There's no obligation to use it, and you can self-host the software on your own infrastructure free of charge."
 msgstr "Pour une durabilité à long terme, nous reconnaissons que tous les bons projets open source ont besoin d'une source de revenus. La nôtre provient de l'offre cloud payante pour les espaces de travail avec plusieurs utilisateurs (gratuite pendant la bêta) et pour les slugs d'espace de travail personnalisés. Il n'y a aucune obligation de l'utiliser, et vous pouvez auto-héberger le logiciel sur votre propre infrastructure gratuitement."
 
-#: src/views/home/components/Pricing.tsx:32
 #: src/views/home/components/Pricing.tsx:32
 msgid "Free"
 msgstr "Gratuit"
@@ -1093,7 +1092,7 @@ msgstr "Veuillez sélectionner un fichier à télécharger."
 #: src/views/card/components/LabelSelector.tsx:73
 #: src/views/card/components/DeleteCommentConfirmation.tsx:45
 #: src/views/card/components/DeleteCardConfirmation.tsx:52
-#: src/views/card/components/Comment.tsx:62
+#: src/views/card/components/Comment.tsx:64
 #: src/views/boards/components/ImportBoardsForm.tsx:205
 #: src/views/board/index.tsx:135
 #: src/views/board/index.tsx:191
@@ -1214,7 +1213,7 @@ msgstr "Rôle"
 msgid "Run on your own infrastructure"
 msgstr "Exécutez sur votre propre infrastructure"
 
-#: src/views/card/components/Comment.tsx:163
+#: src/views/card/components/Comment.tsx:165
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -1366,7 +1365,7 @@ msgstr "Ils ne pourront plus accéder à cet espace de travail."
 msgid "This action can't be undone."
 msgstr "Cette action ne peut pas être annulée."
 
-#: src/views/public/board/index.tsx:140
+#: src/views/public/board/index.tsx:146
 msgid "This board is private or does not exist"
 msgstr "Ce tableau est privé ou n'existe pas"
 
@@ -1456,7 +1455,7 @@ msgstr "Impossible de mettre à jour la visibilité du tableau"
 msgid "Unable to update card"
 msgstr "Impossible de mettre à jour la carte"
 
-#: src/views/card/components/Comment.tsx:61
+#: src/views/card/components/Comment.tsx:63
 msgid "Unable to update comment"
 msgstr "Impossible de mettre à jour le commentaire"
 
@@ -1578,11 +1577,15 @@ msgstr "Consultez et gérez votre facturation et votre abonnement."
 msgid "View docs"
 msgstr "Voir la documentation"
 
+#: src/views/public/board/index.tsx:120
+msgid "View only"
+msgstr "Affichage uniquement"
+
 #: src/views/home/components/Features.tsx:147
 msgid "View our roadmap."
 msgstr "Consultez notre feuille de route."
 
-#: src/views/public/board/index.tsx:143
+#: src/views/public/board/index.tsx:149
 msgid "View workspace"
 msgstr "Voir l'espace de travail"
 

@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/views/card/components/Comment.tsx:121
+#: src/views/card/components/Comment.tsx:123
 msgid " (edited)"
 msgstr " (edited)"
 
@@ -60,7 +60,7 @@ msgstr "A powerful, flexible kanban app that helps you organise work, track prog
 msgid "Account deleted"
 msgstr "Account deleted"
 
-#: src/views/public/board/CardModal.tsx:104
+#: src/views/public/board/CardModal.tsx:128
 #: src/views/card/index.tsx:256
 msgid "Activity"
 msgstr "Activity"
@@ -74,7 +74,7 @@ msgid "Add a card"
 msgstr "Add a card"
 
 #: src/views/card/components/NewCommentForm.tsx:57
-#: src/views/card/components/Comment.tsx:144
+#: src/views/card/components/Comment.tsx:146
 msgid "Add a comment..."
 msgstr "Add a comment..."
 
@@ -218,7 +218,7 @@ msgstr "Board name cannot exceed 100 characters"
 msgid "Board name is required"
 msgstr "Board name is required"
 
-#: src/views/public/board/index.tsx:137
+#: src/views/public/board/index.tsx:143
 #: src/views/board/index.tsx:358
 msgid "Board not found"
 msgstr "Board not found"
@@ -279,7 +279,7 @@ msgstr "Bug Report"
 #: src/views/members/components/DeleteMemberConfirmation.tsx:55
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
-#: src/views/card/components/Comment.tsx:156
+#: src/views/card/components/Comment.tsx:158
 #: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Cancel"
@@ -477,7 +477,7 @@ msgstr "Delete board"
 msgid "Delete card"
 msgstr "Delete card"
 
-#: src/views/card/components/Comment.tsx:89
+#: src/views/card/components/Comment.tsx:91
 msgid "Delete comment"
 msgstr "Delete comment"
 
@@ -553,7 +553,7 @@ msgstr "Done"
 msgid "Edit board URL"
 msgstr "Edit board URL"
 
-#: src/views/card/components/Comment.tsx:80
+#: src/views/card/components/Comment.tsx:82
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -1137,7 +1137,7 @@ msgstr "Please select a file to upload."
 #: src/views/card/components/LabelSelector.tsx:73
 #: src/views/card/components/DeleteCommentConfirmation.tsx:45
 #: src/views/card/components/DeleteCardConfirmation.tsx:52
-#: src/views/card/components/Comment.tsx:62
+#: src/views/card/components/Comment.tsx:64
 #: src/views/boards/components/ImportBoardsForm.tsx:205
 #: src/views/board/index.tsx:135
 #: src/views/board/index.tsx:191
@@ -1258,7 +1258,7 @@ msgstr "Role"
 msgid "Run on your own infrastructure"
 msgstr "Run on your own infrastructure"
 
-#: src/views/card/components/Comment.tsx:163
+#: src/views/card/components/Comment.tsx:165
 msgid "Save"
 msgstr "Save"
 
@@ -1414,7 +1414,7 @@ msgstr "They won't be able to access this workspace."
 msgid "This action can't be undone."
 msgstr "This action can't be undone."
 
-#: src/views/public/board/index.tsx:140
+#: src/views/public/board/index.tsx:146
 msgid "This board is private or does not exist"
 msgstr "This board is private or does not exist"
 
@@ -1508,7 +1508,7 @@ msgstr "Unable to update board visibility"
 msgid "Unable to update card"
 msgstr "Unable to update card"
 
-#: src/views/card/components/Comment.tsx:61
+#: src/views/card/components/Comment.tsx:63
 msgid "Unable to update comment"
 msgstr "Unable to update comment"
 
@@ -1630,11 +1630,15 @@ msgstr "View and manage your billing and subscription."
 msgid "View docs"
 msgstr "View docs"
 
+#: src/views/public/board/index.tsx:120
+msgid "View only"
+msgstr "View only"
+
 #: src/views/home/components/Features.tsx:147
 msgid "View our roadmap."
 msgstr "View our roadmap."
 
-#: src/views/public/board/index.tsx:143
+#: src/views/public/board/index.tsx:149
 msgid "View workspace"
 msgstr "View workspace"
 

@@ -112,7 +112,13 @@ export default function PublicBoardView() {
               </h1>
             )}
             {data && (
-              <div className="flex items-center space-x-2">
+              <div className="z-10 flex items-center space-x-2">
+                <div className="inline-flex cursor-default items-center justify-center whitespace-nowrap rounded-md border-[1px] border-light-300 bg-light-50 px-3 py-2 text-sm font-semibold text-light-950 shadow-sm dark:border-dark-300 dark:bg-dark-50 dark:text-dark-950">
+                  <span className="mr-2">
+                    <HiOutlineLockClosed />
+                  </span>
+                  {t`View only`}
+                </div>
                 <Filters
                   labels={data.labels ?? []}
                   members={[]}
