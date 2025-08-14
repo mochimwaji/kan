@@ -28,7 +28,7 @@ msgid "{0} | {1}"
 msgstr "{0} | {1}"
 
 #. placeholder {0}: labelPublicIds.length
-#: src/views/board/components/NewCardForm.tsx:392
+#: src/views/board/components/NewCardForm.tsx:432
 msgid "{0} labels"
 msgstr "{0} labels"
 
@@ -48,8 +48,8 @@ msgstr "Een krachtige, flexibele kanban-app die je helpt werk te organiseren, vo
 msgid "Account deleted"
 msgstr "Account verwijderd"
 
-#: src/views/public/board/CardModal.tsx:136
-#: src/views/card/index.tsx:287
+#: src/views/public/board/CardModal.tsx:140
+#: src/views/card/index.tsx:288
 msgid "Activity"
 msgstr "Activiteit"
 
@@ -74,9 +74,9 @@ msgstr "Voeg een item toe..."
 msgid "Add checklist"
 msgstr "Checklist toevoegen"
 
-#: src/components/Editor.tsx:308
-msgid "Add description... (type '/' to open commands)"
-msgstr "Voeg beschrijving toe... (typ '/' om commando's te openen)"
+#: src/components/Editor.tsx:442
+msgid "Add description... (type '/' to open commands or '@' to mention)"
+msgstr "Beschrijving toevoegen... (typ '/' om commando's te openen of '@' om te vermelden)"
 
 #: src/views/card/components/ChecklistItemRow.tsx:172
 msgid "Add details..."
@@ -180,7 +180,7 @@ msgstr "Weet je zeker dat je deze checklist wilt verwijderen?"
 msgid "Are you sure you want to delete this comment?"
 msgstr "Weet je zeker dat je deze opmerking wilt verwijderen?"
 
-#: src/components/DeleteLabelConfirmation.tsx:39
+#: src/components/DeleteLabelConfirmation.tsx:41
 msgid "Are you sure you want to delete this label?"
 msgstr "Weet je zeker dat je dit label wilt verwijderen?"
 
@@ -289,7 +289,7 @@ msgstr "Bugrapport"
 #: src/views/card/components/DeleteChecklistConfirmation.tsx:63
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
 #: src/views/card/components/Comment.tsx:158
-#: src/components/DeleteLabelConfirmation.tsx:47
+#: src/components/DeleteLabelConfirmation.tsx:49
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -297,7 +297,7 @@ msgstr "Annuleren"
 msgid "Card not found"
 msgstr "Kaart niet gevonden"
 
-#: src/views/board/components/NewCardForm.tsx:278
+#: src/views/board/components/NewCardForm.tsx:307
 msgid "Card title"
 msgstr "Kaarttitel"
 
@@ -403,8 +403,8 @@ msgid "Control who can view and edit your boards."
 msgstr "Bepaal wie je borden kan bekijken en bewerken."
 
 #: src/views/board/components/NewListForm.tsx:140
-#: src/views/board/components/NewCardForm.tsx:418
-#: src/components/LabelForm.tsx:212
+#: src/views/board/components/NewCardForm.tsx:458
+#: src/components/LabelForm.tsx:213
 msgid "Create another"
 msgstr "Maak nog een"
 
@@ -412,7 +412,7 @@ msgstr "Maak nog een"
 msgid "Create board"
 msgstr "Maak bord"
 
-#: src/views/board/components/NewCardForm.tsx:428
+#: src/views/board/components/NewCardForm.tsx:468
 msgid "Create card"
 msgstr "Maak kaart"
 
@@ -420,7 +420,7 @@ msgstr "Maak kaart"
 msgid "Create checklist"
 msgstr "Checklist maken"
 
-#: src/components/LabelForm.tsx:236
+#: src/components/LabelForm.tsx:238
 msgid "Create label"
 msgstr "Maak label"
 
@@ -437,7 +437,7 @@ msgid "Create new key"
 msgstr "Nieuwe sleutel aanmaken"
 
 #: src/views/card/components/LabelSelector.tsx:98
-#: src/views/board/components/NewCardForm.tsx:354
+#: src/views/board/components/NewCardForm.tsx:394
 msgid "Create new label"
 msgstr "Maak nieuw label"
 
@@ -477,8 +477,8 @@ msgstr "Donker"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:82
 #: src/views/card/components/DeleteChecklistConfirmation.tsx:66
 #: src/views/card/components/DeleteCardConfirmation.tsx:92
-#: src/components/LabelForm.tsx:226
-#: src/components/DeleteLabelConfirmation.tsx:49
+#: src/components/LabelForm.tsx:228
+#: src/components/DeleteLabelConfirmation.tsx:51
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -594,7 +594,7 @@ msgstr "Board URL bewerken"
 msgid "Edit comment"
 msgstr "Reactie bewerken"
 
-#: src/components/LabelForm.tsx:118
+#: src/components/LabelForm.tsx:119
 msgid "Edit label"
 msgstr "Label bewerken"
 
@@ -634,7 +634,7 @@ msgstr "Voer je wachtwoord in"
 msgid "Error deleting account"
 msgstr "Fout bij verwijderen account"
 
-#: src/components/DeleteLabelConfirmation.tsx:22
+#: src/components/DeleteLabelConfirmation.tsx:25
 msgid "Error deleting label"
 msgstr "Fout bij het verwijderen van label"
 
@@ -923,7 +923,7 @@ msgid "Keep in mind that this action is irreversible."
 msgstr "Houd er rekening mee dat deze actie onomkeerbaar is."
 
 #: src/views/card/index.tsx:118
-#: src/views/board/components/NewCardForm.tsx:358
+#: src/views/board/components/NewCardForm.tsx:398
 #: src/views/board/components/Filters.tsx:101
 msgid "Labels"
 msgstr "Labels"
@@ -999,7 +999,7 @@ msgstr "Gemiddelde prioriteit"
 
 #: src/views/members/index.tsx:161
 #: src/views/card/index.tsx:126
-#: src/views/board/components/NewCardForm.tsx:317
+#: src/views/board/components/NewCardForm.tsx:357
 #: src/views/board/components/Filters.tsx:93
 #: src/components/SideNavigation.tsx:73
 msgid "Members"
@@ -1025,7 +1025,7 @@ msgid "moved the card to another list"
 msgstr "heeft de kaart naar een andere lijst verplaatst"
 
 #: src/views/boards/components/NewBoardForm.tsx:99
-#: src/components/LabelForm.tsx:134
+#: src/components/LabelForm.tsx:135
 msgid "Name"
 msgstr "Naam"
 
@@ -1041,7 +1041,7 @@ msgstr "Nieuw"
 msgid "New board"
 msgstr "Nieuw bord"
 
-#: src/views/board/components/NewCardForm.tsx:261
+#: src/views/board/components/NewCardForm.tsx:290
 msgid "New card"
 msgstr "Nieuwe kaart"
 
@@ -1053,7 +1053,7 @@ msgstr "Nieuwe checklist"
 msgid "New import"
 msgstr "Nieuwe import"
 
-#: src/components/LabelForm.tsx:118
+#: src/components/LabelForm.tsx:119
 msgid "New label"
 msgstr "Nieuw label"
 
@@ -1193,10 +1193,10 @@ msgstr "Selecteer een bestand om te uploaden."
 #: src/views/board/components/VisibilityButton.tsx:53
 #: src/views/board/components/UpdateBoardSlugForm.tsx:72
 #: src/views/board/components/NewListForm.tsx:78
-#: src/views/board/components/NewCardForm.tsx:145
+#: src/views/board/components/NewCardForm.tsx:174
 #: src/components/NewWorkspaceForm.tsx:41
 #: src/components/FeedbackModal.tsx:41
-#: src/components/DeleteLabelConfirmation.tsx:23
+#: src/components/DeleteLabelConfirmation.tsx:26
 msgid "Please try again later, or contact customer support."
 msgstr "Probeer het later opnieuw of neem contact op met de klantenservice."
 
@@ -1471,7 +1471,7 @@ msgstr "Ze zullen geen toegang meer hebben tot deze werkruimte."
 #: src/views/card/components/DeleteCommentConfirmation.tsx:68
 #: src/views/card/components/DeleteChecklistConfirmation.tsx:58
 #: src/views/card/components/DeleteCardConfirmation.tsx:78
-#: src/components/DeleteLabelConfirmation.tsx:42
+#: src/components/DeleteLabelConfirmation.tsx:44
 msgid "This action can't be undone."
 msgstr "Deze actie kan niet ongedaan worden gemaakt."
 
@@ -1528,7 +1528,7 @@ msgstr "Kan checklistitem niet toevoegen"
 msgid "Unable to add comment"
 msgstr "Kan geen reactie toevoegen"
 
-#: src/views/board/components/NewCardForm.tsx:142
+#: src/views/board/components/NewCardForm.tsx:171
 msgid "Unable to create card"
 msgstr "Kan kaart niet aanmaken"
 
@@ -1647,7 +1647,7 @@ msgstr "Onbeperkt aantal lijsten"
 msgid "Update"
 msgstr "Bijwerken"
 
-#: src/components/LabelForm.tsx:236
+#: src/components/LabelForm.tsx:238
 msgid "Update label"
 msgstr "Label bijwerken"
 
