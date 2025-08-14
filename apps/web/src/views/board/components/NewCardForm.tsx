@@ -14,7 +14,7 @@ import { generateUID } from "@kan/shared/utils";
 import Avatar from "~/components/Avatar";
 import Button from "~/components/Button";
 import CheckboxDropdown from "~/components/CheckboxDropdown";
-import Editor from "~/components/Editor";
+import Editor, { WorkspaceMember } from "~/components/Editor";
 import Input from "~/components/Input";
 import LabelIcon from "~/components/LabelIcon";
 import Toggle from "~/components/Toggle";
@@ -322,6 +322,17 @@ export function NewCardForm({
                 setValue("description", value);
                 saveFormState({ ...formState, description: value });
               }}
+              workspaceMembers={
+                boardData?.workspace.members?.map((member): WorkspaceMember => ({
+                  publicId: member.publicId,
+                  email: member.email,
+                  user: member.user ? {
+                    id: member.publicId,
+                    name: member.user.name,
+                    image: member.user.image ?? null,
+                  } : null,
+                })) ?? []
+              }
             />
           </div>
         </div>
