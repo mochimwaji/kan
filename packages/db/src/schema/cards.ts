@@ -12,6 +12,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { checklists } from "./checklists";
 import { imports } from "./imports";
 import { labels } from "./labels";
 import { lists } from "./lists";
@@ -31,6 +32,15 @@ export const activityTypes = [
   "card.updated.comment.added",
   "card.updated.comment.updated",
   "card.updated.comment.deleted",
+  // Checklist activities
+  "card.updated.checklist.added",
+  "card.updated.checklist.renamed",
+  "card.updated.checklist.deleted",
+  "card.updated.checklist.item.added",
+  "card.updated.checklist.item.updated",
+  "card.updated.checklist.item.completed",
+  "card.updated.checklist.item.uncompleted",
+  "card.updated.checklist.item.deleted",
   "card.archived",
 ] as const;
 
@@ -84,6 +94,7 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
   }),
   comments: many(comments),
   activities: many(cardActivities),
+  checklists: many(checklists),
 }));
 
 export const cardActivities = pgTable("card_activity", {

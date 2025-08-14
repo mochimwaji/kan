@@ -23,7 +23,7 @@ msgstr ", of bekijk onze"
 
 #. placeholder {0}: card?.title ?? "Card"
 #. placeholder {1}: board?.name ?? "Board"
-#: src/views/card/index.tsx:189
+#: src/views/card/index.tsx:214
 msgid "{0} | {1}"
 msgstr "{0} | {1}"
 
@@ -48,8 +48,8 @@ msgstr "Een krachtige, flexibele kanban-app die je helpt werk te organiseren, vo
 msgid "Account deleted"
 msgstr "Account verwijderd"
 
-#: src/views/public/board/CardModal.tsx:128
-#: src/views/card/index.tsx:256
+#: src/views/public/board/CardModal.tsx:136
+#: src/views/card/index.tsx:287
 msgid "Activity"
 msgstr "Activiteit"
 
@@ -66,9 +66,21 @@ msgstr "Voeg een kaart toe"
 msgid "Add a comment..."
 msgstr "Voeg een reactie toe..."
 
-#: src/components/Editor.tsx:303
+#: src/views/card/components/NewChecklistItemForm.tsx:140
+msgid "Add an item..."
+msgstr "Voeg een item toe..."
+
+#: src/views/card/components/Dropdown.tsx:18
+msgid "Add checklist"
+msgstr "Checklist toevoegen"
+
+#: src/components/Editor.tsx:308
 msgid "Add description... (type '/' to open commands)"
 msgstr "Voeg beschrijving toe... (typ '/' om commando's te openen)"
+
+#: src/views/card/components/ChecklistItemRow.tsx:172
+msgid "Add details..."
+msgstr "Details toevoegen..."
 
 #: src/views/card/components/LabelSelector.tsx:110
 #: src/views/card/components/LabelSelector.tsx:118
@@ -80,17 +92,36 @@ msgstr "Label toevoegen"
 msgid "Add member"
 msgstr "Lid toevoegen"
 
-#: src/views/card/components/ActivityList.tsx:56
+#: src/views/card/components/ActivityList.tsx:69
+msgid "added a checklist"
+msgstr "heeft een checklist toegevoegd"
+
+#: src/views/card/components/ActivityList.tsx:72
+msgid "added a checklist item"
+msgstr "heeft een checklistitem toegevoegd"
+
+#: src/views/card/components/ActivityList.tsx:65
 msgid "added a label to the card"
 msgstr "heeft een label aan de kaart toegevoegd"
 
-#: src/views/card/components/ActivityList.tsx:58
+#: src/views/card/components/ActivityList.tsx:67
 msgid "added a member to the card"
 msgstr "heeft een lid aan de kaart toegevoegd"
 
-#: src/views/card/components/ActivityList.tsx:110
-msgid "added label <0>{label}</0>"
-msgstr "heeft label <0>{label}</0> toegevoegd"
+#. placeholder {0}: truncate(toTitle)
+#: src/views/card/components/ActivityList.tsx:146
+msgid "added checklist <0>{0}</0>"
+msgstr "heeft checklist <0>{0}</0> toegevoegd"
+
+#. placeholder {0}: truncate(toTitle)
+#: src/views/card/components/ActivityList.tsx:170
+msgid "added checklist item <0>{0}</0>"
+msgstr "heeft checklistitem <0>{0}</0> toegevoegd"
+
+#. placeholder {0}: truncate(label)
+#: src/views/card/components/ActivityList.tsx:130
+msgid "added label <0>{0}</0>"
+msgstr "heeft label <0>{0}</0> toegevoegd"
 
 #: src/views/home/components/Pricing.tsx:55
 msgid "Admin roles"
@@ -141,6 +172,10 @@ msgstr "Weet je zeker dat je de werkruimte {0} wilt verwijderen?"
 msgid "Are you sure you want to delete this card?"
 msgstr "Weet je zeker dat je deze kaart wilt verwijderen?"
 
+#: src/views/card/components/DeleteChecklistConfirmation.tsx:55
+msgid "Are you sure you want to delete this checklist?"
+msgstr "Weet je zeker dat je deze checklist wilt verwijderen?"
+
 #: src/views/card/components/DeleteCommentConfirmation.tsx:65
 msgid "Are you sure you want to delete this comment?"
 msgstr "Weet je zeker dat je deze opmerking wilt verwijderen?"
@@ -153,9 +188,10 @@ msgstr "Weet je zeker dat je dit label wilt verwijderen?"
 msgid "Are you sure you want to delete your account?"
 msgstr "Weet je zeker dat je je account wilt verwijderen?"
 
-#: src/views/card/components/ActivityList.tsx:92
-msgid "assigned <0>{memberName}</0> to the card"
-msgstr "heeft <0>{memberName}</0> aan de kaart toegewezen"
+#. placeholder {0}: truncate(memberName)
+#: src/views/card/components/ActivityList.tsx:110
+msgid "assigned <0>{0}</0> to the card"
+msgstr "heeft <0>{0}</0> aan de kaart toegewezen"
 
 #: src/views/boards/components/TemplateBoards.tsx:46
 msgid "Awaiting Customer"
@@ -182,7 +218,7 @@ msgstr "Factureringsportaal"
 msgid "Blog Post"
 msgstr "Blogbericht"
 
-#: src/views/board/index.tsx:332
+#: src/views/board/index.tsx:331
 msgid "Board"
 msgstr "Bord"
 
@@ -195,7 +231,7 @@ msgid "Board name is required"
 msgstr "Bordnaam is verplicht"
 
 #: src/views/public/board/index.tsx:143
-#: src/views/board/index.tsx:358
+#: src/views/board/index.tsx:357
 msgid "Board not found"
 msgstr "Bord niet gevonden"
 
@@ -250,13 +286,14 @@ msgstr "Bugrapport"
 #: src/views/settings/components/CustomURLConfirmation.tsx:50
 #: src/views/members/components/DeleteMemberConfirmation.tsx:55
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
+#: src/views/card/components/DeleteChecklistConfirmation.tsx:63
 #: src/views/card/components/DeleteCardConfirmation.tsx:86
 #: src/views/card/components/Comment.tsx:158
 #: src/components/DeleteLabelConfirmation.tsx:47
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/views/card/index.tsx:234
+#: src/views/card/index.tsx:259
 msgid "Card not found"
 msgstr "Kaart niet gevonden"
 
@@ -272,6 +309,10 @@ msgstr "Wijzig de taal van de app."
 #: src/views/auth/login/index.tsx:41
 msgid "Check your inbox"
 msgstr "Controleer je inbox"
+
+#: src/views/card/components/NewChecklistForm.tsx:118
+msgid "Checklist name"
+msgstr "Naam checklist"
 
 #: src/views/board/components/Filters.tsx:155
 msgid "Clear filters"
@@ -309,6 +350,15 @@ msgstr "Voltooid"
 #: src/views/home/components/Pricing.tsx:70
 msgid "Complete control and ownership:"
 msgstr "Volledige controle en eigendom:"
+
+#: src/views/card/components/ActivityList.tsx:74
+msgid "completed a checklist item"
+msgstr "heeft een checklistitem voltooid"
+
+#. placeholder {0}: truncate(toTitle)
+#: src/views/card/components/ActivityList.tsx:187
+msgid "completed checklist item <0>{0}</0>"
+msgstr "heeft checklistitem <0>{0}</0> voltooid"
 
 #: src/views/settings/components/CustomURLConfirmation.tsx:42
 msgid "Confirm URL change"
@@ -366,6 +416,10 @@ msgstr "Maak bord"
 msgid "Create card"
 msgstr "Maak kaart"
 
+#: src/views/card/components/NewChecklistForm.tsx:134
+msgid "Create checklist"
+msgstr "Checklist maken"
+
 #: src/components/LabelForm.tsx:236
 msgid "Create label"
 msgstr "Maak label"
@@ -387,7 +441,7 @@ msgstr "Nieuwe sleutel aanmaken"
 msgid "Create new label"
 msgstr "Maak nieuw label"
 
-#: src/views/board/index.tsx:426
+#: src/views/board/index.tsx:425
 msgid "Create new list"
 msgstr "Maak nieuwe lijst"
 
@@ -396,7 +450,7 @@ msgstr "Maak nieuwe lijst"
 msgid "Create workspace"
 msgstr "Werkruimte maken"
 
-#: src/views/card/components/ActivityList.tsx:52
+#: src/views/card/components/ActivityList.tsx:61
 msgid "created the card"
 msgstr "heeft de kaart aangemaakt"
 
@@ -421,6 +475,7 @@ msgid "Dark"
 msgstr "Donker"
 
 #: src/views/card/components/DeleteCommentConfirmation.tsx:82
+#: src/views/card/components/DeleteChecklistConfirmation.tsx:66
 #: src/views/card/components/DeleteCardConfirmation.tsx:92
 #: src/components/LabelForm.tsx:226
 #: src/components/DeleteLabelConfirmation.tsx:49
@@ -437,7 +492,7 @@ msgstr "Account verwijderen"
 msgid "Delete board"
 msgstr "Board verwijderen"
 
-#: src/views/card/components/Dropdown.tsx:14
+#: src/views/card/components/Dropdown.tsx:25
 msgid "Delete card"
 msgstr "Kaart verwijderen"
 
@@ -454,6 +509,24 @@ msgstr "Lijst verwijderen"
 #: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:106
 msgid "Delete workspace"
 msgstr "Werkruimte verwijderen"
+
+#: src/views/card/components/ActivityList.tsx:71
+msgid "deleted a checklist"
+msgstr "heeft een checklist verwijderd"
+
+#: src/views/card/components/ActivityList.tsx:76
+msgid "deleted a checklist item"
+msgstr "heeft een checklistitem verwijderd"
+
+#. placeholder {0}: truncate(fromTitle)
+#: src/views/card/components/ActivityList.tsx:162
+msgid "deleted checklist <0>{0}</0>"
+msgstr "heeft checklist <0>{0}</0> verwijderd"
+
+#. placeholder {0}: truncate(fromTitle)
+#: src/views/card/components/ActivityList.tsx:205
+msgid "deleted checklist item <0>{0}</0>"
+msgstr "heeft checklistitem <0>{0}</0> verwijderd"
 
 #: src/views/boards/components/TemplateBoards.tsx:32
 msgid "Design"
@@ -692,7 +765,7 @@ msgstr "Aan de slag"
 msgid "Get started by creating a new board"
 msgstr "Begin door een nieuw bord te maken"
 
-#: src/views/board/index.tsx:418
+#: src/views/board/index.tsx:417
 msgid "Get started by creating a new list"
 msgstr "Begin door een nieuwe lijst te maken"
 
@@ -849,7 +922,7 @@ msgstr "Kanban opnieuw uitgevonden"
 msgid "Keep in mind that this action is irreversible."
 msgstr "Houd er rekening mee dat deze actie onomkeerbaar is."
 
-#: src/views/card/index.tsx:113
+#: src/views/card/index.tsx:118
 #: src/views/board/components/NewCardForm.tsx:358
 #: src/views/board/components/Filters.tsx:101
 msgid "Labels"
@@ -883,7 +956,7 @@ msgstr "Licht"
 msgid "Link copied"
 msgstr "Link gekopieerd"
 
-#: src/views/card/index.tsx:105
+#: src/views/card/index.tsx:110
 msgid "List"
 msgstr "Lijst"
 
@@ -911,12 +984,21 @@ msgstr "Lage prioriteit"
 msgid "magic link"
 msgstr "magische link"
 
+#: src/views/card/components/ActivityList.tsx:75
+msgid "marked a checklist item as incomplete"
+msgstr "heeft een checklistitem als onvoltooid gemarkeerd"
+
+#. placeholder {0}: truncate(toTitle)
+#: src/views/card/components/ActivityList.tsx:196
+msgid "marked checklist item <0>{0}</0> as incomplete"
+msgstr "heeft checklistitem <0>{0}</0> als onvoltooid gemarkeerd"
+
 #: src/views/boards/components/TemplateBoards.tsx:17
 msgid "Medium Priority"
 msgstr "Gemiddelde prioriteit"
 
 #: src/views/members/index.tsx:161
-#: src/views/card/index.tsx:121
+#: src/views/card/index.tsx:126
 #: src/views/board/components/NewCardForm.tsx:317
 #: src/views/board/components/Filters.tsx:93
 #: src/components/SideNavigation.tsx:73
@@ -932,11 +1014,13 @@ msgstr "Leden | {0}"
 msgid "Monthly"
 msgstr "Maandelijks"
 
-#: src/views/card/components/ActivityList.tsx:81
-msgid "moved the card from <0>{fromList}</0> to<1>{toList}</1>"
-msgstr "heeft de kaart verplaatst van <0>{fromList}</0> naar<1>{toList}</1>"
+#. placeholder {0}: truncate(fromList)
+#. placeholder {1}: truncate(toList)
+#: src/views/card/components/ActivityList.tsx:98
+msgid "moved the card from <0>{0}</0> to<1>{1}</1>"
+msgstr "heeft de kaart verplaatst van <0>{0}</0> naar<1>{1}</1>"
 
-#: src/views/card/components/ActivityList.tsx:55
+#: src/views/card/components/ActivityList.tsx:64
 msgid "moved the card to another list"
 msgstr "heeft de kaart naar een andere lijst verplaatst"
 
@@ -961,6 +1045,10 @@ msgstr "Nieuw bord"
 msgid "New card"
 msgstr "Nieuwe kaart"
 
+#: src/views/card/components/NewChecklistForm.tsx:102
+msgid "New checklist"
+msgstr "Nieuwe checklist"
+
 #: src/views/boards/components/ImportBoardsForm.tsx:322
 msgid "New import"
 msgstr "Nieuwe import"
@@ -969,7 +1057,7 @@ msgstr "Nieuwe import"
 msgid "New label"
 msgstr "Nieuw label"
 
-#: src/views/board/index.tsx:395
+#: src/views/board/index.tsx:394
 #: src/views/board/components/NewListForm.tsx:112
 msgid "New list"
 msgstr "Nieuwe lijst"
@@ -1002,7 +1090,7 @@ msgstr "Geen borden gevonden"
 msgid "No credit card required"
 msgstr "Geen creditcard vereist"
 
-#: src/views/board/index.tsx:415
+#: src/views/board/index.tsx:414
 msgid "No lists"
 msgstr "Geen lijsten"
 
@@ -1085,17 +1173,23 @@ msgstr "Selecteer een bestand om te uploaden."
 #: src/views/settings/components/Avatar.tsx:98
 #: src/views/members/components/InviteMemberForm.tsx:64
 #: src/views/members/components/DeleteMemberConfirmation.tsx:28
-#: src/views/card/index.tsx:159
+#: src/views/card/index.tsx:173
 #: src/views/card/components/NewCommentForm.tsx:31
+#: src/views/card/components/NewChecklistItemForm.tsx:89
+#: src/views/card/components/NewChecklistForm.tsx:70
 #: src/views/card/components/MemberSelector.tsx:80
 #: src/views/card/components/ListSelector.tsx:53
 #: src/views/card/components/LabelSelector.tsx:73
 #: src/views/card/components/DeleteCommentConfirmation.tsx:45
+#: src/views/card/components/DeleteChecklistConfirmation.tsx:37
 #: src/views/card/components/DeleteCardConfirmation.tsx:52
 #: src/views/card/components/Comment.tsx:64
+#: src/views/card/components/ChecklistNameInput.tsx:46
+#: src/views/card/components/ChecklistItemRow.tsx:60
+#: src/views/card/components/ChecklistItemRow.tsx:88
 #: src/views/boards/components/ImportBoardsForm.tsx:205
-#: src/views/board/index.tsx:135
-#: src/views/board/index.tsx:191
+#: src/views/board/index.tsx:134
+#: src/views/board/index.tsx:190
 #: src/views/board/components/VisibilityButton.tsx:53
 #: src/views/board/components/UpdateBoardSlugForm.tsx:72
 #: src/views/board/components/NewListForm.tsx:78
@@ -1168,17 +1262,32 @@ msgstr "Verwijderen"
 msgid "Remove member"
 msgstr "Lid verwijderen"
 
-#: src/views/card/components/ActivityList.tsx:57
+#: src/views/card/components/ActivityList.tsx:66
 msgid "removed a label from the card"
 msgstr "heeft een label van de kaart verwijderd"
 
-#: src/views/card/components/ActivityList.tsx:59
+#: src/views/card/components/ActivityList.tsx:68
 msgid "removed a member from the card"
 msgstr "heeft een lid van de kaart verwijderd"
 
-#: src/views/card/components/ActivityList.tsx:118
-msgid "removed label <0>{label}</0>"
-msgstr "heeft label <0>{label}</0> verwijderd"
+#. placeholder {0}: truncate(label)
+#: src/views/card/components/ActivityList.tsx:138
+msgid "removed label <0>{0}</0>"
+msgstr "heeft label <0>{0}</0> verwijderd"
+
+#: src/views/card/components/ActivityList.tsx:70
+msgid "renamed a checklist"
+msgstr "heeft een checklist hernoemd"
+
+#. placeholder {0}: truncate(toTitle)
+#: src/views/card/components/ActivityList.tsx:154
+msgid "renamed checklist <0>{0}</0>"
+msgstr "heeft checklist <0>{0}</0> hernoemd"
+
+#. placeholder {0}: truncate(toTitle)
+#: src/views/card/components/ActivityList.tsx:178
+msgid "renamed checklist item to <0>{0}</0>"
+msgstr "checklistitem hernoemd naar <0>{0}</0>"
 
 #: src/views/boards/components/TemplateBoards.tsx:76
 msgid "Research"
@@ -1241,7 +1350,7 @@ msgstr "Zelf hosten"
 msgid "Self host with Github"
 msgstr "Zelf hosten met Github"
 
-#: src/views/card/components/ActivityList.tsx:89
+#: src/views/card/components/ActivityList.tsx:107
 msgid "self-assigned the card"
 msgstr "heeft de kaart aan zichzelf toegewezen"
 
@@ -1360,6 +1469,7 @@ msgid "They won't be able to access this workspace."
 msgstr "Ze zullen geen toegang meer hebben tot deze werkruimte."
 
 #: src/views/card/components/DeleteCommentConfirmation.tsx:68
+#: src/views/card/components/DeleteChecklistConfirmation.tsx:58
 #: src/views/card/components/DeleteCardConfirmation.tsx:78
 #: src/components/DeleteLabelConfirmation.tsx:42
 msgid "This action can't be undone."
@@ -1410,6 +1520,10 @@ msgstr "Trello-imports"
 msgid "Triaging"
 msgstr "Triage"
 
+#: src/views/card/components/NewChecklistItemForm.tsx:88
+msgid "Unable to add checklist item"
+msgstr "Kan checklistitem niet toevoegen"
+
 #: src/views/card/components/NewCommentForm.tsx:30
 msgid "Unable to add comment"
 msgstr "Kan geen reactie toevoegen"
@@ -1417,6 +1531,10 @@ msgstr "Kan geen reactie toevoegen"
 #: src/views/board/components/NewCardForm.tsx:142
 msgid "Unable to create card"
 msgstr "Kan kaart niet aanmaken"
+
+#: src/views/card/components/NewChecklistForm.tsx:69
+msgid "Unable to create checklist"
+msgstr "Kan checklist niet maken"
 
 #: src/views/board/components/NewListForm.tsx:77
 msgid "Unable to create list"
@@ -1429,6 +1547,14 @@ msgstr "Kan werkruimte niet aanmaken"
 #: src/views/card/components/DeleteCardConfirmation.tsx:51
 msgid "Unable to delete card"
 msgstr "Kan kaart niet verwijderen"
+
+#: src/views/card/components/DeleteChecklistConfirmation.tsx:36
+msgid "Unable to delete checklist"
+msgstr "Kan checklist niet verwijderen"
+
+#: src/views/card/components/ChecklistItemRow.tsx:87
+msgid "Unable to delete checklist item"
+msgstr "Kan checklistitem niet verwijderen"
 
 #: src/views/card/components/DeleteCommentConfirmation.tsx:44
 msgid "Unable to delete comment"
@@ -1450,10 +1576,18 @@ msgstr "Kan board URL niet bijwerken"
 msgid "Unable to update board visibility"
 msgstr "Kan bordzichtbaarheid niet bijwerken"
 
-#: src/views/card/index.tsx:158
-#: src/views/board/index.tsx:190
+#: src/views/card/index.tsx:172
+#: src/views/board/index.tsx:189
 msgid "Unable to update card"
 msgstr "Kan kaart niet bijwerken"
+
+#: src/views/card/components/ChecklistNameInput.tsx:45
+msgid "Unable to update checklist"
+msgstr "Kan checklist niet bijwerken"
+
+#: src/views/card/components/ChecklistItemRow.tsx:59
+msgid "Unable to update checklist item"
+msgstr "Kan checklistitem niet bijwerken"
 
 #: src/views/card/components/Comment.tsx:63
 msgid "Unable to update comment"
@@ -1464,7 +1598,7 @@ msgid "Unable to update labels"
 msgstr "Kan labels niet bijwerken"
 
 #: src/views/card/components/ListSelector.tsx:52
-#: src/views/board/index.tsx:134
+#: src/views/board/index.tsx:133
 msgid "Unable to update list"
 msgstr "Kan lijst niet bijwerken"
 
@@ -1472,11 +1606,12 @@ msgstr "Kan lijst niet bijwerken"
 msgid "Unable to update members"
 msgstr "Kan leden niet bijwerken"
 
-#: src/views/card/components/ActivityList.tsx:102
-msgid "unassigned <0>{memberName}</0> from the card"
-msgstr "<0>{memberName}</0> van de kaart verwijderd"
+#. placeholder {0}: truncate(memberName)
+#: src/views/card/components/ActivityList.tsx:121
+msgid "unassigned <0>{0}</0> from the card"
+msgstr "<0>{0}</0> van de kaart verwijderd"
 
-#: src/views/card/components/ActivityList.tsx:99
+#: src/views/card/components/ActivityList.tsx:118
 msgid "unassigned themselves from the card"
 msgstr "zichzelf van de kaart verwijderd"
 
@@ -1516,17 +1651,22 @@ msgstr "Bijwerken"
 msgid "Update label"
 msgstr "Label bijwerken"
 
-#: src/views/card/components/ActivityList.tsx:54
+#: src/views/card/components/ActivityList.tsx:73
+msgid "updated a checklist item"
+msgstr "een checklistitem bijgewerkt"
+
+#: src/views/card/components/ActivityList.tsx:63
 msgid "updated the description"
 msgstr "beschrijving bijgewerkt"
 
-#: src/views/card/components/ActivityList.tsx:53
+#: src/views/card/components/ActivityList.tsx:62
 msgid "updated the title"
 msgstr "titel bijgewerkt"
 
-#: src/views/card/components/ActivityList.tsx:73
-msgid "updated the title to <0>{toTitle}</0>"
-msgstr "titel bijgewerkt naar <0>{toTitle}</0>"
+#. placeholder {0}: truncate(toTitle)
+#: src/views/card/components/ActivityList.tsx:90
+msgid "updated the title to <0>{0}</0>"
+msgstr "titel bijgewerkt naar <0>{0}</0>"
 
 #: src/views/settings/components/CustomURLConfirmation.tsx:52
 msgid "Upgrade"
@@ -1621,7 +1761,7 @@ msgstr "Toen Trello in 2011 werd gelanceerd, blies het iedereen omver met zijn z
 msgid "Why make an open source Trello?"
 msgstr "Waarom een open source Trello maken?"
 
-#: src/views/board/index.tsx:332
+#: src/views/board/index.tsx:331
 msgid "Workspace"
 msgstr "Werkruimte"
 

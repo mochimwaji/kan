@@ -5,9 +5,11 @@ import { de, enGB, es, fr, it, nl } from "date-fns/locale";
 import {
   HiOutlineArrowLeft,
   HiOutlineArrowRight,
+  HiOutlineCheckCircle,
   HiOutlinePencil,
   HiOutlinePlus,
   HiOutlineTag,
+  HiOutlineTrash,
   HiOutlineUserMinus,
   HiOutlineUserPlus,
 } from "react-icons/hi2";
@@ -31,6 +33,11 @@ const dateLocaleMap = {
   nl: nl,
 } as const;
 
+const truncate = (value: string | null, maxLength = 50) => {
+  if (!value) return value;
+  return value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
+};
+
 const getActivityText = ({
   type,
   toTitle,
@@ -39,6 +46,7 @@ const getActivityText = ({
   memberName,
   isSelf,
   label,
+  fromTitle,
 }: {
   type: ActivityType;
   toTitle: string | null;
@@ -47,6 +55,7 @@ const getActivityText = ({
   memberName: string | null;
   isSelf: boolean;
   label: string | null;
+  fromTitle?: string | null;
 }) => {
   const ACTIVITY_TYPE_MAP = {
     "card.created": t`created the card`,
@@ -57,6 +66,14 @@ const getActivityText = ({
     "card.updated.label.removed": t`removed a label from the card`,
     "card.updated.member.added": t`added a member to the card`,
     "card.updated.member.removed": t`removed a member from the card`,
+    "card.updated.checklist.added": t`added a checklist`,
+    "card.updated.checklist.renamed": t`renamed a checklist`,
+    "card.updated.checklist.deleted": t`deleted a checklist`,
+    "card.updated.checklist.item.added": t`added a checklist item`,
+    "card.updated.checklist.item.updated": t`updated a checklist item`,
+    "card.updated.checklist.item.completed": t`completed a checklist item`,
+    "card.updated.checklist.item.uncompleted": t`marked a checklist item as incomplete`,
+    "card.updated.checklist.item.deleted": t`deleted a checklist item`,
   } as const;
 
   if (!(type in ACTIVITY_TYPE_MAP)) return null;
@@ -71,7 +88,7 @@ const getActivityText = ({
   if (type === "card.updated.title" && toTitle) {
     return (
       <Trans>
-        updated the title to <TextHighlight>{toTitle}</TextHighlight>
+        updated the title to <TextHighlight>{truncate(toTitle)}</TextHighlight>
       </Trans>
     );
   }
@@ -79,8 +96,9 @@ const getActivityText = ({
   if (type === "card.updated.list" && fromList && toList) {
     return (
       <Trans>
-        moved the card from <TextHighlight>{fromList}</TextHighlight> to
-        <TextHighlight>{toList}</TextHighlight>
+        moved the card from <TextHighlight>{truncate(fromList)}</TextHighlight>{" "}
+        to
+        <TextHighlight>{truncate(toList)}</TextHighlight>
       </Trans>
     );
   }
@@ -90,7 +108,8 @@ const getActivityText = ({
 
     return (
       <Trans>
-        assigned <TextHighlight>{memberName}</TextHighlight> to the card
+        assigned <TextHighlight>{truncate(memberName)}</TextHighlight> to the
+        card
       </Trans>
     );
   }
@@ -100,7 +119,8 @@ const getActivityText = ({
 
     return (
       <Trans>
-        unassigned <TextHighlight>{memberName}</TextHighlight> from the card
+        unassigned <TextHighlight>{truncate(memberName)}</TextHighlight> from
+        the card
       </Trans>
     );
   }
@@ -108,7 +128,7 @@ const getActivityText = ({
   if (type === "card.updated.label.added" && label) {
     return (
       <Trans>
-        added label <TextHighlight>{label}</TextHighlight>
+        added label <TextHighlight>{truncate(label)}</TextHighlight>
       </Trans>
     );
   }
@@ -116,7 +136,75 @@ const getActivityText = ({
   if (type === "card.updated.label.removed" && label) {
     return (
       <Trans>
-        removed label <TextHighlight>{label}</TextHighlight>
+        removed label <TextHighlight>{truncate(label)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.added" && toTitle) {
+    return (
+      <Trans>
+        added checklist <TextHighlight>{truncate(toTitle)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.renamed" && toTitle) {
+    return (
+      <Trans>
+        renamed checklist <TextHighlight>{truncate(toTitle)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.deleted" && fromTitle) {
+    return (
+      <Trans>
+        deleted checklist <TextHighlight>{truncate(fromTitle)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.item.added" && toTitle) {
+    return (
+      <Trans>
+        added checklist item <TextHighlight>{truncate(toTitle)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.item.updated" && toTitle) {
+    return (
+      <Trans>
+        renamed checklist item to{" "}
+        <TextHighlight>{truncate(toTitle)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.item.completed" && toTitle) {
+    return (
+      <Trans>
+        completed checklist item{" "}
+        <TextHighlight>{truncate(toTitle)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.item.uncompleted" && toTitle) {
+    return (
+      <Trans>
+        marked checklist item <TextHighlight>{truncate(toTitle)}</TextHighlight>{" "}
+        as incomplete
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.checklist.item.deleted" && fromTitle) {
+    return (
+      <Trans>
+        deleted checklist item{" "}
+        <TextHighlight>{truncate(fromTitle)}</TextHighlight>
       </Trans>
     );
   }
@@ -133,6 +221,14 @@ const ACTIVITY_ICON_MAP: Partial<Record<ActivityType, React.ReactNode | null>> =
     "card.updated.label.removed": <HiOutlineTag />,
     "card.updated.member.added": <HiOutlineUserPlus />,
     "card.updated.member.removed": <HiOutlineUserMinus />,
+    "card.updated.checklist.added": <HiOutlinePlus />,
+    "card.updated.checklist.renamed": <HiOutlinePencil />,
+    "card.updated.checklist.deleted": <HiOutlineTrash />,
+    "card.updated.checklist.item.added": <HiOutlinePlus />,
+    "card.updated.checklist.item.updated": <HiOutlinePencil />,
+    "card.updated.checklist.item.completed": <HiOutlineCheckCircle />,
+    "card.updated.checklist.item.uncompleted": <HiOutlineCheckCircle />,
+    "card.updated.checklist.item.deleted": <HiOutlineTrash />,
   } as const;
 
 const getActivityIcon = (
@@ -179,6 +275,7 @@ const ActivityList = ({
           memberName: activity.member?.user?.name ?? null,
           isSelf: activity.member?.user?.id === data?.user.id,
           label: activity.label?.name ?? null,
+          fromTitle: activity.fromTitle ?? null,
         });
 
         if (activity.type === "card.updated.comment.added")

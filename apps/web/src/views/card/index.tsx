@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoChevronForwardSharp } from "react-icons/io5";
 
@@ -19,12 +20,16 @@ import { api } from "~/utils/api";
 import { formatMemberDisplayName, getAvatarUrl } from "~/utils/helpers";
 import { DeleteLabelConfirmation } from "../../components/DeleteLabelConfirmation";
 import ActivityList from "./components/ActivityList";
+import Checklists from "./components/Checklists";
 import { DeleteCardConfirmation } from "./components/DeleteCardConfirmation";
+import { DeleteChecklistConfirmation } from "./components/DeleteChecklistConfirmation";
 import { DeleteCommentConfirmation } from "./components/DeleteCommentConfirmation";
 import Dropdown from "./components/Dropdown";
 import LabelSelector from "./components/LabelSelector";
 import ListSelector from "./components/ListSelector";
 import MemberSelector from "./components/MemberSelector";
+import { NewChecklistForm } from "./components/NewChecklistForm";
+import NewChecklistItemForm from "./components/NewChecklistItemForm";
 import NewCommentForm from "./components/NewCommentForm";
 
 interface FormValues {
@@ -132,9 +137,18 @@ export function CardRightPanel() {
 export default function CardPage() {
   const router = useRouter();
   const utils = api.useUtils();
-  const { modalContentType, entityId } = useModal();
+  const {
+    modalContentType,
+    entityId,
+    openModal,
+    getModalState,
+    clearModalState,
+  } = useModal();
   const { showPopup } = usePopup();
   const { workspace } = useWorkspace();
+  const [activeChecklistForm, setActiveChecklistForm] = useState<string | null>(
+    null,
+  );
 
   const cardId = Array.isArray(router.query.cardId)
     ? router.query.cardId[0]
@@ -180,6 +194,17 @@ export default function CardPage() {
       description: values.description,
     });
   };
+
+  // Open the new item form after creating a new checklist
+  useEffect(() => {
+    if (!card) return;
+    const state = getModalState("ADD_CHECKLIST");
+    const createdId: string | undefined = state?.createdChecklistId;
+    if (createdId) {
+      setActiveChecklistForm(createdId);
+      clearModalState("ADD_CHECKLIST");
+    }
+  }, [card, getModalState, clearModalState]);
 
   if (!cardId) return <></>;
 
@@ -252,8 +277,14 @@ export default function CardPage() {
                     </div>
                   </form>
                 </div>
+                <Checklists
+                  checklists={card.checklists}
+                  cardPublicId={cardId}
+                  activeChecklistForm={activeChecklistForm}
+                  setActiveChecklistForm={setActiveChecklistForm}
+                />
                 <div className="border-t-[1px] border-light-300 pt-12 dark:border-dark-300">
-                  <h2 className="text-md pb-4 font-medium text-light-900 dark:text-dark-1000">
+                  <h2 className="text-md pb-4 font-medium text-light-1000 dark:text-dark-1000">
                     {t`Activity`}
                   </h2>
                   <div>
@@ -304,6 +335,15 @@ export default function CardPage() {
             />
           )}
           {modalContentType === "NEW_WORKSPACE" && <NewWorkspaceForm />}
+          {modalContentType === "ADD_CHECKLIST" && (
+            <NewChecklistForm cardPublicId={cardId} />
+          )}
+          {modalContentType === "DELETE_CHECKLIST" && (
+            <DeleteChecklistConfirmation
+              cardPublicId={cardId}
+              checklistPublicId={entityId}
+            />
+          )}
         </Modal>
       </div>
     </>

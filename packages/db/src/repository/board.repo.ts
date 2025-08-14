@@ -7,6 +7,8 @@ import {
   cards,
   cardsToLabels,
   cardToWorkspaceMembers,
+  checklistItems,
+  checklists,
   labels,
   lists,
   workspaceMembers,
@@ -164,6 +166,27 @@ export const getByPublicId = async (
                   },
                 },
               },
+              checklists: {
+                columns: {
+                  publicId: true,
+                  name: true,
+                  index: true,
+                },
+                where: isNull(checklists.deletedAt),
+                orderBy: asc(checklists.index),
+                with: {
+                  items: {
+                    columns: {
+                      publicId: true,
+                      title: true,
+                      completed: true,
+                      index: true,
+                    },
+                    where: isNull(checklistItems.deletedAt),
+                    orderBy: asc(checklistItems.index),
+                  },
+                },
+              },
             },
             where: and(
               cardIds.length > 0 ? inArray(cards.publicId, cardIds) : undefined,
@@ -277,6 +300,27 @@ export const getBySlug = async (
                       name: true,
                       colourCode: true,
                     },
+                  },
+                },
+              },
+              checklists: {
+                columns: {
+                  publicId: true,
+                  name: true,
+                  index: true,
+                },
+                where: isNull(checklists.deletedAt),
+                orderBy: asc(checklists.index),
+                with: {
+                  items: {
+                    columns: {
+                      publicId: true,
+                      title: true,
+                      completed: true,
+                      index: true,
+                    },
+                    where: isNull(checklistItems.deletedAt),
+                    orderBy: asc(checklistItems.index),
                   },
                 },
               },

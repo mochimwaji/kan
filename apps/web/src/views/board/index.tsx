@@ -13,7 +13,6 @@ import type { UpdateBoardInput } from "@kan/api/types";
 
 import Button from "~/components/Button";
 import { DeleteLabelConfirmation } from "~/components/DeleteLabelConfirmation";
-import FeedbackModal from "~/components/FeedbackModal";
 import { LabelForm } from "~/components/LabelForm";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
@@ -238,15 +237,15 @@ export default function BoardPage() {
   const renderModalContent = () => {
     return (
       <>
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "DELETE_BOARD"}
         >
           <DeleteBoardConfirmation boardPublicId={boardId ?? ""} />
         </Modal>
 
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "DELETE_LIST"}
         >
           <DeleteListConfirmation
@@ -255,8 +254,8 @@ export default function BoardPage() {
           />
         </Modal>
 
-        <Modal 
-          modalSize="md" 
+        <Modal
+          modalSize="md"
           isVisible={isOpen && modalContentType === "NEW_CARD"}
         >
           <NewCardForm
@@ -266,8 +265,8 @@ export default function BoardPage() {
           />
         </Modal>
 
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "NEW_LIST"}
         >
           <NewListForm
@@ -276,22 +275,22 @@ export default function BoardPage() {
           />
         </Modal>
 
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "NEW_WORKSPACE"}
         >
           <NewWorkspaceForm />
         </Modal>
 
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "NEW_LABEL"}
         >
           <LabelForm boardPublicId={boardId ?? ""} refetch={refetchBoard} />
         </Modal>
 
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "EDIT_LABEL"}
         >
           <LabelForm
@@ -301,8 +300,8 @@ export default function BoardPage() {
           />
         </Modal>
 
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "DELETE_LABEL"}
         >
           <DeleteLabelConfirmation
@@ -311,8 +310,8 @@ export default function BoardPage() {
           />
         </Modal>
 
-        <Modal 
-          modalSize="sm" 
+        <Modal
+          modalSize="sm"
           isVisible={isOpen && modalContentType === "UPDATE_BOARD_SLUG"}
         >
           <UpdateBoardSlugForm
@@ -492,6 +491,7 @@ export default function BoardPage() {
                                             title={card.title}
                                             labels={card.labels}
                                             members={card.members}
+                                            checklists={card.checklists ?? []}
                                           />
                                         </Link>
                                       )}

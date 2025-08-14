@@ -13,12 +13,19 @@ checksums:
     Activity%20logs/singular: 8b1f0bb96a905646ecfad1cfdfa42168
     Add%20a%20card/singular: 9d80becc4fe65a74e0004e4fd290735d
     Add%20a%20comment.../singular: c28cfccc0cc69a2a2487e37eb9988028
+    Add%20an%20item.../singular: f8e7993980420698700b07f56b3a38af
+    Add%20checklist/singular: 05d73200b56cfea75fb3a0f94c9bfb74
     Add%20description...%20(type%20'%2F'%20to%20open%20commands)/singular: df99ea599521682e9ad0a90716955dc6
+    Add%20details.../singular: 2f42547fd5d199f173aa7a88c8a9b19a
     Add%20label/singular: 0be732d46df263265935fda342097a08
     Add%20member/singular: 11979625770516ca287e929381778e02
+    added%20a%20checklist/singular: 44304f4a5ef3a46378eea243b5d2df79
+    added%20a%20checklist%20item/singular: 20bc0330dba5a9ec978e04bec174365a
     added%20a%20label%20to%20the%20card/singular: 04c5e4ee9b7b7e77ef089d2ac473d235
     added%20a%20member%20to%20the%20card/singular: 95495e770062e2fd590333d56e6308d2
-    added%20label%20%3C0%3E%7Blabel%7D%3C%2F0%3E/singular: 1caba6b6bca4c6fa1ab173d241059dc2
+    added%20checklist%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: fb6a852c50c1629f47c6f155fc93fdee
+    added%20checklist%20item%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: bdd202da20b1fffbec21792c5453f90c
+    added%20label%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: b32be052b3d57de0c9120fa7f9fc86ee
     Admin%20roles/singular: 32a5d78073b9bb9a246773afba8831df
     All%20seats%20are%20free%20during%20the%20beta%20until%20Sept%201st!/singular: 015cec3899cf99e37c3cf231d432e31d
     All%20systems%20operational/singular: ee943a4046b09e6334cceeea9fda2bfc
@@ -31,10 +38,11 @@ checksums:
     Are%20you%20sure%20want%20to%20remove%20%7BentityLabel%7D%3F/singular: f9b67026c5ef86ac4d5944380d571961
     Are%20you%20sure%20you%20want%20to%20delete%20the%20workspace%20%7B0%7D%3F/singular: 27ba2854202dd77c51e78c64e5c93946
     Are%20you%20sure%20you%20want%20to%20delete%20this%20card%3F/singular: 131a5a7cccca7be8b32c987d9fa0b0c0
+    Are%20you%20sure%20you%20want%20to%20delete%20this%20checklist%3F/singular: 7c0f540603474b1a30462dda087fd2f0
     Are%20you%20sure%20you%20want%20to%20delete%20this%20comment%3F/singular: 55fe6f1b52b71b91b2a079cfda3cc7fe
     Are%20you%20sure%20you%20want%20to%20delete%20this%20label%3F/singular: 037fbaf1d04356937e6afb574714f51f
     Are%20you%20sure%20you%20want%20to%20delete%20your%20account%3F/singular: 428b74d781063224c3e63980e1094ec3
-    assigned%20%3C0%3E%7BmemberName%7D%3C%2F0%3E%20to%20the%20card/singular: 4fb1c419a78a0f010a3e5790801551fc
+    assigned%20%3C0%3E%7B0%7D%3C%2F0%3E%20to%20the%20card/singular: 9df6d89fa83706123dedd8cba2243d04
     Awaiting%20Customer/singular: 122c108794f321c10e05a08f09b11457
     Backlog/singular: 35919fd5b10ad212839a75e72829fe4e
     Basic%20Kanban/singular: e46ebc406749486f3907436970d4d6c7
@@ -61,6 +69,7 @@ checksums:
     Card%20title/singular: 7c34f59f4005e6cb3a6ff546ea0b96e3
     Change%20the%20language%20of%20the%20app./singular: fb20db145e28ed44aba89c146ded7bfc
     Check%20your%20inbox/singular: e9a430fcd298def74212238df0f680d6
+    Checklist%20name/singular: 5eb5de823f7ca5a4d97bb41e6a3f675a
     Clear%20filters/singular: 8f40ab5af527e4b190da94e7b6221379
     Click%20on%20the%20link%20we've%20sent%20to%20%7BmagicLinkRecipient%7D%20to%20sign%20in./singular: 210b6ff8727f976182ec3f29ea3c7667
     Code%20Review/singular: a2da6c2339301e7c3ddf068c4ff9f7e8
@@ -70,6 +79,8 @@ checksums:
     Company/singular: 9e36d11fa82d1bd4563eef2abc4fcfba
     Complete/singular: d3e36d723de0cfdea51c5b4171d30b4d
     Complete%20control%20and%20ownership%3A/singular: 0d8b682ba873272217425ccfc96aa9cd
+    completed%20a%20checklist%20item/singular: 757b04c6c80cc927e1c597c0ad4fda33
+    completed%20checklist%20item%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: 71ec18acf051fc909a48a07ca3578673
     Confirm%20URL%20change/singular: e14b4ce081d1ef6194b37e1814e97b39
     Connect%20Trello/singular: 4440a0b9e387ef7136e3958e7a089213
     Connect%20your%20favorite%20tools%20to%20streamline%20your%20workflow./singular: 033c5dcdb059ccb634aef7fe63f2f45d
@@ -83,6 +94,7 @@ checksums:
     Create%20another/singular: 2de8a82a416eb78c0462aa36278edc9a
     Create%20board/singular: 155b62818bfab0e34f0089e1b34a32f3
     Create%20card/singular: 32792935dd5837a9433909b04021c22b
+    Create%20checklist/singular: 5cbca15a7004558c4e6d381f83a34da2
     Create%20label/singular: c64e8180fa956f005edc1fd9b8e65abb
     Create%20list/singular: 858c3d514aa95765ec82114393199144
     Create%20new%20board/singular: cbb87b1f4cc46b336ad9510c9f19407c
@@ -103,6 +115,10 @@ checksums:
     Delete%20comment/singular: a3dae0c9ddbc73677aad9812e3dffd69
     Delete%20list/singular: b694f58e4c973d8797a78e746b550b1f
     Delete%20workspace/singular: 9017c821209528d9b20d40a488854cdf
+    deleted%20a%20checklist/singular: c54f922dc6c238c9141c700cb3180baf
+    deleted%20a%20checklist%20item/singular: 2b7a861600102ac5c271dd25c1df261a
+    deleted%20checklist%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: 60f9107197e756487d3f95a1083846b5
+    deleted%20checklist%20item%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: 8b7e270f612f9e91bda7f5cfb853d843
     Design/singular: 991b75727b6784c1a063a7462b76186d
     Disconnect%20Trello/singular: a2dd737d133887d34504728c7e7f05e3
     Discuss%20and%20collaborate%20on%20cards./singular: f2e87816709f602130831ead50bba457
@@ -211,17 +227,20 @@ checksums:
     Long-term/singular: 51cb6f0b112250c5a091ca5f0866904b
     Low%20Priority/singular: 509b5cb7c1e8a185e0aa6d38c64c90e8
     magic%20link/singular: db9d17a5bd98bba8aa0d8068c68579f3
+    marked%20a%20checklist%20item%20as%20incomplete/singular: 35d0822f65971b97774b962561b02649
+    marked%20checklist%20item%20%3C0%3E%7B0%7D%3C%2F0%3E%20as%20incomplete/singular: 4c38799ff25321ea25017bf4cd8e2e4f
     Medium%20Priority/singular: 1f527cd6d1ed602930bcaa303f503b51
     Members/singular: 0932e80cba1e3e0a7f52bb67ff31da32
     Members%20%7C%20%7B0%7D/singular: a29e3e9f1076acd178c417d047584e88
     Monthly/singular: 818f1192e32bb855597f930d3e78806e
-    moved%20the%20card%20from%20%3C0%3E%7BfromList%7D%3C%2F0%3E%20to%3C1%3E%7BtoList%7D%3C%2F1%3E/singular: c2d0d72ad97510344b51154ef15060e0
+    moved%20the%20card%20from%20%3C0%3E%7B0%7D%3C%2F0%3E%20to%3C1%3E%7B1%7D%3C%2F1%3E/singular: 11edf0427766c26db541d46379dc3c16
     moved%20the%20card%20to%20another%20list/singular: 2e8c41bfafb42fa299ce56e4300205ff
     Name/singular: 9368b5a047572b6051f334af5aa76819
     Need%20help%3F/singular: 04e7322f2d3ffb2d73ff2f64b71637c8
     New/singular: 126d036fae5fb6b629728ecb97e6195b
     New%20board/singular: 63f4e979e29a7fc2f5c09ff91fa75966
     New%20card/singular: a33f6219a756127f91c2523cfe845a19
+    New%20checklist/singular: 58252b71e9693ae0f4d2d0b72108a569
     New%20import/singular: e8fddfe15dd170277df919e5d37efd47
     New%20label/singular: 890040da52a88c16c249a4ac78980f81
     New%20list/singular: 146c2e642b11056a0b07ed65733e4178
@@ -268,7 +287,10 @@ checksums:
     Remove%20member/singular: 1d77c2ca3768e486fd1fb5df30cb60d9
     removed%20a%20label%20from%20the%20card/singular: f83ec18850a2a8a3f8242a740a04df06
     removed%20a%20member%20from%20the%20card/singular: 0bd7561bb79358fde3d595c3e60a315a
-    removed%20label%20%3C0%3E%7Blabel%7D%3C%2F0%3E/singular: 1e7ebc1866136352bdc3cd90afc083f0
+    removed%20label%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: 7e0936b15831e65754588b8512f62fcb
+    renamed%20a%20checklist/singular: 4d208de1857740e63469007c5b8b491a
+    renamed%20checklist%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: e95d119ef65b0af6c0a96bef182be671
+    renamed%20checklist%20item%20to%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: 50f55f71f9245890afee434d7adc2140
     Research/singular: 3368e9638d1619babd6df9fad592274f
     Resolution/singular: 6d8bd9e1bd7dae5ae38c93061d32990e
     Resources/singular: ec7fb05ed963bb6781a35782b3475502
@@ -324,22 +346,28 @@ checksums:
     Trello%20disconnected/singular: 54b24a3e6c9a7eedd8c8d1060ab1175d
     Trello%20imports/singular: 6827eca403faa8f89891d17827e72af9
     Triaging/singular: 1d40799fcae53a8a27688fdae2a48dee
+    Unable%20to%20add%20checklist%20item/singular: 4c4c3eaaf10b348b39ae97eb5dc455df
     Unable%20to%20add%20comment/singular: 49bb435880817434698f31a6069564d6
     Unable%20to%20create%20card/singular: 90112ea12ec6fa42097a6e022ae048a4
+    Unable%20to%20create%20checklist/singular: 94eed122e42e0951cd08b9ec62f5eeb6
     Unable%20to%20create%20list/singular: 7fbbf8314f8d08a4123c7daef09fed05
     Unable%20to%20create%20workspace/singular: c1c949477e121d73ed6683eddf9cd874
     Unable%20to%20delete%20card/singular: 50ff06aa1265fe464f776aba33f1bef9
+    Unable%20to%20delete%20checklist/singular: d7067e2c009f4919f0cca77df3c228ee
+    Unable%20to%20delete%20checklist%20item/singular: a74144593b625e4d8d7ecf734462c60d
     Unable%20to%20delete%20comment/singular: 550198b2c87f06726a843c79c1026ed9
     Unable%20to%20remove%20member/singular: 39025a0c53818438829603d213baef06
     Unable%20to%20send%20feedback/singular: 656c93265d7e2bef1245b17d85f85ae5
     Unable%20to%20update%20board%20URL/singular: 080746884059142358b58d9a44ff7d93
     Unable%20to%20update%20board%20visibility/singular: a76a21d561b8943e9276e027a1e3f70d
     Unable%20to%20update%20card/singular: eca6002e57af8ec97324eae64e3b5731
+    Unable%20to%20update%20checklist/singular: 44c10f49f448909ceca481ed9b4b07e7
+    Unable%20to%20update%20checklist%20item/singular: 5c86b3523531c30d58856e3ecde0cb55
     Unable%20to%20update%20comment/singular: 05e798ed6b0f3fee41f3e8832eb699ea
     Unable%20to%20update%20labels/singular: dca2bdc3dcf74bc9d95e05156039a291
     Unable%20to%20update%20list/singular: 14aa802f91b9b4c05236c8c75afb33da
     Unable%20to%20update%20members/singular: 9a851a6b0c75ee16d25cf2ff4b67b255
-    unassigned%20%3C0%3E%7BmemberName%7D%3C%2F0%3E%20from%20the%20card/singular: 105d4eeb32044126b8dde243bad11d56
+    unassigned%20%3C0%3E%7B0%7D%3C%2F0%3E%20from%20the%20card/singular: b683cc07092348c1e75dba40b1262b85
     unassigned%20themselves%20from%20the%20card/singular: 27c6f293c562af6a44348d7f00036d30
     Unlimited%20activity%20log/singular: 8c993de94cda0deac19ba14ecafce6a5
     Unlimited%20boards/singular: cb4fd858137ce825c2f1904d142d8042
@@ -349,9 +377,10 @@ checksums:
     Unlimited%20lists/singular: 5c418701b27b9acbc5dd199719007362
     Update/singular: 079fc039262fd31b10532929685c2d1b
     Update%20label/singular: 97880b503dfe956941c5f23025a1c102
+    updated%20a%20checklist%20item/singular: 198e1d1d503f4b69b752dd84d0cc0e9d
     updated%20the%20description/singular: 70fd604b6dc957a75be90ea77572d76d
     updated%20the%20title/singular: 98cf8f12923ec1a58e767e3a40863b21
-    updated%20the%20title%20to%20%3C0%3E%7BtoTitle%7D%3C%2F0%3E/singular: 70cdf681ec2b6ef8e14397bc1f93f945
+    updated%20the%20title%20to%20%3C0%3E%7B0%7D%3C%2F0%3E/singular: aca196d729401d8adc5c8ca9d558840e
     Upgrade/singular: 63c3b52882e0d779859307d672c178c2
     Urgent/singular: e79afcd4398e52e10e7e8243a7eecabe
     URL%20can%20only%20contain%20letters%2C%20numbers%2C%20and%20hyphens/singular: 875d37d2d920f98ef60a314eda8a5d9a

@@ -10,7 +10,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-type ModalContextType = {
+interface ModalContextType {
   isOpen: boolean;
   openModal: (
     contentType: string,
@@ -28,7 +28,7 @@ type ModalContextType = {
   getModalState: (modalType: string) => any;
   clearModalState: (modalType: string) => void;
   clearAllModalStates: () => void;
-};
+}
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
@@ -48,11 +48,11 @@ export const ModalProvider: React.FC<Props> = ({ children }) => {
     entityLabel?: string,
   ) => {
     const newModal: ModalState = { contentType, entityId, entityLabel };
-    setModalStack(prev => [...prev, newModal]);
+    setModalStack((prev) => [...prev, newModal]);
   };
 
   const closeModal = () => {
-    setModalStack(prev => {
+    setModalStack((prev) => {
       if (prev.length <= 1) {
         return [];
       }
@@ -72,9 +72,9 @@ export const ModalProvider: React.FC<Props> = ({ children }) => {
   };
 
   const setModalState = (modalType: string, state: any) => {
-    setModalStates(prev => ({
+    setModalStates((prev) => ({
       ...prev,
-      [modalType]: state
+      [modalType]: state,
     }));
   };
 
@@ -83,7 +83,7 @@ export const ModalProvider: React.FC<Props> = ({ children }) => {
   };
 
   const clearModalState = (modalType: string) => {
-    setModalStates(prev => {
+    setModalStates((prev) => {
       const newStates = { ...prev };
       delete newStates[modalType];
       return newStates;

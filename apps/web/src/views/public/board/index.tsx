@@ -175,6 +175,7 @@ export default function PublicBoardView() {
                           <Card
                             title={card.title}
                             labels={card.labels}
+                            checklists={card.checklists ?? []}
                             members={[]}
                           />
                         </Link>

@@ -45,10 +45,12 @@ export const formatMemberDisplayName = (
   return localPart.replace(/[_-]/g, ".");
 };
 
-export const getAvatarUrl = (imageOrKey: string) => {
+export const getAvatarUrl = (imageOrKey: string | null) => {
+  if (!imageOrKey) return "";
+
   if (imageOrKey.startsWith("http://") || imageOrKey.startsWith("https://")) {
     return imageOrKey;
   }
-  
+
   return `${env("NEXT_PUBLIC_STORAGE_URL")}/${env("NEXT_PUBLIC_AVATAR_BUCKET_NAME")}/${imageOrKey}`;
 };
