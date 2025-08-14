@@ -29,7 +29,6 @@ import LabelSelector from "./components/LabelSelector";
 import ListSelector from "./components/ListSelector";
 import MemberSelector from "./components/MemberSelector";
 import { NewChecklistForm } from "./components/NewChecklistForm";
-import NewChecklistItemForm from "./components/NewChecklistItemForm";
 import NewCommentForm from "./components/NewCommentForm";
 
 interface FormValues {
@@ -213,94 +212,96 @@ export default function CardPage() {
       <PageHead
         title={t`${card?.title ?? "Card"} | ${board?.name ?? "Board"}`}
       />
-      <div className="flex h-full flex-1 flex-row">
-        <div className="m-auto flex h-full w-full max-w-[800px] flex-col overflow-hidden">
-          <div className="h-full max-h-[calc(100dvh-3rem)] overflow-y-auto p-6 md:max-h-[calc(100dvh-4rem)] md:p-8">
-            <div className="mb-8 flex w-full items-center justify-between md:mt-6">
-              {!card && isLoading && (
-                <div className="flex space-x-2">
-                  <div className="h-[2.3rem] w-[150px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
-                  <div className="h-[2.3rem] w-[300px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
-                </div>
-              )}
+      <div className="flex h-full flex-1 flex-row overflow-hidden">
+        <div className="scrollbar-thumb-rounded-[4px] scrollbar-track-rounded-[4px] w-full flex-1 overflow-y-auto scrollbar scrollbar-track-light-200 scrollbar-thumb-light-400 hover:scrollbar-thumb-light-400 dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-300 dark:hover:scrollbar-thumb-dark-300">
+          <div className="p-auto mx-auto flex h-full w-full max-w-[800px] flex-col">
+            <div className="p-6 md:p-8">
+              <div className="mb-8 flex w-full items-center justify-between md:mt-6">
+                {!card && isLoading && (
+                  <div className="flex space-x-2">
+                    <div className="h-[2.3rem] w-[150px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
+                    <div className="h-[2.3rem] w-[300px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
+                  </div>
+                )}
+                {card && (
+                  <>
+                    <Link
+                      className="whitespace-nowrap font-bold leading-[2.3rem] tracking-tight text-light-900 dark:text-dark-900 sm:text-[1.2rem]"
+                      href={`/boards/${board?.publicId}`}
+                    >
+                      {board?.name}
+                    </Link>
+                    <IoChevronForwardSharp
+                      size={18}
+                      className="mx-2 text-light-900 dark:text-dark-900"
+                    />
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className="w-full space-y-6"
+                    >
+                      <div>
+                        <input
+                          type="text"
+                          id="title"
+                          {...register("title")}
+                          onBlur={handleSubmit(onSubmit)}
+                          className="block w-full border-0 bg-transparent p-0 py-0 font-bold tracking-tight text-neutral-900 focus:ring-0 dark:text-dark-1000 sm:text-[1.2rem]"
+                        />
+                      </div>
+                    </form>
+                    <div className="flex">
+                      <Dropdown />
+                    </div>
+                  </>
+                )}
+                {!card && !isLoading && (
+                  <p className="block p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
+                    {t`Card not found`}
+                  </p>
+                )}
+              </div>
               {card && (
                 <>
-                  <Link
-                    className="whitespace-nowrap font-bold leading-[2.3rem] tracking-tight text-light-900 dark:text-dark-900 sm:text-[1.2rem]"
-                    href={`/boards/${board?.publicId}`}
-                  >
-                    {board?.name}
-                  </Link>
-                  <IoChevronForwardSharp
-                    size={18}
-                    className="mx-2 text-light-900 dark:text-dark-900"
+                  <div className="mb-10 flex w-full max-w-2xl flex-col justify-between">
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className="w-full space-y-6"
+                    >
+                      <div className="mt-2">
+                        <Editor
+                          content={card.description}
+                          onChange={(e) => setValue("description", e)}
+                          onBlur={() => handleSubmit(onSubmit)()}
+                          workspaceMembers={board?.workspace.members ?? []}
+                        />
+                      </div>
+                    </form>
+                  </div>
+                  <Checklists
+                    checklists={card.checklists}
+                    cardPublicId={cardId}
+                    activeChecklistForm={activeChecklistForm}
+                    setActiveChecklistForm={setActiveChecklistForm}
                   />
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="w-full space-y-6"
-                  >
+                  <div className="border-t-[1px] border-light-300 pt-12 dark:border-dark-300">
+                    <h2 className="text-md pb-4 font-medium text-light-1000 dark:text-dark-1000">
+                      {t`Activity`}
+                    </h2>
                     <div>
-                      <input
-                        type="text"
-                        id="title"
-                        {...register("title")}
-                        onBlur={handleSubmit(onSubmit)}
-                        className="block w-full border-0 bg-transparent p-0 py-0 font-bold tracking-tight text-neutral-900 focus:ring-0 dark:text-dark-1000 sm:text-[1.2rem]"
+                      <ActivityList
+                        cardPublicId={cardId}
+                        activities={activities ?? []}
+                        isLoading={!card}
+                        isAdmin={workspace.role === "admin"}
                       />
                     </div>
-                  </form>
-                  <div className="flex">
-                    <Dropdown />
+                    <div className="mt-6">
+                      <NewCommentForm cardPublicId={cardId} />
+                    </div>
                   </div>
                 </>
               )}
-              {!card && !isLoading && (
-                <p className="block p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
-                  {t`Card not found`}
-                </p>
-              )}
             </div>
-            {card && (
-              <>
-                <div className="mb-10 flex w-full max-w-2xl flex-col justify-between">
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="w-full space-y-6"
-                  >
-                    <div className="mt-2">
-                      <Editor
-                        content={card.description}
-                        onChange={(e) => setValue("description", e)}
-                        onBlur={() => handleSubmit(onSubmit)()}
-                        workspaceMembers={board?.workspace?.members ?? []}
-                      />
-                    </div>
-                  </form>
-                </div>
-                <Checklists
-                  checklists={card.checklists}
-                  cardPublicId={cardId}
-                  activeChecklistForm={activeChecklistForm}
-                  setActiveChecklistForm={setActiveChecklistForm}
-                />
-                <div className="border-t-[1px] border-light-300 pt-12 dark:border-dark-300">
-                  <h2 className="text-md pb-4 font-medium text-light-1000 dark:text-dark-1000">
-                    {t`Activity`}
-                  </h2>
-                  <div>
-                    <ActivityList
-                      cardPublicId={cardId}
-                      activities={activities ?? []}
-                      isLoading={!card}
-                      isAdmin={workspace.role === "admin"}
-                    />
-                  </div>
-                  <div className="mt-6">
-                    <NewCommentForm cardPublicId={cardId} />
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
 
