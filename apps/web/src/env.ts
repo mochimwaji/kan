@@ -24,7 +24,7 @@ export const env = createEnv({
           s.split(",").every((l) => z.string().url().safeParse(l).success),
       )
       .optional(),
-    POSTGRES_URL: z.string().url().optional().or(z.literal('')),
+    POSTGRES_URL: z.string().url().optional().or(z.literal("")),
     TRELLO_APP_API_KEY: z.string().optional(),
     TRELLO_APP_SECRET: z.string().optional(),
     STRIPE_SECRET_KEY: z.string().optional(),
@@ -101,6 +101,13 @@ export const env = createEnv({
         (s) => !s || s.toLowerCase() === "true" || s.toLowerCase() === "false",
       )
       .optional(),
+    NEXT_PUBLIC_WHITE_LABEL_HIDE_POWERED_BY: z
+      .string()
+      .transform((s) => (s === "" ? undefined : s))
+      .refine(
+        (s) => !s || s.toLowerCase() === "true" || s.toLowerCase() === "false",
+      )
+      .optional(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -119,6 +126,8 @@ export const env = createEnv({
     NEXT_PUBLIC_DISABLE_SIGN_UP: process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
     NEXT_PUBLIC_USE_STANDALONE_OUTPUT:
       process.env.NEXT_PUBLIC_USE_STANDALONE_OUTPUT,
+    NEXT_PUBLIC_WHITE_LABEL_HIDE_POWERED_BY:
+      process.env.NEXT_PUBLIC_WHITE_LABEL_HIDE_POWERED_BY,
   },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",
