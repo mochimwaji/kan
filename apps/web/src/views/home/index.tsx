@@ -6,7 +6,7 @@ import { IoLogoGithub, IoLogoHackernews } from "react-icons/io";
 
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
-import { useTheme } from "~/providers/theme";
+import { useTheme } from "next-themes";
 import Cta from "./components/Cta";
 import FAQs from "./components/Faqs";
 import Features from "./components/Features";
@@ -14,9 +14,10 @@ import Layout from "./components/Layout";
 import Pricing from "./components/Pricing";
 
 export default function HomeView() {
-  const theme = useTheme();
+  const { resolvedTheme } = useTheme();
 
-  const isDarkMode = theme.activeTheme === "dark";
+  const isDarkMode = resolvedTheme === "dark";
+
   return (
     <Layout>
       <PageHead title="Kan.bn | The open source alternative to Trello" />
@@ -88,19 +89,27 @@ export default function HomeView() {
         </div>
         <div className="px-4">
           <div className="mb-24 rounded-[16px] border border-light-300 bg-light-50 p-1 shadow-md dark:border-dark-300 dark:bg-dark-100 lg:rounded-[24px] lg:p-2">
-            <div className="overflow-hidden rounded-[12px] border border-light-300 shadow-sm dark:border-dark-300 lg:rounded-[16px]">
+            <div className="relative overflow-hidden rounded-[12px] border border-light-300 shadow-sm dark:border-dark-300 lg:rounded-[16px]">
               <Image
-                src={`/hero-${isDarkMode ? "dark" : "light"}.png`}
+                src={`/hero-light.png`}
                 alt="kanban"
                 width={1100}
                 height={1000}
+                className="block dark:hidden"
+              />
+              <Image
+                src={`/hero-dark.png`}
+                alt="kanban"
+                width={1100}
+                height={1000}
+                className="hidden dark:block"
               />
             </div>
           </div>
         </div>
         <div className="relative pt-10">
           <div id="features" className="absolute -top-20" />
-          <Features theme={theme.activeTheme} />
+          <Features theme={resolvedTheme === "dark" ? "dark" : "light"} />
         </div>
         <div className="relative pt-10">
           <div id="pricing" className="absolute -top-20" />
@@ -111,7 +120,7 @@ export default function HomeView() {
           <FAQs />
         </div>
         <div className="relative">
-          <Cta theme={theme.activeTheme} />
+          <Cta theme={resolvedTheme ?? "light"} />
         </div>
       </div>
     </Layout>
