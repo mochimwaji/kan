@@ -7,7 +7,10 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const feedbackRouter = createTRPCRouter({
   create: protectedProcedure
-    .meta({ enabled: false, openApi: false })
+    .meta({
+      enabled: false,
+      openapi: { enabled: false, method: "POST", path: "/feedback" },
+    })
     .input(
       z.object({
         feedback: z.string().min(1),
