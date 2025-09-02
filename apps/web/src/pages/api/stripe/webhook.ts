@@ -36,7 +36,7 @@ export default async function handler(
     const event = stripe.webhooks.constructEvent(
       rawBody,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET!,
+      process.env.STRIPE_WEBHOOK_SECRET_LEGACY!,
     );
 
     const { db } = await createNextApiContext(req);
