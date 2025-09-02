@@ -114,13 +114,13 @@ async function downloadImage(url: string): Promise<Buffer> {
 export const initAuth = (db: dbClient) => {
   return betterAuth({
     secret: process.env.BETTER_AUTH_SECRET!,
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL!,
+    baseURL: env("NEXT_PUBLIC_BASE_URL"),
     trustedOrigins: process.env.BETTER_AUTH_TRUSTED_ORIGINS
       ? [
-          process.env.NEXT_PUBLIC_BASE_URL!,
+          env("NEXT_PUBLIC_BASE_URL") ?? "",
           ...process.env.BETTER_AUTH_TRUSTED_ORIGINS.split(","),
         ]
-      : [process.env.NEXT_PUBLIC_BASE_URL!],
+      : [env("NEXT_PUBLIC_BASE_URL") ?? ""],
     database: drizzleAdapter(db, {
       provider: "pg",
       schema: {
