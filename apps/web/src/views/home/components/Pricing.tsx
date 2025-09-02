@@ -94,7 +94,7 @@ const Pricing = () => {
 
         {/* Beta free pricing pill */}
         <div className="mt-4 flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800 dark:bg-green-700 dark:text-green-100">
-          {t`All seats are free during the beta until Sept 1st!`}
+          {t`All seats are free during the beta until Sept 3rd!`}
         </div>
 
         <div className="mt-16 flex justify-center">
@@ -108,7 +108,12 @@ const Pricing = () => {
                 <Radio
                   key={option.value}
                   value={option}
-                  className="cursor-pointer rounded-full px-2.5 py-1 text-xs text-light-900 data-[checked]:bg-dark-50 data-[checked]:text-white dark:data-[checked]:bg-light-50 dark:data-[checked]:text-dark-50 lg:text-sm"
+                  className={twMerge(
+                    "cursor-pointer rounded-full px-2.5 py-1 text-xs transition-colors lg:text-sm",
+                    frequency?.value === option.value
+                      ? "bg-dark-50 text-white dark:bg-light-50 dark:text-dark-50"
+                      : "text-light-900 hover:bg-light-100 dark:hover:bg-dark-100",
+                  )}
                 >
                   {option.label}
                 </Radio>
