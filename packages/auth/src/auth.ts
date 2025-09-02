@@ -317,27 +317,7 @@ export const initAuth = (db: dbClient) => {
     },
     hooks: {
       after: createAuthMiddleware(async (ctx) => {
-        if (ctx.path.startsWith("/get-session")) {
-          const user = ctx.context.session?.user;
-
-          if (
-            env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-            user &&
-            !user.stripeCustomerId
-          ) {
-            const stripe = createStripeClient();
-            const stripeCustomer = await stripe.customers.create({
-              email: user.email,
-              metadata: {
-                userId: user.id,
-              },
-            });
-
-            await userRepo.update(db, user.id, {
-              stripeCustomerId: stripeCustomer.id,
-            });
-          }
-        } else if (
+        if (
           ctx.path === "/magic-link/verify" &&
           (ctx.query?.callbackURL as string | undefined)?.includes(
             "type=invite",
