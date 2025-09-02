@@ -4,6 +4,7 @@ import { z } from "zod";
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { updateSubscriptionSeats } from "@kan/stripe";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
@@ -58,6 +59,42 @@ export const memberRouter = createTRPCRouter({
           message: `User with email ${input.email} is already a member of this workspace`,
           code: "CONFLICT",
         });
+      }
+
+      if (process.env.NEXT_PUBLIC_KAN_ENV === "cloud") {
+        const subscriptions = await ctx.auth.api.listActiveSubscriptions({
+          workspacePublicId: workspace.publicId,
+        });
+
+        // get the active subscription
+        const activeSubscription = subscriptions.find(
+          (sub) =>
+            sub.status === "active" ||
+            (sub.status === "trialing" && sub.plan === "team"),
+        );
+
+        if (!activeSubscription) {
+          throw new TRPCError({
+            message: `Workspace with public ID ${workspace.publicId} does not have an active subscription`,
+            code: "NOT_FOUND",
+          });
+        }
+
+        // Update the Stripe subscription to add a seat with immediate proration
+        if (activeSubscription.stripeSubscriptionId) {
+          try {
+            await updateSubscriptionSeats(
+              activeSubscription.stripeSubscriptionId,
+              1,
+            );
+          } catch (error) {
+            console.error("Failed to update Stripe subscription seats:", error);
+            throw new TRPCError({
+              message: `Failed to update subscription for the new member.`,
+              code: "INTERNAL_SERVER_ERROR",
+            });
+          }
+        }
       }
 
       const existingUser = await userRepo.getByEmail(ctx.db, input.email);
@@ -164,6 +201,35 @@ export const memberRouter = createTRPCRouter({
           message: `Failed to delete member with public ID ${input.memberPublicId}`,
           code: "INTERNAL_SERVER_ERROR",
         });
+
+      // Handle subscription seat decrement for cloud environment
+      if (process.env.NEXT_PUBLIC_KAN_ENV === "cloud") {
+        const subscriptions = await ctx.auth.api.listActiveSubscriptions({
+          workspacePublicId: workspace.publicId,
+        });
+
+        // get the active subscription
+        const activeSubscription = subscriptions.find(
+          (sub) =>
+            sub.status === "active" ||
+            (sub.status === "trialing" && sub.plan === "team"),
+        );
+
+        // Only decrease seats if there's an active subscription and stripeSubscriptionId
+        if (activeSubscription?.stripeSubscriptionId) {
+          try {
+            await updateSubscriptionSeats(
+              activeSubscription.stripeSubscriptionId,
+              -1,
+            );
+          } catch (error) {
+            console.error(
+              "Failed to decrease Stripe subscription seats:",
+              error,
+            );
+          }
+        }
+      }
 
       return { success: true };
     }),

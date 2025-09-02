@@ -1,4 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createAuthEndpoint, createAuthMiddleware } from "better-auth/api";
@@ -10,6 +11,7 @@ import { env } from "next-runtime-env";
 import type { dbClient } from "@kan/db/client";
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
+import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import * as schema from "@kan/db/schema";
 import { cloudMailerClient, sendEmail } from "@kan/email";
 import { createStripeClient } from "@kan/stripe";
@@ -153,6 +155,51 @@ export const initAuth = (db: dbClient) => {
     },
     plugins: [
       socialProvidersPlugin(),
+      ...(process.env.NEXT_PUBLIC_KAN_ENV === "cloud"
+        ? [
+            stripe({
+              stripeClient: createStripeClient(),
+              stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+              createCustomerOnSignUp: true,
+              subscription: {
+                enabled: true,
+                plans: [
+                  {
+                    name: "team",
+                    priceId: process.env.STRIPE_TEAM_PLAN_MONTHLY_PRICE_ID!,
+                    annualDiscountPriceId:
+                      process.env.STRIPE_TEAM_PLAN_YEARLY_PRICE_ID!,
+                  },
+                  {
+                    name: "pro",
+                    priceId: process.env.STRIPE_PRO_PLAN_MONTHLY_PRICE_ID!,
+                    annualDiscountPriceId:
+                      process.env.STRIPE_PRO_PLAN_YEARLY_PRICE_ID!,
+                  },
+                ],
+                authorizeReference: async (data) => {
+                  const workspace = await workspaceRepo.getByPublicId(
+                    db,
+                    data.referenceId,
+                  );
+
+                  if (!workspace) {
+                    return Promise.resolve(false);
+                  }
+
+                  const isUserInWorkspace =
+                    await workspaceRepo.isUserInWorkspace(
+                      db,
+                      data.user.id,
+                      workspace.id,
+                    );
+
+                  return isUserInWorkspace;
+                },
+              },
+            }),
+          ]
+        : []),
       // @todo: hasing is disabled due to a bug in the api key plugin
       apiKey({ disableKeyHashing: true }),
       magicLink({
