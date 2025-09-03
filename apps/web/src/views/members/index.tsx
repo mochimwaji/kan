@@ -1,4 +1,5 @@
 import { t } from "@lingui/core/macro";
+import { env } from "next-runtime-env";
 import { HiEllipsisHorizontal, HiOutlinePlusSmall } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
@@ -11,7 +12,6 @@ import FeedbackModal from "~/components/FeedbackModal";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
-import { env } from "~/env";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
@@ -171,7 +171,7 @@ export default function MembersPage() {
             {t`Members`}
           </h1>
           <div className="flex items-center gap-3">
-            {env.NEXT_PUBLIC_KAN_ENV === "cloud" && (
+            {env("NEXT_PUBLIC_KAN_ENV") === "cloud" && (
               <div
                 className={twMerge(
                   "flex items-center rounded-full border px-3 py-1 text-center text-xs",
