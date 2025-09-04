@@ -196,6 +196,13 @@ export const initAuth = (db: dbClient) => {
 
                   return isUserInWorkspace;
                 },
+                getCheckoutSessionParams: () => {
+                  return {
+                    params: {
+                      allow_promotion_codes: true,
+                    },
+                  };
+                },
               },
             }),
           ]
