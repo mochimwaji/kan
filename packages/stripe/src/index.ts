@@ -64,7 +64,7 @@ export const updateSubscriptionSeats = async (
           quantity: newQuantity,
         },
       ],
-      proration_behavior: "always_invoice", // Invoice immediately
+      proration_behavior: "create_prorations",
     },
   );
 
