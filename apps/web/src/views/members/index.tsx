@@ -3,7 +3,9 @@ import { env } from "next-runtime-env";
 import { HiEllipsisHorizontal, HiOutlinePlusSmall } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
+import type { Subscription } from "@kan/shared/utils";
 import { authClient } from "@kan/auth/client";
+import { getSubscriptionByPlan, hasUnlimitedSeats } from "@kan/shared/utils";
 
 import Avatar from "~/components/Avatar";
 import Button from "~/components/Button";
@@ -30,13 +32,12 @@ export default function MembersPage() {
 
   const { data: session } = authClient.useSession();
 
-  const subscription = data?.subscriptions;
+  const subscriptions = data?.subscriptions as Subscription[] | undefined;
 
-  const activeTeamSubscription = subscription?.find(
-    (sub: any) =>
-      sub.status === "active" ||
-      (sub.status === "trialing" && sub.plan === "team"),
-  );
+  const teamSubscription = getSubscriptionByPlan(subscriptions, "team");
+  const proSubscription = getSubscriptionByPlan(subscriptions, "pro");
+
+  const unlimitedSeats = hasUnlimitedSeats(subscriptions);
 
   const TableRow = ({
     memberPublicId,
@@ -175,13 +176,20 @@ export default function MembersPage() {
               <div
                 className={twMerge(
                   "flex items-center rounded-full border px-3 py-1 text-center text-xs",
-                  activeTeamSubscription
+                  teamSubscription || proSubscription
                     ? "border-emerald-300 bg-emerald-50 text-emerald-400 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-400"
                     : "border-light-300 bg-light-50 text-light-1000 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900",
                 )}
               >
                 <span className="font-medium">
-                  {activeTeamSubscription ? t`Team Plan` : t`Free Plan`}
+                  {proSubscription
+                    ? t`Pro Plan`
+                    : teamSubscription
+                      ? t`Team Plan`
+                      : t`Free Plan`}
+                  {proSubscription && unlimitedSeats && (
+                    <span className="ml-1 text-xs">∞</span>
+                  )}
                 </span>
               </div>
             )}
@@ -268,7 +276,8 @@ export default function MembersPage() {
             <InviteMemberForm
               userId={session?.user.id}
               numberOfMembers={data?.members.length ?? 1}
-              activeTeamSubscription={activeTeamSubscription}
+              subscriptions={subscriptions}
+              unlimitedSeats={unlimitedSeats}
             />
           </Modal>
 

@@ -7,7 +7,9 @@ import { HiXMark } from "react-icons/hi2";
 import { z } from "zod";
 
 import type { InviteMemberInput } from "@kan/api/types";
+import type { Subscription } from "@kan/shared/utils";
 import { authClient } from "@kan/auth/client";
+import { getSubscriptionByPlan } from "@kan/shared/utils";
 
 import Button from "~/components/Button";
 import Input from "~/components/Input";
@@ -19,20 +21,13 @@ import { api } from "~/utils/api";
 
 export function InviteMemberForm({
   numberOfMembers,
-  activeTeamSubscription,
+  subscriptions,
+  unlimitedSeats,
   userId,
 }: {
   numberOfMembers: number;
-  activeTeamSubscription:
-    | {
-        id: number | null;
-        plan: string;
-        status: string;
-        seats: number | null;
-        periodStart: Date | null;
-        periodEnd: Date | null;
-      }
-    | undefined;
+  subscriptions: Subscription[] | undefined;
+  unlimitedSeats: boolean;
   userId: string | undefined;
 }) {
   const utils = api.useUtils();
@@ -87,16 +82,19 @@ export function InviteMemberForm({
     },
   });
 
+  const teamSubscription = getSubscriptionByPlan(subscriptions, "team");
+  const proSubscription = getSubscriptionByPlan(subscriptions, "pro");
+
+  const hasTeamSubscription = !!teamSubscription;
+  const hasProSubscription = !!proSubscription;
+
   let isYearly = false;
   let price = t`$10/month`;
   let billingType = t`monthly billing`;
 
-  if (
-    activeTeamSubscription?.periodStart &&
-    activeTeamSubscription?.periodEnd
-  ) {
-    const periodStartDate = new Date(activeTeamSubscription.periodStart);
-    const periodEndDate = new Date(activeTeamSubscription.periodEnd);
+  if (teamSubscription?.periodStart && teamSubscription?.periodEnd) {
+    const periodStartDate = new Date(teamSubscription.periodStart);
+    const periodEndDate = new Date(teamSubscription.periodEnd);
     const diffInDays = Math.round(
       (periodEndDate.getTime() - periodStartDate.getTime()) /
         (1000 * 60 * 60 * 24),
@@ -163,7 +161,8 @@ export function InviteMemberForm({
           placeholder={t`Email`}
           disabled={
             env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-            !activeTeamSubscription?.id
+            !hasTeamSubscription &&
+            !hasProSubscription
           }
           {...register("email", { required: true })}
           onKeyDown={async (e) => {
@@ -177,13 +176,15 @@ export function InviteMemberForm({
 
         {env("NEXT_PUBLIC_KAN_ENV") === "cloud" && (
           <div className="mt-3 rounded-md bg-light-100 p-3 text-xs text-light-900 dark:bg-dark-200 dark:text-dark-900">
-            {activeTeamSubscription?.id ? (
+            {hasTeamSubscription || hasProSubscription ? (
               <div>
                 <span className="font-medium text-emerald-500 dark:text-emerald-400">
-                  {t`Team Plan`}
+                  {hasTeamSubscription ? t`Team Plan` : t`Pro Plan ∞`}
                 </span>
                 <p className="mt-1">
-                  {t`Adding a new member will cost an additional ${price} (${billingType}) per seat.`}
+                  {unlimitedSeats
+                    ? t`You have unlimited seats with your Pro Plan. There is no additional charge for new members!`
+                    : t`Adding a new member will cost an additional ${price} (${billingType}) per seat.`}
                 </p>
               </div>
             ) : (
@@ -201,7 +202,7 @@ export function InviteMemberForm({
       </div>
 
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
-        {activeTeamSubscription?.id &&
+        {(hasTeamSubscription || hasProSubscription) &&
           env("NEXT_PUBLIC_KAN_ENV") === "cloud" && (
             <Toggle
               label={t`Invite another`}
@@ -213,7 +214,8 @@ export function InviteMemberForm({
           )}
         <div>
           {env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-          !activeTeamSubscription?.id ? (
+          !hasTeamSubscription &&
+          !hasProSubscription ? (
             <Button
               type="button"
               onClick={handleUpgrade}
