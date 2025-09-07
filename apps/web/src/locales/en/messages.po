@@ -40,12 +40,12 @@ msgstr "{boardCount, plural, one {Import board (1)} other {Import boards ({board
 #~ msgid "#1 Hacker News"
 #~ msgstr "#1 Hacker News"
 
-#: src/views/members/components/InviteMemberForm.tsx:91
-#: src/views/members/components/InviteMemberForm.tsx:106
+#: src/views/members/components/InviteMemberForm.tsx:92
+#: src/views/members/components/InviteMemberForm.tsx:104
 msgid "$10/month"
 msgstr "$10/month"
 
-#: src/views/members/components/InviteMemberForm.tsx:106
+#: src/views/members/components/InviteMemberForm.tsx:104
 msgid "$8/month"
 msgstr "$8/month"
 
@@ -113,7 +113,7 @@ msgid "Add label"
 msgstr "Add label"
 
 #: src/views/card/components/MemberSelector.tsx:130
-#: src/views/members/components/InviteMemberForm.tsx:149
+#: src/views/members/components/InviteMemberForm.tsx:147
 msgid "Add member"
 msgstr "Add member"
 
@@ -152,7 +152,7 @@ msgstr "added label <0>{0}</0>"
 #~ msgid "added label <0>{label}</0>"
 #~ msgstr "added label <0>{label}</0>"
 
-#: src/views/members/components/InviteMemberForm.tsx:186
+#: src/views/members/components/InviteMemberForm.tsx:187
 msgid "Adding a new member will cost an additional {price} ({billingType}) per seat."
 msgstr "Adding a new member will cost an additional {price} ({billingType}) per seat."
 
@@ -254,11 +254,11 @@ msgstr "Backlog"
 msgid "Basic Kanban"
 msgstr "Basic Kanban"
 
-#: src/views/members/components/InviteMemberForm.tsx:107
+#: src/views/members/components/InviteMemberForm.tsx:105
 msgid "billed annually"
 msgstr "billed annually"
 
-#: src/views/members/components/InviteMemberForm.tsx:107
+#: src/views/members/components/InviteMemberForm.tsx:105
 msgid "billed monthly"
 msgstr "billed monthly"
 
@@ -353,7 +353,7 @@ msgstr "Bug Report"
 #: src/views/card/components/DeleteCommentConfirmation.tsx:76
 #: src/views/members/components/DeleteMemberConfirmation.tsx:55
 #: src/views/settings/components/ChangePasswordConfirmation.tsx:168
-#: src/views/settings/components/CustomURLConfirmation.tsx:50
+#: src/views/settings/components/CustomURLConfirmation.tsx:55
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:88
 #: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:98
 msgid "Cancel"
@@ -433,7 +433,7 @@ msgstr "completed a checklist item"
 msgid "completed checklist item <0>{0}</0>"
 msgstr "completed checklist item <0>{0}</0>"
 
-#: src/views/settings/components/CustomURLConfirmation.tsx:42
+#: src/views/settings/components/CustomURLConfirmation.tsx:47
 msgid "Confirm URL change"
 msgstr "Confirm URL change"
 
@@ -551,7 +551,7 @@ msgstr "Current password is required"
 msgid "Custom domain"
 msgstr "Custom domain"
 
-#: src/views/settings/components/CustomURLConfirmation.tsx:45
+#: src/views/settings/components/CustomURLConfirmation.tsx:50
 msgid "Custom URLs are a premium feature. You'll be directed to upgrade your account."
 msgstr "Custom URLs are a premium feature. You'll be directed to upgrade your account."
 
@@ -699,7 +699,7 @@ msgstr "Editing"
 msgid "email"
 msgstr "email"
 
-#: src/views/members/components/InviteMemberForm.tsx:163
+#: src/views/members/components/InviteMemberForm.tsx:161
 msgid "Email"
 msgstr "Email"
 
@@ -751,8 +751,8 @@ msgstr "Error deleting workspace"
 msgid "Error disconnecting Trello"
 msgstr "Error disconnecting Trello"
 
-#: src/views/members/components/InviteMemberForm.tsx:76
-#: src/views/members/components/InviteMemberForm.tsx:82
+#: src/views/members/components/InviteMemberForm.tsx:71
+#: src/views/members/components/InviteMemberForm.tsx:77
 msgid "Error inviting member"
 msgstr "Error inviting member"
 
@@ -776,7 +776,8 @@ msgstr "Error updating workspace name"
 msgid "Error updating workspace URL"
 msgstr "Error updating workspace URL"
 
-#: src/views/members/components/InviteMemberForm.tsx:132
+#: src/views/members/components/InviteMemberForm.tsx:130
+#: src/views/settings/components/CustomURLConfirmation.tsx:36
 msgid "Error upgrading subscription"
 msgstr "Error upgrading subscription"
 
@@ -847,8 +848,8 @@ msgstr "For long-term sustainability, we recognise all good open source projects
 msgid "Free"
 msgstr "Free"
 
-#: src/views/members/components/InviteMemberForm.tsx:192
-#: src/views/members/index.tsx:184
+#: src/views/members/components/InviteMemberForm.tsx:193
+#: src/views/members/index.tsx:189
 msgid "Free Plan"
 msgstr "Free Plan"
 
@@ -1007,24 +1008,24 @@ msgstr "Integrations"
 msgid "Interviewing"
 msgstr "Interviewing"
 
-#: src/views/members/components/InviteMemberForm.tsx:45
+#: src/views/members/components/InviteMemberForm.tsx:40
 msgid "Invalid email address"
 msgstr "Invalid email address"
 
-#: src/views/members/index.tsx:193
+#: src/views/members/index.tsx:201
 msgid "Invite"
 msgstr "Invite"
 
-#: src/views/members/components/InviteMemberForm.tsx:207
+#: src/views/members/components/InviteMemberForm.tsx:208
 msgid "Invite another"
 msgstr "Invite another"
 
 #: src/views/card/components/MemberSelector.tsx:112
-#: src/views/members/components/InviteMemberForm.tsx:231
+#: src/views/members/components/InviteMemberForm.tsx:233
 msgid "Invite member"
 msgstr "Invite member"
 
-#: src/views/members/components/InviteMemberForm.tsx:195
+#: src/views/members/components/InviteMemberForm.tsx:196
 msgid "Inviting members requires a Team Plan. You'll be redirected to upgrade your workspace."
 msgstr "Inviting members requires a Team Plan. You'll be redirected to upgrade your workspace."
 
@@ -1124,12 +1125,12 @@ msgstr "Medium Priority"
 #: src/views/board/components/Filters.tsx:93
 #: src/views/board/components/NewCardForm.tsx:357
 #: src/views/card/index.tsx:125
-#: src/views/members/index.tsx:171
+#: src/views/members/index.tsx:172
 msgid "Members"
 msgstr "Members"
 
 #. placeholder {0}: workspace.name ?? "Workspace"
-#: src/views/members/index.tsx:167
+#: src/views/members/index.tsx:168
 msgid "Members | {0}"
 msgstr "Members | {0}"
 
@@ -1137,7 +1138,7 @@ msgstr "Members | {0}"
 msgid "Monthly"
 msgstr "Monthly"
 
-#: src/views/members/components/InviteMemberForm.tsx:92
+#: src/views/members/components/InviteMemberForm.tsx:93
 msgid "monthly billing"
 msgstr "monthly billing"
 
@@ -1285,7 +1286,7 @@ msgstr "Passwords do not match"
 msgid "Payment frequency"
 msgstr "Payment frequency"
 
-#: src/views/members/index.tsx:128
+#: src/views/members/index.tsx:129
 msgid "Pending"
 msgstr "Pending"
 
@@ -1347,10 +1348,11 @@ msgstr "Please select a file to upload."
 #: src/views/card/components/NewCommentForm.tsx:31
 #: src/views/card/index.tsx:173
 #: src/views/members/components/DeleteMemberConfirmation.tsx:28
-#: src/views/members/components/InviteMemberForm.tsx:83
-#: src/views/members/components/InviteMemberForm.tsx:133
+#: src/views/members/components/InviteMemberForm.tsx:78
+#: src/views/members/components/InviteMemberForm.tsx:131
 #: src/views/settings/components/Avatar.tsx:40
 #: src/views/settings/components/Avatar.tsx:98
+#: src/views/settings/components/CustomURLConfirmation.tsx:37
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:40
 #: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:46
 #: src/views/settings/components/UpdateDisplayNameForm.tsx:55
@@ -1377,6 +1379,14 @@ msgstr "Privacy policy"
 #: src/views/board/components/VisibilityButton.tsx:73
 msgid "Private"
 msgstr "Private"
+
+#: src/views/members/index.tsx:186
+msgid "Pro Plan"
+msgstr "Pro Plan"
+
+#: src/views/members/components/InviteMemberForm.tsx:182
+msgid "Pro Plan ∞"
+msgstr "Pro Plan ∞"
 
 #: src/views/settings/components/Avatar.tsx:26
 msgid "Profile image updated"
@@ -1418,7 +1428,7 @@ msgstr "Remote"
 msgid "Remove"
 msgstr "Remove"
 
-#: src/views/members/index.tsx:142
+#: src/views/members/index.tsx:143
 msgid "Remove member"
 msgstr "Remove member"
 
@@ -1478,7 +1488,7 @@ msgstr "Revoke"
 msgid "Roadmap"
 msgstr "Roadmap"
 
-#: src/views/members/index.tsx:215
+#: src/views/members/index.tsx:223
 msgid "Role"
 msgstr "Role"
 
@@ -1599,8 +1609,8 @@ msgstr "Support the development of the project"
 msgid "System"
 msgstr "System"
 
-#: src/views/members/components/InviteMemberForm.tsx:183
-#: src/views/members/index.tsx:184
+#: src/views/members/components/InviteMemberForm.tsx:182
+#: src/views/members/index.tsx:188
 msgid "Team Plan"
 msgstr "Team Plan"
 
@@ -1857,11 +1867,11 @@ msgstr "updated the title to <0>{0}</0>"
 #~ msgid "updated the title to <0>{toTitle}</0>"
 #~ msgstr "updated the title to <0>{toTitle}</0>"
 
-#: src/views/settings/components/CustomURLConfirmation.tsx:52
+#: src/views/settings/components/CustomURLConfirmation.tsx:57
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: src/views/members/components/InviteMemberForm.tsx:222
+#: src/views/members/components/InviteMemberForm.tsx:224
 msgid "Upgrade to Team Plan"
 msgstr "Upgrade to Team Plan"
 
@@ -1886,11 +1896,11 @@ msgstr "URL must be at least 3 characters long"
 msgid "Use template"
 msgstr "Use template"
 
-#: src/views/members/index.tsx:209
+#: src/views/members/index.tsx:217
 msgid "User"
 msgstr "User"
 
-#: src/views/members/components/InviteMemberForm.tsx:77
+#: src/views/members/components/InviteMemberForm.tsx:72
 msgid "User is already a member of this workspace"
 msgstr "User is already a member of this workspace"
 
@@ -2047,6 +2057,10 @@ msgstr "You have been logged in successfully."
 #: src/components/AuthForm.tsx:204
 msgid "You have been signed up successfully."
 msgstr "You have been signed up successfully."
+
+#: src/views/members/components/InviteMemberForm.tsx:186
+msgid "You have unlimited seats with your Pro Plan. There is no additional charge for new members!"
+msgstr "You have unlimited seats with your Pro Plan. There is no additional charge for new members!"
 
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:28
 msgid "Your account has been deleted."

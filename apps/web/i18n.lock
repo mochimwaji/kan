@@ -296,6 +296,8 @@ checksums:
     Priority%20email%20support/singular: 678538c912a770b1e1416ecdb8e299b1
     Privacy%20policy/singular: 462c6a536b52873e4498785c66dd48c8
     Private/singular: d740d0660e68c61db1853489356030ae
+    Pro%20Plan/singular: 76a09fd843b496610f8cf1dced417b62
+    Pro%20Plan%20%E2%88%9E/singular: a898be9e4610706b9b8146a209e8ba16
     Profile%20image%20updated/singular: 1ba6609b50bc217a36ab659563e78dae
     Profile%20picture/singular: d9b5e595877ffe2557486a987dd28274
     Public/singular: c834f11dab0881632aded3f01d4f8fa9
@@ -451,6 +453,7 @@ checksums:
     You%20can%20self-host%20by%20following%20the%20instructions%20in%20our%20%3C0%3Erepo%3C%2F0%3E./singular: a6152a41b2d8f64d5a657e5b8bc808a9
     You%20have%20been%20logged%20in%20successfully./singular: ef8fad1dce13ae4112f17c5258655fea
     You%20have%20been%20signed%20up%20successfully./singular: f614a6e3b45f5ffb9a3b0fb420fef84b
+    You%20have%20unlimited%20seats%20with%20your%20Pro%20Plan.%20There%20is%20no%20additional%20charge%20for%20new%20members!/singular: e3dc59a5ba7211cd3d8516b3a79d85ca
     Your%20account%20has%20been%20deleted./singular: 8c8d944e07388c5877effdb2c2803dcf
     Your%20boards%20have%20been%20imported./singular: 403972e7a25afc2415762c1c2b1ec868
     Your%20display%20name%20has%20been%20updated./singular: 15e5fff36c554c16ec5214427fae1bf4
