@@ -21,15 +21,20 @@
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "turbo run typecheck",
     "ui-add": "turbo run ui-add"
   },
   "devDependencies": {
     "@kan/prettier-config": "workspace:*",
     "@turbo/gen": "^2.3.1",
+    "@vitest/coverage-v8": "^2.1.0",
     "prettier": "catalog:",
     "turbo": "^2.3.1",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "^2.1.0"
   },
   "prettier": "@kan/prettier-config",
   "pnpm": {

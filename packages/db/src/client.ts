@@ -6,17 +6,22 @@ import { drizzle as drizzlePgLite } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { Pool } from "pg";
 
+import { dbLogger } from "@kan/logger";
+
 import * as schema from "./schema";
 
 export type dbClient = NodePgDatabase<typeof schema> & {
   $client: Pool;
 };
 
+// Singleton pool instance to avoid creating multiple connections
+let poolInstance: Pool | null = null;
+
 export const createDrizzleClient = (): dbClient => {
   const connectionString = process.env.POSTGRES_URL;
 
   if (!connectionString) {
-    console.log("POSTGRES_URL environment variable is not set, using PGLite");
+    dbLogger.info("POSTGRES_URL not set, using PGLite for local development");
 
     const client = new PGlite({
       dataDir: "./pgdata",
@@ -29,9 +34,13 @@ export const createDrizzleClient = (): dbClient => {
     return db as unknown as dbClient;
   }
 
-  const pool = new Pool({
-    connectionString,
-  });
+  // Use singleton pattern for connection pool
+  if (!poolInstance) {
+    poolInstance = new Pool({
+      connectionString,
+    });
+    dbLogger.debug("Database connection pool created");
+  }
 
-  return drizzlePg(pool, { schema }) as dbClient;
+  return drizzlePg(poolInstance, { schema }) as dbClient;
 };

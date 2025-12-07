@@ -393,7 +393,7 @@ export const softDeleteById = async (
       .groupBy(lists.index)
       .having(gt(countExpr, 1));
 
-    console.log(duplicateIndices);
+
 
     if (duplicateIndices.length > 0) {
       throw new Error(
