@@ -39,13 +39,8 @@ export const checklistRouter = createTRPCRouter({
     )
     .output(checklistSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -90,12 +85,7 @@ export const checklistRouter = createTRPCRouter({
     )
     .output(z.object({ publicId: z.string().length(12), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const checklist = await checklistRepo.getChecklistByPublicId(
         ctx.db,
@@ -150,12 +140,7 @@ export const checklistRouter = createTRPCRouter({
     .input(z.object({ checklistPublicId: z.string().length(12) }))
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const checklist = await checklistRepo.getChecklistByPublicId(
         ctx.db,
@@ -219,13 +204,8 @@ export const checklistRouter = createTRPCRouter({
     )
     .output(checklistItemSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const checklist = await checklistRepo.getChecklistByPublicId(
         ctx.db,
@@ -285,13 +265,8 @@ export const checklistRouter = createTRPCRouter({
     )
     .output(checklistItemSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const item = await checklistRepo.getChecklistItemByPublicIdWithChecklist(
         ctx.db,
@@ -363,12 +338,7 @@ export const checklistRouter = createTRPCRouter({
     .input(z.object({ checklistItemPublicId: z.string().length(12) }))
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const item = await checklistRepo.getChecklistItemByPublicIdWithChecklist(
         ctx.db,

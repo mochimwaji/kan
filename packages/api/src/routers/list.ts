@@ -29,13 +29,8 @@ export const listRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof listRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const board = await boardRepo.getWorkspaceAndBoardIdByBoardPublicId(
         ctx.db,
@@ -82,13 +77,8 @@ export const listRouter = createTRPCRouter({
     )
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const list = await listRepo.getWorkspaceAndListIdByListPublicId(
         ctx.db,
@@ -164,13 +154,8 @@ export const listRouter = createTRPCRouter({
       >(),
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const list = await listRepo.getWorkspaceAndListIdByListPublicId(
         ctx.db,

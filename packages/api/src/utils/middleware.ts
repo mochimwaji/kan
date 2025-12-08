@@ -75,7 +75,7 @@ const loggingMiddleware = protectedProcedure.use(
   async ({ ctx, next, path, type }) => {
     const startTime = Date.now();
     const requestId = crypto.randomUUID();
-    const userId = ctx.user?.id;
+    const userId = ctx.user.id;
 
     apiLogger.debug("Request started", {
       requestId,

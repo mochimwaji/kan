@@ -41,13 +41,7 @@ export const boardRouter = createTRPCRouter({
       z.custom<Awaited<ReturnType<typeof boardRepo.getAllByWorkspaceId>>>(),
     )
     .query(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const workspace = await workspaceRepo.getByPublicId(
         ctx.db,
@@ -91,13 +85,7 @@ export const boardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof boardRepo.getByPublicId>>>())
     .query(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const board = await boardRepo.getWorkspaceAndBoardIdByBoardPublicId(
         ctx.db,
@@ -220,13 +208,7 @@ export const boardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof boardRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const workspace = await workspaceRepo.getByPublicId(
         ctx.db,
@@ -393,13 +375,7 @@ export const boardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof boardRepo.update>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const board = await boardRepo.getWorkspaceAndBoardIdByBoardPublicId(
         ctx.db,
@@ -436,12 +412,6 @@ export const boardRouter = createTRPCRouter({
         visibility: input.visibility,
       });
 
-      if (!result)
-        throw new TRPCError({
-          message: `Failed to update board`,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-
       return result;
     }),
   delete: protectedProcedure
@@ -462,13 +432,7 @@ export const boardRouter = createTRPCRouter({
     )
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const board = await boardRepo.getWithListIdsByPublicId(
         ctx.db,

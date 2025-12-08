@@ -19,13 +19,8 @@ export const feedbackRouter = createTRPCRouter({
     )
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const result = await feedbackRepo.create(ctx.db, {
         feedback: input.feedback,

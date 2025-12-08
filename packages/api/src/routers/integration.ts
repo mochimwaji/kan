@@ -41,17 +41,9 @@ export const integrationRouter = createTRPCRouter({
       ),
     )
     .query(async ({ ctx }) => {
-      const user = ctx.user;
-
-      if (!user)
-        throw new TRPCError({
-          message: "User not authenticated",
-          code: "UNAUTHORIZED",
-        });
-
       const integrations = await integrationsRepo.getProvidersForUser(
         ctx.db,
-        user.id,
+        ctx.user.id,
       );
 
       return integrations;
@@ -70,17 +62,9 @@ export const integrationRouter = createTRPCRouter({
     .input(z.object({ provider: z.enum(["trello"]) }))
     .output(z.object({}))
     .mutation(async ({ ctx, input }) => {
-      const user = ctx.user;
-
-      if (!user)
-        throw new TRPCError({
-          message: "User not authenticated",
-          code: "UNAUTHORIZED",
-        });
-
       const integration = await integrationsRepo.getProviderForUser(
         ctx.db,
-        user.id,
+        ctx.user.id,
         input.provider,
       );
 
@@ -92,7 +76,7 @@ export const integrationRouter = createTRPCRouter({
 
       await integrationsRepo.deleteProviderForUser(
         ctx.db,
-        user.id,
+        ctx.user.id,
         input.provider,
       );
 
@@ -116,38 +100,24 @@ export const integrationRouter = createTRPCRouter({
 
       if (!apiKey)
         throw new TRPCError({
-          message: `${input.provider.at(0)?.toUpperCase() + input.provider.slice(1)} API key not set in environment variables`,
+          message: `${input.provider.at(0)?.toUpperCase()}${input.provider.slice(1)} API key not set in environment variables`,
           code: "INTERNAL_SERVER_ERROR",
-        });
-
-      const user = ctx.user;
-
-      if (!user)
-        throw new TRPCError({
-          message: "User not authenticated",
-          code: "UNAUTHORIZED",
         });
 
       const integration = await integrationsRepo.getProviderForUser(
         ctx.db,
-        user.id,
+        ctx.user.id,
         input.provider,
       );
 
       if (integration)
         throw new TRPCError({
-          message: `${input.provider.at(0)?.toUpperCase() + input.provider.slice(1)} integration already exists`,
+          message: `${input.provider.at(0)?.toUpperCase()}${input.provider.slice(1)} integration already exists`,
           code: "BAD_REQUEST",
         });
 
-      if (input.provider === "trello") {
-        const url = `${urls[input.provider]}/authorize?key=${apiKey}&expiration=never&response_type=token&scope=read&return_url=${env("NEXT_PUBLIC_BASE_URL")}/settings/trello/authorize&callback_method=fragment`;
-        return { url };
-      }
-
-      throw new TRPCError({
-        message: "Invalid provider",
-        code: "BAD_REQUEST",
-      });
+      // Currently only "trello" is supported per the input schema
+      const url = `${urls[input.provider]}/authorize?key=${apiKey}&expiration=never&response_type=token&scope=read&return_url=${env("NEXT_PUBLIC_BASE_URL")}/settings/trello/authorize&callback_method=fragment`;
+      return { url };
     }),
 });

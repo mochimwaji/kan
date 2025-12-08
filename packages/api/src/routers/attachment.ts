@@ -38,13 +38,8 @@ export const attachmentRouter = createTRPCRouter({
     )
     .output(z.object({ url: z.string(), key: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -114,13 +109,8 @@ export const attachmentRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof cardAttachmentRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -167,13 +157,8 @@ export const attachmentRouter = createTRPCRouter({
     .input(z.object({ attachmentPublicId: z.string().min(12) }))
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const attachment = await cardAttachmentRepo.getByPublicId(
         ctx.db,
