@@ -180,11 +180,6 @@ export const cardActivitiesRelations = relations(cardActivities, ({ one }) => ({
     references: [users.id],
     relationName: "cardActivitiesUser",
   }),
-  member: one(workspaceMembers, {
-    fields: [cardActivities.workspaceMemberId],
-    references: [workspaceMembers.id],
-    relationName: "cardActivitiesMember",
-  }),
   comment: one(comments, {
     fields: [cardActivities.commentId],
     references: [comments.id],
