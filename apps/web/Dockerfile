@@ -39,6 +39,7 @@ ARG PROJECT
 
 # Environment to skip .env validation on build
 ENV CI=true
+ENV NEXT_PUBLIC_USE_STANDALONE_OUTPUT=true
 
 WORKDIR /app
 
@@ -54,12 +55,7 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfi
 COPY --from=pruner /app/out/full/ .
 
 
-RUN pnpm build --filter=${PROJECT}
-
-# # Copy static files to standalone directory
-# RUN mkdir -p apps/web/.next/standalone/.next && \
-# mv apps/web/public apps/web/.next/standalone/ && \
-# mv apps/web/.next/static apps/web/.next/standalone/.next/
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm build --filter=${PROJECT}
 
 # 4. Final image - runner stage to run the application
 FROM base AS runner
@@ -74,11 +70,17 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY --chown=nextjs:nodejs --from=builder /app/ ./
-WORKDIR /app/apps/${APP_DIRNAME}
+# Copy standalone output
+COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/.next/static ./apps/${APP_DIRNAME}/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/public ./apps/${APP_DIRNAME}/public
 
 ARG PORT=3000
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-CMD ["sh", "-c", "if [ -n \"$POSTGRES_URL\" ]; then cd /app && pnpm db:migrate && cd /app/apps/web; fi && pnpm start"]
+# We can execute directly from the standalone output
+# But we usually want an entrypoint script for migrations
+COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/entrypoint.sh ./entrypoint.sh
+
+CMD ["sh", "./entrypoint.sh"]
