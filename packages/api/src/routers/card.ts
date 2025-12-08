@@ -7,6 +7,7 @@ import * as cardCommentRepo from "@kan/db/repository/cardComment.repo";
 import * as labelRepo from "@kan/db/repository/label.repo";
 import * as listRepo from "@kan/db/repository/list.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { apiLogger } from "@kan/logger";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
@@ -615,8 +616,12 @@ export const cardRouter = createTRPCRouter({
                 86400, // 24 hours expiration
               );
               return { ...base, url };
-            } catch {
-              // If URL generation fails, return attachment with url: null
+            } catch (error) {
+              // Log S3 URL generation failures for debugging
+              apiLogger.warn("Failed to generate S3 download URL", error, {
+                s3Key: attachment.s3Key,
+                bucket,
+              });
               return { ...base, url: null };
             }
           }),
