@@ -5,8 +5,9 @@ import * as boardRepo from "@kan/db/repository/board.repo";
 import * as cardRepo from "@kan/db/repository/card.repo";
 import * as labelRepo from "@kan/db/repository/label.repo";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 
 const labelSchema = z.object({
   publicId: z.string(),
@@ -30,7 +31,6 @@ export const labelRouter = createTRPCRouter({
     .output(labelSchema)
     .query(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const label = await labelRepo.getWorkspaceAndLabelIdByLabelPublicId(
         ctx.db,
@@ -80,7 +80,6 @@ export const labelRouter = createTRPCRouter({
     .output(labelSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const board = await boardRepo.getWorkspaceAndBoardIdByBoardPublicId(
         ctx.db,
@@ -135,7 +134,6 @@ export const labelRouter = createTRPCRouter({
     .output(labelSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const label = await labelRepo.getWorkspaceAndLabelIdByLabelPublicId(
         ctx.db,
@@ -179,7 +177,6 @@ export const labelRouter = createTRPCRouter({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const label = await labelRepo.getWorkspaceAndLabelIdByLabelPublicId(
         ctx.db,

@@ -11,8 +11,9 @@ import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { apiLogger } from "@kan/logger";
 import { S3_URL_EXPIRATION_SECONDS } from "@kan/shared/constants";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 import { generateDownloadUrl } from "../utils/s3";
 
 export const cardRouter = createTRPCRouter({

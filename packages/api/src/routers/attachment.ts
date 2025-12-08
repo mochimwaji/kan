@@ -9,8 +9,9 @@ import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { apiLogger } from "@kan/logger";
 import { generateUID } from "@kan/shared/utils";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 import { deleteObject, generateUploadUrl } from "../utils/s3";
 
 export const attachmentRouter = createTRPCRouter({
