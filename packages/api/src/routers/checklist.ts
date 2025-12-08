@@ -5,8 +5,9 @@ import * as cardRepo from "@kan/db/repository/card.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
 import * as checklistRepo from "@kan/db/repository/checklist.repo";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 
 const checklistSchema = z.object({
   publicId: z.string().length(12),
@@ -40,7 +41,6 @@ export const checklistRouter = createTRPCRouter({
     .output(checklistSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -85,7 +85,7 @@ export const checklistRouter = createTRPCRouter({
     )
     .output(z.object({ publicId: z.string().length(12), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user.id;
+      const userId = ctx.user.id;
 
       const checklist = await checklistRepo.getChecklistByPublicId(
         ctx.db,
@@ -140,7 +140,7 @@ export const checklistRouter = createTRPCRouter({
     .input(z.object({ checklistPublicId: z.string().length(12) }))
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user.id;
+      const userId = ctx.user.id;
 
       const checklist = await checklistRepo.getChecklistByPublicId(
         ctx.db,
@@ -205,7 +205,6 @@ export const checklistRouter = createTRPCRouter({
     .output(checklistItemSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const checklist = await checklistRepo.getChecklistByPublicId(
         ctx.db,
@@ -266,7 +265,6 @@ export const checklistRouter = createTRPCRouter({
     .output(checklistItemSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const item = await checklistRepo.getChecklistItemByPublicIdWithChecklist(
         ctx.db,
@@ -338,7 +336,7 @@ export const checklistRouter = createTRPCRouter({
     .input(z.object({ checklistItemPublicId: z.string().length(12) }))
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user.id;
+      const userId = ctx.user.id;
 
       const item = await checklistRepo.getChecklistItemByPublicIdWithChecklist(
         ctx.db,

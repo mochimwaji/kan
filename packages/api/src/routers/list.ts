@@ -6,8 +6,9 @@ import * as cardRepo from "@kan/db/repository/card.repo";
 import * as activityRepo from "@kan/db/repository/cardActivity.repo";
 import * as listRepo from "@kan/db/repository/list.repo";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 
 export const listRouter = createTRPCRouter({
   create: protectedProcedure
@@ -30,7 +31,6 @@ export const listRouter = createTRPCRouter({
     .output(z.custom<Awaited<ReturnType<typeof listRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const board = await boardRepo.getWorkspaceAndBoardIdByBoardPublicId(
         ctx.db,
@@ -78,7 +78,6 @@ export const listRouter = createTRPCRouter({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const list = await listRepo.getWorkspaceAndListIdByListPublicId(
         ctx.db,
@@ -155,7 +154,6 @@ export const listRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const list = await listRepo.getWorkspaceAndListIdByListPublicId(
         ctx.db,
