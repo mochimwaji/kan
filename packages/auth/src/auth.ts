@@ -291,7 +291,7 @@ export const initAuth = (db: dbClient) => {
                       await memberRepo.unpauseAllMembers(db, workspace.id);
 
                       authLogger.info("Unpausing all members for workspace", {
-                        workspaceId: workspace.id,
+                        workspaceId: String(workspace.id),
                       });
                     }
                   }
