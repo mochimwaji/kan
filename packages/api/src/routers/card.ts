@@ -8,6 +8,7 @@ import * as labelRepo from "@kan/db/repository/label.repo";
 import * as listRepo from "@kan/db/repository/list.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { apiLogger } from "@kan/logger";
+import { S3_URL_EXPIRATION_SECONDS } from "@kan/shared/constants";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
@@ -613,7 +614,7 @@ export const cardRouter = createTRPCRouter({
               const url = await generateDownloadUrl(
                 bucket,
                 attachment.s3Key,
-                86400, // 24 hours expiration
+                S3_URL_EXPIRATION_SECONDS,
               );
               return { ...base, url };
             } catch (error) {
