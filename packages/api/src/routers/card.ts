@@ -619,9 +619,10 @@ export const cardRouter = createTRPCRouter({
               return { ...base, url };
             } catch (error) {
               // Log S3 URL generation failures for debugging
-              apiLogger.warn("Failed to generate S3 download URL", error, {
+              apiLogger.warn("Failed to generate S3 download URL", {
                 s3Key: attachment.s3Key,
                 bucket,
+                error: error instanceof Error ? error.message : String(error),
               });
               return { ...base, url: null };
             }
