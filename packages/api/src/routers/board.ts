@@ -10,8 +10,9 @@ import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { colours } from "@kan/shared/constants";
 import { generateSlug, generateUID } from "@kan/shared/utils";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 
 const dueDateFilterSchema = z.object({
   startDate: z.string().datetime().optional(),

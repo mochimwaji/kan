@@ -6,8 +6,9 @@ import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import * as workspaceSlugRepo from "@kan/db/repository/workspaceSlug.repo";
 import { generateUID } from "@kan/shared/utils";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 
 export const workspaceRouter = createTRPCRouter({
   all: protectedProcedure

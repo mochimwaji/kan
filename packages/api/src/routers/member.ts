@@ -15,8 +15,9 @@ import {
 } from "@kan/shared/utils";
 import { updateSubscriptionSeats } from "@kan/stripe";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
+import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
 
 export const memberRouter = createTRPCRouter({
   invite: protectedProcedure
