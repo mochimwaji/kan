@@ -7,6 +7,7 @@ import * as memberRepo from "@kan/db/repository/member.repo";
 import * as subscriptionRepo from "@kan/db/repository/subscription.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { apiLogger } from "@kan/logger";
 import {
   generateUID,
   getSubscriptionByPlan,
@@ -101,7 +102,10 @@ export const memberRouter = createTRPCRouter({
               1,
             );
           } catch (error) {
-            console.error("Failed to update Stripe subscription seats:", error);
+            apiLogger.error(
+              "Failed to update Stripe subscription seats",
+              error,
+            );
             throw new TRPCError({
               message: `Failed to update subscription for the new member.`,
               code: "INTERNAL_SERVER_ERROR",
@@ -133,7 +137,7 @@ export const memberRouter = createTRPCRouter({
       });
 
       if (!status) {
-        console.error("Failed to send magic link invitation:", {
+        apiLogger.error("Failed to send magic link invitation", undefined, {
           email: input.email,
           callbackURL: `/boards?type=invite&memberPublicId=${invite.publicId}`,
         });
@@ -237,8 +241,8 @@ export const memberRouter = createTRPCRouter({
               -1,
             );
           } catch (error) {
-            console.error(
-              "Failed to decrease Stripe subscription seats:",
+            apiLogger.error(
+              "Failed to decrease Stripe subscription seats",
               error,
             );
           }
@@ -622,7 +626,10 @@ export const memberRouter = createTRPCRouter({
               1,
             );
           } catch (error) {
-            console.error("Failed to update Stripe subscription seats:", error);
+            apiLogger.error(
+              "Failed to update Stripe subscription seats",
+              error,
+            );
             throw new TRPCError({
               message: `Failed to update subscription for the new member.`,
               code: "INTERNAL_SERVER_ERROR",

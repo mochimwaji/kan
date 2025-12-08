@@ -18,6 +18,7 @@ import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import * as schema from "@kan/db/schema";
 import { notificationClient, sendEmail } from "@kan/email";
+import { authLogger } from "@kan/logger";
 import { createEmailUnsubscribeLink } from "@kan/shared";
 import { createStripeClient } from "@kan/stripe";
 
@@ -78,8 +79,7 @@ export const configuredProviders = socialProviderList.reduce<
     Object.keys(acc).includes("google") &&
     acc[provider]
   ) {
-    const allowed = process.env.BETTER_AUTH_ALLOWED_DOMAINS
-      ?.split(",")
+    const allowed = process.env.BETTER_AUTH_ALLOWED_DOMAINS?.split(",")
       .map((d) => d.trim().toLowerCase())
       .filter(Boolean);
     if (allowed && allowed.length > 0) {
@@ -277,8 +277,9 @@ export const initAuth = (db: dbClient) => {
                         unlimitedSeats: true,
                       },
                     );
-                    console.log(
-                      `Pro subscription ${stripeSubscription.id} activated with unlimited seats`,
+                    authLogger.info(
+                      "Pro subscription activated with unlimited seats",
+                      { stripeSubscriptionId: stripeSubscription.id },
                     );
 
                     const workspace = await workspaceRepo.getByPublicId(
@@ -289,9 +290,9 @@ export const initAuth = (db: dbClient) => {
                     if (workspace?.id) {
                       await memberRepo.unpauseAllMembers(db, workspace.id);
 
-                      console.log(
-                        `Unpausing all members for workspace ${workspace.id}`,
-                      );
+                      authLogger.info("Unpausing all members for workspace", {
+                        workspaceId: workspace.id,
+                      });
                     }
                   }
                 },
@@ -365,8 +366,7 @@ export const initAuth = (db: dbClient) => {
               // Fall through to any additional checks below
             }
             // Enforce allowed domains (OIDC/social) if configured
-            const allowed = process.env.BETTER_AUTH_ALLOWED_DOMAINS
-              ?.split(",")
+            const allowed = process.env.BETTER_AUTH_ALLOWED_DOMAINS?.split(",")
               .map((d) => d.trim().toLowerCase())
               .filter(Boolean);
             if (allowed && allowed.length > 0) {
@@ -423,7 +423,7 @@ export const initAuth = (db: dbClient) => {
                   image: key,
                 });
               } catch (error) {
-                console.error(error);
+                authLogger.error("Failed to upload user avatar to S3", error);
               }
             }
 
@@ -472,7 +472,7 @@ export const initAuth = (db: dbClient) => {
                   user.id,
                 );
               } catch (error) {
-                console.error(
+                authLogger.error(
                   "Error adding user to notification client",
                   error,
                 );
@@ -546,6 +546,6 @@ async function triggerWorkflow(
       workflowId,
     });
   } catch (error) {
-    console.error("Error triggering workflow", error);
+    authLogger.error("Error triggering workflow", error, { workflowId });
   }
 }

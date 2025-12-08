@@ -1,6 +1,8 @@
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
 
+import { logger } from "@kan/logger";
+
 import JoinWorkspaceTemplate from "./templates/join-workspace";
 import MagicLinkTemplate from "./templates/magic-link";
 import ResetPasswordTemplate from "./templates/reset-password";
@@ -62,13 +64,11 @@ export const sendEmail = async (
 
     return response;
   } catch (error) {
-    console.error("Email sending failed:", {
+    logger.error("Email sending failed", error, {
       to,
       from: process.env.EMAIL_FROM,
       subject,
       template,
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
     });
     throw error;
   }
