@@ -16,6 +16,8 @@ export type dbClient = NodePgDatabase<typeof schema> & {
 
 // Singleton pool instance to avoid creating multiple connections
 let poolInstance: Pool | null = null;
+// Singleton Drizzle client instance for the PostgreSQL pool
+let drizzleInstance: dbClient | null = null;
 
 export const createDrizzleClient = (): dbClient => {
   const connectionString = process.env.POSTGRES_URL;
@@ -34,6 +36,11 @@ export const createDrizzleClient = (): dbClient => {
     return db as unknown as dbClient;
   }
 
+  // Return cached Drizzle instance if available
+  if (drizzleInstance) {
+    return drizzleInstance;
+  }
+
   // Use singleton pattern for connection pool
   if (!poolInstance) {
     poolInstance = new Pool({
@@ -42,5 +49,8 @@ export const createDrizzleClient = (): dbClient => {
     dbLogger.debug("Database connection pool created");
   }
 
-  return drizzlePg(poolInstance, { schema }) as dbClient;
+  drizzleInstance = drizzlePg(poolInstance, { schema }) as dbClient;
+  dbLogger.debug("Drizzle client instance created");
+
+  return drizzleInstance;
 };
