@@ -83,4 +83,7 @@ EXPOSE ${PORT}
 # But we usually want an entrypoint script for migrations
 COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/entrypoint.sh ./entrypoint.sh
 
-CMD ["sh", "./entrypoint.sh"]
+# Fix line endings for Windows compatibility and make executable
+RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
+
+CMD ["./entrypoint.sh"]
