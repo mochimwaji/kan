@@ -563,7 +563,7 @@ export const getWithListAndMembersByPublicId = async (
               name: true,
             },
           },
-          member: {
+          workspaceMember: {
             columns: {
               publicId: true,
             },
