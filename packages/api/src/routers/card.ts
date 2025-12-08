@@ -37,13 +37,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof cardRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const list = await listRepo.getWorkspaceAndListIdByListPublicId(
         ctx.db,
@@ -57,12 +51,6 @@ export const cardRouter = createTRPCRouter({
         });
 
       await assertUserInWorkspace(ctx.db, userId, list.workspaceId);
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
 
       const newCard = await cardRepo.create(ctx.db, {
         title: input.title,
@@ -179,13 +167,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof cardCommentRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -242,13 +224,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof cardCommentRepo.update>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -320,13 +296,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof cardCommentRepo.softDelete>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -392,13 +362,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.object({ newLabel: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -484,13 +448,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.object({ newMember: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -608,13 +566,11 @@ export const cardRouter = createTRPCRouter({
 
       if (card.workspaceVisibility === "private") {
         const userId = ctx.user?.id;
-
         if (!userId)
           throw new TRPCError({
-            message: `User not authenticated`,
+            message: "User not authenticated",
             code: "UNAUTHORIZED",
           });
-
         await assertUserInWorkspace(ctx.db, userId, card.workspaceId);
       }
 
@@ -693,13 +649,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof cardRepo.update>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -863,13 +813,7 @@ export const cardRouter = createTRPCRouter({
     )
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,

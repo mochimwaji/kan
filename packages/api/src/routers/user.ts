@@ -36,13 +36,8 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const result = await userRepo.getById(ctx.db, userId);
 
@@ -85,13 +80,8 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-
-      if (!userId)
-        throw new TRPCError({
-          message: `User not authenticated`,
-          code: "UNAUTHORIZED",
-        });
+      const userId = ctx.user.id;
+
 
       const result = await userRepo.update(ctx.db, userId, input);
 

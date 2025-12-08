@@ -90,17 +90,9 @@ export const importRouter = createTRPCRouter({
             code: "INTERNAL_SERVER_ERROR",
           });
 
-        const user = ctx.user;
-
-        if (!user)
-          throw new TRPCError({
-            message: "User not authenticated",
-            code: "UNAUTHORIZED",
-          });
-
         const integration = await integrationsRepo.getProviderForUser(
           ctx.db,
-          user.id,
+          ctx.user.id,
           "trello",
         );
 
@@ -142,7 +134,7 @@ export const importRouter = createTRPCRouter({
       )
       .output(z.object({ boardsCreated: z.number() }))
       .mutation(async ({ ctx, input }) => {
-        const userId = ctx.user?.id;
+        const userId = ctx.user.id;
 
         const apiKey = apiKeys.trello;
 
@@ -150,12 +142,6 @@ export const importRouter = createTRPCRouter({
           throw new TRPCError({
             message: "Trello API key not found",
             code: "INTERNAL_SERVER_ERROR",
-          });
-
-        if (!userId)
-          throw new TRPCError({
-            message: `User not authenticated`,
-            code: "UNAUTHORIZED",
           });
 
         const integration = await integrationsRepo.getProviderForUser(
