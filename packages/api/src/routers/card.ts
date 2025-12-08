@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { env } from "next-runtime-env";
 import { z } from "zod";
 
 import * as cardRepo from "@kan/db/repository/card.repo";
@@ -588,7 +589,7 @@ export const cardRouter = createTRPCRouter({
         });
 
       // Generate URLs for all attachments
-      const bucket = process.env.NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME;
+      const bucket = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
       if (result.attachments && Array.isArray(result.attachments)) {
         const attachments = result.attachments as {
           publicId: string;
