@@ -350,7 +350,6 @@ export const complexOperation = async (db: dbClient, ...) => {
 
 | Variable                           | Description                 |
 | ---------------------------------- | --------------------------- |
-| `NEXT_PUBLIC_DISABLE_EMAIL`        | Disable email features      |
 | `NEXT_PUBLIC_DISABLE_SIGN_UP`      | Disable public registration |
 | Various OAuth provider credentials | Enable social login         |
 
