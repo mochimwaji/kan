@@ -317,6 +317,9 @@ importers:
       '@kan/email':
         specifier: workspace:^
         version: link:../email
+      '@kan/logger':
+        specifier: workspace:^
+        version: link:../logger
       '@kan/shared':
         specifier: workspace:^
         version: link:../shared

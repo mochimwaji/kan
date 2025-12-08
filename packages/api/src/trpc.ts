@@ -8,6 +8,7 @@ import { ZodError } from "zod";
 import type { dbClient } from "@kan/db/client";
 import { initAuth } from "@kan/auth/server";
 import { createDrizzleClient } from "@kan/db/client";
+import { apiLogger } from "@kan/logger";
 
 export interface User {
   id: string;
@@ -87,7 +88,7 @@ export const createRESTContext = async ({ req }: CreateNextContextOptions) => {
   try {
     session = await auth.api.getSession();
   } catch (error) {
-    console.error("Error getting session, ", error);
+    apiLogger.error("Error getting session in REST context", error);
     throw error;
   }
 
