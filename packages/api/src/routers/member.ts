@@ -71,7 +71,7 @@ export const memberRouter = createTRPCRouter({
         });
       }
 
-      if (process.env.NEXT_PUBLIC_KAN_ENV === "cloud") {
+      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
         const subscriptions = await subscriptionRepo.getByReferenceId(
           ctx.db,
           workspace.publicId,
@@ -221,7 +221,7 @@ export const memberRouter = createTRPCRouter({
         });
 
       // Handle subscription seat decrement for cloud environment
-      if (process.env.NEXT_PUBLIC_KAN_ENV === "cloud") {
+      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
         const subscriptions = await subscriptionRepo.getByReferenceId(
           ctx.db,
           workspace.publicId,
@@ -369,7 +369,7 @@ export const memberRouter = createTRPCRouter({
       await assertUserInWorkspace(ctx.db, userId, workspace.id, "admin");
 
       // Check subscription for cloud environment
-      if (process.env.NEXT_PUBLIC_KAN_ENV === "cloud") {
+      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
         const subscriptions = await subscriptionRepo.getByReferenceId(
           ctx.db,
           workspace.publicId,
@@ -595,7 +595,7 @@ export const memberRouter = createTRPCRouter({
           code: "NOT_FOUND",
         });
 
-      if (process.env.NEXT_PUBLIC_KAN_ENV === "cloud") {
+      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
         const subscriptions = await subscriptionRepo.getByReferenceId(
           ctx.db,
           workspace.publicId,

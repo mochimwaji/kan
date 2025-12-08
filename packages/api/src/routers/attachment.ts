@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { env } from "next-runtime-env";
 import { z } from "zod";
 
 import * as cardRepo from "@kan/db/repository/card.repo";
@@ -39,7 +40,6 @@ export const attachmentRouter = createTRPCRouter({
     .output(z.object({ url: z.string(), key: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -62,7 +62,7 @@ export const attachmentRouter = createTRPCRouter({
           code: "NOT_FOUND",
         });
 
-      const bucket = process.env.NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME;
+      const bucket = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
       if (!bucket)
         throw new TRPCError({
           message: `Attachments bucket not configured`,
@@ -110,7 +110,6 @@ export const attachmentRouter = createTRPCRouter({
     .output(z.custom<Awaited<ReturnType<typeof cardAttachmentRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const card = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
@@ -158,7 +157,6 @@ export const attachmentRouter = createTRPCRouter({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const attachment = await cardAttachmentRepo.getByPublicId(
         ctx.db,
@@ -175,7 +173,7 @@ export const attachmentRouter = createTRPCRouter({
 
       await assertUserInWorkspace(ctx.db, userId, workspaceId);
 
-      const bucket = process.env.NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME;
+      const bucket = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
       if (bucket) {
         try {
           await deleteObject(bucket, attachment.s3Key);

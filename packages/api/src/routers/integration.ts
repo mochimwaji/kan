@@ -11,7 +11,7 @@ export const urls = {
 };
 
 export const apiKeys = {
-  trello: process.env.TRELLO_APP_API_KEY,
+  trello: env("TRELLO_APP_API_KEY"),
 };
 
 export const integrationRouter = createTRPCRouter({
