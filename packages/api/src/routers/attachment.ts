@@ -5,6 +5,7 @@ import * as cardRepo from "@kan/db/repository/card.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
 import * as cardAttachmentRepo from "@kan/db/repository/cardAttachment.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { apiLogger } from "@kan/logger";
 import { generateUID } from "@kan/shared/utils";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -194,10 +195,9 @@ export const attachmentRouter = createTRPCRouter({
         try {
           await deleteObject(bucket, attachment.s3Key);
         } catch (error) {
-          console.error(
-            `Failed to delete attachment from S3: ${attachment.s3Key}`,
-            error,
-          );
+          apiLogger.error("Failed to delete attachment from S3", error, {
+            s3Key: attachment.s3Key,
+          });
         }
       }
 

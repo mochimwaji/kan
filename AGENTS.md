@@ -70,15 +70,15 @@ kan/
 
 ### Naming Conventions
 
-| Element | Convention | Example |
-|---------|------------|---------|
-| Files (components) | PascalCase | `BoardView.tsx` |
-| Files (utilities) | camelCase | `generateUID.ts` |
-| Files (repos) | camelCase + `.repo.ts` | `card.repo.ts` |
-| Variables/Functions | camelCase | `getUserById` |
-| Types/Interfaces | PascalCase | `BoardVisibilityStatus` |
-| Constants | UPPER_SNAKE_CASE | `LOG_LEVEL_PRIORITY` |
-| React Components | PascalCase | `function CardModal()` |
+| Element             | Convention             | Example                 |
+| ------------------- | ---------------------- | ----------------------- |
+| Files (components)  | PascalCase             | `BoardView.tsx`         |
+| Files (utilities)   | camelCase              | `generateUID.ts`        |
+| Files (repos)       | camelCase + `.repo.ts` | `card.repo.ts`          |
+| Variables/Functions | camelCase              | `getUserById`           |
+| Types/Interfaces    | PascalCase             | `BoardVisibilityStatus` |
+| Constants           | UPPER_SNAKE_CASE       | `LOG_LEVEL_PRIORITY`    |
+| React Components    | PascalCase             | `function CardModal()`  |
 
 ### Import Order
 
@@ -100,7 +100,7 @@ kan/
 Use the `@kan/logger` package instead of `console.log`:
 
 ```typescript
-import { logger, apiLogger, dbLogger } from "@kan/logger";
+import { apiLogger, dbLogger, logger } from "@kan/logger";
 
 // Basic logging
 logger.info("Server started", { port: 3000 });
@@ -116,6 +116,7 @@ reqLogger.info("Request started");
 ```
 
 **Environment Variables:**
+
 - `LOG_LEVEL`: `debug` | `info` | `warn` | `error` | `silent`
 - `DB_LOG_QUERIES`: `true` | `false` - Enable database query logging
 
@@ -140,12 +141,14 @@ pnpm -F @kan/shared test
 ### Test File Location
 
 Test files are co-located with source files:
+
 - `src/utils/generateUID.ts` → `src/utils/generateUID.test.ts`
 
 ### Test Structure
 
 ```typescript
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
 import { functionToTest } from "./module";
 
 describe("functionToTest", () => {
@@ -232,25 +235,69 @@ export const entityRouter = createTRPCRouter({
       // 1. Get user ID
       const userId = ctx.user?.id;
       if (!userId) throw new TRPCError({ code: "UNAUTHORIZED" });
-      
+
       // 2. Fetch resource
       const entity = await entityRepo.getById(ctx.db, input.id);
       if (!entity) throw new TRPCError({ code: "NOT_FOUND" });
-      
+
       // 3. Verify access
       await assertUserInWorkspace(ctx.db, userId, entity.workspaceId);
-      
+
       // 4. Return result
       return entity;
     }),
-    
-  // Mutation: Write operations  
+
+  // Mutation: Write operations
   create: protectedProcedure
     .input(z.object({ ... }))
     .mutation(async ({ ctx, input }) => {
       // Similar pattern: auth → validate → execute → return
     }),
 });
+```
+
+### Middleware Utilities
+
+The `packages/api/src/utils/middleware.ts` module provides reusable tRPC middleware:
+
+#### Logged Procedures
+
+```typescript
+import { loggedProtectedProcedure, loggedPublicProcedure } from "../utils/middleware";
+
+// Automatically logs request/response with timing, path, userId
+export const myRouter = createTRPCRouter({
+  endpoint: loggedProtectedProcedure
+    .input(...)
+    .mutation(async ({ ctx }) => {
+      // Request automatically logged on start
+      // Response/error logged with duration on completion
+    }),
+});
+```
+
+#### Resource-Scoped Procedures
+
+Eliminate repetitive auth + lookup + workspace validation patterns:
+
+| Procedure            | Required Input      | Context Added                    |
+| -------------------- | ------------------- | -------------------------------- |
+| `cardProcedure`      | `cardPublicId`      | `ctx.card.id`, `ctx.userId`      |
+| `boardProcedure`     | `boardPublicId`     | `ctx.board.id`, `ctx.userId`     |
+| `listProcedure`      | `listPublicId`      | `ctx.list.id`, `ctx.userId`      |
+| `workspaceProcedure` | `workspacePublicId` | `ctx.workspace.id`, `ctx.userId` |
+
+```typescript
+import { cardProcedure, boardProcedure } from "../utils/middleware";
+
+// Card access validated, ctx.card.id available
+cardProcedure
+  .input(z.object({ cardPublicId: z.string().min(12), ... }))
+  .mutation(async ({ ctx, input }) => {
+    // ctx.card.id and ctx.userId guaranteed
+    // Workspace access already validated
+    await cardRepo.update(ctx.db, ctx.card.id, ...);
+  });
 ```
 
 ### Repository Pattern
@@ -286,38 +333,38 @@ export const complexOperation = async (db: dbClient, ...) => {
 
 ### Required
 
-| Variable | Description |
-|----------|-------------|
-| `BETTER_AUTH_SECRET` | Secret for authentication |
-| `POSTGRES_URL` | PostgreSQL connection string |
+| Variable               | Description                   |
+| ---------------------- | ----------------------------- |
+| `BETTER_AUTH_SECRET`   | Secret for authentication     |
+| `POSTGRES_URL`         | PostgreSQL connection string  |
 | `NEXT_PUBLIC_BASE_URL` | Public URL of the application |
 
 ### Optional (Logging)
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `LOG_LEVEL` | Minimum log level | `info` (prod) / `debug` (dev) |
-| `DB_LOG_QUERIES` | Log database queries | `false` |
+| Variable         | Description          | Default                       |
+| ---------------- | -------------------- | ----------------------------- |
+| `LOG_LEVEL`      | Minimum log level    | `info` (prod) / `debug` (dev) |
+| `DB_LOG_QUERIES` | Log database queries | `false`                       |
 
 ### Optional (Features)
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_DISABLE_EMAIL` | Disable email features |
-| `NEXT_PUBLIC_DISABLE_SIGN_UP` | Disable public registration |
-| Various OAuth provider credentials | Enable social login |
+| Variable                           | Description                 |
+| ---------------------------------- | --------------------------- |
+| `NEXT_PUBLIC_DISABLE_EMAIL`        | Disable email features      |
+| `NEXT_PUBLIC_DISABLE_SIGN_UP`      | Disable public registration |
+| Various OAuth provider credentials | Enable social login         |
 
 ## Troubleshooting
 
 ### Common Errors
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `UNAUTHORIZED` | Missing/invalid session | Check authentication flow |
-| `FORBIDDEN` | User not in workspace | Verify workspace membership |
-| `NOT_FOUND` | Resource deleted or wrong ID | Check publicId format |
-| Connection refused | DB not running | Start PostgreSQL container |
-| Module not found | Dependencies out of sync | Run `pnpm install` |
+| Error              | Cause                        | Solution                    |
+| ------------------ | ---------------------------- | --------------------------- |
+| `UNAUTHORIZED`     | Missing/invalid session      | Check authentication flow   |
+| `FORBIDDEN`        | User not in workspace        | Verify workspace membership |
+| `NOT_FOUND`        | Resource deleted or wrong ID | Check publicId format       |
+| Connection refused | DB not running               | Start PostgreSQL container  |
+| Module not found   | Dependencies out of sync     | Run `pnpm install`          |
 
 ### Performance Tips
 
@@ -350,12 +397,12 @@ apps/web → @kan/api → @kan/db → @kan/shared
 
 ### Key Files
 
-| Purpose | Location |
-|---------|----------|
-| API Routes | `packages/api/src/routers/` |
-| DB Schema | `packages/db/src/schema/` |
-| DB Queries | `packages/db/src/repository/` |
-| React Pages | `apps/web/src/pages/` |
-| React Views | `apps/web/src/views/` |
-| Components | `apps/web/src/components/` |
-| Environment | `apps/web/src/env.ts` |
+| Purpose     | Location                      |
+| ----------- | ----------------------------- |
+| API Routes  | `packages/api/src/routers/`   |
+| DB Schema   | `packages/db/src/schema/`     |
+| DB Queries  | `packages/db/src/repository/` |
+| React Pages | `apps/web/src/pages/`         |
+| React Views | `apps/web/src/views/`         |
+| Components  | `apps/web/src/components/`    |
+| Environment | `apps/web/src/env.ts`         |
