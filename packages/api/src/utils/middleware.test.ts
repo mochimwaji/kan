@@ -1,58 +1,15 @@
-import { describe, expect, it } from "vitest";
+import { describe, it } from "vitest";
 
-import { requireUserId } from "./middleware";
+// Note: The requireUserId helper has been deprecated and removed.
+// Use resource-scoped procedures (cardProcedure, boardProcedure, etc.) instead.
+// These procedures automatically validate resource access and provide userId in context.
 
-describe("requireUserId", () => {
-  it("returns userId when user is authenticated", () => {
-    const user = {
-      id: "user_123",
-      name: "Test User",
-      email: "test@example.com",
-      emailVerified: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+describe("middleware procedures", () => {
+  // Testing middleware procedures requires full tRPC integration tests
+  // which are better suited for E2E testing rather than unit tests.
 
-    const result = requireUserId(user);
-    expect(result).toBe("user_123");
-  });
-
-  it("throws UNAUTHORIZED when user is null", () => {
-    expect(() => requireUserId(null)).toThrow();
-
-    try {
-      requireUserId(null);
-    } catch (error: unknown) {
-      const trpcError = error as { code: string };
-      expect(trpcError.code).toBe("UNAUTHORIZED");
-    }
-  });
-
-  it("throws UNAUTHORIZED when user is undefined", () => {
-    expect(() => requireUserId(undefined)).toThrow();
-
-    try {
-      requireUserId(undefined);
-    } catch (error: unknown) {
-      const trpcError = error as { code: string };
-      expect(trpcError.code).toBe("UNAUTHORIZED");
-    }
-  });
-
-  it("throws UNAUTHORIZED when user has no id", () => {
-    const userWithoutId = {
-      id: "",
-      name: "Test User",
-      email: "test@example.com",
-      emailVerified: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    expect(() => requireUserId(userWithoutId)).toThrow();
-  });
+  it.todo("cardProcedure should validate card access");
+  it.todo("boardProcedure should validate board access");
+  it.todo("listProcedure should validate list access");
+  it.todo("workspaceProcedure should validate workspace access");
 });
-
-// Note: Testing the middleware procedures would require mocking the tRPC context
-// and database calls. For now, we test the exported helper functions.
-// Integration tests for the middleware should be added as E2E tests.

@@ -327,22 +327,5 @@ export const workspaceProcedure = loggedProtectedProcedure
     });
   });
 
-// =============================================================================
-// Helper Functions
-// =============================================================================
-
-/**
- * Helper to get userId from context with proper error handling.
- * Use this in procedures that use protectedProcedure but need explicit userId access.
- *
- * @deprecated Prefer using resource-scoped procedures which provide userId in context.
- */
-export function requireUserId(user: User | null | undefined): string {
-  if (!user?.id) {
-    throw new TRPCError({
-      message: "User not authenticated",
-      code: "UNAUTHORIZED",
-    });
-  }
-  return user.id;
-}
+// Note: requireUserId has been removed.
+// Use resource-scoped procedures (cardProcedure, boardProcedure, etc.) instead.
