@@ -68,7 +68,10 @@ USER nextjs
 
 WORKDIR /app
 
+WORKDIR /app
+
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_USE_STANDALONE_OUTPUT=true
 
 # Copy standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/.next/standalone ./
