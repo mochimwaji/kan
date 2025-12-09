@@ -119,11 +119,12 @@ export default function UserMenu({
       >
         <Menu.Items
           className={twMerge(
-            "absolute bottom-[40px] z-10 mt-2 origin-top-left rounded-md border border-light-600 bg-light-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-dark-600 dark:bg-dark-300",
+            "absolute bottom-[40px] z-10 mt-2 origin-top-left rounded-md border border-light-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-dark-600",
             isCollapsed ? "left-0 w-48" : "left-0 w-full",
           )}
+          style={{ backgroundColor: "var(--kan-menu-bg)" }}
         >
-          <div className="flex flex-col text-neutral-900 dark:text-dark-1000">
+          <div className="flex flex-col">
             <div className="p-1">
               <Menu.Item>
                 <button
@@ -134,6 +135,7 @@ export default function UserMenu({
                     openLegend();
                   }}
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  style={{ color: "var(--kan-menu-text)" }}
                 >
                   {t`Shortcuts`}
                 </button>
@@ -145,6 +147,7 @@ export default function UserMenu({
                   rel="noreferrer"
                   onClick={handleLinkClick}
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  style={{ color: "var(--kan-menu-text)" }}
                 >
                   {t`Support`}
                 </Link>
@@ -156,6 +159,7 @@ export default function UserMenu({
                   rel="noreferrer"
                   onClick={handleLinkClick}
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  style={{ color: "var(--kan-menu-text)" }}
                 >
                   {t`Documentation`}
                 </Link>
@@ -164,6 +168,7 @@ export default function UserMenu({
                 <button
                   onClick={() => handleModalOpen("NEW_FEEDBACK")}
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  style={{ color: "var(--kan-menu-text)" }}
                 >
                   {t`Feedback`}
                 </button>
@@ -174,6 +179,7 @@ export default function UserMenu({
                 <button
                   onClick={handleLogout}
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  style={{ color: "var(--kan-menu-text)" }}
                 >
                   {t`Logout`}
                 </button>
