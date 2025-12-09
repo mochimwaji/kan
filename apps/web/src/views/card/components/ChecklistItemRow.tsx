@@ -25,8 +25,8 @@ export default function ChecklistItemRow({
   const utils = api.useUtils();
   const { showPopup } = usePopup();
 
-  const [title, setTitle] = useState("");
-  const [completed, setCompleted] = useState(false);
+  const [title, setTitle] = useState(item.title);
+  const [completed, setCompleted] = useState(item.completed);
 
   const updateItem = api.checklist.updateItem.useMutation({
     onMutate: async (vars) => {

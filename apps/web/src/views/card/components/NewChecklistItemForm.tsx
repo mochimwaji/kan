@@ -1,6 +1,7 @@
 import { t } from "@lingui/core/macro";
 import { useEffect, useRef } from "react";
 import ContentEditable from "react-contenteditable";
+import { flushSync } from "react-dom";
 import { useForm } from "react-hook-form";
 
 import { generateUID } from "@kan/shared/utils";
@@ -71,15 +72,35 @@ const NewChecklistItemForm = ({
         return { ...old, checklists: updatedChecklists } as typeof old;
       });
 
-      if (keepOpenRef.current) {
-        reset({ title: "" });
-        if (editableRef.current) editableRef.current.innerHTML = "";
-        refocusEditable();
-      } else {
+      // Handle cancel case in onMutate, but delay form reset to onSuccess for keepOpen case
+      if (!keepOpenRef.current) {
         onCancel();
       }
 
       return { previous };
+    },
+    onSuccess: () => {
+      // Prevent placeholder flash during form reset when keepOpen is true
+      if (keepOpenRef.current) {
+        const el = editableRef.current;
+        if (el) {
+          // Temporarily remove placeholder attribute to prevent CSS :empty:before from showing
+          const placeholderText = el.getAttribute("placeholder") || "";
+          el.removeAttribute("placeholder");
+          
+          // Reset form and clear content
+          flushSync(() => {
+            reset({ title: "" });
+            el.innerHTML = "";
+          });
+          
+          // Restore placeholder and refocus after the DOM update
+          requestAnimationFrame(() => {
+            el.setAttribute("placeholder", placeholderText);
+            refocusEditable();
+          });
+        }
+      }
     },
     onError: (_err, _vars, ctx) => {
       if (ctx?.previous)
@@ -90,14 +111,36 @@ const NewChecklistItemForm = ({
         icon: "error",
       });
     },
-    onSettled: async () => {
-      await utils.card.byId.invalidate({ cardPublicId });
+    onSettled: async (data, error) => {
+      if (error || !data) {
+        // On error, do full invalidation to revert to correct state
+        await utils.card.byId.invalidate({ cardPublicId });
+      } else {
+        // On success, update the placeholder item with real data instead of full invalidation
+        // This prevents visual flash from unnecessary re-renders
+        utils.card.byId.setData({ cardPublicId }, (old) => {
+          if (!old) return old;
+          const updatedChecklists = old.checklists.map((cl) =>
+            cl.publicId === checklistPublicId
+              ? {
+                  ...cl,
+                  items: cl.items.map((item) =>
+                    item.publicId.startsWith("PLACEHOLDER_")
+                      ? { ...item, publicId: data.publicId }
+                      : item
+                  ),
+                }
+              : cl
+          );
+          return { ...old, checklists: updatedChecklists };
+        });
+      }
     },
   });
 
   const sanitizeHtmlToPlainText = (html: string): string => {
     return html
-      .replace(/<br\s*\/?>(\n)?/gi, "\n")
+      .replace(/<br\s*\/?>(\\n)?/gi, "\n")
       .replace(/<div><br\s*\/?><\/div>/gi, "")
       .replace(/<[^>]*>/g, "")
       .replace(/&nbsp;/g, " ")
