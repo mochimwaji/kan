@@ -32,6 +32,7 @@ export const lists = pgTable("list", {
     .notNull()
     .references(() => boards.id, { onDelete: "cascade" }),
   importId: bigint("importId", { mode: "number" }).references(() => imports.id),
+  color: varchar("color", { length: 7 }), // hex color e.g. #FF5733
 }).enableRLS();
 
 export const listsRelations = relations(lists, ({ one, many }) => ({

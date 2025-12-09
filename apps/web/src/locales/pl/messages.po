@@ -27,7 +27,7 @@ msgid ", or see our"
 msgstr ", lub zobacz nasze"
 
 #. placeholder {0}: isTemplate ? "Templates" : "Boards"
-#: src/views/boards/index.tsx:38
+#: src/views/boards/index.tsx:41
 msgid "{0}"
 msgstr "{0}"
 
@@ -36,7 +36,7 @@ msgstr "{0}"
 #. placeholder {1}: board?.name ?? t`Board`
 #. placeholder {1}: workspace.name ?? t`Workspace`
 #: src/views/boards/index.tsx:33
-#: src/views/card/index.tsx:238
+#: src/views/card/index.tsx:272
 msgid "{0} | {1}"
 msgstr "{0} | {1}"
 
@@ -46,7 +46,7 @@ msgid "{0} labels"
 msgstr "{0} etykiety"
 
 #. placeholder {0}: isTemplate ? "Template" : "Board"
-#: src/views/board/index.tsx:412
+#: src/views/board/index.tsx:435
 msgid "{0} not found"
 msgstr "{0} nie znaleziono"
 
@@ -76,7 +76,7 @@ msgstr "14-dniowy bezpłatny okres próbny"
 msgid "A powerful, flexible kanban app that helps you organise work, track progress, and deliver results—all in one place."
 msgstr "Potężna, elastyczna aplikacja kanban, która pomaga organizować pracę, śledzić postępy i dostarczać wyniki — wszystko w jednym miejscu."
 
-#: src/components/SettingsLayout.tsx:33
+#: src/components/SettingsLayout.tsx:55
 msgid "Account"
 msgstr "Konto"
 
@@ -88,7 +88,7 @@ msgstr "Konto zostało usunięte"
 msgid "Actions"
 msgstr "Działania"
 
-#: src/views/card/index.tsx:352
+#: src/views/card/index.tsx:386
 #: src/views/public/board/CardModal.tsx:158
 msgid "Activity"
 msgstr "Aktywność"
@@ -101,7 +101,7 @@ msgstr "Dziennik aktywności"
 msgid "Activity logs"
 msgstr "Dzienniki aktywności"
 
-#: src/views/board/components/List.tsx:110
+#: src/views/board/components/List.tsx:143
 msgid "Add a card"
 msgstr "Dodaj kartę"
 
@@ -110,7 +110,7 @@ msgstr "Dodaj kartę"
 msgid "Add a comment..."
 msgstr "Dodaj komentarz..."
 
-#: src/views/card/components/NewChecklistItemForm.tsx:140
+#: src/views/card/components/NewChecklistItemForm.tsx:183
 msgid "Add an item..."
 msgstr "Dodaj element..."
 
@@ -200,7 +200,7 @@ msgstr "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później."
 msgid "Anyone with this link can join your workspace"
 msgstr "Każdy z tym linkiem może dołączyć do twojego obszaru roboczego"
 
-#: src/components/SettingsLayout.tsx:51
+#: src/components/SettingsLayout.tsx:73
 msgid "API"
 msgstr "API"
 
@@ -220,7 +220,7 @@ msgstr "Nazwa klucza API nie może przekraczać 30 znaków"
 msgid "API key name is required"
 msgstr "Nazwa klucza API jest wymagana"
 
-#: src/views/settings/ApiSettings.tsx:22
+#: src/views/settings/ApiSettings.tsx:25
 msgid "API keys"
 msgstr "Klucze API"
 
@@ -303,7 +303,7 @@ msgstr "rozliczane rocznie"
 msgid "billed monthly"
 msgstr "rozliczane miesięcznie"
 
-#: src/components/SettingsLayout.tsx:44
+#: src/components/SettingsLayout.tsx:66
 #: src/views/boards/components/TemplateBoards.tsx:56
 #: src/views/settings/BillingSettings.tsx:39
 msgid "Billing"
@@ -317,8 +317,9 @@ msgstr "Portal rozliczeniowy"
 msgid "Blog Post"
 msgstr "Post na blogu"
 
-#: src/views/board/index.tsx:386
-#: src/views/card/index.tsx:238
+#: src/components/ThemePresetSelector.tsx:60
+#: src/views/board/index.tsx:409
+#: src/views/card/index.tsx:272
 #: src/views/public/board/index.tsx:113
 msgid "Board"
 msgstr "Tablica"
@@ -327,6 +328,10 @@ msgstr "Tablica"
 #: src/views/settings/components/UpgradeToProConfirmation.tsx:83
 msgid "Board analytics"
 msgstr "Analiza tablicy"
+
+#: src/views/settings/components/ColorSettings.tsx:199
+msgid "Board Background"
+msgstr ""
 
 #: src/views/boards/components/NewBoardForm.tsx:23
 msgid "Board name cannot exceed 100 characters"
@@ -385,6 +390,10 @@ msgstr "Błąd"
 msgid "Bug Report"
 msgstr "Zgłoszenie błędu"
 
+#: src/views/settings/components/ColorSettings.tsx:204
+msgid "Buttons"
+msgstr ""
+
 #: src/components/DeleteLabelConfirmation.tsx:49
 #: src/views/board/components/DeleteBoardConfirmation.tsx:44
 #: src/views/card/components/Comment.tsx:158
@@ -400,12 +409,12 @@ msgstr "Zgłoszenie błędu"
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: src/views/card/index.tsx:238
+#: src/views/card/index.tsx:272
 msgid "Card"
 msgstr "Karta"
 
-#: src/views/card/index.tsx:272
-#: src/views/card/index.tsx:308
+#: src/views/card/index.tsx:306
+#: src/views/card/index.tsx:342
 msgid "Card not found"
 msgstr "Nie można było znaleźć karty"
 
@@ -413,14 +422,14 @@ msgstr "Nie można było znaleźć karty"
 msgid "Card title"
 msgstr "Tytuł karty"
 
-#: src/views/settings/AccountSettings.tsx:70
-#: src/views/settings/AccountSettings.tsx:80
+#: src/views/settings/AccountSettings.tsx:91
+#: src/views/settings/AccountSettings.tsx:104
 #: src/views/settings/components/ChangePasswordConfirmation.tsx:109
 #: src/views/settings/components/ChangePasswordConfirmation.tsx:178
 msgid "Change Password"
 msgstr "Zmień hasło"
 
-#: src/views/settings/AccountSettings.tsx:45
+#: src/views/settings/AccountSettings.tsx:57
 msgid "Change your language preferences."
 msgstr "Zmień swoje preferencje językowe."
 
@@ -467,6 +476,10 @@ msgstr "Przegląd kodu"
 #: src/views/home/components/Features.tsx:91
 msgid "Collaborate seamlessly with your team."
 msgstr "Współpracuj płynnie ze swoim zespołem."
+
+#: src/views/settings/WorkspaceSettings.tsx:85
+msgid "Colors"
+msgstr ""
 
 #: src/components/NewWorkspaceForm.tsx:352
 #: src/views/home/components/Features.tsx:67
@@ -595,12 +608,12 @@ msgid "Create list"
 msgstr "Utwórz listę"
 
 #. placeholder {0}: isTemplate ? "template" : "board"
-#: src/views/boards/components/BoardsList.tsx:45
+#: src/views/boards/components/BoardsList.tsx:114
 #: src/views/boards/index.tsx:26
 msgid "Create new {0}"
 msgstr "Utwórz nowy {0}"
 
-#: src/views/settings/ApiSettings.tsx:30
+#: src/views/settings/ApiSettings.tsx:36
 msgid "Create new key"
 msgstr "Utwórz nowy klucz"
 
@@ -610,7 +623,7 @@ msgid "Create new label"
 msgstr "Utwórz nową etykietę"
 
 #: src/views/board/index.tsx:65
-#: src/views/board/index.tsx:503
+#: src/views/board/index.tsx:526
 msgid "Create new list"
 msgstr "Utwórz nową listę"
 
@@ -619,7 +632,7 @@ msgid "Create template"
 msgstr "Utwórz szablon"
 
 #: src/components/NewWorkspaceForm.tsx:387
-#: src/components/WorkspaceMenu.tsx:153
+#: src/components/WorkspaceMenu.tsx:158
 msgid "Create workspace"
 msgstr "Utwórz przestrzeń roboczą"
 
@@ -639,9 +652,18 @@ msgstr "Przytnij swój awatar"
 msgid "Current password is required"
 msgstr "Wymagane jest obecne hasło"
 
+#: src/components/ThemePresetSelector.tsx:97
+msgid "Custom"
+msgstr ""
+
 #: src/views/pricing/components/PricingTiers.tsx:37
 msgid "Custom board templates"
 msgstr "Niestandardowe szablony tablic"
+
+#: src/components/ThemePresetSelector.tsx:109
+#: src/views/settings/components/ColorSettings.tsx:185
+msgid "Custom Colors"
+msgstr ""
 
 #: src/views/pricing/components/Pricing.tsx:74
 #: src/views/pricing/components/PricingTiers.tsx:71
@@ -669,9 +691,13 @@ msgstr "Niestandardowy adres URL przestrzeni roboczej"
 msgid "Customer Support"
 msgstr "Obsługa klienta"
 
+#: src/views/settings/WorkspaceSettings.tsx:88
+msgid "Customize the appearance of your workspace with preset themes or custom colors."
+msgstr ""
+
 #: src/components/UserMenu.tsx:155
-msgid "Dark"
-msgstr "Ciemny"
+#~ msgid "Dark"
+#~ msgstr "Ciemny"
 
 #: src/views/members/components/InviteMemberForm.tsx:348
 msgid "Deactivate invite link"
@@ -686,8 +712,8 @@ msgstr "Dezaktywuj link zaproszenia"
 msgid "Delete"
 msgstr "Usuń"
 
-#: src/views/settings/AccountSettings.tsx:52
-#: src/views/settings/AccountSettings.tsx:62
+#: src/views/settings/AccountSettings.tsx:67
+#: src/views/settings/AccountSettings.tsx:80
 #: src/views/settings/components/DeleteAccountConfirmation.tsx:96
 msgid "Delete account"
 msgstr "Usuń konto"
@@ -704,7 +730,7 @@ msgstr "Usuń kartę"
 msgid "Delete comment"
 msgstr "Usuń komentarz"
 
-#: src/views/board/components/List.tsx:117
+#: src/views/board/components/List.tsx:157
 msgid "Delete list"
 msgstr "Usuń listę"
 
@@ -713,8 +739,8 @@ msgid "Delete template"
 msgstr "Usuń szablon"
 
 #: src/views/settings/components/DeleteWorkspaceConfirmation.tsx:106
-#: src/views/settings/WorkspaceSettings.tsx:97
 #: src/views/settings/WorkspaceSettings.tsx:108
+#: src/views/settings/WorkspaceSettings.tsx:119
 msgid "Delete workspace"
 msgstr "Usuń przestrzeń roboczą"
 
@@ -748,7 +774,7 @@ msgstr "Odłącz Trello"
 msgid "Discuss and collaborate on cards."
 msgstr "Dyskutuj i współpracuj nad kartami."
 
-#: src/views/settings/AccountSettings.tsx:35
+#: src/views/settings/AccountSettings.tsx:41
 msgid "Display name"
 msgstr "Wyświetlana nazwa"
 
@@ -780,7 +806,7 @@ msgstr "dokumentacja"
 msgid "Docs"
 msgstr "Dokumentacja"
 
-#: src/components/UserMenu.tsx:206
+#: src/components/UserMenu.tsx:160
 #: src/views/boards/components/TemplateBoards.tsx:24
 #: src/views/home/components/Footer.tsx:78
 #: src/views/home/components/Header.tsx:36
@@ -856,6 +882,10 @@ msgstr "Email"
 #: src/views/boards/components/TemplateBoards.tsx:24
 msgid "Enhancement"
 msgstr "Ulepszenie"
+
+#: src/components/ColorPicker.tsx:132
+msgid "Enter a valid hex color (e.g., #FF5733)"
+msgstr ""
 
 #: src/views/settings/components/ChangePasswordConfirmation.tsx:122
 msgid "Enter your current password"
@@ -1026,7 +1056,7 @@ msgid "Features"
 msgstr "Funkcje"
 
 #: src/components/FeedbackModal.tsx:59
-#: src/components/UserMenu.tsx:214
+#: src/components/UserMenu.tsx:168
 msgid "Feedback"
 msgstr "Opinie"
 
@@ -1047,12 +1077,14 @@ msgid "For long-term sustainability, we recognise all good open source projects 
 msgstr "Dla długoterminowej trwałości uznajemy, że wszystkie dobre projekty open source potrzebują źródła dochodu. Nasze pochodzi z płatnej oferty w chmurze dla przestrzeni roboczych z wieloma użytkownikami oraz dla niestandardowych nazw przestrzeni roboczych. Nie ma obowiązku korzystania z niej, a oprogramowanie można hostować samodzielnie na własnej infrastrukturze bezpłatnie."
 
 #: src/views/pricing/components/Pricing.tsx:32
+#: src/views/pricing/components/Pricing.tsx:32
+#: src/views/pricing/components/PricingTiers.tsx:30
 #: src/views/pricing/components/PricingTiers.tsx:30
 msgid "Free"
 msgstr "Darmowy"
 
 #: src/views/members/components/InviteMemberForm.tsx:333
-#: src/views/members/index.tsx:208
+#: src/views/members/index.tsx:213
 msgid "Free Plan"
 msgstr "Darmowy plan"
 
@@ -1088,11 +1120,11 @@ msgid "Get Started"
 msgstr "Rozpocznij"
 
 #. placeholder {0}: isTemplate ? "template" : "board"
-#: src/views/boards/components/BoardsList.tsx:41
+#: src/views/boards/components/BoardsList.tsx:110
 msgid "Get started by creating a new {0}"
 msgstr "Rozpocznij, tworząc nowy {0}"
 
-#: src/views/board/index.tsx:495
+#: src/views/board/index.tsx:518
 msgid "Get started by creating a new list"
 msgstr "Rozpocznij, tworząc nową listę"
 
@@ -1191,7 +1223,7 @@ msgstr "Pomysły"
 msgid "Ideas to improve this page..."
 msgstr "Pomysły na ulepszenie tej strony..."
 
-#: src/views/boards/index.tsx:50
+#: src/views/boards/index.tsx:53
 msgid "Import"
 msgstr "Importuj"
 
@@ -1238,7 +1270,7 @@ msgstr "W toku"
 msgid "Individuals"
 msgstr "Osoby"
 
-#: src/components/SettingsLayout.tsx:57
+#: src/components/SettingsLayout.tsx:79
 #: src/views/home/components/Features.tsx:121
 msgid "Integrations"
 msgstr "Integracje"
@@ -1259,7 +1291,7 @@ msgstr "Nieprawidłowy adres e-mail"
 msgid "Invalid invitation"
 msgstr "Nieprawidłowe zaproszenie"
 
-#: src/views/members/index.tsx:221
+#: src/views/members/index.tsx:226
 msgid "Invite"
 msgstr "Zaproś"
 
@@ -1340,7 +1372,7 @@ msgstr "Etykiety i filtry"
 msgid "Labels & Filters"
 msgstr "Etykiety i Filtry"
 
-#: src/views/settings/AccountSettings.tsx:42
+#: src/views/settings/AccountSettings.tsx:51
 msgid "Language"
 msgstr "Język"
 
@@ -1349,7 +1381,7 @@ msgstr "Język"
 msgid "Launch offer"
 msgstr "Oferta startowa"
 
-#: src/views/members/index.tsx:191
+#: src/views/members/index.tsx:196
 msgid "Launch offer: Get unlimited members with Pro"
 msgstr "Oferta startowa: Nieograniczona liczba członków z Pro"
 
@@ -1375,8 +1407,8 @@ msgid "License"
 msgstr "Licencja"
 
 #: src/components/UserMenu.tsx:169
-msgid "Light"
-msgstr "Jasny"
+#~ msgid "Light"
+#~ msgstr "Jasny"
 
 #: src/views/public/board/index.tsx:77
 msgid "Link copied"
@@ -1385,6 +1417,10 @@ msgstr "Link skopiowany"
 #: src/views/card/index.tsx:112
 msgid "List"
 msgstr "Lista"
+
+#: src/components/ListColorPicker.tsx:129
+msgid "List color"
+msgstr ""
 
 #: src/views/board/components/NewListForm.tsx:129
 msgid "List name"
@@ -1398,7 +1434,7 @@ msgstr "Listy"
 msgid "Login | kan.bn"
 msgstr "Zaloguj się | kan.bn"
 
-#: src/components/UserMenu.tsx:224
+#: src/components/UserMenu.tsx:178
 msgid "Logout"
 msgstr "Wyloguj się"
 
@@ -1439,14 +1475,18 @@ msgstr "Średni priorytet"
 #: src/views/board/components/Filters.tsx:147
 #: src/views/board/components/NewCardForm.tsx:376
 #: src/views/card/index.tsx:129
-#: src/views/members/index.tsx:178
+#: src/views/members/index.tsx:183
 msgid "Members"
 msgstr "Członkowie"
 
 #. placeholder {0}: workspace.name ?? t`Workspace`
-#: src/views/members/index.tsx:173
+#: src/views/members/index.tsx:175
 msgid "Members | {0}"
 msgstr "Członkowie | {0}"
+
+#: src/views/settings/components/ColorSettings.tsx:209
+msgid "Menus"
+msgstr ""
 
 #: src/views/pricing/components/Pricing.tsx:14
 #: src/views/pricing/index.tsx:20
@@ -1481,7 +1521,7 @@ msgstr "Nawigacja"
 msgid "Need help?"
 msgstr "Potrzebujesz pomocy?"
 
-#: src/views/boards/index.tsx:62
+#: src/views/boards/index.tsx:65
 #: src/views/home/components/Features.tsx:73
 msgid "New"
 msgstr "Nowy"
@@ -1512,7 +1552,7 @@ msgid "New label"
 msgstr "Nowa etykieta"
 
 #: src/views/board/components/NewListForm.tsx:113
-#: src/views/board/index.tsx:466
+#: src/views/board/index.tsx:489
 msgid "New list"
 msgstr "Nowa lista"
 
@@ -1545,7 +1585,7 @@ msgid "Next Steps"
 msgstr "Następne kroki"
 
 #. placeholder {0}: isTemplate ? "templates" : "boards"
-#: src/views/boards/components/BoardsList.tsx:38
+#: src/views/boards/components/BoardsList.tsx:107
 msgid "No {0}"
 msgstr "Brak {0}"
 
@@ -1573,7 +1613,7 @@ msgstr "Brak dostępnego URL do pobrania tego załącznika."
 msgid "No keyboard shortcuts registered."
 msgstr "Brak zarejestrowanych skrótów klawiaturowych."
 
-#: src/views/board/index.tsx:492
+#: src/views/board/index.tsx:515
 msgid "No lists"
 msgstr "Brak list"
 
@@ -1589,11 +1629,11 @@ msgstr "Oferta"
 msgid "Onboarding"
 msgstr "Wprowadzenie"
 
-#: src/views/settings/AccountSettings.tsx:55
+#: src/views/settings/AccountSettings.tsx:73
 msgid "Once you delete your account, there is no going back. This action cannot be undone."
 msgstr "Po usunięciu konta nie będzie możliwości jego przywrócenia. Tej operacji nie można cofnąć."
 
-#: src/views/settings/WorkspaceSettings.tsx:100
+#: src/views/settings/WorkspaceSettings.tsx:111
 msgid "Once you delete your workspace, there is no going back. This action cannot be undone."
 msgstr "Po usunięciu przestrzeni roboczej nie będzie możliwości jej przywrócenia. Tej operacji nie można cofnąć."
 
@@ -1639,6 +1679,11 @@ msgstr "Ty posiadasz swoje dane"
 msgid "Owned by Atlassian"
 msgstr "Należy do Atlassian"
 
+#: src/components/ThemePresetSelector.tsx:55
+#: src/views/settings/components/ColorSettings.tsx:194
+msgid "Pages"
+msgstr ""
+
 #: src/views/boards/components/TemplateBoards.tsx:70
 msgid "Part-time"
 msgstr "Niepełny etat"
@@ -1663,7 +1708,7 @@ msgstr "Hasło musi mieć co najmniej 8 znaków"
 msgid "Passwords do not match"
 msgstr "Hasła nie pasują do siebie"
 
-#: src/views/members/index.tsx:134
+#: src/views/members/index.tsx:136
 msgid "Paused"
 msgstr "Wstrzymane"
 
@@ -1672,7 +1717,7 @@ msgstr "Wstrzymane"
 msgid "Payment frequency"
 msgstr "Częstotliwość płatności"
 
-#: src/views/members/index.tsx:134
+#: src/views/members/index.tsx:136
 msgid "Pending"
 msgstr "Oczekujące"
 
@@ -1724,8 +1769,8 @@ msgstr "Proszę wybrać plik do przesłania."
 #: src/views/board/components/NewTemplateForm.tsx:77
 #: src/views/board/components/UpdateBoardSlugForm.tsx:73
 #: src/views/board/components/VisibilityButton.tsx:54
-#: src/views/board/index.tsx:174
-#: src/views/board/index.tsx:230
+#: src/views/board/index.tsx:180
+#: src/views/board/index.tsx:249
 #: src/views/boards/components/ImportBoardsForm.tsx:205
 #: src/views/card/components/AttachmentThumbnails.tsx:73
 #: src/views/card/components/ChecklistItemRow.tsx:60
@@ -1740,9 +1785,10 @@ msgstr "Proszę wybrać plik do przesłania."
 #: src/views/card/components/ListSelector.tsx:52
 #: src/views/card/components/MemberSelector.tsx:79
 #: src/views/card/components/NewChecklistForm.tsx:70
-#: src/views/card/components/NewChecklistItemForm.tsx:89
+#: src/views/card/components/NewChecklistItemForm.tsx:110
 #: src/views/card/components/NewCommentForm.tsx:31
-#: src/views/card/index.tsx:186
+#: src/views/card/index.tsx:187
+#: src/views/card/index.tsx:200
 #: src/views/members/components/DeleteMemberConfirmation.tsx:28
 #: src/views/members/components/InviteMemberForm.tsx:104
 #: src/views/members/components/InviteMemberForm.tsx:241
@@ -1790,7 +1836,7 @@ msgstr "Polityka prywatności"
 msgid "Private"
 msgstr "Prywatne"
 
-#: src/views/members/index.tsx:205
+#: src/views/members/index.tsx:210
 msgid "Pro Plan"
 msgstr "Plan Pro"
 
@@ -1802,7 +1848,7 @@ msgstr "Plan Pro ∞"
 msgid "Profile image updated"
 msgstr "Zaktualizowano zdjęcie profilowe"
 
-#: src/views/settings/AccountSettings.tsx:29
+#: src/views/settings/AccountSettings.tsx:32
 msgid "Profile picture"
 msgstr "Zdjęcie profilowe"
 
@@ -1838,7 +1884,11 @@ msgstr "Zdalne"
 msgid "Remove"
 msgstr "Usuń"
 
-#: src/views/members/index.tsx:148
+#: src/components/ListColorPicker.tsx:178
+msgid "Remove color"
+msgstr ""
+
+#: src/views/members/index.tsx:150
 msgid "Remove member"
 msgstr "Usuń członka"
 
@@ -1900,7 +1950,7 @@ msgstr "Przegląd"
 msgid "Roadmap"
 msgstr "Plan ulepszeń"
 
-#: src/views/members/index.tsx:243
+#: src/views/members/index.tsx:248
 msgid "Role"
 msgstr "Rola"
 
@@ -1913,6 +1963,10 @@ msgstr "Uruchom na własnej infrastrukturze"
 #: src/views/settings/components/Avatar.tsx:309
 msgid "Save"
 msgstr "Zapisz"
+
+#: src/views/settings/components/ColorSettings.tsx:190
+#~ msgid "Save Changes"
+#~ msgstr ""
 
 #: src/views/home/components/Features.tsx:116
 msgid "Save time with reusable board templates."
@@ -1963,6 +2017,10 @@ msgstr "Prześlij opinię"
 msgid "Senior"
 msgstr "Starszy"
 
+#: src/views/board/components/List.tsx:150
+msgid "Set color"
+msgstr ""
+
 #: src/views/card/components/DueDateSelector.tsx:116
 msgid "Set due date"
 msgstr "Ustaw termin"
@@ -1971,7 +2029,7 @@ msgstr "Ustaw termin"
 msgid "set the due date"
 msgstr "ustawiono termin"
 
-#: src/components/SettingsLayout.tsx:82
+#: src/components/SettingsLayout.tsx:212
 #: src/components/SideNavigation.tsx:133
 msgid "Settings"
 msgstr "Ustawienia"
@@ -1992,13 +2050,18 @@ msgstr "Ustawienia | Rozliczenia"
 msgid "Settings | Integrations"
 msgstr "Ustawienia | Integracje"
 
-#: src/views/settings/WorkspaceSettings.tsx:54
+#: src/views/settings/WorkspaceSettings.tsx:55
 msgid "Settings | Workspace"
 msgstr "Ustawienia | Obszar roboczy"
 
-#: src/components/UserMenu.tsx:184
+#: src/components/UserMenu.tsx:138
 msgid "Shortcuts"
 msgstr "Skróty"
+
+#: src/components/ThemePresetSelector.tsx:50
+#: src/views/settings/components/ColorSettings.tsx:189
+msgid "Sidebar"
+msgstr ""
 
 #: src/views/home/components/Header.tsx:104
 msgid "Sign in"
@@ -2068,7 +2131,7 @@ msgstr "Sukces"
 msgid "Supercharge your workspace for just $29/month. Here's what you'll get:"
 msgstr "Zwiększ możliwości swojego obszaru roboczego za jedyne 29 USD/miesiąc. Oto, co otrzymasz:"
 
-#: src/components/UserMenu.tsx:195
+#: src/components/UserMenu.tsx:149
 msgid "Support"
 msgstr "Wsparcie"
 
@@ -2078,11 +2141,11 @@ msgid "Support the development of the project"
 msgstr "Wspieraj rozwój projektu"
 
 #: src/components/UserMenu.tsx:141
-msgid "System"
-msgstr "System"
+#~ msgid "System"
+#~ msgstr "System"
 
 #: src/views/members/components/InviteMemberForm.tsx:322
-#: src/views/members/index.tsx:207
+#: src/views/members/index.tsx:212
 msgid "Team Plan"
 msgstr "Plan zespołowy"
 
@@ -2092,8 +2155,8 @@ msgstr "Plan zespołowy"
 msgid "Teams"
 msgstr "Zespoły"
 
-#: src/views/board/index.tsx:386
-#: src/views/board/index.tsx:421
+#: src/views/board/index.tsx:409
+#: src/views/board/index.tsx:444
 msgid "Template"
 msgstr "Szablon"
 
@@ -2148,8 +2211,12 @@ msgid "The visibility of your board has been set to {0}."
 msgstr "Widoczność Twojej tablicy została ustawiona na {0}."
 
 #: src/components/UserMenu.tsx:128
-msgid "Theme"
-msgstr "Motyw"
+#~ msgid "Theme"
+#~ msgstr "Motyw"
+
+#: src/components/ThemePresetSelector.tsx:25
+msgid "Theme Presets"
+msgstr ""
 
 #: src/views/members/components/DeleteMemberConfirmation.tsx:50
 msgid "They won't be able to access this workspace."
@@ -2233,13 +2300,17 @@ msgstr "Sortowanie"
 msgid "Trusted by fast-moving teams<0/>around the world"
 msgstr "Zaufany przez dynamiczne zespoły<0/>na całym świecie"
 
-#: src/views/card/components/NewChecklistItemForm.tsx:88
+#: src/views/card/components/NewChecklistItemForm.tsx:109
 msgid "Unable to add checklist item"
 msgstr "Nie można dodać elementu listy kontrolnej"
 
 #: src/views/card/components/NewCommentForm.tsx:30
 msgid "Unable to add comment"
 msgstr "Nie można dodać komentarza"
+
+#: src/views/card/index.tsx:199
+msgid "Unable to add label"
+msgstr ""
 
 #: src/views/board/components/NewCardForm.tsx:181
 msgid "Unable to create card"
@@ -2298,8 +2369,8 @@ msgstr "Nie można zaktualizować adresu URL tablicy"
 msgid "Unable to update board visibility"
 msgstr "Nie można zaktualizować widoczności tablicy"
 
-#: src/views/board/index.tsx:229
-#: src/views/card/index.tsx:185
+#: src/views/board/index.tsx:248
+#: src/views/card/index.tsx:186
 msgid "Unable to update card"
 msgstr "Nie można zaktualizować karty"
 
@@ -2323,7 +2394,7 @@ msgstr "Nie można zaktualizować terminu"
 msgid "Unable to update labels"
 msgstr "Nie można zaktualizować etykiet"
 
-#: src/views/board/index.tsx:173
+#: src/views/board/index.tsx:179
 #: src/views/card/components/ListSelector.tsx:51
 msgid "Unable to update list"
 msgstr "Nie można zaktualizować listy"
@@ -2417,9 +2488,9 @@ msgstr "zaktualizowano tytuł"
 msgid "updated the title to <0>{0}</0>"
 msgstr "zaktualizowano tytuł na <0>{0}</0>"
 
-#: src/components/SideNavigation.tsx:237
+#: src/components/SideNavigation.tsx:241
 #: src/views/settings/components/UpgradeToProConfirmation.tsx:53
-#: src/views/settings/WorkspaceSettings.tsx:90
+#: src/views/settings/WorkspaceSettings.tsx:101
 msgid "Upgrade to Pro"
 msgstr "Ulepsz do planu Pro"
 
@@ -2456,7 +2527,7 @@ msgstr "Adres URL musi mieć co najmniej 3 znaki"
 msgid "Use template"
 msgstr "Użyj szablonu"
 
-#: src/views/members/index.tsx:237
+#: src/views/members/index.tsx:242
 msgid "User"
 msgstr "Użytkownik"
 
@@ -2468,7 +2539,7 @@ msgstr "Użytkownik jest już członkiem tego obszaru roboczego"
 msgid "Video"
 msgstr "Wideo"
 
-#: src/views/settings/ApiSettings.tsx:25
+#: src/views/settings/ApiSettings.tsx:31
 msgid "View and manage your API keys."
 msgstr "Zobacz i zarządzaj swoimi kluczami API."
 
@@ -2533,10 +2604,10 @@ msgstr "Biała etykieta"
 msgid "Why make an open source Trello?"
 msgstr "Dlaczego próbujecie stworzyć Trello w wersji otwartoźródłowej?"
 
-#: src/components/SettingsLayout.tsx:39
-#: src/views/board/index.tsx:386
+#: src/components/SettingsLayout.tsx:61
+#: src/views/board/index.tsx:409
 #: src/views/boards/index.tsx:33
-#: src/views/members/index.tsx:173
+#: src/views/members/index.tsx:175
 #: src/views/public/board/index.tsx:113
 #: src/views/public/boards/index.tsx:66
 msgid "Workspace"
@@ -2550,7 +2621,7 @@ msgstr "Obszar roboczy został pomyślnie utworzony. Możesz go ulepszyć późn
 msgid "Workspace deleted"
 msgstr "Obszar roboczy został usunięty"
 
-#: src/views/settings/WorkspaceSettings.tsx:75
+#: src/views/settings/WorkspaceSettings.tsx:76
 msgid "Workspace description"
 msgstr "Opis obszaru roboczego"
 
@@ -2573,7 +2644,7 @@ msgid "Workspace members"
 msgstr "Członkowie przestrzeni roboczej"
 
 #: src/components/NewWorkspaceForm.tsx:262
-#: src/views/settings/WorkspaceSettings.tsx:58
+#: src/views/settings/WorkspaceSettings.tsx:59
 msgid "Workspace name"
 msgstr "Nazwa przestrzeni roboczej"
 
@@ -2598,7 +2669,7 @@ msgstr "Nazwa przestrzeni roboczej została zaktualizowana"
 msgid "Workspace slug updated"
 msgstr "Slug przestrzeni roboczej został zaktualizowany"
 
-#: src/views/settings/WorkspaceSettings.tsx:66
+#: src/views/settings/WorkspaceSettings.tsx:67
 msgid "Workspace URL"
 msgstr "URL przestrzeni roboczej"
 
@@ -2619,7 +2690,7 @@ msgstr "Rocznie"
 msgid "Yes, we offer an forever free plan for individual use. No restrictions, no paywalls, no limits."
 msgstr "Tak, oferujemy wiecznie darmowy plan dla użytkowników indywidualnych. Bez ograniczeń, bez płatnych ścian, bez limitów."
 
-#: src/views/settings/AccountSettings.tsx:73
+#: src/views/settings/AccountSettings.tsx:97
 msgid "You are about to change your password."
 msgstr "Zaraz zmienisz swoje hasło."
 

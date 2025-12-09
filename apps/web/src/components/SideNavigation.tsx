@@ -151,15 +151,19 @@ export default function SideNavigation({
     <>
       <nav
         className={twMerge(
-          "flex h-full w-64 flex-col justify-between border-r border-light-300 bg-light-100 p-3 dark:border-dark-300 dark:bg-dark-100 md:border-r-0 md:py-0 md:pl-0",
-          isCollapsed && "md:w-auto",
+          "flex h-full w-64 flex-col justify-between overflow-hidden border-r border-light-300 p-3 transition-all duration-300 ease-in-out dark:border-dark-300 md:border-r-0 md:py-0 md:pl-0",
+          isCollapsed && "md:w-14",
         )}
+        style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
       >
         <div>
           <div className="hidden h-[45px] items-center justify-between pb-3 md:flex">
             {!isCollapsed && (
               <Link href="/" className="block">
-                <h1 className="pl-2 text-[16px] font-bold tracking-tight text-neutral-900 dark:text-dark-1000">
+                <h1
+                  className="pl-2 text-[16px] font-bold tracking-tight"
+                  style={{ color: "var(--kan-sidebar-text)" }}
+                >
                   kan.bn
                 </h1>
               </Link>
@@ -174,12 +178,12 @@ export default function SideNavigation({
               {isCollapsed ? (
                 <TbLayoutSidebarLeftExpand
                   size={18}
-                  className="text-light-900 dark:text-dark-900"
+                  style={{ color: "var(--kan-sidebar-text)", opacity: 0.7 }}
                 />
               ) : (
                 <TbLayoutSidebarLeftCollapse
                   size={18}
-                  className="text-light-900 dark:text-dark-900"
+                  style={{ color: "var(--kan-sidebar-text)", opacity: 0.7 }}
                 />
               )}
             </Button>

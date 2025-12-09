@@ -73,7 +73,8 @@ export default function UserMenu({
           </div>
         ) : (
           <Menu.Button
-            className="flex w-full items-center rounded-md p-1.5 text-neutral-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200 dark:hover:text-dark-1000"
+            className="flex w-full items-center rounded-md p-1.5"
+            style={{ color: "var(--kan-sidebar-text)" }}
             title={isCollapsed ? email : undefined}
           >
             {avatarUrl ? (
@@ -124,53 +125,6 @@ export default function UserMenu({
         >
           <div className="flex flex-col text-neutral-900 dark:text-dark-1000">
             <div className="p-1">
-              <div className="flex w-full items-center px-3 py-2 text-left text-xs">
-                <span>{t`Theme`}</span>
-              </div>
-              <Menu.Item>
-                <button
-                  onClick={() => setTheme("system")}
-                  className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
-                >
-                  <span
-                    className={twMerge(
-                      theme === "system" ? "visible" : "invisible",
-                      "mr-4 h-[6px] w-[6px] rounded-full bg-light-900 dark:bg-dark-900",
-                    )}
-                  />
-                  {t`System`}
-                </button>
-              </Menu.Item>
-              <Menu.Item>
-                <button
-                  onClick={() => setTheme("dark")}
-                  className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
-                >
-                  <span
-                    className={twMerge(
-                      theme === "dark" ? "visible" : "invisible",
-                      "mr-4 h-[6px] w-[6px] rounded-full bg-light-900 dark:bg-dark-900",
-                    )}
-                  />
-                  {t`Dark`}
-                </button>
-              </Menu.Item>
-              <Menu.Item>
-                <button
-                  onClick={() => setTheme("light")}
-                  className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
-                >
-                  <span
-                    className={twMerge(
-                      theme === "light" ? "visible" : "invisible",
-                      "mr-4 h-[6px] w-[6px] rounded-full bg-light-900 dark:bg-dark-900",
-                    )}
-                  />
-                  {t`Light`}
-                </button>
-              </Menu.Item>
-            </div>
-            <div className="light-border-600 border-t-[1px] p-1 dark:border-dark-600">
               <Menu.Item>
                 <button
                   onClick={() => {

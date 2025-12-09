@@ -32,9 +32,12 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
       <PageHead
         title={t`${isTemplate ? "Templates" : "Boards"} | ${workspace.name ?? t`Workspace`}`}
       />
-      <div className="m-auto h-full max-w-[1100px] p-6 px-5 md:px-28 md:py-12">
+      <div className="m-auto max-w-[1100px] p-6 px-5 md:px-28 md:py-12">
         <div className="relative z-10 mb-8 flex w-full items-center justify-between">
-          <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
+          <h1
+            className="font-bold tracking-tight sm:text-[1.2rem]"
+            style={{ color: "var(--kan-pages-text)" }}
+          >
             {t`${isTemplate ? "Templates" : "Boards"}`}
           </h1>
           <div className="flex gap-2">
@@ -95,7 +98,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
           </Modal>
         </>
 
-        <div className="flex h-full flex-row">
+        <div className="flex flex-row">
           <BoardsList isTemplate={!!isTemplate} />
         </div>
       </div>

@@ -25,33 +25,51 @@ export default function AccountSettings() {
       <PageHead title={t`Settings | Account`} />
 
       <div className="mb-8 border-t border-light-300 dark:border-dark-300">
-        <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+        <h2
+          className="mb-4 mt-8 text-[14px] font-bold"
+          style={{ color: "var(--kan-pages-text)" }}
+        >
           {t`Profile picture`}
         </h2>
         <Avatar userId={data?.id} userImage={data?.image} />
 
         <div className="mb-4">
-          <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="mb-4 mt-8 text-[14px] font-bold"
+            style={{ color: "var(--kan-pages-text)" }}
+          >
             {t`Display name`}
           </h2>
           <UpdateDisplayNameForm displayName={data?.name ?? ""} />
         </div>
 
         <div className="mb-8 border-t border-light-300 dark:border-dark-300">
-          <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="mb-4 mt-8 text-[14px] font-bold"
+            style={{ color: "var(--kan-pages-text)" }}
+          >
             {t`Language`}
           </h2>
-          <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
+          <p
+            className="mb-8 text-sm"
+            style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+          >
             {t`Change your language preferences.`}
           </p>
           <LanguageSelector />
         </div>
 
         <div className="mb-8 border-t border-light-300 dark:border-dark-300">
-          <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="mb-4 mt-8 text-[14px] font-bold"
+            style={{ color: "var(--kan-pages-text)" }}
+          >
             {t`Delete account`}
           </h2>
-          <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
+          <p
+            className="mb-8 text-sm"
+            style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+          >
             {t`Once you delete your account, there is no going back. This action cannot be undone.`}
           </p>
           <div className="mt-4">
@@ -66,10 +84,16 @@ export default function AccountSettings() {
 
         {isCredentialsEnabled && (
           <div className="mb-8 border-t border-light-300 dark:border-dark-300">
-            <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+            <h2
+              className="mb-4 mt-8 text-[14px] font-bold"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
               {t`Change Password`}
             </h2>
-            <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
+            <p
+              className="mb-8 text-sm"
+              style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+            >
               {t`You are about to change your password.`}
             </p>
             <div className="mt-4">

@@ -1,6 +1,7 @@
 import { and, desc, eq, ilike, inArray, isNull, or, sql } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
+import type { ThemeColorsType } from "@kan/db/schema";
 import {
   boards,
   cards,
@@ -86,6 +87,26 @@ export const update = async (
   return result;
 };
 
+export const updateThemeColors = async (
+  db: dbClient,
+  workspacePublicId: string,
+  themeColors: ThemeColorsType,
+) => {
+  const [result] = await db
+    .update(workspaces)
+    .set({
+      themeColors,
+      updatedAt: new Date(),
+    })
+    .where(eq(workspaces.publicId, workspacePublicId))
+    .returning({
+      publicId: workspaces.publicId,
+      themeColors: workspaces.themeColors,
+    });
+
+  return result;
+};
+
 export const getByPublicId = (db: dbClient, workspacePublicId: string) => {
   return db.query.workspaces.findFirst({
     columns: {
@@ -120,6 +141,7 @@ export const getByPublicIdWithMembers = (
     columns: {
       id: true,
       publicId: true,
+      themeColors: true,
     },
     with: {
       members: {

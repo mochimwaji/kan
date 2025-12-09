@@ -12,6 +12,7 @@ import Badge from "~/components/Badge";
 import CircularProgress from "~/components/CircularProgress";
 import LabelIcon from "~/components/LabelIcon";
 import { useLocalisation } from "~/hooks/useLocalisation";
+import { derivePastelColor } from "~/utils/colorUtils";
 import { getAvatarUrl } from "~/utils/helpers";
 
 const Card = ({
@@ -23,6 +24,7 @@ const Card = ({
   comments,
   attachments,
   dueDate,
+  listColor,
 }: {
   title: string;
   labels: { name: string; colourCode: string | null }[];
@@ -45,6 +47,7 @@ const Card = ({
   comments: { publicId: string }[];
   attachments?: { publicId: string }[];
   dueDate?: Date | null;
+  listColor?: string | null;
 }) => {
   const { dateLocale } = useLocalisation();
   const showYear = dueDate ? !isSameYear(dueDate, new Date()) : false;
@@ -65,8 +68,21 @@ const Card = ({
   const hasAttachments = attachments && attachments.length > 0;
   const hasDueDate = !!dueDate;
 
+  // Compute card background color from list color
+  const cardStyle = listColor
+    ? { backgroundColor: derivePastelColor(listColor) }
+    : undefined;
+
   return (
-    <div className="flex flex-col rounded-md border border-light-200 bg-light-50 px-3 py-2 text-sm text-neutral-900 dark:border-dark-200 dark:bg-dark-200 dark:text-dark-1000 dark:hover:bg-dark-300">
+    <div
+      className={twMerge(
+        "flex flex-col rounded-md border px-3 py-2 text-sm text-neutral-900",
+        listColor
+          ? "border-opacity-30"
+          : "border-light-200 bg-light-50 dark:border-dark-200 dark:bg-dark-200 dark:hover:bg-dark-300",
+      )}
+      style={cardStyle}
+    >
       <span>{title}</span>
       {labels.length ||
       members.length ||
