@@ -90,7 +90,7 @@ export default function WorkspaceMenu({
               <Tooltip content={commandPaletteShortcutTooltipContent}>
                 <Button
                   className={twMerge(
-                    "mb-1 h-[34px] w-[34px] flex-shrink-0 rounded-lg bg-light-200 p-2 hover:bg-light-300 focus:outline-none dark:bg-dark-200 dark:hover:bg-dark-300",
+                    "mb-1 h-[34px] w-[34px] flex-shrink-0 rounded-lg bg-transparent p-2 hover:bg-light-300 focus:outline-none dark:hover:bg-dark-300",
                     isCollapsed && "md:mb-2 md:h-9 md:w-9",
                   )}
                   onClick={() => setIsOpen(true)}
@@ -135,7 +135,10 @@ export default function WorkspaceMenu({
                             {availableWorkspace.name.charAt(0).toUpperCase()}
                           </span>
                         </span>
-                        <span className="ml-2 truncate text-xs font-medium">
+                        <span
+                          className="ml-2 truncate text-xs font-medium"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        >
                           {availableWorkspace.name}
                         </span>
                       </div>
@@ -153,7 +156,8 @@ export default function WorkspaceMenu({
               <Menu.Item>
                 <button
                   onClick={() => openModal("NEW_WORKSPACE")}
-                  className="flex w-full items-center justify-between rounded-[5px] px-3 py-2 text-left text-xs text-neutral-900 hover:bg-light-200 dark:text-dark-1000 dark:hover:bg-dark-400"
+                  style={{ color: "var(--kan-menu-text)" }}
+                  className="flex w-full items-center justify-between rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
                 >
                   {t`Create workspace`}
                 </button>

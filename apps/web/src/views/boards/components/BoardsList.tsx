@@ -103,10 +103,19 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
       <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-8 pb-[150px]">
         <div className="flex flex-col items-center">
           <HiOutlineRectangleStack className="h-10 w-10 text-light-800 dark:text-dark-800" />
-          <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
+          <p
+            className="mb-2 mt-4 text-[14px] font-bold"
+            style={{ color: "var(--kan-pages-text)" }}
+          >
             {t`No ${isTemplate ? "templates" : "boards"}`}
           </p>
-          <p className="text-[14px] text-light-900 dark:text-dark-900">
+          <p
+            className="text-[14px]"
+            style={{
+              color: "var(--kan-pages-text)",
+              opacity: 0.7,
+            }}
+          >
             {t`Get started by creating a new ${isTemplate ? "template" : "board"}`}
           </p>
         </div>

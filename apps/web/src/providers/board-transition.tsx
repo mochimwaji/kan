@@ -39,7 +39,7 @@ interface BoardTransitionContextValue extends BoardTransitionState {
 const BoardTransitionContext =
   createContext<BoardTransitionContextValue | null>(null);
 
-const ANIMATION_DURATION = 350; // ms
+const ANIMATION_DURATION = 600; // ms
 
 export function BoardTransitionProvider({
   children,

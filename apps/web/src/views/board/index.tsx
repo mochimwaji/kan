@@ -432,7 +432,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         className="relative flex h-full flex-col"
         style={{
           opacity: showContent ? 1 : 0,
-          transition: "opacity 300ms ease-in-out",
+          transition: "opacity 800ms ease-in-out",
         }}
       >
         <PatternedBackground />
