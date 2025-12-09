@@ -111,7 +111,11 @@ export default function List({
               ? "border-opacity-50"
               : "border-light-400 bg-light-300 dark:border-dark-300 dark:bg-dark-100",
           )}
-          style={{ ...listStyle, color: "var(--kan-pages-text)" }}
+          style={{
+            ...provided.draggableProps.style,
+            ...listStyle,
+            color: "var(--kan-pages-text)",
+          }}
         >
           <div className="mb-2 flex justify-between">
             <form

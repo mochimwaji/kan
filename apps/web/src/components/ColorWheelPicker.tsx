@@ -136,7 +136,7 @@ export default function ColorWheelPicker({
       </label>
 
       {/* Color wheel */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col items-center gap-4">
         <canvas
           ref={handleCanvasRef}
           width={120}

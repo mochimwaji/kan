@@ -78,7 +78,10 @@ const SelectSource = ({ handleNextStep }: { handleNextStep: () => void }) => {
               {({ open }) => (
                 <>
                   <div className="relative">
-                    <Listbox.Button className="focus-ring-light-700 block w-full rounded-md border-0 bg-dark-300 bg-white/5 px-4 py-1.5 text-neutral-900 shadow-sm ring-1 ring-inset ring-light-600 focus:ring-2 focus:ring-inset dark:text-dark-1000 dark:ring-dark-700 dark:focus:ring-dark-700 sm:text-sm sm:leading-6">
+                    <Listbox.Button
+                      className="focus-ring-light-700 block w-full rounded-md border-0 bg-dark-300 bg-white/5 px-4 py-1.5 shadow-sm ring-1 ring-inset ring-light-600 focus:ring-2 focus:ring-inset dark:ring-dark-700 dark:focus:ring-dark-700 sm:text-sm sm:leading-6"
+                      style={{ color: "var(--kan-menu-text)" }}
+                    >
                       <span className="flex items-center">
                         {integrationProviders[field.value]?.icon}
                         <span className="ml-2 block truncate text-sm">
@@ -100,7 +103,10 @@ const SelectSource = ({ handleNextStep }: { handleNextStep: () => void }) => {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-light-50 py-1 text-base text-neutral-900 shadow-lg ring-1 ring-light-600 ring-opacity-5 focus:outline-none dark:bg-dark-300 dark:text-dark-1000 sm:text-sm">
+                      <Listbox.Options
+                        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-light-50 py-1 text-base shadow-lg ring-1 ring-light-600 ring-opacity-5 focus:outline-none dark:bg-dark-300 sm:text-sm"
+                        style={{ color: "var(--kan-menu-text)" }}
+                      >
                         {hasIntegrations ? (
                           integrations.map((integration, index) => (
                             <Listbox.Option
@@ -257,7 +263,10 @@ const ImportTrello: React.FC = () => {
             className="h-[14px] w-[14px] rounded bg-transparent ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0"
             {...registerBoards(board.id)}
           />
-          <span className="ml-3 text-sm text-neutral-900 dark:text-dark-1000">
+          <span
+            className="ml-3 text-sm"
+            style={{ color: "var(--kan-menu-text)" }}
+          >
             {board.name}
           </span>
         </label>
@@ -318,7 +327,10 @@ export function ImportBoardsForm() {
     <div>
       <div className="flex w-full items-center justify-between px-5 pb-4 pt-5">
         <div className="flex items-center">
-          <h2 className="text-sm font-medium text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="text-sm font-medium"
+            style={{ color: "var(--kan-menu-text)" }}
+          >
             {t`New import`}
           </h2>
           <Link

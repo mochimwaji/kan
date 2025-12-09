@@ -5,7 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/kanbn/kan/compare/v0.2.4...HEAD)
+## [Unreleased](https://github.com/kanbn/kan/compare/v0.3.0...HEAD)
+
+## [0.3.0](https://github.com/kanbn/kan/compare/v0.2.4...v0.3.0) - 2025-12-09
+
+### Added
+
+- **Structured Logging**: Introduced `@kan/logger` for type-safe, environment-aware logging with context support.
+- **List Customization**: Added ability to set custom colors for lists with `ListColorPicker`.
+- **Theming System**: Implemented `ThemePresetSelector` and enhanced color management.
+- **UI Animations**: Added smooth transitions for pages, tabs, and board overlays.
+- **Docker Optimizations**: Implemented multi-stage builds with caching strategies to significantly reduce build times.
+
+### Changed
+
+- Replaced direct `process.env` usage with `next-runtime-env` for better type safety.
+- Refactored `List` component to support dynamic theming.
+- Updated `Dockerfile` to use `turbo prune` for smaller image sizes.
+
+### Fixed
+
+- Resolved flashing issues with drag-and-drop interactions.
+- Fixed scrollbar jittering on board and settings pages.
+- Corrected various visual bugs in dark mode.
 
 ## [0.2.4](https://github.com/kanbn/kan/compare/v0.2.3...v0.2.4) - 2025-01-14
 

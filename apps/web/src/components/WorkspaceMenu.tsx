@@ -127,7 +127,8 @@ export default function WorkspaceMenu({
                   <Menu.Item>
                     <button
                       onClick={() => switchWorkspace(availableWorkspace)}
-                      className="flex w-full items-center justify-between rounded-[5px] px-3 py-2 text-left text-sm text-neutral-900 hover:bg-light-200 dark:text-dark-1000 dark:hover:bg-dark-400"
+                      className="flex w-full items-center justify-between rounded-[5px] px-3 py-2 text-left text-sm hover:bg-light-200 dark:hover:bg-dark-400"
+                      style={{ color: "var(--kan-menu-text)" }}
                     >
                       <div className="flex min-w-0 flex-1 items-center">
                         <span className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-[5px] bg-indigo-700">

@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   TbLayoutSidebarLeftCollapse,
   TbLayoutSidebarLeftExpand,
@@ -54,6 +54,8 @@ export default function Dashboard({
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
+  // Separate state for desktop panel, default to true
+  const [isDesktopRightPanelOpen, setIsDesktopRightPanelOpen] = useState(true);
 
   const sideNavRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
@@ -76,6 +78,10 @@ export default function Dashboard({
     if (!isRightPanelOpen) {
       setIsSideNavOpen(false);
     }
+  };
+
+  const toggleDesktopRightPanel = () => {
+    setIsDesktopRightPanelOpen(!isDesktopRightPanelOpen);
   };
 
   useClickOutside(sideNavRef, (event) => {
@@ -196,9 +202,62 @@ export default function Dashboard({
                 </div>
               )}
 
-              {/* Desktop Right Panel */}
+              {/* Desktop Right Panel with Sliding Animation */}
               {hasRightPanel && rightPanel && (
-                <div className="hidden md:block">{rightPanel}</div>
+                <div
+                  className={`hidden h-full flex-col border-l border-light-300 transition-all duration-300 ease-in-out dark:border-dark-300 md:flex ${
+                    isDesktopRightPanelOpen ? "w-[360px]" : "w-12"
+                  }`}
+                  style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
+                >
+                  <div
+                    className={`flex h-[45px] shrink-0 items-center px-2 ${
+                      isDesktopRightPanelOpen
+                        ? "justify-start"
+                        : "justify-center"
+                    }`}
+                  >
+                    <button
+                      onClick={toggleDesktopRightPanel}
+                      className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-light-200 dark:hover:bg-dark-200"
+                    >
+                      {isDesktopRightPanelOpen ? (
+                        <TbLayoutSidebarRightCollapse
+                          size={18}
+                          style={{
+                            color: "var(--kan-sidebar-text)",
+                            opacity: 0.7,
+                          }}
+                        />
+                      ) : (
+                        <TbLayoutSidebarRightExpand
+                          size={18}
+                          style={{
+                            color: "var(--kan-sidebar-text)",
+                            opacity: 0.7,
+                          }}
+                        />
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="flex-1 overflow-hidden transition-opacity duration-200">
+                    {isDesktopRightPanelOpen ? (
+                      <div className="h-full w-[360px]">{rightPanel}</div>
+                    ) : (
+                      <div className="h-full w-12">
+                        {React.isValidElement(rightPanel)
+                          ? React.cloneElement(
+                              rightPanel as React.ReactElement<{
+                                isCollapsed?: boolean;
+                              }>,
+                              { isCollapsed: true },
+                            )
+                          : rightPanel}
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           </div>

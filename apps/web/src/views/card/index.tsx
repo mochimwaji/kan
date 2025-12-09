@@ -3,6 +3,13 @@ import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import {
+  HiOutlineCalendar,
+  HiOutlineRectangleStack,
+  HiOutlineTag,
+  HiOutlineUsers,
+  HiXMark,
+} from "react-icons/hi2";
 import { IoChevronForwardSharp } from "react-icons/io5";
 
 import Avatar from "~/components/Avatar";
@@ -40,8 +47,36 @@ interface FormValues {
   description: string;
 }
 
-export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
+function SidebarSectionHeader({
+  icon,
+  title,
+  isCollapsed,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  isCollapsed?: boolean;
+}) {
+  return (
+    <div
+      className={`flex h-[34px] w-full items-center gap-2 rounded-[5px] ${
+        isCollapsed ? "justify-center" : "pl-2"
+      } hover:bg-light-200 dark:hover:bg-dark-100`}
+    >
+      <div className="flex h-5 w-5 items-center justify-center">{icon}</div>
+      {!isCollapsed && <p className="text-sm font-medium">{title}</p>}
+    </div>
+  );
+}
+
+export function CardRightPanel({
+  isTemplate,
+  isCollapsed = false,
+}: {
+  isTemplate?: boolean;
+  isCollapsed?: boolean;
+}) {
   const router = useRouter();
+
   const cardId = Array.isArray(router.query.cardId)
     ? router.query.cardId[0]
     : router.query.cardId;
@@ -106,48 +141,178 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
       };
     }) ?? [];
 
+  // Collapsed view: mirrors left sidebar collapsed structure exactly
+  // Left sidebar collapsed has: divider (still visible with mb-4) > WorkspaceMenu (flex-col-reverse with h-9 icons) > navigation icons
+  // Note: Dashboard already provides the h-[45px] header with drawer toggle, so we don't duplicate it
+  if (isCollapsed) {
+    return (
+      <div
+        className="flex h-full w-full flex-col"
+        style={{
+          backgroundColor: "var(--kan-sidebar-bg)",
+          color: "var(--kan-sidebar-text)",
+        }}
+      >
+        {/* Visible divider bar - matches left sidebar divider (stays visible even when collapsed) */}
+        <div className="mx-1 mb-4 hidden w-auto border-b border-light-300 dark:border-dark-400 md:block" />
+
+        {/* Invisible WorkspaceMenu placeholder - matches collapsed WorkspaceMenu structure exactly */}
+        {/* WorkspaceMenu uses flex-col-reverse when collapsed, so search shows above workspace */}
+        <div className="relative inline-block w-full pb-3" aria-hidden="true">
+          <div className="flex flex-col-reverse items-center">
+            {/* Workspace button placeholder: md:h-9 md:w-9 md:mb-1.5 */}
+            <div className="mb-1.5 h-9 w-9" />
+            {/* Search button placeholder: md:h-9 md:w-9 md:mb-2 */}
+            <div className="mb-2 h-9 w-9" />
+          </div>
+        </div>
+
+        {/* Card action icons - matches left sidebar collapsed navigation pattern */}
+        <ul role="list" className="flex flex-col items-center space-y-1">
+          <li>
+            <ListSelector
+              cardPublicId={cardId ?? ""}
+              lists={formattedLists}
+              isLoading={!card}
+              isCollapsed
+            >
+              <SidebarSectionHeader
+                icon={<HiOutlineRectangleStack size={20} />}
+                title={t`List`}
+                isCollapsed
+              />
+            </ListSelector>
+          </li>
+          <li>
+            <LabelSelector
+              cardPublicId={cardId ?? ""}
+              labels={formattedLabels}
+              isLoading={!card}
+              isCollapsed
+            >
+              <SidebarSectionHeader
+                icon={<HiOutlineTag size={20} />}
+                title={t`Labels`}
+                isCollapsed
+              />
+            </LabelSelector>
+          </li>
+          {!isTemplate && (
+            <li>
+              <MemberSelector
+                cardPublicId={cardId ?? ""}
+                members={formattedMembers}
+                isLoading={!card}
+                isCollapsed
+              >
+                <SidebarSectionHeader
+                  icon={<HiOutlineUsers size={20} />}
+                  title={t`Members`}
+                  isCollapsed
+                />
+              </MemberSelector>
+            </li>
+          )}
+          <li>
+            <DueDateSelector
+              cardPublicId={cardId ?? ""}
+              dueDate={card?.dueDate}
+              isLoading={!card}
+              isCollapsed
+            >
+              <SidebarSectionHeader
+                icon={<HiOutlineCalendar size={20} />}
+                title={t`Due date`}
+                isCollapsed
+              />
+            </DueDateSelector>
+          </li>
+        </ul>
+      </div>
+    );
+  }
+
+  // Expanded view: mirrors left sidebar structure exactly for perfect alignment
+  // Left sidebar has: divider mb-4 > WorkspaceMenu (pb-3 with h-[34px] button + h-[34px] search side-by-side) > ul.space-y-1
+  // Note: Dashboard already provides the h-[45px] header with drawer toggle, so we don't duplicate it
   return (
     <div
-      className="h-full w-[360px] border-l-[1px] border-light-300 p-8 dark:border-dark-300"
+      className="h-full w-full"
       style={{
         backgroundColor: "var(--kan-sidebar-bg)",
         color: "var(--kan-sidebar-text)",
       }}
     >
-      <div className="mb-4 flex w-full flex-row pt-[18px]">
-        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`List`}</p>
-        <ListSelector
-          cardPublicId={cardId ?? ""}
-          lists={formattedLists}
-          isLoading={!card}
-        />
-      </div>
-      <div className="mb-4 flex w-full flex-row">
-        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Labels`}</p>
-        <LabelSelector
-          cardPublicId={cardId ?? ""}
-          labels={formattedLabels}
-          isLoading={!card}
-        />
-      </div>
-      {!isTemplate && (
-        <div className="mb-4 flex w-full flex-row">
-          <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Members`}</p>
-          <MemberSelector
-            cardPublicId={cardId ?? ""}
-            members={formattedMembers}
-            isLoading={!card}
-          />
+      {/* Visible divider bar - matches left sidebar divider styling exactly */}
+      <div className="mx-1 mb-4 hidden w-auto border-b border-light-300 dark:border-dark-400 md:block" />
+
+      {/* Invisible WorkspaceMenu placeholder - matches WorkspaceMenu expanded structure */}
+      {/* In expanded mode, workspace button and search are side-by-side (flex-row with gap-1) */}
+      <div
+        className="relative inline-block w-full px-2 pb-3"
+        aria-hidden="true"
+      >
+        <div className="flex items-center justify-start gap-1">
+          {/* Workspace button placeholder: h-[34px] flex-1 + mb-1 */}
+          <div className="mb-1 h-[34px] flex-1" />
+          {/* Search button placeholder: h-[34px] w-[34px] + mb-1 */}
+          <div className="mb-1 h-[34px] w-[34px]" />
         </div>
-      )}
-      <div className="mb-4 flex w-full flex-row">
-        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Due date`}</p>
-        <DueDateSelector
-          cardPublicId={cardId ?? ""}
-          dueDate={card?.dueDate}
-          isLoading={!card}
-        />
       </div>
+
+      {/* Card action buttons - matches left sidebar ul.space-y-1 navigation */}
+      <ul role="list" className="space-y-1 px-2">
+        <li>
+          <ListSelector
+            cardPublicId={cardId ?? ""}
+            lists={formattedLists}
+            isLoading={!card}
+          >
+            <SidebarSectionHeader
+              icon={<HiOutlineRectangleStack size={20} />}
+              title={t`List`}
+            />
+          </ListSelector>
+        </li>
+        <li>
+          <LabelSelector
+            cardPublicId={cardId ?? ""}
+            labels={formattedLabels}
+            isLoading={!card}
+          >
+            <SidebarSectionHeader
+              icon={<HiOutlineTag size={20} />}
+              title={t`Labels`}
+            />
+          </LabelSelector>
+        </li>
+        {!isTemplate && (
+          <li>
+            <MemberSelector
+              cardPublicId={cardId ?? ""}
+              members={formattedMembers}
+              isLoading={!card}
+            >
+              <SidebarSectionHeader
+                icon={<HiOutlineUsers size={20} />}
+                title={t`Members`}
+              />
+            </MemberSelector>
+          </li>
+        )}
+        <li>
+          <DueDateSelector
+            cardPublicId={cardId ?? ""}
+            dueDate={card?.dueDate}
+            isLoading={!card}
+          >
+            <SidebarSectionHeader
+              icon={<HiOutlineCalendar size={20} />}
+              title={t`Due date`}
+            />
+          </DueDateSelector>
+        </li>
+      </ul>
     </div>
   );
 }
@@ -169,6 +334,22 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   const [activeChecklistForm, setActiveChecklistForm] = useState<string | null>(
     null,
   );
+
+  // Transition state
+  const [opacity, setOpacity] = useState(0);
+
+  useEffect(() => {
+    // Fade in on mount
+    requestAnimationFrame(() => setOpacity(1));
+  }, []);
+
+  const handleClose = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    setOpacity(0);
+    setTimeout(() => {
+      router.push(href);
+    }, 300);
+  };
 
   const cardId = Array.isArray(router.query.cardId)
     ? router.query.cardId[0]
@@ -277,10 +458,16 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
       <PageHead
         title={t`${card?.title ?? t`Card`} | ${board?.name ?? t`Board`}`}
       />
-      <div className="flex h-full flex-1 flex-col overflow-hidden">
+      <div
+        className="flex h-full flex-1 flex-col overflow-hidden"
+        style={{
+          opacity,
+          transition: "opacity 300ms ease-in-out",
+        }}
+      >
         {/* Full-width top strip with board link and dropdown */}
         <div
-          className="flex w-full items-center justify-between border-b-[1px] border-light-300 px-8 py-2 dark:border-dark-300"
+          className="flex w-full items-center justify-between px-8 py-2"
           style={{ backgroundColor: "var(--kan-pages-bg)" }}
         >
           {!card && isLoading && (
@@ -296,6 +483,27 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
               {t`Card not found`}
             </p>
           )}
+
+          <div className="flex-1" />
+
+          <Link
+            href={
+              board?.publicId
+                ? `/${isTemplate ? "templates" : "boards"}/${board.publicId}`
+                : "/boards"
+            }
+            onClick={(e) =>
+              handleClose(
+                e,
+                board?.publicId
+                  ? `/${isTemplate ? "templates" : "boards"}/${board.publicId}`
+                  : "/boards",
+              )
+            }
+            className="text-light-400 hover:text-light-600 dark:text-dark-500 dark:hover:text-dark-300"
+          >
+            <HiXMark size={24} />
+          </Link>
         </div>
         <div className="scrollbar-thumb-rounded-[4px] scrollbar-track-rounded-[4px] w-full flex-1 overflow-y-auto scrollbar scrollbar-track-light-200 scrollbar-thumb-light-400 hover:scrollbar-thumb-light-400 dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-300 dark:hover:scrollbar-thumb-dark-300">
           <div className="p-auto mx-auto flex h-full w-full max-w-[800px] flex-col">

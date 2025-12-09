@@ -60,20 +60,26 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // Transition integration
+  /* Transition integration */
   const { animationPhase, fromBoardsPage } = useBoardTransition();
-  const [showContent, setShowContent] = useState(!fromBoardsPage);
+  // Always start hidden to ensure fade-in on mount (fixes pop-in on return)
+  // Logic updated: init false, effect sets true.
+  // 'fromBoardsPage' logic remains relevant for initial expand animation check but
+  // simpler to just fade in always for consistency or check phase.
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     if (fromBoardsPage) {
       if (animationPhase === "expanded" || animationPhase === "idle") {
-        // Slight delay to ensure overlay is fully done or allow smooth fade in
         const timer = setTimeout(() => setShowContent(true), 50);
         return () => clearTimeout(timer);
       } else {
         setShowContent(false);
       }
     } else {
-      setShowContent(true);
+      // If direct load or return from card, fade in immediately
+      const timer = requestAnimationFrame(() => setShowContent(true));
+      // return () => cancelAnimationFrame(timer); // (Optional cleanup)
     }
   }, [animationPhase, fromBoardsPage]);
 
@@ -153,6 +159,31 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   }, [boardId]);
 
   const isLoading = isInitialLoading || isQueryLoading;
+
+  /* Transition logic */
+  // 'showContent' controls opacity: 1 (visible) or 0 (hidden)
+  // 'fromBoardsPage' check is already in place to handle entry animation
+  // We add 'isExiting' for exit animation
+  const [isExiting, setIsExiting] = useState(false);
+
+  const handleCardClick = (e: React.MouseEvent, cardPublicId: string) => {
+    if (cardPublicId.startsWith("PLACEHOLDER")) {
+      e.preventDefault();
+      return;
+    }
+
+    // Start exit animation
+    e.preventDefault();
+    setIsExiting(true);
+
+    // Navigate after animation
+    setTimeout(() => {
+      const href = isTemplate
+        ? `/templates/${boardId}/cards/${cardPublicId}`
+        : `/cards/${cardPublicId}`;
+      router.push(href);
+    }, 300); // 300ms match transition duration
+  };
 
   const updateListMutation = api.list.update.useMutation({
     onMutate: async (args) => {
@@ -428,232 +459,243 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       <PageHead
         title={`${boardData?.name ?? (isTemplate ? t`Board` : t`Template`)} | ${workspace.name ?? t`Workspace`}`}
       />
-      <div
-        className="relative flex h-full flex-col"
-        style={{
-          opacity: showContent ? 1 : 0,
-          transition: "opacity 800ms ease-in-out",
-        }}
-      >
-        <PatternedBackground />
-        <div className="z-10 flex w-full flex-col justify-between p-6 md:flex-row md:p-8">
-          {isLoading && !boardData && (
-            <div className="flex space-x-2">
-              <div className="h-[2.3rem] w-[150px] animate-pulse rounded-[5px] bg-light-200 dark:bg-dark-100" />
-            </div>
-          )}
-          {boardData && (
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="order-2 focus-visible:outline-none md:order-1"
-            >
-              <input
-                id="name"
-                type="text"
-                {...register("name")}
-                onBlur={handleSubmit(onSubmit)}
-                className="block border-0 bg-transparent p-0 py-0 font-bold leading-[2.3rem] tracking-tight focus:ring-0 focus-visible:outline-none sm:text-[1.2rem]"
-                style={{ color: "var(--kan-board-text)" }}
-              />
-            </form>
-          )}
-          {!boardData && !isLoading && (
-            <p
-              className="order-2 block p-0 py-0 font-bold leading-[2.3rem] tracking-tight sm:text-[1.2rem] md:order-1"
-              style={{ color: "var(--kan-board-text)" }}
-            >
-              {t`${isTemplate ? "Template" : "Board"} not found`}
-            </p>
-          )}
-          <div className="order-1 mb-4 flex items-center justify-end space-x-2 md:order-2 md:mb-0">
-            {isTemplate && (
-              <div className="inline-flex cursor-default items-center justify-center whitespace-nowrap rounded-md border-[1px] border-light-300 bg-light-50 px-3 py-2 text-sm font-semibold text-light-950 shadow-sm dark:border-dark-300 dark:bg-dark-50 dark:text-dark-950">
-                <span className="mr-2">
-                  <HiOutlineRectangleStack />
-                </span>
-                {t`Template`}
+      <div className="relative flex h-full flex-col">
+        {/* Background appears instantly when animation completes */}
+        <div
+          style={{
+            opacity:
+              animationPhase === "expanded" ||
+              animationPhase === "idle" ||
+              !fromBoardsPage
+                ? 1
+                : 0,
+            transition: "opacity 50ms ease-in-out",
+          }}
+        >
+          <PatternedBackground />
+        </div>
+        {/* Content fades in after background */}
+        <div
+          className="absolute inset-0 z-10 flex flex-col"
+          style={{
+            opacity: showContent && !isExiting ? 1 : 0,
+            transition: "opacity 300ms ease-in-out",
+          }}
+        >
+          <div className="z-10 flex w-full flex-col justify-between p-6 md:flex-row md:p-8">
+            {isLoading && !boardData && (
+              <div className="flex space-x-2">
+                <div className="h-[2.3rem] w-[150px] animate-pulse rounded-[5px] bg-light-200 dark:bg-dark-100" />
               </div>
             )}
-            {!isTemplate && (
-              <>
-                <UpdateBoardSlugButton
-                  handleOnClick={() => openModal("UPDATE_BOARD_SLUG")}
-                  isLoading={isLoading}
-                  workspaceSlug={workspace.slug ?? ""}
-                  boardSlug={boardData?.slug ?? ""}
-                />
-                <VisibilityButton
-                  visibility={boardData?.visibility ?? "private"}
-                  boardPublicId={boardId ?? ""}
-                  boardSlug={boardData?.slug ?? ""}
-                  queryParams={queryParams}
-                  isLoading={!boardData}
-                  isAdmin={workspace.role === "admin"}
-                />
-                {boardData && (
-                  <Filters
-                    labels={boardData.labels}
-                    members={boardData.workspace.members.filter(
-                      (member) => member.user !== null,
-                    )}
-                    lists={boardData.allLists}
-                    position="left"
-                    isLoading={!boardData}
-                  />
-                )}
-              </>
-            )}
-            <Tooltip content={createListShortcutTooltipContent}>
-              <Button
-                iconLeft={
-                  <HiOutlinePlusSmall
-                    className="-mr-0.5 h-5 w-5"
-                    aria-hidden="true"
-                  />
-                }
-                onClick={() => {
-                  if (boardId) openNewListForm(boardId);
-                }}
-                disabled={!boardData}
+            {boardData && (
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="order-2 focus-visible:outline-none md:order-1"
               >
-                {t`New list`}
-              </Button>
-            </Tooltip>
-            <BoardDropdown
-              isTemplate={!!isTemplate}
-              isLoading={!boardData}
-              boardPublicId={boardId ?? ""}
-              workspacePublicId={workspace.publicId}
-            />
-          </div>
-        </div>
-
-        <div className="scrollbar-w-none scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-h-[8px] z-0 flex-1 overflow-y-hidden overflow-x-scroll overscroll-contain scrollbar scrollbar-track-light-200 scrollbar-thumb-light-400 dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-300">
-          {isLoading ? (
-            <div className="ml-[2rem] flex">
-              <div className="0 mr-5 h-[500px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
-              <div className="0 mr-5 h-[275px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
-              <div className="0 mr-5 h-[375px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
-            </div>
-          ) : boardData ? (
-            <>
-              {boardData.lists.length === 0 ? (
-                <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-8 pb-[150px]">
-                  <div className="flex flex-col items-center">
-                    <HiOutlineSquare3Stack3D className="h-10 w-10 text-light-800 dark:text-dark-800" />
-                    <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
-                      {t`No lists`}
-                    </p>
-                    <p className="text-[14px] text-light-900 dark:text-dark-900">
-                      {t`Get started by creating a new list`}
-                    </p>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      if (boardId) openNewListForm(boardId);
-                    }}
-                  >
-                    {t`Create new list`}
-                  </Button>
+                <input
+                  id="name"
+                  type="text"
+                  {...register("name")}
+                  onBlur={handleSubmit(onSubmit)}
+                  className="block border-0 bg-transparent p-0 py-0 font-bold leading-[2.3rem] tracking-tight focus:ring-0 focus-visible:outline-none sm:text-[1.2rem]"
+                  style={{ color: "var(--kan-board-text)" }}
+                />
+              </form>
+            )}
+            {!boardData && !isLoading && (
+              <p
+                className="order-2 block p-0 py-0 font-bold leading-[2.3rem] tracking-tight sm:text-[1.2rem] md:order-1"
+                style={{ color: "var(--kan-board-text)" }}
+              >
+                {t`${isTemplate ? "Template" : "Board"} not found`}
+              </p>
+            )}
+            <div className="order-1 mb-4 flex items-center justify-end space-x-2 md:order-2 md:mb-0">
+              {isTemplate && (
+                <div className="inline-flex cursor-default items-center justify-center whitespace-nowrap rounded-md border-[1px] border-light-300 bg-light-50 px-3 py-2 text-sm font-semibold text-light-950 shadow-sm dark:border-dark-300 dark:bg-dark-50 dark:text-dark-950">
+                  <span className="mr-2">
+                    <HiOutlineRectangleStack />
+                  </span>
+                  {t`Template`}
                 </div>
-              ) : (
-                <DragDropContext onDragEnd={onDragEnd}>
-                  <Droppable
-                    droppableId="all-lists"
-                    direction="horizontal"
-                    type="LIST"
-                  >
-                    {(provided) => (
-                      <div
-                        className="flex"
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        <div className="min-w-[2rem]" />
-                        {boardData.lists.map((list, index) => (
-                          <List
-                            index={index}
-                            key={list.publicId}
-                            list={list}
-                            setSelectedPublicListId={(publicListId) =>
-                              setSelectedPublicListId(publicListId)
-                            }
-                          >
-                            <Droppable
-                              droppableId={`${list.publicId}`}
-                              type="CARD"
+              )}
+              {!isTemplate && (
+                <>
+                  <UpdateBoardSlugButton
+                    handleOnClick={() => openModal("UPDATE_BOARD_SLUG")}
+                    isLoading={isLoading}
+                    workspaceSlug={workspace.slug ?? ""}
+                    boardSlug={boardData?.slug ?? ""}
+                  />
+                  <VisibilityButton
+                    visibility={boardData?.visibility ?? "private"}
+                    boardPublicId={boardId ?? ""}
+                    boardSlug={boardData?.slug ?? ""}
+                    queryParams={queryParams}
+                    isLoading={!boardData}
+                    isAdmin={workspace.role === "admin"}
+                  />
+                  {boardData && (
+                    <Filters
+                      labels={boardData.labels}
+                      members={boardData.workspace.members.filter(
+                        (member) => member.user !== null,
+                      )}
+                      lists={boardData.allLists}
+                      position="left"
+                      isLoading={!boardData}
+                    />
+                  )}
+                </>
+              )}
+              <Tooltip content={createListShortcutTooltipContent}>
+                <Button
+                  iconLeft={
+                    <HiOutlinePlusSmall
+                      className="-mr-0.5 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                  }
+                  onClick={() => {
+                    if (boardId) openNewListForm(boardId);
+                  }}
+                  disabled={!boardData}
+                >
+                  {t`New list`}
+                </Button>
+              </Tooltip>
+              <BoardDropdown
+                isTemplate={!!isTemplate}
+                isLoading={!boardData}
+                boardPublicId={boardId ?? ""}
+                workspacePublicId={workspace.publicId}
+              />
+            </div>
+          </div>
+
+          <div className="scrollbar-w-none scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-h-[8px] z-0 flex-1 overflow-y-hidden overflow-x-scroll overscroll-contain scrollbar scrollbar-track-light-200 scrollbar-thumb-light-400 dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-300">
+            {isLoading ? (
+              <div className="ml-[2rem] flex">
+                <div className="0 mr-5 h-[500px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
+                <div className="0 mr-5 h-[275px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
+                <div className="0 mr-5 h-[375px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
+              </div>
+            ) : boardData ? (
+              <>
+                {boardData.lists.length === 0 ? (
+                  <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-8 pb-[150px]">
+                    <div className="flex flex-col items-center">
+                      <HiOutlineSquare3Stack3D className="h-10 w-10 text-light-800 dark:text-dark-800" />
+                      <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
+                        {t`No lists`}
+                      </p>
+                      <p className="text-[14px] text-light-900 dark:text-dark-900">
+                        {t`Get started by creating a new list`}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        if (boardId) openNewListForm(boardId);
+                      }}
+                    >
+                      {t`Create new list`}
+                    </Button>
+                  </div>
+                ) : (
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable
+                      droppableId="all-lists"
+                      direction="horizontal"
+                      type="LIST"
+                    >
+                      {(provided) => (
+                        <div
+                          className="flex"
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          <div className="min-w-[2rem]" />
+                          {boardData.lists.map((list, index) => (
+                            <List
+                              index={index}
+                              key={list.publicId}
+                              list={list}
+                              setSelectedPublicListId={(publicListId) =>
+                                setSelectedPublicListId(publicListId)
+                              }
                             >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.droppableProps}
-                                  className="scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-w-[8px] z-10 h-full max-h-[calc(100vh-225px)] min-h-[2rem] overflow-y-auto pr-1 scrollbar dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-600"
-                                >
-                                  {list.cards.map((card, index) => (
-                                    <Draggable
-                                      key={card.publicId}
-                                      draggableId={card.publicId}
-                                      index={index}
-                                    >
-                                      {(provided) => (
-                                        <Link
-                                          onClick={(e) => {
-                                            if (
+                              <Droppable
+                                droppableId={`${list.publicId}`}
+                                type="CARD"
+                              >
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                    className="scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-w-[8px] z-10 h-full max-h-[calc(100vh-225px)] min-h-[2rem] overflow-y-auto pr-1 scrollbar dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-600"
+                                  >
+                                    {list.cards.map((card, index) => (
+                                      <Draggable
+                                        key={card.publicId}
+                                        draggableId={card.publicId}
+                                        index={index}
+                                      >
+                                        {(provided) => (
+                                          <Link
+                                            onClick={(e) =>
+                                              handleCardClick(e, card.publicId)
+                                            }
+                                            key={card.publicId}
+                                            href={
+                                              isTemplate
+                                                ? `/templates/${boardId}/cards/${card.publicId}`
+                                                : `/cards/${card.publicId}`
+                                            }
+                                            className={`mb-2 flex !cursor-pointer flex-col ${
                                               card.publicId.startsWith(
                                                 "PLACEHOLDER",
                                               )
-                                            )
-                                              e.preventDefault();
-                                          }}
-                                          key={card.publicId}
-                                          href={
-                                            isTemplate
-                                              ? `/templates/${boardId}/cards/${card.publicId}`
-                                              : `/cards/${card.publicId}`
-                                          }
-                                          className={`mb-2 flex !cursor-pointer flex-col ${
-                                            card.publicId.startsWith(
-                                              "PLACEHOLDER",
-                                            )
-                                              ? "pointer-events-none"
-                                              : ""
-                                          }`}
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                        >
-                                          <Card
-                                            title={card.title}
-                                            labels={card.labels}
-                                            members={card.members}
-                                            checklists={card.checklists ?? []}
-                                            description={
-                                              card.description ?? null
-                                            }
-                                            comments={card.comments ?? []}
-                                            attachments={card.attachments}
-                                            dueDate={card.dueDate ?? null}
-                                            listColor={list.color}
-                                          />
-                                        </Link>
-                                      )}
-                                    </Draggable>
-                                  ))}
-                                  {provided.placeholder}
-                                </div>
-                              )}
-                            </Droppable>
-                          </List>
-                        ))}
-                        <div className="min-w-[0.75rem]" />
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-              )}
-            </>
-          ) : null}
+                                                ? "pointer-events-none"
+                                                : ""
+                                            }`}
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                          >
+                                            <Card
+                                              title={card.title}
+                                              labels={card.labels}
+                                              members={card.members}
+                                              checklists={card.checklists ?? []}
+                                              description={
+                                                card.description ?? null
+                                              }
+                                              comments={card.comments ?? []}
+                                              attachments={card.attachments}
+                                              dueDate={card.dueDate ?? null}
+                                              listColor={list.color}
+                                            />
+                                          </Link>
+                                        )}
+                                      </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                  </div>
+                                )}
+                              </Droppable>
+                            </List>
+                          ))}
+                          <div className="min-w-[0.75rem]" />
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+                )}
+              </>
+            ) : null}
+          </div>
         </div>
         {renderModalContent()}
       </div>

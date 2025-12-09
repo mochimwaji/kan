@@ -60,6 +60,7 @@ export default function BoardTransitionOverlay() {
 
   const [styles, setStyles] = useState<AnimationStyles | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
 
   // Handle client-side mounting for portal
   useEffect(() => {
@@ -70,8 +71,10 @@ export default function BoardTransitionOverlay() {
   useEffect(() => {
     if (animationPhase === "expanding" && sourceRect) {
       const contentBounds = getContentAreaBounds();
+      const TITLE_FADE_DURATION = 150;
 
-      // Start at source rect
+      // Start at source rect with title visible, then fade title
+      setShowTitle(true);
       setStyles({
         top: sourceRect.top,
         left: sourceRect.left,
@@ -81,27 +84,50 @@ export default function BoardTransitionOverlay() {
         opacity: 1,
       });
 
-      // Animate to content area after a frame
+      // Fade title out after a frame
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setStyles({
-            top: contentBounds.top,
-            left: contentBounds.left,
-            width: contentBounds.width,
-            height: contentBounds.height,
-            borderRadius: 0,
-            opacity: 1,
-          });
-        });
+        setShowTitle(false);
       });
 
-      // Complete expand after animation
-      const timer = setTimeout(() => {
-        completeExpand();
-        setStyles(null);
-      }, ANIMATION_DURATION);
+      // Delay the morph to allow title to fade first
+      const morphTimer = setTimeout(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setStyles({
+              top: contentBounds.top,
+              left: contentBounds.left,
+              width: contentBounds.width,
+              height: contentBounds.height,
+              borderRadius: 0,
+              opacity: 1,
+            });
+          });
+        });
+      }, TITLE_FADE_DURATION);
 
-      return () => clearTimeout(timer);
+      // Call completeExpand() midway through morph so background renders UNDER the visible overlay
+      // This eliminates the flash by having the background ready before overlay is removed
+      const completeTimer = setTimeout(
+        () => {
+          completeExpand();
+        },
+        TITLE_FADE_DURATION + ANIMATION_DURATION / 2,
+      );
+
+      // Keep overlay visible at full opacity until background is definitely rendered
+      // Then remove instantly - no fade needed since overlay background matches board background
+      const removeTimer = setTimeout(
+        () => {
+          setStyles(null);
+        },
+        TITLE_FADE_DURATION + ANIMATION_DURATION + 500, // Extra 200ms buffer for render
+      );
+
+      return () => {
+        clearTimeout(morphTimer);
+        clearTimeout(completeTimer);
+        clearTimeout(removeTimer);
+      };
     }
   }, [animationPhase, sourceRect, completeExpand]);
 
@@ -175,8 +201,8 @@ export default function BoardTransitionOverlay() {
           className="text-[14px] font-bold"
           style={{
             color: "var(--kan-board-text)",
-            opacity: animationPhase === "expanding" ? 1 : 0,
-            transition: `opacity ${ANIMATION_DURATION / 2}ms ease`,
+            opacity: showTitle ? 1 : 0,
+            transition: "opacity 150ms ease",
           }}
         >
           {boardName}

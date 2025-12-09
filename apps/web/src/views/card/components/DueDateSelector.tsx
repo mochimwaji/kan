@@ -11,12 +11,16 @@ interface DueDateSelectorProps {
   cardPublicId: string;
   dueDate: Date | null | undefined;
   isLoading?: boolean;
+  isCollapsed?: boolean;
+  children?: React.ReactNode;
 }
 
 export function DueDateSelector({
   cardPublicId,
   dueDate,
   isLoading = false,
+  isCollapsed = false,
+  children,
 }: DueDateSelectorProps) {
   const { showPopup } = usePopup();
   const utils = api.useUtils();
@@ -100,28 +104,50 @@ export function DueDateSelector({
     }
   };
 
+  // When children are provided, use them as the trigger (clickable header pattern)
+  const triggerElement = children ? (
+    <div
+      onClick={() => setIsOpen(!isOpen)}
+      className="cursor-pointer"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          setIsOpen(!isOpen);
+        }
+      }}
+    >
+      {children}
+    </div>
+  ) : (
+    <button
+      type="button"
+      onClick={() => setIsOpen(!isOpen)}
+      disabled={isLoading}
+      className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 py-1 pl-2 text-left text-xs hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:hover:border-dark-200 dark:hover:bg-dark-100"
+    >
+      {dueDate ? (
+        <span>{format(dueDate, "MMM d, yyyy")}</span>
+      ) : (
+        <>
+          <HiMiniPlus size={22} className="pr-2" />
+          {t`Set due date`}
+        </>
+      )}
+    </button>
+  );
+
   return (
-    <div className="relative flex w-full items-center text-left">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        disabled={isLoading}
-        className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 py-1 pl-2 text-left text-xs text-neutral-900 hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:text-dark-1000 dark:hover:border-dark-200 dark:hover:bg-dark-100"
-      >
-        {dueDate ? (
-          <span>{format(dueDate, "MMM d, yyyy")}</span>
-        ) : (
-          <>
-            <HiMiniPlus size={22} className="pr-2" />
-            {t`Set due date`}
-          </>
-        )}
-      </button>
+    <div
+      className={`relative flex w-full items-center ${isCollapsed ? "justify-center" : "text-left"}`}
+    >
+      {triggerElement}
       {isOpen && (
         <>
           <div className="fixed inset-0 z-10" onClick={handleBackdropClick} />
           <div
-            className="absolute -left-8 top-full z-20 mt-2 rounded-md border border-light-200 bg-light-50 shadow-lg dark:border-dark-200 dark:bg-dark-100"
+            className="absolute -left-8 top-full z-20 mt-2 rounded-md border border-light-200 shadow-lg dark:border-dark-200"
+            style={{ backgroundColor: "var(--kan-menu-bg)" }}
             onClick={(e) => {
               e.stopPropagation();
             }}

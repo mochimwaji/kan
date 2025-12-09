@@ -51,7 +51,10 @@ export default function Checklists({
 
           return (
             <div key={checklist.publicId} className="mb-4">
-              <div className="mb-2 flex items-center font-medium text-light-1000 dark:text-dark-1000">
+              <div
+                className="mb-2 flex items-center font-medium"
+                style={{ color: "var(--kan-pages-text)" }}
+              >
                 <div className="min-w-0 flex-1">
                   <ChecklistNameInput
                     checklistPublicId={checklist.publicId}

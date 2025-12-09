@@ -18,12 +18,16 @@ interface MemberSelectorProps {
     imageUrl: string | undefined;
   }[];
   isLoading: boolean;
+  isCollapsed?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function MemberSelector({
   cardPublicId,
   members,
   isLoading,
+  isCollapsed = false,
+  children,
 }: MemberSelectorProps) {
   const router = useRouter();
   const utils = api.useUtils();
@@ -92,47 +96,68 @@ export default function MemberSelector({
     openModal("INVITE_MEMBER");
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex w-full">
+        <div className="h-full w-[125px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
+      </div>
+    );
+  }
+
+  // When children are provided, use them as the trigger (clickable header pattern)
+  if (children) {
+    return (
+      <CheckboxDropdown
+        items={members}
+        handleSelect={(_, member) => {
+          addOrRemoveMember.mutate({
+            cardPublicId,
+            workspaceMemberPublicId: member.key,
+          });
+        }}
+        handleCreate={handleInviteMember}
+        createNewItemLabel={t`Invite member`}
+        asChild
+      >
+        {children}
+      </CheckboxDropdown>
+    );
+  }
+
+  // Fallback: original behavior
   return (
-    <>
-      {isLoading ? (
-        <div className="flex w-full">
-          <div className="h-full w-[125px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
-        </div>
-      ) : (
-        <CheckboxDropdown
-          items={members}
-          handleSelect={(_, member) => {
-            addOrRemoveMember.mutate({
-              cardPublicId,
-              workspaceMemberPublicId: member.key,
-            });
-          }}
-          handleCreate={handleInviteMember}
-          createNewItemLabel={t`Invite member`}
-          asChild
-        >
-          <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 py-1 pl-2 text-left text-xs text-neutral-900 hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:text-dark-1000 dark:hover:border-dark-200 dark:hover:bg-dark-100">
-            {selectedMembers.length ? (
-              <div className="isolate flex justify-end -space-x-1 overflow-hidden">
-                {selectedMembers.map(({ value, imageUrl }) => (
-                  <Avatar
-                    key={value}
-                    size="sm"
-                    name={value}
-                    imageUrl={imageUrl}
-                    email={value}
-                  />
-                ))}
-              </div>
-            ) : (
-              <>
-                <HiMiniPlus size={22} className="pr-2" />
-                {t`Add member`}
-              </>
-            )}
+    <CheckboxDropdown
+      items={members}
+      handleSelect={(_, member) => {
+        addOrRemoveMember.mutate({
+          cardPublicId,
+          workspaceMemberPublicId: member.key,
+        });
+      }}
+      handleCreate={handleInviteMember}
+      createNewItemLabel={t`Invite member`}
+      asChild
+    >
+      <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 py-1 pl-2 text-left text-xs hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:hover:border-dark-200 dark:hover:bg-dark-100">
+        {selectedMembers.length ? (
+          <div className="isolate flex justify-end -space-x-1 overflow-hidden">
+            {selectedMembers.map(({ value, imageUrl }) => (
+              <Avatar
+                key={value}
+                size="sm"
+                name={value}
+                imageUrl={imageUrl}
+                email={value}
+              />
+            ))}
           </div>
-        </CheckboxDropdown>
-      )}
-    </>
+        ) : (
+          <>
+            <HiMiniPlus size={22} className="pr-2" />
+            {t`Add member`}
+          </>
+        )}
+      </div>
+    </CheckboxDropdown>
   );
 }

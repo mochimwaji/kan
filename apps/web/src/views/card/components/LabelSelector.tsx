@@ -16,12 +16,16 @@ interface LabelSelectorProps {
     leftIcon: React.ReactNode;
   }[];
   isLoading: boolean;
+  isCollapsed?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function LabelSelector({
   cardPublicId,
   labels,
   isLoading,
+  isCollapsed = false,
+  children,
 }: LabelSelectorProps) {
   const utils = api.useUtils();
   const { openModal } = useModal();
@@ -80,42 +84,61 @@ export default function LabelSelector({
 
   const selectedLabels = labels.filter((label) => label.selected);
 
+  if (isLoading) {
+    return (
+      <div className="flex w-full">
+        <div className="h-full w-[175px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
+      </div>
+    );
+  }
+
+  // When children are provided, use them as the trigger (clickable header pattern)
+  if (children) {
+    return (
+      <CheckboxDropdown
+        items={labels}
+        handleSelect={(_, label) => {
+          addOrRemoveLabel.mutate({ cardPublicId, labelPublicId: label.key });
+        }}
+        handleEdit={(labelPublicId) => openModal("EDIT_LABEL", labelPublicId)}
+        handleCreate={() => openModal("NEW_LABEL")}
+        createNewItemLabel={t`Create new label`}
+        asChild
+      >
+        {children}
+      </CheckboxDropdown>
+    );
+  }
+
+  // Fallback: original behavior
   return (
-    <>
-      {isLoading ? (
-        <div className="flex w-full">
-          <div className="h-full w-[175px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
+    <CheckboxDropdown
+      items={labels}
+      handleSelect={(_, label) => {
+        addOrRemoveLabel.mutate({ cardPublicId, labelPublicId: label.key });
+      }}
+      handleEdit={(labelPublicId) => openModal("EDIT_LABEL", labelPublicId)}
+      handleCreate={() => openModal("NEW_LABEL")}
+      createNewItemLabel={t`Create new label`}
+      asChild
+    >
+      {selectedLabels.length ? (
+        <div className="flex flex-wrap gap-x-0.5">
+          {selectedLabels.map((label) => (
+            <Badge
+              key={label.key}
+              value={label.value}
+              iconLeft={label.leftIcon}
+            />
+          ))}
+          <Badge value={t`Add label`} iconLeft={<HiMiniPlus size={14} />} />
         </div>
       ) : (
-        <CheckboxDropdown
-          items={labels}
-          handleSelect={(_, label) => {
-            addOrRemoveLabel.mutate({ cardPublicId, labelPublicId: label.key });
-          }}
-          handleEdit={(labelPublicId) => openModal("EDIT_LABEL", labelPublicId)}
-          handleCreate={() => openModal("NEW_LABEL")}
-          createNewItemLabel={t`Create new label`}
-          asChild
-        >
-          {selectedLabels.length ? (
-            <div className="flex flex-wrap gap-x-0.5">
-              {selectedLabels.map((label) => (
-                <Badge
-                  key={label.key}
-                  value={label.value}
-                  iconLeft={label.leftIcon}
-                />
-              ))}
-              <Badge value={t`Add label`} iconLeft={<HiMiniPlus size={14} />} />
-            </div>
-          ) : (
-            <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 pl-2 text-left text-sm text-neutral-900 hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:text-dark-1000 dark:hover:border-dark-200 dark:hover:bg-dark-100">
-              <HiMiniPlus size={22} className="pr-2" />
-              {t`Add label`}
-            </div>
-          )}
-        </CheckboxDropdown>
+        <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 pl-2 text-left text-sm hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:hover:border-dark-200 dark:hover:bg-dark-100">
+          <HiMiniPlus size={22} className="pr-2" />
+          {t`Add label`}
+        </div>
       )}
-    </>
+    </CheckboxDropdown>
   );
 }
