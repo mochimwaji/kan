@@ -144,6 +144,10 @@ export const listRouter = createTRPCRouter({
         listPublicId: z.string().min(12),
         name: z.string().min(1).optional(),
         index: z.number().optional(),
+        color: z
+          .string()
+          .regex(/^#[0-9A-Fa-f]{6}$/)
+          .nullish(),
       }),
     )
     .output(
@@ -168,12 +172,17 @@ export const listRouter = createTRPCRouter({
 
       await assertUserInWorkspace(ctx.db, userId, list.workspaceId);
 
-      let result: { name: string; publicId: string } | undefined;
+      let result:
+        | { name: string; publicId: string; color?: string | null }
+        | undefined;
 
-      if (input.name) {
+      if (input.name || input.color !== undefined) {
         result = await listRepo.update(
           ctx.db,
-          { name: input.name },
+          {
+            name: input.name,
+            color: input.color,
+          },
           { listPublicId: input.listPublicId },
         );
       }

@@ -90,20 +90,22 @@ export default function MembersPage() {
                 <div className="flex items-center">
                   <p
                     className={twMerge(
-                      "mr-2 truncate text-xs font-medium text-neutral-900 dark:text-dark-1000 sm:text-sm",
+                      "mr-2 truncate text-xs font-medium sm:text-sm",
                       showSkeleton &&
                         "md mb-2 h-3 w-[125px] animate-pulse rounded-sm bg-light-200 dark:bg-dark-200",
                     )}
+                    style={{ color: "var(--kan-pages-text)" }}
                   >
                     {memberName}
                   </p>
                 </div>
                 <p
                   className={twMerge(
-                    "truncate text-xs text-dark-900 sm:text-sm",
+                    "truncate text-xs sm:text-sm",
                     showSkeleton &&
                       "h-3 w-[175px] animate-pulse rounded-sm bg-light-200 dark:bg-dark-200",
                   )}
+                  style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
                 >
                   {memberEmail}
                 </p>
@@ -174,7 +176,10 @@ export default function MembersPage() {
       <div className="m-auto h-full max-w-[1100px] p-6 px-5 md:px-28 md:py-12">
         <div className="mb-8 flex w-full justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
+            <h1
+              className="font-bold tracking-tight sm:text-[1.2rem]"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
               {t`Members`}
             </h1>
           </div>
@@ -228,23 +233,31 @@ export default function MembersPage() {
             <div className="inline-block min-w-full overflow-x-auto px-4 py-2 pb-16 align-middle sm:px-6 lg:px-8">
               <div className="h-full shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-light-600 overflow-visible dark:divide-dark-600">
-                  <thead className="rounded-t-lg bg-light-300 dark:bg-dark-200">
+                  <thead
+                    className="rounded-t-lg"
+                    style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
+                  >
                     <tr>
                       <th
                         scope="col"
-                        className="w-full rounded-tl-lg py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-900 dark:text-dark-900 sm:w-[65%] sm:pl-6"
+                        className="w-full rounded-tl-lg py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:w-[65%] sm:pl-6"
+                        style={{ color: "var(--kan-sidebar-text)" }}
                       >
                         {t`User`}
                       </th>
                       <th
                         scope="col"
-                        className="w-auto whitespace-nowrap rounded-tr-lg px-3 py-3.5 text-left text-sm font-semibold text-light-900 dark:text-dark-900 sm:w-[35%]"
+                        className="w-auto whitespace-nowrap rounded-tr-lg px-3 py-3.5 text-left text-sm font-semibold sm:w-[35%]"
+                        style={{ color: "var(--kan-sidebar-text)" }}
                       >
                         {t`Role`}
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-light-600 overflow-visible bg-light-50 dark:divide-dark-600 dark:bg-dark-100">
+                  <tbody
+                    className="divide-y divide-light-600 overflow-visible dark:divide-dark-600"
+                    style={{ backgroundColor: "var(--kan-pages-bg)" }}
+                  >
                     {!isLoading &&
                       data?.members.map((member, index) => (
                         <TableRow

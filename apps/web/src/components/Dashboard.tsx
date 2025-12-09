@@ -9,9 +9,12 @@ import {
 
 import { authClient } from "@kan/auth/client";
 
+import BoardTransitionOverlay from "~/components/BoardTransitionOverlay";
+import { useApplyThemeColors } from "~/hooks/useApplyThemeColors";
 import { useClickOutside } from "~/hooks/useClickOutside";
 import { useModal } from "~/providers/modal";
 import { useWorkspace, WorkspaceProvider } from "~/providers/workspace";
+import PageTransition from "./PageTransition";
 import SideNavigation from "./SideNavigation";
 
 interface DashboardProps {
@@ -42,6 +45,9 @@ export default function Dashboard({
   const { resolvedTheme } = useTheme();
   const { openModal } = useModal();
   const { availableWorkspaces, hasLoaded } = useWorkspace();
+
+  // Apply workspace theme colors on load
+  useApplyThemeColors();
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
 
@@ -104,12 +110,18 @@ export default function Dashboard({
           height: 100vh;
           overflow: hidden;
           min-width: 320px;
-          background-color: ${!isDarkMode ? "hsl(0deg 0% 97.3%)" : "#1c1c1c"};
+          background-color: var(--kan-sidebar-bg);
         }
       `}</style>
-      <div className="relative flex h-screen flex-col bg-light-50 dark:bg-dark-50 md:bg-light-100 md:p-3 md:dark:bg-dark-100">
+      <div
+        className="relative flex h-screen flex-col md:p-3"
+        style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
+      >
         {/* Mobile Header */}
-        <div className="flex h-12 items-center justify-between border-b border-light-300 bg-light-50 px-3 dark:border-dark-300 dark:bg-dark-50 md:hidden">
+        <div
+          className="flex h-12 items-center justify-between border-b border-light-300 px-3 dark:border-dark-300 md:hidden"
+          style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
+        >
           <button
             ref={sideNavButtonRef}
             onClick={toggleSideNav}
@@ -161,9 +173,15 @@ export default function Dashboard({
             />
           </div>
 
-          <div className="relative h-full min-h-0 w-full overflow-hidden md:rounded-lg md:border md:border-light-300 md:bg-light-50 md:dark:border-dark-300 md:dark:bg-dark-50">
+          <div
+            data-content-area="true"
+            className="relative h-full min-h-0 w-full overflow-hidden md:rounded-lg md:border md:border-light-300 md:dark:border-dark-300"
+            style={{ backgroundColor: "var(--kan-pages-bg)" }}
+          >
             <div className="relative flex h-full min-h-0 w-full overflow-hidden">
-              <div className="h-full w-full overflow-y-auto">{children}</div>
+              <div className="h-full w-full overflow-y-auto">
+                <PageTransition>{children}</PageTransition>
+              </div>
 
               {/* Mobile Right Panel */}
               {hasRightPanel && rightPanel && (
@@ -185,6 +203,7 @@ export default function Dashboard({
           </div>
         </div>
       </div>
+      <BoardTransitionOverlay />
     </>
   );
 }

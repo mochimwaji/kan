@@ -231,19 +231,30 @@ export const getWithCardsByPublicId = async (
 export const update = async (
   db: dbClient,
   listInput: {
-    name: string;
+    name?: string;
+    color?: string | null;
   },
   args: {
     listPublicId: string;
   },
 ) => {
+  const setData: { name?: string; color?: string | null } = {};
+
+  if (listInput.name !== undefined) {
+    setData.name = listInput.name;
+  }
+  if (listInput.color !== undefined) {
+    setData.color = listInput.color;
+  }
+
   const [result] = await db
     .update(lists)
-    .set({ name: listInput.name })
+    .set(setData)
     .where(and(eq(lists.publicId, args.listPublicId), isNull(lists.deletedAt)))
     .returning({
       publicId: lists.publicId,
       name: lists.name,
+      color: lists.color,
     });
 
   return result;
@@ -392,8 +403,6 @@ export const softDeleteById = async (
       .where(and(eq(lists.boardId, result.boardId), isNull(lists.deletedAt)))
       .groupBy(lists.index)
       .having(gt(countExpr, 1));
-
-
 
     if (duplicateIndices.length > 0) {
       throw new Error(

@@ -29,7 +29,7 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const classes = twMerge(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-light-50 shadow-sm focus-visible:outline-none",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none",
     size === "xs" && "text-xs px-2 py-1",
     size === "sm" && "text-xs",
     size === "lg" && "py-[0.65rem]",
@@ -43,16 +43,22 @@ const Button = ({
           : size === "lg"
             ? "h-10 w-10"
             : "h-9 w-9"),
-    variant === "primary" &&
-      "bg-light-1000 dark:bg-dark-1000 dark:text-dark-50",
+    variant === "primary" && "shadow-sm",
     variant === "secondary" &&
-      "border-[1px] border-light-600 bg-light-50 text-light-1000 dark:border-dark-600 dark:bg-dark-300 dark:text-dark-1000",
-    variant === "danger" &&
-      "dark:text-red-1000 border-[1px] border-red-600 bg-red-500 dark:border-red-600 dark:bg-red-500",
-    variant === "ghost" &&
-      "bg-none text-light-1000 shadow-none hover:bg-light-300 dark:text-dark-1000 dark:hover:bg-dark-200",
+      "border-[1px] border-light-600 bg-transparent text-neutral-900 dark:text-dark-1000",
+    variant === "danger" && "border-[1px] border-red-600 bg-red-500 text-white",
+    variant === "ghost" && "bg-none shadow-none",
     props.disabled && "opacity-60",
   );
+
+  // Compute styles for CSS variable integration
+  const buttonStyle: React.CSSProperties = {};
+  if (variant === "primary") {
+    buttonStyle.backgroundColor = "var(--kan-button-bg)";
+    buttonStyle.color = "var(--kan-button-text)";
+  } else if (variant === "ghost") {
+    buttonStyle.color = "var(--kan-pages-text)";
+  }
 
   const content = (
     <span className="relative flex items-center justify-center">
@@ -120,6 +126,7 @@ const Button = ({
       <Link
         href={href}
         className={classes}
+        style={buttonStyle}
         target={openInNewTab ? "_blank" : undefined}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
         {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
@@ -132,6 +139,7 @@ const Button = ({
   return (
     <button
       className={classes}
+      style={buttonStyle}
       disabled={isLoading ?? props.disabled}
       {...props}
     >

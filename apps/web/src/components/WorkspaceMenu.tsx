@@ -69,9 +69,10 @@ export default function WorkspaceMenu({
                 </span>
                 <span
                   className={twMerge(
-                    "ml-2 min-w-0 flex-1 truncate text-left text-sm font-bold text-neutral-900 dark:text-dark-1000",
+                    "ml-2 min-w-0 flex-1 truncate text-left text-sm font-bold",
                     isCollapsed && "md:hidden",
                   )}
+                  style={{ color: "var(--kan-sidebar-text)" }}
                 >
                   {workspace.name}
                 </span>
@@ -94,7 +95,11 @@ export default function WorkspaceMenu({
                   )}
                   onClick={() => setIsOpen(true)}
                 >
-                  <HiMagnifyingGlass className="h-4 w-4" aria-hidden="true" />
+                  <HiMagnifyingGlass
+                    className="h-4 w-4"
+                    style={{ color: "var(--kan-sidebar-text)" }}
+                    aria-hidden="true"
+                  />
                 </Button>
               </Tooltip>
             </div>

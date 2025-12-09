@@ -15,6 +15,7 @@ import { PageHead } from "~/components/PageHead";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
+import ColorSettings from "./components/ColorSettings";
 import { DeleteWorkspaceConfirmation } from "./components/DeleteWorkspaceConfirmation";
 import UpdateWorkspaceDescriptionForm from "./components/UpdateWorkspaceDescriptionForm";
 import UpdateWorkspaceNameForm from "./components/UpdateWorkspaceNameForm";
@@ -78,6 +79,16 @@ export default function WorkspaceSettings() {
           workspacePublicId={workspace.publicId}
           workspaceDescription={workspace.description ?? ""}
         />
+
+        <div className="mb-8 border-t border-light-300 dark:border-dark-300">
+          <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+            {t`Colors`}
+          </h2>
+          <p className="mb-4 text-sm text-neutral-500 dark:text-dark-900">
+            {t`Customize the appearance of your workspace with preset themes or custom colors.`}
+          </p>
+          <ColorSettings />
+        </div>
 
         {env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
           !hasActiveSubscription(subscriptions, "pro") &&

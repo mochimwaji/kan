@@ -1,5 +1,8 @@
 const PatternedBackground = () => (
-  <div className="absolute inset-0 h-full w-full">
+  <div
+    className="absolute inset-0 h-full w-full"
+    style={{ backgroundColor: "var(--kan-board-bg)" }}
+  >
     <svg className="h-full w-full">
       <pattern
         id="pattern"

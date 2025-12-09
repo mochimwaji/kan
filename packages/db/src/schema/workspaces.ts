@@ -3,6 +3,7 @@ import {
   bigint,
   bigserial,
   boolean,
+  json,
   pgEnum,
   pgTable,
   text,
@@ -14,6 +15,14 @@ import {
 import { boards } from "./boards";
 import { subscription } from "./subscriptions";
 import { users } from "./users";
+
+// Theme colors type for workspace customization
+export interface ThemeColorsType {
+  preset: string;
+  sidebar: string;
+  pages: string;
+  boardBackground: string;
+}
 
 export const memberRoles = ["admin", "member", "guest"] as const;
 export type MemberRole = (typeof memberRoles)[number];
@@ -52,6 +61,7 @@ export const workspaces = pgTable("workspace", {
   deletedBy: uuid("deletedBy").references(() => users.id, {
     onDelete: "set null",
   }),
+  themeColors: json("themeColors").$type<ThemeColorsType>(),
 }).enableRLS();
 
 export const workspaceRelations = relations(workspaces, ({ one, many }) => ({

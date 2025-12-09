@@ -109,7 +109,10 @@ export function NewListForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4">
-          <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="text-sm font-bold"
+            style={{ color: "var(--kan-pages-text)" }}
+          >
             {t`New list`}
           </h2>
           <button

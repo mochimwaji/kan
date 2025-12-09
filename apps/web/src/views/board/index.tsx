@@ -12,6 +12,7 @@ import {
   HiOutlineRectangleStack,
   HiOutlineSquare3Stack3D,
 } from "react-icons/hi2";
+import { twMerge } from "tailwind-merge";
 
 import type { UpdateBoardInput } from "@kan/api/types";
 
@@ -24,6 +25,7 @@ import { PageHead } from "~/components/PageHead";
 import PatternedBackground from "~/components/PatternedBackground";
 import { StrictModeDroppable as Droppable } from "~/components/StrictModeDroppable";
 import { Tooltip } from "~/components/Tooltip";
+import { useBoardTransition } from "~/providers/board-transition";
 import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
@@ -56,6 +58,24 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const [selectedPublicListId, setSelectedPublicListId] =
     useState<PublicListId>("");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Transition integration
+  const { animationPhase, fromBoardsPage } = useBoardTransition();
+  const [showContent, setShowContent] = useState(!fromBoardsPage);
+
+  useEffect(() => {
+    if (fromBoardsPage) {
+      if (animationPhase === "expanded" || animationPhase === "idle") {
+        // Slight delay to ensure overlay is fully done or allow smooth fade in
+        const timer = setTimeout(() => setShowContent(true), 50);
+        return () => clearTimeout(timer);
+      } else {
+        setShowContent(false);
+      }
+    } else {
+      setShowContent(true);
+    }
+  }, [animationPhase, fromBoardsPage]);
 
   const { tooltipContent: createListShortcutTooltipContent } =
     useKeyboardShortcut({
@@ -408,7 +428,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       <PageHead
         title={`${boardData?.name ?? (isTemplate ? t`Board` : t`Template`)} | ${workspace.name ?? t`Workspace`}`}
       />
-      <div className="relative flex h-full flex-col">
+      <div
+        className="relative flex h-full flex-col"
+        style={{
+          opacity: showContent ? 1 : 0,
+          transition: "opacity 300ms ease-in-out",
+        }}
+      >
         <PatternedBackground />
         <div className="z-10 flex w-full flex-col justify-between p-6 md:flex-row md:p-8">
           {isLoading && !boardData && (
@@ -426,12 +452,16 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 type="text"
                 {...register("name")}
                 onBlur={handleSubmit(onSubmit)}
-                className="block border-0 bg-transparent p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 focus:ring-0 focus-visible:outline-none dark:text-dark-1000 sm:text-[1.2rem]"
+                className="block border-0 bg-transparent p-0 py-0 font-bold leading-[2.3rem] tracking-tight focus:ring-0 focus-visible:outline-none sm:text-[1.2rem]"
+                style={{ color: "var(--kan-board-text)" }}
               />
             </form>
           )}
           {!boardData && !isLoading && (
-            <p className="order-2 block p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem] md:order-1">
+            <p
+              className="order-2 block p-0 py-0 font-bold leading-[2.3rem] tracking-tight sm:text-[1.2rem] md:order-1"
+              style={{ color: "var(--kan-board-text)" }}
+            >
               {t`${isTemplate ? "Template" : "Board"} not found`}
             </p>
           )}
@@ -603,6 +633,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                             comments={card.comments ?? []}
                                             attachments={card.attachments}
                                             dueDate={card.dueDate ?? null}
+                                            listColor={list.color}
                                           />
                                         </Link>
                                       )}

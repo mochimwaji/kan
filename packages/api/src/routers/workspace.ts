@@ -410,6 +410,77 @@ export const workspaceRouter = createTRPCRouter({
         isReserved: workspaceSlug?.type === "reserved",
       };
     }),
+  updateThemeColors: protectedProcedure
+    .meta({
+      openapi: {
+        summary: "Update workspace theme colors",
+        method: "PUT",
+        path: "/workspaces/{workspacePublicId}/theme-colors",
+        description: "Updates the theme colors for a workspace",
+        tags: ["Workspaces"],
+        protect: true,
+      },
+    })
+    .input(
+      z.object({
+        workspacePublicId: z.string().min(12),
+        themeColors: z.object({
+          preset: z.string(),
+          sidebar: z.string(),
+          pages: z.string(),
+          boardBackground: z.string(),
+        }),
+      }),
+    )
+    .output(
+      z.object({
+        publicId: z.string(),
+        themeColors: z
+          .object({
+            preset: z.string(),
+            sidebar: z.string(),
+            pages: z.string(),
+            boardBackground: z.string(),
+          })
+          .nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user?.id;
+
+      if (!userId)
+        throw new TRPCError({
+          message: `User not authenticated`,
+          code: "UNAUTHORIZED",
+        });
+
+      const workspace = await workspaceRepo.getByPublicId(
+        ctx.db,
+        input.workspacePublicId,
+      );
+
+      if (!workspace)
+        throw new TRPCError({
+          message: `Workspace not found`,
+          code: "NOT_FOUND",
+        });
+
+      await assertUserInWorkspace(ctx.db, userId, workspace.id);
+
+      const result = await workspaceRepo.updateThemeColors(
+        ctx.db,
+        input.workspacePublicId,
+        input.themeColors,
+      );
+
+      if (!result)
+        throw new TRPCError({
+          message: `Failed to update theme colors`,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+
+      return result;
+    }),
   search: protectedProcedure
     .meta({
       openapi: {

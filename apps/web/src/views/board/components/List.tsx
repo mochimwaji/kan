@@ -1,17 +1,22 @@
 import type { ReactNode } from "react";
 import { t } from "@lingui/core/macro";
+import { useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import {
   HiEllipsisHorizontal,
+  HiOutlinePaintBrush,
   HiOutlinePlusSmall,
   HiOutlineSquaresPlus,
   HiOutlineTrash,
 } from "react-icons/hi2";
+import { twMerge } from "tailwind-merge";
 
 import Dropdown from "~/components/Dropdown";
+import ListColorPicker from "~/components/ListColorPicker";
 import { useModal } from "~/providers/modal";
 import { api } from "~/utils/api";
+import { deriveListBackground } from "~/utils/colorUtils";
 
 interface ListProps {
   children: ReactNode;
@@ -23,6 +28,7 @@ interface ListProps {
 interface List {
   publicId: string;
   name: string;
+  color?: string | null;
 }
 
 interface FormValues {
@@ -39,13 +45,19 @@ export default function List({
   setSelectedPublicListId,
 }: ListProps) {
   const { openModal } = useModal();
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   const openNewCardForm = (publicListId: PublicListId) => {
     openModal("NEW_CARD");
     setSelectedPublicListId(publicListId);
   };
 
-  const updateList = api.list.update.useMutation();
+  const utils = api.useUtils();
+  const updateList = api.list.update.useMutation({
+    onSuccess: () => {
+      utils.board.byId.invalidate();
+    },
+  });
 
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: {
@@ -70,6 +82,21 @@ export default function List({
     openModal("DELETE_LIST");
   };
 
+  const handleColorSelect = useCallback(
+    (color: string | null) => {
+      updateList.mutate({
+        listPublicId: list.publicId,
+        color,
+      });
+    },
+    [list.publicId, updateList],
+  );
+
+  // Compute background style based on list color
+  const listStyle = list.color
+    ? { backgroundColor: deriveListBackground(list.color) }
+    : undefined;
+
   return (
     <Draggable key={list.publicId} draggableId={list.publicId} index={index}>
       {(provided) => (
@@ -78,7 +105,13 @@ export default function List({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="dark-text-dark-1000 mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border border-light-400 bg-light-300 py-2 pl-2 pr-1 text-neutral-900 dark:border-dark-300 dark:bg-dark-100"
+          className={twMerge(
+            "dark-text-dark-1000 mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border py-2 pl-2 pr-1 text-neutral-900",
+            list.color
+              ? "border-opacity-50"
+              : "border-light-400 bg-light-300 dark:border-dark-300 dark:bg-dark-100",
+          )}
+          style={listStyle}
         >
           <div className="mb-2 flex justify-between">
             <form
@@ -114,6 +147,13 @@ export default function List({
                       ),
                     },
                     {
+                      label: t`Set color`,
+                      action: () => setIsColorPickerOpen(true),
+                      icon: (
+                        <HiOutlinePaintBrush className="h-[18px] w-[18px] text-dark-900" />
+                      ),
+                    },
+                    {
                       label: t`Delete list`,
                       action: handleOpenDeleteListConfirmation,
                       icon: (
@@ -124,6 +164,13 @@ export default function List({
                 >
                   <HiEllipsisHorizontal className="h-5 w-5 text-dark-900" />
                 </Dropdown>
+                {isColorPickerOpen && (
+                  <ListColorPicker
+                    currentColor={list.color ?? null}
+                    onColorSelect={handleColorSelect}
+                    onClose={() => setIsColorPickerOpen(false)}
+                  />
+                )}
               </div>
             </div>
           </div>

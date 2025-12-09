@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom theme color variables */
+:root {
+  --kan-sidebar-bg: #ffffff;
+  --kan-pages-bg: #f8f8f8;
+  --kan-board-bg: #f5f5f5;
+  --kan-sidebar-text: #000000;
+  --kan-pages-text: #000000;
+  --kan-board-text: #000000;
+  /* Button theme group - derives from pages */
+  --kan-button-bg: #e5e5e5;
+  --kan-button-text: #000000;
+  /* Menu theme group */
+  --kan-menu-bg: #ffffff;
+  --kan-menu-text: #000000;
+}
+
+.dark {
+  --kan-sidebar-bg: #161616;
+  --kan-pages-bg: #1c1c1c;
+  --kan-board-bg: #232323;
+  --kan-sidebar-text: #ffffff;
+  --kan-pages-text: #ffffff;
+  --kan-board-text: #ffffff;
+  /* Button theme group */
+  --kan-button-bg: #2a2a2a;
+  --kan-button-text: #ffffff;
+  /* Menu theme group */
+  --kan-menu-bg: #1c1c1c;
+  --kan-menu-text: #ffffff;
+}
+
 [contenteditable="true"]:empty:before {
   content: attr(placeholder);
   display: block;

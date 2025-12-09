@@ -54,10 +54,13 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfi
 # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 
+# Compile Lingui translations before build
+RUN pnpm --filter=@kan/web lingui:extract && pnpm --filter=@kan/web lingui:compile
 
 RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store \
     --mount=type=cache,target=/app/apps/${APP_DIRNAME}/.next/cache,sharing=locked \
     --mount=type=cache,target=/app/node_modules/.cache \
+    --mount=type=cache,target=/app/.turbo \
     pnpm build --filter=${PROJECT}
 
 # 4. Final image - runner stage to run the application
