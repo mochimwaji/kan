@@ -94,13 +94,15 @@ export default function CommandPallette({
         <div className="flex min-h-full items-start justify-center p-4 text-center sm:items-start sm:p-0">
           <DialogPanel
             transition
-            className="data-closed:opacity-0 data-closed:translate-y-4 data-closed:sm:translate-y-0 data-closed:sm:scale-95 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in relative mt-[25vh] w-full max-w-[550px] transform divide-y divide-gray-100 overflow-hidden rounded-lg border border-light-600 bg-white/90 shadow-3xl-light backdrop-blur-[6px] transition-all dark:divide-white/10 dark:border-dark-600 dark:bg-dark-100/90 dark:shadow-3xl-dark"
+            style={{ backgroundColor: "var(--kan-menu-bg)" }}
+            className="data-closed:opacity-0 data-closed:translate-y-4 data-closed:sm:translate-y-0 data-closed:sm:scale-95 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in relative mt-[25vh] w-full max-w-[550px] transform divide-y divide-gray-100 overflow-hidden rounded-lg border border-light-600 shadow-3xl-light backdrop-blur-[6px] transition-all dark:divide-white/10 dark:border-dark-600 dark:shadow-3xl-dark"
           >
             <Combobox>
               <div className="grid grid-cols-1">
                 <ComboboxInput
                   autoFocus
-                  className="col-start-1 row-start-1 h-12 w-full border-0 bg-transparent pl-11 pr-4 text-sm text-light-900 placeholder:text-light-700 focus:outline-none focus:ring-0 dark:text-dark-900 dark:placeholder:text-dark-700"
+                  className="col-start-1 row-start-1 h-12 w-full border-0 bg-transparent pl-11 pr-4 text-sm placeholder:text-light-700 focus:outline-none focus:ring-0 dark:placeholder:text-dark-700"
+                  style={{ color: "var(--kan-menu-text)" }}
                   placeholder={t`Search boards and cards...`}
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
@@ -160,7 +162,10 @@ export default function CommandPallette({
                             )}
                           </div>
                           <div className="min-w-0 flex-1 text-left">
-                            <div className="truncate text-sm font-bold text-light-900 dark:text-dark-900">
+                            <div
+                              className="truncate text-sm font-bold"
+                              style={{ color: "var(--kan-menu-text)" }}
+                            >
                               {result.title}
                             </div>
                             {result.type === "card" && (

@@ -163,7 +163,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
             left: currentPos.left,
             width: currentPos.width,
             tab: currentTab,
-          })
+          }),
         );
       } catch {
         // Ignore localStorage errors
@@ -191,7 +191,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
         try {
           localStorage.setItem(
             UNDERLINE_STORAGE_KEY,
-            JSON.stringify({ ...pos, tab: currentTab })
+            JSON.stringify({ ...pos, tab: currentTab }),
           );
         } catch {
           // Ignore
@@ -205,10 +205,13 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       {/* Added scrollbar-gutter to prevent layout shift when scrollbar appears/disappears */}
-      <div className="h-full max-h-[calc(100vdh-3rem)] overflow-y-scroll md:max-h-[calc(100vdh-4rem)] [scrollbar-gutter:stable]">
+      <div className="h-full max-h-[calc(100vdh-3rem)] overflow-y-scroll [scrollbar-gutter:stable] md:max-h-[calc(100vdh-4rem)]">
         <div className="m-auto max-w-[1100px] px-5 py-6 md:px-28 md:py-12">
           <div className="mb-8 flex w-full justify-between">
-            <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
+            <h1
+              className="font-bold tracking-tight sm:text-[1.2rem]"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
               {t`Settings`}
             </h1>
           </div>
@@ -261,11 +264,11 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                         tabRefs.current[index] = el;
                       }}
                       href={`/settings/${tab.key}`}
-                      className={`whitespace-nowrap px-1 py-4 text-sm font-medium transition-colors focus:outline-none ${
-                        currentTab === tab.key
-                          ? "text-light-1000 dark:text-dark-1000"
-                          : "text-light-900 hover:text-light-950 dark:text-dark-900 dark:hover:text-dark-950"
-                      }`}
+                      className="whitespace-nowrap px-1 py-4 text-sm font-medium transition-colors focus:outline-none"
+                      style={{
+                        color: "var(--kan-pages-text)",
+                        opacity: currentTab === tab.key ? 1 : 0.6,
+                      }}
                     >
                       {tab.label}
                     </Link>
@@ -273,7 +276,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                 </nav>
                 {/* Animated underline */}
                 <div
-                  className={`absolute bottom-0 h-0.5 bg-light-1000 dark:bg-dark-1000 ${
+                  className={`absolute bottom-0 h-0.5 ${
                     underlineStyle.animate
                       ? "transition-all duration-300 ease-in-out"
                       : ""
@@ -282,6 +285,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                     left: underlineStyle.left,
                     width: underlineStyle.width,
                     opacity: underlineStyle.width > 0 ? 1 : 0,
+                    backgroundColor: "var(--kan-pages-text)",
                   }}
                 />
               </div>

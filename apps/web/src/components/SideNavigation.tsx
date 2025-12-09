@@ -28,9 +28,12 @@ import ButtonComponent from "~/components/Button";
 import ReactiveButton from "~/components/ReactiveButton";
 import UserMenu from "~/components/UserMenu";
 import WorkspaceMenu from "~/components/WorkspaceMenu";
+import { useColorTheme } from "~/providers/colorTheme";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
+import { getContrastColor } from "~/utils/colorUtils";
+import { getPresetColors } from "~/utils/themePresets";
 
 interface SideNavigationProps {
   user: UserType;
@@ -85,7 +88,18 @@ export default function SideNavigation({
 
   const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
 
-  const isDarkMode = resolvedTheme === "dark";
+  const { themeColors } = useColorTheme();
+
+  // Calculate if the sidebar specific color is dark
+  const sidebarColor =
+    themeColors.preset === "custom"
+      ? themeColors.sidebar
+      : getPresetColors(themeColors.preset, "light").sidebar; // Assuming light mode for base preset colors as dark mode is forced off
+
+  // If contrast color is white, then background is dark
+  const isSidebarDark = getContrastColor(sidebarColor) === "#ffffff";
+
+  const isDarkMode = isSidebarDark;
 
   const navigation: {
     name: string;

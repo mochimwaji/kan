@@ -55,63 +55,68 @@ export default function CheckboxDropdown({
 
   const renderMenuItems = (items: Item[], groupKey: string | null) => (
     <>
-      {items.length > 0 ? (
-        items.map((item) => (
-          <Menu.Item key={item.key}>
-            <div
-              className="group flex items-center rounded-[5px] p-2 hover:bg-light-200 dark:hover:bg-dark-300"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSelect(groupKey, { key: item.key, value: item.value });
-              }}
-            >
-              <input
-                id={item.key}
-                name={item.key}
-                type="checkbox"
-                className="h-[14px] w-[14px] rounded bg-transparent"
-                onClick={(event) => event.stopPropagation()}
-                onChange={() =>
-                  handleSelect(groupKey, { key: item.key, value: item.value })
-                }
-                checked={item.selected}
-              />
-              {item.leftIcon && (
-                <span className="ml-3 flex items-center">{item.leftIcon}</span>
-              )}
-              <label
-                htmlFor={item.key}
-                className="ml-3 text-[12px] text-dark-900"
+      {items.length > 0
+        ? items.map((item) => (
+            <Menu.Item key={item.key}>
+              <div
+                className="group flex items-center rounded-[5px] p-2 hover:bg-light-200 dark:hover:bg-dark-300"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSelect(groupKey, { key: item.key, value: item.value });
+                }}
               >
-                {item.value}
-              </label>
-              {handleEdit && (
-                <button
-                  type="button"
-                  className="invisible ml-auto group-hover:visible"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    handleEdit(item.key);
-                  }}
+                <input
+                  id={item.key}
+                  name={item.key}
+                  type="checkbox"
+                  className="h-[14px] w-[14px] rounded bg-transparent"
+                  onClick={(event) => event.stopPropagation()}
+                  onChange={() =>
+                    handleSelect(groupKey, { key: item.key, value: item.value })
+                  }
+                  checked={item.selected}
+                />
+                {item.leftIcon && (
+                  <span className="ml-3 flex items-center">
+                    {item.leftIcon}
+                  </span>
+                )}
+                <label
+                  htmlFor={item.key}
+                  className="ml-3 text-[12px]"
+                  style={{ color: "var(--kan-menu-text)" }}
                 >
-                  <HiEllipsisHorizontal size={20} className="text-dark-900" />
-                </button>
-              )}
+                  {item.value}
+                </label>
+                {handleEdit && (
+                  <button
+                    type="button"
+                    className="invisible ml-auto group-hover:visible"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      handleEdit(item.key);
+                    }}
+                  >
+                    <HiEllipsisHorizontal size={20} className="text-dark-900" />
+                  </button>
+                )}
+              </div>
+            </Menu.Item>
+          ))
+        : !handleCreate && (
+            <div
+              className="flex items-center p-2 text-[12px]"
+              style={{ color: "var(--kan-menu-text)" }}
+            >
+              No items
             </div>
-          </Menu.Item>
-        ))
-      ) : (
-        !handleCreate && (
-          <div className="flex items-center p-2 text-[12px] text-dark-900">
-            No items
-          </div>
-        )
-      )}
+          )}
       {handleCreate && (
         <button
           type="button"
-          className="flex w-full items-center rounded-[5px] p-2 px-2 text-[12px] text-dark-900 hover:bg-light-200 dark:hover:bg-dark-300"
+          className="flex w-full items-center rounded-[5px] p-2 px-2 text-[12px] hover:bg-light-200 dark:hover:bg-dark-300"
+          style={{ color: "var(--kan-menu-text)" }}
           onClick={(e) => {
             e.preventDefault();
             handleCreate();
@@ -149,10 +154,11 @@ export default function CheckboxDropdown({
         >
           <Menu.Items
             className={twMerge(
-              "mt-2s absolute z-50 w-56 origin-top-left rounded-md border-[1px] border-light-200 bg-light-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-dark-500 dark:bg-dark-200",
+              "mt-2s absolute z-50 w-56 origin-top-left rounded-md border-[1px] border-light-200 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-dark-500",
               position === "left" ? "left-0" : "right-0",
               menuSpacingClass[menuSpacing],
             )}
+            style={{ backgroundColor: "var(--kan-menu-bg)" }}
           >
             <div className="max-h-[350px] overflow-y-auto p-1">
               {!selectedGroup ? (
@@ -168,8 +174,16 @@ export default function CheckboxDropdown({
                           setSelectedGroup(group.key);
                         }}
                       >
-                        <span className="mr-2 text-dark-900">{group.icon}</span>
-                        <span className="pointer-events-none text-[12px] text-dark-900">
+                        <span
+                          className="mr-2"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        >
+                          {group.icon}
+                        </span>
+                        <span
+                          className="pointer-events-none text-[12px]"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        >
                           {group.label}
                         </span>
                       </div>

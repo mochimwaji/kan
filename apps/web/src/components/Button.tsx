@@ -44,8 +44,7 @@ const Button = ({
             ? "h-10 w-10"
             : "h-9 w-9"),
     variant === "primary" && "shadow-sm",
-    variant === "secondary" &&
-      "border-[1px] border-light-600 bg-transparent text-neutral-900 dark:text-dark-1000",
+    variant === "secondary" && "border-[1px] border-light-600 bg-transparent",
     variant === "danger" && "border-[1px] border-red-600 bg-red-500 text-white",
     variant === "ghost" && "bg-none shadow-none",
     props.disabled && "opacity-60",
@@ -56,7 +55,7 @@ const Button = ({
   if (variant === "primary") {
     buttonStyle.backgroundColor = "var(--kan-button-bg)";
     buttonStyle.color = "var(--kan-button-text)";
-  } else if (variant === "ghost") {
+  } else if (variant === "secondary" || variant === "ghost") {
     buttonStyle.color = "var(--kan-pages-text)";
   }
 

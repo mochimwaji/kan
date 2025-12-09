@@ -12,6 +12,7 @@ import { authClient } from "@kan/auth/client";
 import BoardTransitionOverlay from "~/components/BoardTransitionOverlay";
 import { useApplyThemeColors } from "~/hooks/useApplyThemeColors";
 import { useClickOutside } from "~/hooks/useClickOutside";
+import { ColorThemeProvider } from "~/providers/colorTheme";
 import { useModal } from "~/providers/modal";
 import { useWorkspace, WorkspaceProvider } from "~/providers/workspace";
 import PageTransition from "./PageTransition";
@@ -30,9 +31,11 @@ export function getDashboardLayout(
 ) {
   return (
     <WorkspaceProvider>
-      <Dashboard rightPanel={rightPanel} hasRightPanel={hasRightPanel}>
-        {page}
-      </Dashboard>
+      <ColorThemeProvider>
+        <Dashboard rightPanel={rightPanel} hasRightPanel={hasRightPanel}>
+          {page}
+        </Dashboard>
+      </ColorThemeProvider>
     </WorkspaceProvider>
   );
 }
