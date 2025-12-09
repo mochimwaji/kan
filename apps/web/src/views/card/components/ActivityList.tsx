@@ -80,7 +80,7 @@ const getActivityText = ({
   const baseText = ACTIVITY_TYPE_MAP[type as keyof typeof ACTIVITY_TYPE_MAP];
 
   const TextHighlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="font-medium text-light-1000 dark:text-dark-1000">
+    <span className="font-medium" style={{ color: "var(--kan-pages-text)" }}>
       {children}
     </span>
   );
@@ -357,19 +357,33 @@ const ActivityList = ({
                   <div className="absolute bottom-[-14px] left-1/2 top-[30px] w-0.5 -translate-x-1/2 bg-light-600 dark:bg-dark-600" />
                 )}
             </div>
-            <p className="text-sm">
-              <span className="font-medium dark:text-dark-1000">{`${activity.user?.name} `}</span>
-              <span className="space-x-1 text-light-900 dark:text-dark-800">
+            <div className="text-sm">
+              <span
+                className="font-medium"
+                style={{ color: "var(--kan-pages-text)" }}
+              >{`${activity.user?.name} `}</span>
+              <span
+                className="space-x-1"
+                style={{ color: "var(--kan-pages-text)", opacity: 0.8 }}
+              >
                 {activityText}
               </span>
-              <span className="mx-1 text-light-900 dark:text-dark-800">·</span>
-              <span className="space-x-1 text-light-900 dark:text-dark-800">
+              <span
+                className="mx-1"
+                style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
+              >
+                ·
+              </span>
+              <span
+                className="space-x-1 text-light-900 dark:text-dark-800"
+                style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
+              >
                 {formatDistanceToNow(new Date(activity.createdAt), {
                   addSuffix: true,
                   locale: dateLocale,
                 })}
               </span>
-            </p>
+            </div>
           </div>
         );
       })}

@@ -14,6 +14,7 @@ Kan is an open-source Kanban board application built as a **monorepo** using:
 - **Database**: PostgreSQL with Drizzle ORM
 - **Styling**: Tailwind CSS
 - **i18n**: Lingui
+- **Logging**: @kan/logger
 
 ## Directory Structure
 
@@ -119,6 +120,16 @@ reqLogger.info("Request started");
 
 - `LOG_LEVEL`: `debug` | `info` | `warn` | `error` | `silent`
 - `DB_LOG_QUERIES`: `true` | `false` - Enable database query logging
+
+### Theming & Styling
+
+- **Tailwind First**: Use Tailwind utility classes for all styling.
+- **CSS Variables**: Use CSS variables for theme-dependent colors (e.g., `var(--kan-bg-default)`).
+- **Dark Mode**: Ensure all colors have dark mode equivalents defined in `globals.css`.
+- **List Colors**: Use `deriveListBackground` utility for list-specific coloring logic.
+- **Components**:
+  - Use `ColorPicker` for general color selection.
+  - Use `ListColorPicker` specifically for list context.
 
 ## Testing
 

@@ -12,12 +12,16 @@ interface ListSelectorProps {
     selected: boolean;
   }[];
   isLoading: boolean;
+  isCollapsed?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function ListSelector({
   cardPublicId,
   lists,
   isLoading,
+  isCollapsed = false,
+  children,
 }: ListSelectorProps) {
   const utils = api.useUtils();
 
@@ -60,29 +64,49 @@ export default function ListSelector({
 
   const selectedList = lists.find((list) => list.selected);
 
+  if (isLoading) {
+    return (
+      <div className="flex w-full">
+        <div className="h-full w-[150px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
+      </div>
+    );
+  }
+
+  // When children are provided, use them as the trigger (clickable header pattern)
+  if (children) {
+    return (
+      <CheckboxDropdown
+        items={lists}
+        handleSelect={(_, member) => {
+          updateCardList.mutate({
+            cardPublicId,
+            listPublicId: member.key,
+            index: 0,
+          });
+        }}
+        asChild
+      >
+        {children}
+      </CheckboxDropdown>
+    );
+  }
+
+  // Fallback: original behavior (should not be used in new pattern)
   return (
-    <>
-      {isLoading ? (
-        <div className="flex w-full">
-          <div className="h-full w-[150px] animate-pulse rounded-[5px] bg-light-300 dark:bg-dark-300" />
-        </div>
-      ) : (
-        <CheckboxDropdown
-          items={lists}
-          handleSelect={(_, member) => {
-            updateCardList.mutate({
-              cardPublicId,
-              listPublicId: member.key,
-              index: 0,
-            });
-          }}
-          asChild
-        >
-          <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 py-1 pl-2 text-left text-xs text-neutral-900 hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:text-dark-1000 dark:hover:border-dark-200 dark:hover:bg-dark-100">
-            {selectedList?.value}
-          </div>
-        </CheckboxDropdown>
-      )}
-    </>
+    <CheckboxDropdown
+      items={lists}
+      handleSelect={(_, member) => {
+        updateCardList.mutate({
+          cardPublicId,
+          listPublicId: member.key,
+          index: 0,
+        });
+      }}
+      asChild
+    >
+      <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 py-1 pl-2 text-left text-xs hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:hover:border-dark-200 dark:hover:bg-dark-100">
+        {selectedList?.value}
+      </div>
+    </CheckboxDropdown>
   );
 }

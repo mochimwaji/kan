@@ -141,7 +141,13 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
           >
             <PatternedBackground />
             <p
-              className="z-10 px-4 text-[14px] font-bold"
+              className={`z-10 px-4 text-[14px] font-bold transition-opacity duration-200 ${
+                boardId === board.publicId &&
+                (animationPhase === "expanded" ||
+                  animationPhase === "expanding")
+                  ? "opacity-0"
+                  : "opacity-100"
+              }`}
               style={{ color: "var(--kan-board-text)" }}
             >
               {board.name}

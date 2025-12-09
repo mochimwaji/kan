@@ -171,7 +171,7 @@ export default function SideNavigation({
         style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
       >
         <div>
-          <div className="hidden h-[45px] items-center justify-between pb-3 md:flex">
+          <div className="hidden h-[45px] items-center justify-between md:flex">
             {!isCollapsed && (
               <Link href="/" className="block">
                 <h1

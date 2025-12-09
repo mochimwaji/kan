@@ -108,6 +108,12 @@ export function BoardTransitionProvider({
     const handleRouteChange = (url: string) => {
       // Check if navigating back to boards page
       const isBoardsPage = url === "/boards" || url.endsWith("/boards");
+      // Check if staying within board/card context (don't reset for card views)
+      const isWithinBoardContext =
+        url.includes("/boards/") ||
+        url.includes("/cards/") ||
+        url.includes("/templates/");
+
       if (
         isBoardsPage &&
         state.animationPhase === "expanded" &&
@@ -115,8 +121,8 @@ export function BoardTransitionProvider({
       ) {
         // Trigger contract animation immediately to prevent flash
         startContract(state.sourceRect);
-      } else if (!url.includes("/boards/") && state.animationPhase !== "idle") {
-        // Navigating elsewhere, reset
+      } else if (!isWithinBoardContext && state.animationPhase !== "idle") {
+        // Navigating elsewhere (not boards/cards/templates), reset
         reset();
       }
     };
@@ -125,7 +131,13 @@ export function BoardTransitionProvider({
     return () => {
       router.events.off("routeChangeStart", handleRouteChange);
     };
-  }, [router.events, state.animationPhase, state.boardId, reset]);
+  }, [
+    router.events,
+    state.animationPhase,
+    state.sourceRect,
+    startContract,
+    reset,
+  ]);
 
   return (
     <BoardTransitionContext.Provider

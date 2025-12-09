@@ -75,7 +75,10 @@ const DateSelector = ({ selectedDate, onDateSelect }: DateSelectorProps) => {
 
   return (
     <div className="w-[250px] p-4">
-      <div className="flex items-center text-light-1000 dark:text-dark-1000">
+      <div
+        className="flex items-center"
+        style={{ color: "var(--kan-menu-text)" }}
+      >
         <button
           type="button"
           onClick={handlePreviousMonth}
@@ -96,7 +99,10 @@ const DateSelector = ({ selectedDate, onDateSelect }: DateSelectorProps) => {
           <HiChevronRight aria-hidden="true" className="h-4 w-4" />
         </button>
       </div>
-      <div className="mt-6 grid grid-cols-7 text-center text-xs/6 text-light-950 dark:text-dark-950">
+      <div
+        className="mt-6 grid grid-cols-7 text-center text-xs/6"
+        style={{ color: "var(--kan-menu-text)" }}
+      >
         {dayHeaders.map((day, index) => (
           <div key={index}>{day}</div>
         ))}
@@ -123,6 +129,9 @@ const DateSelector = ({ selectedDate, onDateSelect }: DateSelectorProps) => {
                   : "text-light-700 dark:text-dark-600",
                 day.isSelected && "text-light-50 dark:text-dark-50",
               )}
+              style={
+                !day.isSelected ? { color: "var(--kan-menu-text)" } : undefined
+              }
             >
               {day.date.split("-").pop()?.replace(/^0/, "")}
             </time>

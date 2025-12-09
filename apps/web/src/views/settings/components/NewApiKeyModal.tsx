@@ -87,7 +87,10 @@ export default function NewApiKeyModal() {
     return (
       <div>
         <div className="px-5 pt-5">
-          <div className="flex w-full items-center justify-between pb-4 text-neutral-900 dark:text-dark-1000">
+          <div
+            className="flex w-full items-center justify-between pb-4"
+            style={{ color: "var(--kan-menu-text)" }}
+          >
             <h2 className="text-sm font-bold">{t`API key created`}</h2>
             <button
               type="button"
@@ -143,7 +146,10 @@ export default function NewApiKeyModal() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
-        <div className="flex w-full items-center justify-between pb-4 text-neutral-900 dark:text-dark-1000">
+        <div
+          className="flex w-full items-center justify-between pb-4"
+          style={{ color: "var(--kan-menu-text)" }}
+        >
           <h2 className="text-sm font-bold">{t`New API key`}</h2>
           <button
             type="button"
