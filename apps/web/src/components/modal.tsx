@@ -71,7 +71,8 @@ const Modal: React.FC<Props> = ({
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel
-                className={`relative ${positionFromTopMap[positionFromTop]} w-full transform rounded-lg border border-light-600 bg-white/90 text-left shadow-3xl-light backdrop-blur-[6px] transition-all dark:border-dark-600 dark:bg-dark-100/90 dark:shadow-3xl-dark ${modalSizeMap[modalSize]}`}
+                style={{ backgroundColor: "var(--kan-menu-bg)" }}
+                className={`relative ${positionFromTopMap[positionFromTop]} w-full transform rounded-lg border border-light-600 shadow-3xl-light backdrop-blur-[6px] transition-all dark:border-dark-600 dark:shadow-3xl-dark ${modalSizeMap[modalSize]}`}
               >
                 {children}
               </Dialog.Panel>

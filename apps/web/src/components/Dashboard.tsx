@@ -10,7 +10,6 @@ import {
 import { authClient } from "@kan/auth/client";
 
 import BoardTransitionOverlay from "~/components/BoardTransitionOverlay";
-import { useApplyThemeColors } from "~/hooks/useApplyThemeColors";
 import { useClickOutside } from "~/hooks/useClickOutside";
 import { ColorThemeProvider } from "~/providers/colorTheme";
 import { useModal } from "~/providers/modal";
@@ -50,7 +49,6 @@ export default function Dashboard({
   const { availableWorkspaces, hasLoaded } = useWorkspace();
 
   // Apply workspace theme colors on load
-  useApplyThemeColors();
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
 

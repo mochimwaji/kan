@@ -253,7 +253,10 @@ export function InviteMemberForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
-        <div className="text-neutral-9000 flex w-full items-center justify-between pb-4 dark:text-dark-1000">
+        <div
+          className="flex w-full items-center justify-between pb-4"
+          style={{ color: "var(--kan-menu-text)" }}
+        >
           <h2 className="text-sm font-bold">{t`Add member`}</h2>
           <button
             type="button"
@@ -263,7 +266,7 @@ export function InviteMemberForm({
               closeModal();
             }}
           >
-            <HiXMark size={18} className="dark:text-dark-9000 text-light-900" />
+            <HiXMark size={18} style={{ color: "var(--kan-menu-text)" }} />
           </button>
         </div>
         {isEmailEnabled && (
@@ -295,7 +298,8 @@ export function InviteMemberForm({
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-light-900 hover:text-light-950 dark:text-dark-900 dark:hover:text-dark-950"
+                className="absolute inset-y-0 right-0 flex items-center pr-3"
+                style={{ color: "var(--kan-menu-text)" }}
                 onClick={copyToClipboard}
               >
                 {copied ? (
@@ -306,8 +310,14 @@ export function InviteMemberForm({
               </button>
             </div>
             <div className="mt-2 flex items-start gap-1">
-              <HiInformationCircle className="mt-0.5 h-4 w-4 text-dark-900" />
-              <p className="text-xs text-gray-500 dark:text-dark-900">
+              <HiInformationCircle
+                className="mt-0.5 h-4 w-4"
+                style={{ color: "var(--kan-menu-text)" }}
+              />
+              <p
+                className="text-xs"
+                style={{ color: "var(--kan-menu-text)", opacity: 0.7 }}
+              >
                 {t`Anyone with this link can join your workspace`}
               </p>
             </div>

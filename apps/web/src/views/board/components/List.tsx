@@ -106,12 +106,12 @@ export default function List({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={twMerge(
-            "dark-text-dark-1000 mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border py-2 pl-2 pr-1 text-neutral-900",
+            "mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border py-2 pl-2 pr-1",
             list.color
               ? "border-opacity-50"
               : "border-light-400 bg-light-300 dark:border-dark-300 dark:bg-dark-100",
           )}
-          style={listStyle}
+          style={{ ...listStyle, color: "var(--kan-pages-text)" }}
         >
           <div className="mb-2 flex justify-between">
             <form
@@ -123,7 +123,8 @@ export default function List({
                 type="text"
                 {...register("name")}
                 onBlur={handleSubmit(onSubmit)}
-                className="w-full border-0 bg-transparent px-4 pt-1 text-sm font-medium text-neutral-900 focus:ring-0 focus-visible:outline-none dark:text-dark-1000"
+                className="w-full border-0 bg-transparent px-4 pt-1 text-sm font-medium focus:ring-0 focus-visible:outline-none"
+                style={{ color: "var(--kan-pages-text)" }}
               />
             </form>
             <div className="flex items-center">
@@ -132,7 +133,8 @@ export default function List({
                 onClick={() => openNewCardForm(list.publicId)}
               >
                 <HiOutlinePlusSmall
-                  className="h-5 w-5 text-dark-900"
+                  className="h-5 w-5"
+                  style={{ color: "var(--kan-pages-text)" }}
                   aria-hidden="true"
                 />
               </button>
@@ -142,27 +144,41 @@ export default function List({
                     {
                       label: t`Add a card`,
                       action: () => openNewCardForm(list.publicId),
+                      action: () => openNewCardForm(list.publicId),
                       icon: (
-                        <HiOutlineSquaresPlus className="h-[18px] w-[18px] text-dark-900" />
+                        <HiOutlineSquaresPlus
+                          className="h-[18px] w-[18px]"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        />
                       ),
                     },
                     {
                       label: t`Set color`,
                       action: () => setIsColorPickerOpen(true),
                       icon: (
-                        <HiOutlinePaintBrush className="h-[18px] w-[18px] text-dark-900" />
+                        <HiOutlinePaintBrush
+                          className="h-[18px] w-[18px]"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        />
                       ),
                     },
                     {
                       label: t`Delete list`,
                       action: handleOpenDeleteListConfirmation,
+                      action: handleOpenDeleteListConfirmation,
                       icon: (
-                        <HiOutlineTrash className="h-[18px] w-[18px] text-dark-900" />
+                        <HiOutlineTrash
+                          className="h-[18px] w-[18px]"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        />
                       ),
                     },
                   ]}
                 >
-                  <HiEllipsisHorizontal className="h-5 w-5 text-dark-900" />
+                  <HiEllipsisHorizontal
+                    className="h-5 w-5"
+                    style={{ color: "var(--kan-pages-text)" }}
+                  />
                 </Dropdown>
                 {isColorPickerOpen && (
                   <ListColorPicker

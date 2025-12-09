@@ -69,14 +69,20 @@ export default function IntegrationsSettings() {
       <PageHead title={t`Settings | Integrations`} />
 
       <div className="mb-8 border-t border-light-300 dark:border-dark-300">
-        <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+        <h2
+          className="mb-4 mt-8 text-[14px] font-bold"
+          style={{ color: "var(--kan-pages-text)" }}
+        >
           {t`Trello`}
         </h2>
         {!integrations?.some(
           (integration) => integration.provider === "trello",
         ) && trelloUrl ? (
           <>
-            <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
+            <p
+              className="mb-8 text-sm"
+              style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+            >
               {t`Connect your Trello account to import boards.`}
             </p>
             <Button
@@ -98,7 +104,10 @@ export default function IntegrationsSettings() {
             (integration) => integration.provider === "trello",
           ) && (
             <>
-              <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
+              <p
+                className="mb-8 text-sm"
+                style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+              >
                 {t`Your Trello account is connected.`}
               </p>
               <Button
