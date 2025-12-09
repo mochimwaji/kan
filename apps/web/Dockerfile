@@ -1,4 +1,4 @@
-ARG NODE_VERSION=20
+ARG NODE_VERSION=22
 ARG APP_DIRNAME=web
 ARG PROJECT=@kan/web
 
@@ -55,7 +55,10 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfi
 COPY --from=pruner /app/out/full/ .
 
 
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm build --filter=${PROJECT}
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store \
+    --mount=type=cache,target=/app/apps/${APP_DIRNAME}/.next/cache,sharing=locked \
+    --mount=type=cache,target=/app/node_modules/.cache \
+    pnpm build --filter=${PROJECT}
 
 # 4. Final image - runner stage to run the application
 FROM base AS runner
@@ -78,6 +81,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/.next/standal
 COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/.next/static ./apps/${APP_DIRNAME}/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/public ./apps/${APP_DIRNAME}/public
 
+# Copy database migrations and migrate script for auto-migration at startup
+COPY --from=builder --chown=nextjs:nodejs /app/packages/db/migrations ./migrations
+COPY --from=builder --chown=nextjs:nodejs /app/packages/db/src/migrate.ts ./migrate.ts
+
+# Set migrations path for the migrate script
+ENV MIGRATIONS_PATH=/app/migrations
+
 ARG PORT=3000
 ENV PORT=${PORT}
 EXPOSE ${PORT}
@@ -90,3 +100,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/entrypoint.sh
 RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
 
 CMD ["./entrypoint.sh"]
+

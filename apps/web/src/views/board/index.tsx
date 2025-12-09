@@ -158,9 +158,15 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         if (removedList && args.index !== undefined) {
           updatedLists.splice(args.index, 0, removedList);
 
+          // Update index property on each list to match new array positions
+          const listsWithUpdatedIndexes = updatedLists.map((list, idx) => ({
+            ...list,
+            index: idx,
+          }));
+
           return {
             ...oldBoard,
-            lists: updatedLists,
+            lists: listsWithUpdatedIndexes,
           };
         }
       });
@@ -175,8 +181,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         icon: "error",
       });
     },
-    onSettled: async () => {
-      await utils.board.byId.invalidate(queryParams);
+    onSettled: async (_data, error) => {
+      // Only invalidate on error to restore correct state
+      // On success, the optimistic update is already in place and matches server data
+      if (error) {
+        await utils.board.byId.invalidate(queryParams);
+      }
     },
   });
 
@@ -214,9 +224,18 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         ) {
           destinationList.cards.splice(args.index, 0, removedCard);
 
+          // Update index property on cards in affected lists
+          const listsWithUpdatedCardIndexes = updatedLists.map((list) => ({
+            ...list,
+            cards: list.cards.map((card, idx) => ({
+              ...card,
+              index: idx,
+            })),
+          }));
+
           return {
             ...oldBoard,
-            lists: updatedLists,
+            lists: listsWithUpdatedCardIndexes,
           };
         }
       });
@@ -231,8 +250,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         icon: "error",
       });
     },
-    onSettled: async () => {
-      await utils.board.byId.invalidate(queryParams);
+    onSettled: async (_data, error) => {
+      // Only invalidate on error to restore correct state
+      // On success, the optimistic update is already in place and matches server data
+      if (error) {
+        await utils.board.byId.invalidate(queryParams);
+      }
     },
   });
 
@@ -520,7 +543,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                         {boardData.lists.map((list, index) => (
                           <List
                             index={index}
-                            key={index}
+                            key={list.publicId}
                             list={list}
                             setSelectedPublicListId={(publicListId) =>
                               setSelectedPublicListId(publicListId)
