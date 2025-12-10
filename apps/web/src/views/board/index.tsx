@@ -161,21 +161,19 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     placeholderData: keepPreviousData,
   });
 
-  // List collapse state version - increment to force List component re-render
-  const [listCollapseVersion, setListCollapseVersion] = useState(0);
-
-  // Helper to toggle list collapse via localStorage
+  // Helper to toggle list collapse via custom event
   const toggleListCollapse = useCallback(
     (listIndex: number) => {
       const lists = boardData?.lists;
       if (!lists || listIndex >= lists.length) return;
       const list = lists[listIndex];
       if (!list) return;
-      const key = `list-collapsed-${list.publicId}`;
-      const current = localStorage.getItem(key) === "true";
-      localStorage.setItem(key, String(!current));
-      // Force re-render of List components
-      setListCollapseVersion((v) => v + 1);
+      // Dispatch custom event for List component to handle with animation
+      window.dispatchEvent(
+        new CustomEvent("toggle-list-collapse", {
+          detail: { listPublicId: list.publicId },
+        }),
+      );
     },
     [boardData?.lists],
   );
@@ -716,7 +714,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                           {boardData.lists.map((list, index) => (
                             <List
                               index={index}
-                              key={`${list.publicId}-${listCollapseVersion}`}
+                              key={list.publicId}
                               list={list}
                               cardCount={list.cards.length}
                               setSelectedPublicListId={(publicListId) =>

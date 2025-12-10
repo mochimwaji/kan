@@ -491,6 +491,22 @@ export function FormattedShortcut({
     return info.winName;
   };
 
+  const formatKeyName = (key: string): string => {
+    const keyUpperCase = key.toUpperCase();
+    // Special key name mappings for cleaner display
+    const keyNameMap: Record<string, string> = {
+      ESCAPE: "ESC",
+      ARROWUP: "↑",
+      ARROWDOWN: "↓",
+      ARROWLEFT: "←",
+      ARROWRIGHT: "→",
+      BACKSPACE: "⌫",
+      DELETE: "DEL",
+      ENTER: "↵",
+    };
+    return keyNameMap[keyUpperCase] ?? keyUpperCase;
+  };
+
   const formatStroke = (stroke: KeyStroke): ReactNode[] => {
     const parts: ReactNode[] = [];
     const modifierStrings = stroke.modifiers
@@ -501,7 +517,7 @@ export function FormattedShortcut({
       parts.push(<kbd className={kbdClassName}>{mod}</kbd>);
     });
 
-    parts.push(<kbd className={kbdClassName}>{stroke.key.toUpperCase()}</kbd>);
+    parts.push(<kbd className={kbdClassName}>{formatKeyName(stroke.key)}</kbd>);
 
     return parts;
   };

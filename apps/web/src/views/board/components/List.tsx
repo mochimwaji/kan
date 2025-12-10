@@ -77,6 +77,27 @@ export default function List({
     setIsCollapsed((prev) => !prev);
   }, []);
 
+  // Listen for keyboard shortcut toggle events
+  useEffect(() => {
+    const handleToggleEvent = (
+      event: CustomEvent<{ listPublicId: string }>,
+    ) => {
+      if (event.detail.listPublicId === list.publicId) {
+        toggleCollapse();
+      }
+    };
+    window.addEventListener(
+      "toggle-list-collapse" as never,
+      handleToggleEvent as EventListener,
+    );
+    return () => {
+      window.removeEventListener(
+        "toggle-list-collapse" as never,
+        handleToggleEvent as EventListener,
+      );
+    };
+  }, [list.publicId, toggleCollapse]);
+
   const openNewCardForm = (publicListId: PublicListId) => {
     openModal("NEW_CARD");
     setSelectedPublicListId(publicListId);
