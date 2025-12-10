@@ -18,6 +18,7 @@ import {
 } from "react-icons/hi2";
 
 import TabTransition from "~/components/TabTransition";
+import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -45,6 +46,39 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   const hasInitialized = useRef(false);
 
   const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
+
+  // Settings keyboard shortcuts
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "a" },
+    action: () => router.push("/settings/account"),
+    description: t`Account settings`,
+    group: "NAVIGATION",
+  });
+
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "w" },
+    action: () => router.push("/settings/workspace"),
+    description: t`Workspace settings`,
+    group: "NAVIGATION",
+  });
+
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "p" },
+    action: () => router.push("/settings/api"),
+    description: t`API settings`,
+    group: "NAVIGATION",
+  });
+
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "i" },
+    action: () => router.push("/settings/integrations"),
+    description: t`Integrations`,
+    group: "NAVIGATION",
+  });
 
   // Memoize availableTabs to prevent infinite re-renders
   const availableTabs = useMemo(() => {

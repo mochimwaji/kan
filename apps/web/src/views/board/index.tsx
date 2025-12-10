@@ -92,6 +92,15 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       group: "ACTIONS",
     });
 
+  // Esc shortcut to return to boards page
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Escape" },
+    action: () => router.push("/boards"),
+    description: t`Go to boards`,
+    group: "NAVIGATION",
+  });
+
   const boardId = params?.boardId
     ? Array.isArray(params.boardId)
       ? params.boardId[0]

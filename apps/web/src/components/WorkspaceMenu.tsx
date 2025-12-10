@@ -1,6 +1,6 @@
 import { Button, Menu, Transition } from "@headlessui/react";
 import { t } from "@lingui/core/macro";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { HiCheck, HiMagnifyingGlass } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
@@ -19,6 +19,7 @@ export default function WorkspaceMenu({
     useWorkspace();
   const { openModal } = useModal();
   const [isOpen, setIsOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const { tooltipContent: commandPaletteShortcutTooltipContent } =
     useKeyboardShortcut({
@@ -31,6 +32,18 @@ export default function WorkspaceMenu({
       description: t`Open command menu`,
       group: "GENERAL",
     });
+
+  // 'l' shortcut to open workspace menu
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "l" },
+    action: () => {
+      // Programmatically click the menu button to open it
+      menuButtonRef.current?.click();
+    },
+    description: t`Open workspace menu`,
+    group: "NAVIGATION",
+  });
 
   return (
     <>
@@ -55,6 +68,7 @@ export default function WorkspaceMenu({
               )}
             >
               <Menu.Button
+                ref={menuButtonRef}
                 className={twMerge(
                   "mb-1 flex h-[34px] min-w-0 flex-1 items-center justify-start rounded-md p-1.5 hover:bg-light-200 dark:hover:bg-dark-200",
                   isCollapsed &&
