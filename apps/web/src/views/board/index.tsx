@@ -621,6 +621,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                               index={index}
                               key={list.publicId}
                               list={list}
+                              cardCount={list.cards.length}
                               setSelectedPublicListId={(publicListId) =>
                                 setSelectedPublicListId(publicListId)
                               }
