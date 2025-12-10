@@ -112,8 +112,8 @@ export default function SideNavigation({
       href: "/boards",
       icon: isDarkMode ? boardsIconDark : boardsIconLight,
       keyboardShortcut: {
-        type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "B" }],
+        type: "PRESS",
+        stroke: { key: "b" },
         action: () => router.push("/boards"),
         group: "NAVIGATION",
         description: t`Go to boards`,
@@ -124,8 +124,8 @@ export default function SideNavigation({
       href: "/templates",
       icon: isDarkMode ? templatesIconDark : templatesIconLight,
       keyboardShortcut: {
-        type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "T" }],
+        type: "PRESS",
+        stroke: { key: "t" },
         action: () => router.push("/templates"),
         group: "NAVIGATION",
         description: t`Go to templates`,
@@ -136,8 +136,8 @@ export default function SideNavigation({
       href: "/members",
       icon: isDarkMode ? membersIconDark : membersIconLight,
       keyboardShortcut: {
-        type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "M" }],
+        type: "PRESS",
+        stroke: { key: "m" },
         action: () => router.push("/members"),
         group: "NAVIGATION",
         description: t`Go to members`,
@@ -148,8 +148,8 @@ export default function SideNavigation({
       href: "/settings",
       icon: isDarkMode ? settingsIconDark : settingsIconLight,
       keyboardShortcut: {
-        type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "S" }],
+        type: "PRESS",
+        stroke: { key: "s" },
         action: () => router.push("/settings"),
         group: "NAVIGATION",
         description: t`Go to settings`,

@@ -13,6 +13,12 @@ import { useState } from "react";
 import { HiDocumentText, HiFolder, HiMagnifyingGlass } from "react-icons/hi2";
 
 import { useDebounce } from "~/hooks/useDebounce";
+import {
+  FormattedShortcut,
+  getShortcutGroupInfo,
+  ShortcutGroup,
+  useKeyboardShortcuts,
+} from "~/providers/keyboard-shortcuts";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 
@@ -48,6 +54,7 @@ export default function CommandPallette({
   const [query, setQuery] = useState("");
   const { workspace } = useWorkspace();
   const router = useRouter();
+  const { getGroupedShortcuts } = useKeyboardShortcuts();
 
   // Debounce to avoid too many reqs
   const [debouncedQuery] = useDebounce(query, 300);
@@ -75,6 +82,13 @@ export default function CommandPallette({
       : ((searchResults ?? []) as SearchResult[]);
 
   const hasSearched = Boolean(debouncedQuery.trim().length > 0);
+
+  // Get grouped shortcuts for legend display
+  const groupedShortcuts = getGroupedShortcuts();
+  const groupInfo = getShortcutGroupInfo();
+
+  // Show legend when query is empty
+  const showLegend = query.trim().length === 0;
 
   return (
     <Dialog
@@ -128,6 +142,7 @@ export default function CommandPallette({
                 />
               </div>
 
+              {/* Search Results */}
               {results.length > 0 && (
                 <ComboboxOptions
                   static
@@ -181,6 +196,7 @@ export default function CommandPallette({
                 </ComboboxOptions>
               )}
 
+              {/* No Results */}
               {hasSearched &&
                 !isLoading &&
                 searchResults !== undefined &&
@@ -189,6 +205,48 @@ export default function CommandPallette({
                     {t`No results found for "${debouncedQuery}".`}
                   </div>
                 )}
+
+              {/* Keyboard Shortcuts Legend - shows when not searching */}
+              <div
+                className={`overflow-hidden transition-all duration-200 ease-in-out ${
+                  showLegend ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="max-h-[300px] overflow-y-auto border-t border-gray-100 p-4 dark:border-white/10">
+                  <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-light-700 dark:text-dark-700">
+                    {t`Keyboard Shortcuts`}
+                  </h3>
+                  <div className="space-y-4">
+                    {Object.values(ShortcutGroup).map((group) => {
+                      const shortcuts = groupedShortcuts[group];
+                      if (!shortcuts?.length) return null;
+                      return (
+                        <div key={group}>
+                          <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-light-600 dark:text-dark-600">
+                            {groupInfo[group].label}
+                          </h4>
+                          <div className="flex flex-col gap-y-1.5">
+                            {shortcuts.map((shortcut) => (
+                              <div
+                                key={shortcut.description}
+                                className="flex items-center justify-between gap-2"
+                              >
+                                <span
+                                  className="text-xs"
+                                  style={{ color: "var(--kan-menu-text)" }}
+                                >
+                                  {shortcut.description}
+                                </span>
+                                <FormattedShortcut shortcut={shortcut} />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             </Combobox>
           </DialogPanel>
         </div>

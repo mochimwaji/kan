@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlineCalendar,
@@ -20,6 +20,7 @@ import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
+import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
@@ -366,6 +367,26 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   const board = card?.list.board;
   const boardId = board?.publicId;
   const activities = card?.activities;
+
+  // Esc shortcut to close card and return to board
+  const closeCardHref = useCallback(() => {
+    if (boardId) {
+      setOpacity(0);
+      setTimeout(() => {
+        router.push(
+          isTemplate ? `/templates/${boardId}` : `/boards/${boardId}`,
+        );
+      }, 300);
+    }
+  }, [boardId, isTemplate, router]);
+
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Escape" },
+    action: closeCardHref,
+    description: t`Close card`,
+    group: "ACTIONS",
+  });
 
   const updateCard = api.card.update.useMutation({
     onError: () => {

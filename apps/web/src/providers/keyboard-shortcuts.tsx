@@ -42,14 +42,17 @@ const ModifierKeyInfo: Record<
   SHIFT: { macSymbol: "⇧", winName: "Shift", linuxName: "Shift" },
 };
 
-const ShortcutGroup = {
+export const ShortcutGroup = {
   GENERAL: "GENERAL",
   NAVIGATION: "NAVIGATION",
   ACTIONS: "ACTIONS",
 } as const;
-type ShortcutGroup = (typeof ShortcutGroup)[keyof typeof ShortcutGroup];
+export type ShortcutGroup = (typeof ShortcutGroup)[keyof typeof ShortcutGroup];
 
-const getShortcutGroupInfo = (): Record<ShortcutGroup, { label: string }> => ({
+export const getShortcutGroupInfo = (): Record<
+  ShortcutGroup,
+  { label: string }
+> => ({
   GENERAL: { label: t`General` },
   NAVIGATION: { label: t`Navigation` },
   ACTIONS: { label: t`Actions` },
@@ -142,6 +145,7 @@ interface KeyboardShortcutContextType {
   registerShortcut: (shortcut: KeyboardShortcut) => () => void;
   openLegend: () => void;
   openLegendKeys: ReactNode;
+  getGroupedShortcuts: () => Partial<Record<ShortcutGroup, KeyboardShortcut[]>>;
 }
 
 const KeyboardShortcutContext = createContext<
@@ -165,10 +169,10 @@ export function KeyboardShortcutProvider({
       type: "PRESS",
       stroke: {
         key: "/",
-        modifiers: ["META"],
+        modifiers: ["CONTROL"],
       },
       action: () => setIsLegendOpen(true),
-      description: t`Open keyboard shortcuts`,
+      description: t`Open search & shortcuts`,
       group: ShortcutGroup.GENERAL,
     }),
     [setIsLegendOpen],
@@ -293,9 +297,26 @@ export function KeyboardShortcutProvider({
     [openLegendShortcut],
   );
 
+  const getGroupedShortcuts = useCallback(() => {
+    const shortcutsArray = Array.from(shortcutsRef.current.values());
+    return shortcutsArray.reduce<
+      Partial<Record<ShortcutGroup, KeyboardShortcut[]>>
+    >((acc, shortcut) => {
+      const group = shortcut.group;
+      acc[group] ??= [];
+      acc[group].push(shortcut);
+      return acc;
+    }, {});
+  }, []);
+
   return (
     <KeyboardShortcutContext.Provider
-      value={{ registerShortcut, openLegend, openLegendKeys }}
+      value={{
+        registerShortcut,
+        openLegend,
+        openLegendKeys,
+        getGroupedShortcuts,
+      }}
     >
       {children}
 
@@ -442,7 +463,11 @@ function ShortcutListItem({ shortcut }: { shortcut: KeyboardShortcut }) {
   );
 }
 
-function FormattedShortcut({ shortcut }: { shortcut: KeyboardShortcut }) {
+export function FormattedShortcut({
+  shortcut,
+}: {
+  shortcut: KeyboardShortcut;
+}) {
   const kbdClassName =
     "inline-flex h-5 w-5 items-center justify-center rounded border border-light-400 bg-light-200 px-1.5 py-0.5 font-mono text-[8px] font-semibold text-center text-neutral-900 dark:border-dark-400 dark:bg-dark-200 dark:text-dark-950";
 
