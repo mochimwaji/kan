@@ -9,7 +9,7 @@ import {
   DialogPanel,
 } from "@headlessui/react";
 import { t } from "@lingui/macro";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiDocumentText, HiFolder, HiMagnifyingGlass } from "react-icons/hi2";
 
 import { useDebounce } from "~/hooks/useDebounce";
@@ -55,6 +55,18 @@ export default function CommandPallette({
   const { workspace } = useWorkspace();
   const router = useRouter();
   const { getGroupedShortcuts } = useKeyboardShortcuts();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Explicitly focus input after dialog opens (autoFocus can be unreliable with transitions)
+  useEffect(() => {
+    if (isOpen) {
+      // Small delay to ensure dialog transition completes
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   // Debounce to avoid too many reqs
   const [debouncedQuery] = useDebounce(query, 300);
@@ -114,6 +126,7 @@ export default function CommandPallette({
             <Combobox>
               <div className="grid grid-cols-1">
                 <ComboboxInput
+                  ref={inputRef}
                   autoFocus
                   className="col-start-1 row-start-1 h-12 w-full border-0 bg-transparent pl-11 pr-4 text-sm placeholder:text-light-700 focus:outline-none focus:ring-0 dark:placeholder:text-dark-700"
                   style={{ color: "var(--kan-menu-text)" }}
