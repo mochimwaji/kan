@@ -78,7 +78,7 @@ export function CardModal({
                         query: {
                           ...router.query,
                           workspaceSlug,
-                          boardSlug: [boardSlug],
+                          boardSlug: boardSlug ? [boardSlug] : undefined,
                         },
                       },
                       undefined,

@@ -1,6 +1,5 @@
-import { useCallback, useRef, useState } from "react";
-
-import { hexToHsl, hslToHex, isValidHexColor } from "~/utils/colorUtils";
+import { useColorWheel } from "~/hooks/useColorWheel";
+import { isValidHexColor } from "~/utils/colorUtils";
 
 interface ColorWheelPickerProps {
   label: string;
@@ -10,124 +9,24 @@ interface ColorWheelPickerProps {
 
 /**
  * Color wheel picker component that allows users to select colors
- * by clicking on a color wheel and adjusting lightness with a slider
+ * by clicking on a color wheel and adjusting lightness with a slider.
+ * Uses shared useColorWheel hook for canvas logic.
  */
 export default function ColorWheelPicker({
   label,
   value,
   onChange,
 }: ColorWheelPickerProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [lightness, setLightness] = useState(() => {
-    if (isValidHexColor(value)) {
-      return hexToHsl(value).l;
-    }
-    return 50;
+  const {
+    lightness,
+    handleCanvasClick,
+    handleLightnessChange,
+    handleCanvasRef,
+  } = useColorWheel({
+    initialColor: value,
+    onColorChange: onChange,
+    canvasSize: 120,
   });
-
-  // Draw the color wheel
-  const drawColorWheel = useCallback(
-    (canvas: HTMLCanvasElement) => {
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const radius = Math.min(centerX, centerY) - 2;
-
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw color wheel
-      for (let angle = 0; angle < 360; angle++) {
-        const startAngle = ((angle - 1) * Math.PI) / 180;
-        const endAngle = ((angle + 1) * Math.PI) / 180;
-
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-        ctx.closePath();
-
-        // Use current lightness in the wheel
-        ctx.fillStyle = `hsl(${angle}, 100%, ${lightness}%)`;
-        ctx.fill();
-      }
-
-      // Draw center circle (shows currently selected color)
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius * 0.25, 0, 2 * Math.PI);
-      ctx.fillStyle = value;
-      ctx.fill();
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    },
-    [lightness, value],
-  );
-
-  // Handle canvas click to select color
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = Math.min(centerX, centerY) - 2;
-
-    // Calculate distance from center
-    const dx = x - centerX;
-    const dy = y - centerY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    // Only register clicks within the wheel (but not in center preview)
-    if (distance <= radius && distance > radius * 0.25) {
-      // Calculate angle (hue)
-      let angle = Math.atan2(dy, dx) * (180 / Math.PI);
-      if (angle < 0) angle += 360;
-
-      // Calculate saturation based on distance from center
-      const saturation = Math.min(
-        100,
-        Math.max(0, ((distance - radius * 0.25) / (radius * 0.75)) * 100),
-      );
-
-      const newColor = hslToHex(
-        Math.round(angle),
-        Math.round(saturation),
-        lightness,
-      );
-      onChange(newColor);
-    }
-  };
-
-  // Handle lightness slider change
-  const handleLightnessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newLightness = parseInt(e.target.value, 10);
-    setLightness(newLightness);
-
-    // Update current color with new lightness
-    if (isValidHexColor(value)) {
-      const hsl = hexToHsl(value);
-      const newColor = hslToHex(hsl.h, hsl.s, newLightness);
-      onChange(newColor);
-    }
-  };
-
-  // Draw wheel when component mounts or updates
-  const handleCanvasRef = useCallback(
-    (canvas: HTMLCanvasElement | null) => {
-      if (canvas) {
-        // @ts-expect-error - ref assignment
-        canvasRef.current = canvas;
-        drawColorWheel(canvas);
-      }
-    },
-    [drawColorWheel],
-  );
 
   return (
     <div className="flex flex-col gap-3">

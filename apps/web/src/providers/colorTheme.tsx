@@ -10,12 +10,12 @@ import React, {
 import type { ThemeColors } from "~/utils/themePresets";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
-import { getContrastColor } from "~/utils/colorUtils";
 import {
   DEFAULT_THEME_COLORS,
   getPresetColors,
   THEME_PRESETS,
 } from "~/utils/themePresets";
+import { applyColorsToDocument } from "~/utils/themeUtils";
 
 interface ColorThemeContextProps {
   themeColors: ThemeColors;
@@ -33,42 +33,6 @@ const ColorThemeContext = createContext<ColorThemeContextProps | undefined>(
 );
 
 const STORAGE_KEY = "kan-theme-colors";
-
-function applyColorsToDocument(colors: ThemeColors, isDark: boolean) {
-  const root = document.documentElement;
-
-  // Get colors based on preset or custom
-  const isCustom = colors.preset === "custom";
-  const presetColors = !isCustom
-    ? getPresetColors(colors.preset, isDark ? "dark" : "light")
-    : null;
-
-  const sidebar = isCustom
-    ? colors.sidebar
-    : (presetColors?.sidebar ?? colors.sidebar);
-  const pages = isCustom ? colors.pages : (presetColors?.pages ?? colors.pages);
-  const boardBackground = isCustom
-    ? colors.boardBackground
-    : (presetColors?.boardBackground ?? colors.boardBackground);
-  const button = isCustom
-    ? colors.button
-    : (presetColors?.button ?? colors.button);
-  const menu = isCustom ? colors.menu : (presetColors?.menu ?? colors.menu);
-
-  // Set background colors
-  root.style.setProperty("--kan-sidebar-bg", sidebar);
-  root.style.setProperty("--kan-pages-bg", pages);
-  root.style.setProperty("--kan-board-bg", boardBackground);
-  root.style.setProperty("--kan-button-bg", button);
-  root.style.setProperty("--kan-menu-bg", menu);
-
-  // Set text contrast colors
-  root.style.setProperty("--kan-sidebar-text", getContrastColor(sidebar));
-  root.style.setProperty("--kan-pages-text", getContrastColor(pages));
-  root.style.setProperty("--kan-board-text", getContrastColor(boardBackground));
-  root.style.setProperty("--kan-button-text", getContrastColor(button));
-  root.style.setProperty("--kan-menu-text", getContrastColor(menu));
-}
 
 export const ColorThemeProvider: React.FC<{ children: ReactNode }> = ({
   children,

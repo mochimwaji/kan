@@ -130,6 +130,82 @@ reqLogger.info("Request started");
 - **Components**:
   - Use `ColorPicker` for general color selection.
   - Use `ListColorPicker` specifically for list context.
+  - Use `ThemePresetSelector` for workspace-wide theme selection.
+
+#### Theme Presets
+
+The application supports 7 predefined color themes defined in `apps/web/src/utils/themePresets.ts`:
+
+| Preset ID        | Name           | Description                       |
+| ---------------- | -------------- | --------------------------------- |
+| `default-light`  | Default Light  | Clean and minimal light theme     |
+| `default-dark`   | Default Dark   | Dark theme for reduced eye strain |
+| `ocean-blue`     | Ocean Blue     | Calm and professional blue tones  |
+| `forest-green`   | Forest Green   | Nature-inspired green palette     |
+| `sunset-warm`    | Sunset Warm    | Warm orange and coral accents     |
+| `lavender-dream` | Lavender Dream | Soft purple and violet hues       |
+| `slate-gray`     | Slate Gray     | Modern neutral gray palette       |
+
+Each preset defines colors for: `sidebar`, `pages`, `boardBackground`, `button`, `menu`.
+
+#### Color Utilities
+
+Use the color utility functions in `apps/web/src/utils/colorUtils.ts`:
+
+- `hexToHsl(hex)` / `hslToHex(h, s, l)` - Color format conversion
+- `deriveListBackground(hex)` - Derive lighter background from base color
+- `derivePastelColor(hex)` - Create pastel variant of a color
+- `getContrastColor(hex)` - Get black or white for readable text
+- `blendWithOpacity(fg, bg, opacity)` - Blend colors with opacity
+
+### Animations
+
+#### Board Transitions
+
+Smooth morph animations when navigating between boards list and board view:
+
+```typescript
+import { useBoardTransition } from "~/providers/board-transition";
+
+const { startTransition, animationPhase } = useBoardTransition();
+
+// Start transition from a board card
+startTransition(
+  { top, left, width, height }, // Source rect from getBoundingClientRect()
+  boardId,
+  boardName,
+);
+```
+
+**Components**:
+
+- `BoardTransitionProvider` - Context provider managing transition state
+- `BoardTransitionOverlay` - Portal-rendered animating overlay
+- Animation phases: `idle` → `expanding` → `expanded` → `contracting` → `idle`
+
+#### Page Transitions
+
+Use `PageTransition` for fade transitions between workspace pages:
+
+```tsx
+import PageTransition from "~/components/PageTransition";
+
+<PageTransition transitionKey={router.asPath}>
+  <YourPageContent />
+</PageTransition>;
+```
+
+#### Tab Transitions
+
+Use `TabTransition` for content transitions within tabbed interfaces:
+
+```tsx
+import TabTransition from "~/components/TabTransition";
+
+<TabTransition transitionKey={activeTab}>
+  <TabContent />
+</TabTransition>;
+```
 
 ## Testing
 
@@ -407,12 +483,16 @@ apps/web → @kan/api → @kan/db → @kan/shared
 
 ### Key Files
 
-| Purpose     | Location                      |
-| ----------- | ----------------------------- |
-| API Routes  | `packages/api/src/routers/`   |
-| DB Schema   | `packages/db/src/schema/`     |
-| DB Queries  | `packages/db/src/repository/` |
-| React Pages | `apps/web/src/pages/`         |
-| React Views | `apps/web/src/views/`         |
-| Components  | `apps/web/src/components/`    |
-| Environment | `apps/web/src/env.ts`         |
+| Purpose           | Location                                      |
+| ----------------- | --------------------------------------------- |
+| API Routes        | `packages/api/src/routers/`                   |
+| DB Schema         | `packages/db/src/schema/`                     |
+| DB Queries        | `packages/db/src/repository/`                 |
+| React Pages       | `apps/web/src/pages/`                         |
+| React Views       | `apps/web/src/views/`                         |
+| Components        | `apps/web/src/components/`                    |
+| Providers         | `apps/web/src/providers/`                     |
+| Environment       | `apps/web/src/env.ts`                         |
+| Theme Presets     | `apps/web/src/utils/themePresets.ts`          |
+| Color Utilities   | `apps/web/src/utils/colorUtils.ts`            |
+| Board Transitions | `apps/web/src/providers/board-transition.tsx` |
