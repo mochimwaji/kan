@@ -92,13 +92,101 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       group: "ACTIONS",
     });
 
-  // Esc shortcut to return to boards page
+  // Esc shortcut to return to boards page (only when no modal is open)
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "Escape" },
-    action: () => router.push("/boards"),
+    action: () => {
+      if (!isOpen) {
+        router.push("/boards");
+      }
+    },
     description: t`Go to boards`,
-    group: "NAVIGATION",
+    group: "BOARD_VIEW",
+  });
+
+  // List collapse state version - increment to force List component re-render
+  const [listCollapseVersion, setListCollapseVersion] = useState(0);
+
+  // Helper to toggle list collapse via localStorage
+  const toggleListCollapse = useCallback(
+    (listIndex: number) => {
+      const lists = boardData?.lists;
+      if (!lists || listIndex >= lists.length) return;
+      const list = lists[listIndex];
+      if (!list) return;
+      const key = `list-collapsed-${list.publicId}`;
+      const current = localStorage.getItem(key) === "true";
+      localStorage.setItem(key, String(!current));
+      // Force re-render of List components
+      setListCollapseVersion((v) => v + 1);
+    },
+    [boardData?.lists],
+  );
+
+  // 1-9 shortcuts to toggle list collapse
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "1" },
+    action: () => toggleListCollapse(0),
+    description: t`Toggle list 1`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "2" },
+    action: () => toggleListCollapse(1),
+    description: t`Toggle list 2`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "3" },
+    action: () => toggleListCollapse(2),
+    description: t`Toggle list 3`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "4" },
+    action: () => toggleListCollapse(3),
+    description: t`Toggle list 4`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "5" },
+    action: () => toggleListCollapse(4),
+    description: t`Toggle list 5`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "6" },
+    action: () => toggleListCollapse(5),
+    description: t`Toggle list 6`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "7" },
+    action: () => toggleListCollapse(6),
+    description: t`Toggle list 7`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "8" },
+    action: () => toggleListCollapse(7),
+    description: t`Toggle list 8`,
+    group: "BOARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "9" },
+    action: () => toggleListCollapse(8),
+    description: t`Toggle list 9`,
+    group: "BOARD_VIEW",
   });
 
   const boardId = params?.boardId
@@ -628,7 +716,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                           {boardData.lists.map((list, index) => (
                             <List
                               index={index}
-                              key={list.publicId}
+                              key={`${list.publicId}-${listCollapseVersion}`}
                               list={list}
                               cardCount={list.cards.length}
                               setSelectedPublicListId={(publicListId) =>

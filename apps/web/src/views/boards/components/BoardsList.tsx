@@ -53,63 +53,63 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
     stroke: { key: "1" },
     action: () => navigateToBoard(0),
     description: t`Go to board 1`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "2" },
     action: () => navigateToBoard(1),
     description: t`Go to board 2`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "3" },
     action: () => navigateToBoard(2),
     description: t`Go to board 3`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "4" },
     action: () => navigateToBoard(3),
     description: t`Go to board 4`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "5" },
     action: () => navigateToBoard(4),
     description: t`Go to board 5`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "6" },
     action: () => navigateToBoard(5),
     description: t`Go to board 6`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "7" },
     action: () => navigateToBoard(6),
     description: t`Go to board 7`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "8" },
     action: () => navigateToBoard(7),
     description: t`Go to board 8`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "9" },
     action: () => navigateToBoard(8),
     description: t`Go to board 9`,
-    group: "NAVIGATION",
+    group: "BOARDS",
   });
 
   // Handle contract animation when returning to boards page
