@@ -63,6 +63,7 @@ export function NewListForm({
           boardPublicId,
           cards: [],
           index: oldBoard.lists.length,
+          color: null,
         };
 
         const updatedLists = [...oldBoard.lists, newList];

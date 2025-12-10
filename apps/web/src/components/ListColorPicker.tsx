@@ -1,8 +1,7 @@
 import { t } from "@lingui/core/macro";
-import { useCallback, useRef, useState } from "react";
 import { HiXMark } from "react-icons/hi2";
 
-import { hexToHsl, hslToHex, isValidHexColor } from "~/utils/colorUtils";
+import { useColorWheel } from "~/hooks/useColorWheel";
 
 interface ListColorPickerProps {
   currentColor: string | null;
@@ -10,117 +9,29 @@ interface ListColorPickerProps {
   onClose: () => void;
 }
 
+/**
+ * Color picker component specifically designed for list color selection.
+ * Features a color wheel, lightness slider, and remove color option.
+ * Uses shared useColorWheel hook for canvas logic.
+ */
 export default function ListColorPicker({
   currentColor,
   onColorSelect,
   onClose,
 }: ListColorPickerProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [lightness, setLightness] = useState(() => {
-    if (currentColor && isValidHexColor(currentColor)) {
-      return hexToHsl(currentColor).l;
-    }
-    return 50;
-  });
-  const [selectedColor, setSelectedColor] = useState<string | null>(
-    currentColor,
-  );
-
-  // Draw the color wheel
-  const drawColorWheel = useCallback(
-    (canvas: HTMLCanvasElement) => {
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const radius = Math.min(centerX, centerY) - 2;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw color wheel
-      for (let angle = 0; angle < 360; angle++) {
-        const startAngle = ((angle - 1) * Math.PI) / 180;
-        const endAngle = ((angle + 1) * Math.PI) / 180;
-
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-        ctx.closePath();
-
-        ctx.fillStyle = `hsl(${angle}, 100%, ${lightness}%)`;
-        ctx.fill();
-      }
-
-      // Draw center circle with selected color
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius * 0.25, 0, 2 * Math.PI);
-      ctx.fillStyle = selectedColor || "#cccccc";
-      ctx.fill();
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    },
-    [lightness, selectedColor],
-  );
-
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = Math.min(centerX, centerY) - 2;
-
-    const dx = x - centerX;
-    const dy = y - centerY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance <= radius && distance > radius * 0.25) {
-      let angle = Math.atan2(dy, dx) * (180 / Math.PI);
-      if (angle < 0) angle += 360;
-
-      const saturation = Math.min(
-        100,
-        Math.max(50, ((distance - radius * 0.25) / (radius * 0.75)) * 100),
-      );
-
-      const newColor = hslToHex(
-        Math.round(angle),
-        Math.round(saturation),
-        lightness,
-      );
-      setSelectedColor(newColor);
-      onColorSelect(newColor);
+  const {
+    lightness,
+    handleCanvasClick,
+    handleLightnessChange,
+    handleCanvasRef,
+  } = useColorWheel({
+    initialColor: currentColor,
+    onColorChange: (color) => {
+      onColorSelect(color);
       onClose();
-    }
-  };
-
-  const handleLightnessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newLightness = parseInt(e.target.value, 10);
-    setLightness(newLightness);
-
-    if (selectedColor && isValidHexColor(selectedColor)) {
-      const hsl = hexToHsl(selectedColor);
-      const newColor = hslToHex(hsl.h, hsl.s, newLightness);
-      setSelectedColor(newColor);
-    }
-  };
-
-  const handleCanvasRef = useCallback(
-    (canvas: HTMLCanvasElement | null) => {
-      if (canvas) {
-        // @ts-expect-error - ref assignment
-        canvasRef.current = canvas;
-        drawColorWheel(canvas);
-      }
     },
-    [drawColorWheel],
-  );
+    canvasSize: 100,
+  });
 
   return (
     <div className="absolute left-0 top-full z-50 mt-1 w-56 rounded-lg border border-light-300 bg-light-50 p-3 shadow-lg dark:border-dark-400 dark:bg-dark-200">

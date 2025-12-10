@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/kanbn/kan/compare/v0.3.0...HEAD)
 
+### Added
+
+- **Board Transition Animations**: Smooth morph animation when navigating between boards list and board view using `BoardTransitionOverlay` and `BoardTransitionProvider`.
+- **Sidebar Toggle Animations**: Smooth sliding transitions for left and right sidebar open/close states with visual feedback.
+- **Card Right Sidebar Icons**: Added Lottie animations and icons for List, Labels, Members, and Due date sections in the card right panel.
+- **Theme Presets**: Added 7 predefined color themes (Default Light/Dark, Ocean Blue, Forest Green, Sunset Warm, Lavender Dream, Slate Gray) with `ThemePresetSelector` component.
+- **Color Utilities**: New `colorUtils.ts` with HSL conversion, pastel color derivation, contrast detection, and color blending functions.
+- **IRSA Support**: Added IAM Roles for Service Accounts (IRSA) support for S3 authentication (#265).
+- **OIDC Domain Limiting**: Added ability to limit OIDC logins to specific domains (#263).
+- **SMTP SSL Configuration**: Added `SMTP_REJECT_UNAUTHORIZED` env var to allow invalid SSL certificates (#262).
+
+### Changed
+
+- Improved page transition animations across workspace navigation (Boards, Templates, Members, Settings).
+- Enhanced settings tab navigation with tab content fade transitions.
+- Refined right sidebar button alignment to match left sidebar structure.
+
+### Fixed
+
+- Fixed flashing issues during board navigation transitions.
+- Fixed sidebar toggle icon directions for right-side drawer.
+- Resolved scrollbar inconsistency in settings tabs.
+
 ## [0.3.0](https://github.com/kanbn/kan/compare/v0.2.4...v0.3.0) - 2025-12-09
 
 ### Added

@@ -24,11 +24,13 @@
 - 👁️ **Board Visibility**: Control who can view and edit your boards
 - 🤝 **Workspace Members**: Invite members and collaborate with your team
 - 🎨 **Customizable Lists**: Color code your lists for better organization
+- 🎨 **Theme Presets**: Choose from 7 beautiful color themes or create custom ones
 - 🚀 **Trello Imports**: Easily import your Trello boards
 - 🔍 **Labels & Filters**: Organise and find cards quickly
 - 💬 **Comments**: Discuss and collaborate with your team
 - 📝 **Activity Log**: Track all card changes with detailed activity history
 - 🎨 **Templates** : Save time with reusable custom board templates
+- ✨ **Smooth Animations**: Beautiful transitions between pages and boards
 - ⚡️ **Integrations (coming soon)** : Connect your favourite tools
 
 See our [roadmap](https://kan.bn/kan/roadmap) for upcoming features.

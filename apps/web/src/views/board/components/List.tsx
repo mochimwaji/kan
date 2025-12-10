@@ -148,7 +148,6 @@ export default function List({
                     {
                       label: t`Add a card`,
                       action: () => openNewCardForm(list.publicId),
-                      action: () => openNewCardForm(list.publicId),
                       icon: (
                         <HiOutlineSquaresPlus
                           className="h-[18px] w-[18px]"
@@ -168,7 +167,6 @@ export default function List({
                     },
                     {
                       label: t`Delete list`,
-                      action: handleOpenDeleteListConfirmation,
                       action: handleOpenDeleteListConfirmation,
                       icon: (
                         <HiOutlineTrash
