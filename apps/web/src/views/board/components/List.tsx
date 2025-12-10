@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
 import { t } from "@lingui/core/macro";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import {
+  HiChevronDown,
+  HiChevronRight,
   HiEllipsisHorizontal,
   HiOutlinePaintBrush,
   HiOutlinePlusSmall,
@@ -12,6 +14,7 @@ import {
 } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
+import CollapsibleSection from "~/components/CollapsibleSection";
 import Dropdown from "~/components/Dropdown";
 import ListColorPicker from "~/components/ListColorPicker";
 import { useModal } from "~/providers/modal";
@@ -22,6 +25,7 @@ interface ListProps {
   children: ReactNode;
   index: number;
   list: List;
+  cardCount: number;
   setSelectedPublicListId: (publicListId: PublicListId) => void;
 }
 
@@ -38,14 +42,40 @@ interface FormValues {
 
 type PublicListId = string;
 
+// localStorage key prefix for list collapse state
+const COLLAPSE_STORAGE_KEY_PREFIX = "list-collapsed-";
+
 export default function List({
   children,
   index,
   list,
+  cardCount,
   setSelectedPublicListId,
 }: ListProps) {
   const { openModal } = useModal();
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+
+  // Collapse state with localStorage persistence
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    // Only access localStorage on client-side
+    if (typeof window === "undefined") return false;
+    return (
+      localStorage.getItem(`${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`) ===
+      "true"
+    );
+  });
+
+  // Sync collapse state to localStorage
+  useEffect(() => {
+    localStorage.setItem(
+      `${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`,
+      String(isCollapsed),
+    );
+  }, [isCollapsed, list.publicId]);
+
+  const toggleCollapse = useCallback(() => {
+    setIsCollapsed((prev) => !prev);
+  }, []);
 
   const openNewCardForm = (publicListId: PublicListId) => {
     openModal("NEW_CARD");
@@ -117,20 +147,47 @@ export default function List({
             color: "var(--kan-pages-text)",
           }}
         >
-          <div className="mb-2 flex justify-between">
+          <div className="mb-2 flex items-center justify-between">
+            {/* Collapse toggle button */}
+            <button
+              onClick={toggleCollapse}
+              className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded hover:bg-light-400 dark:hover:bg-dark-200"
+              aria-label={isCollapsed ? t`Expand list` : t`Collapse list`}
+            >
+              {isCollapsed ? (
+                <HiChevronRight
+                  className="h-4 w-4"
+                  style={{ color: "var(--kan-pages-text)" }}
+                />
+              ) : (
+                <HiChevronDown
+                  className="h-4 w-4"
+                  style={{ color: "var(--kan-pages-text)" }}
+                />
+              )}
+            </button>
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="w-full focus-visible:outline-none"
+              className="min-w-0 flex-1 focus-visible:outline-none"
             >
               <input
                 id="name"
                 type="text"
                 {...register("name")}
                 onBlur={handleSubmit(onSubmit)}
-                className="w-full border-0 bg-transparent px-4 pt-1 text-sm font-medium focus:ring-0 focus-visible:outline-none"
+                className="w-full border-0 bg-transparent px-2 pt-1 text-sm font-medium focus:ring-0 focus-visible:outline-none"
                 style={{ color: "var(--kan-pages-text)" }}
               />
             </form>
+            {/* Card count badge - shown when collapsed */}
+            {isCollapsed && cardCount > 0 && (
+              <span
+                className="mr-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-light-400 px-1.5 text-[10px] font-medium dark:bg-dark-300"
+                style={{ color: "var(--kan-pages-text)" }}
+              >
+                {cardCount}
+              </span>
+            )}
             <div className="flex items-center">
               <button
                 className="mx-1 inline-flex h-fit items-center rounded-md p-1 px-1 text-sm font-semibold text-dark-50 hover:bg-light-400 dark:hover:bg-dark-200"
@@ -192,7 +249,9 @@ export default function List({
               </div>
             </div>
           </div>
-          {children}
+          <CollapsibleSection isOpen={!isCollapsed}>
+            {children}
+          </CollapsibleSection>
         </div>
       )}
     </Draggable>

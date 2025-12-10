@@ -1,4 +1,11 @@
-import { format, isBefore, isSameYear, startOfDay } from "date-fns";
+import {
+  differenceInDays,
+  format,
+  isBefore,
+  isSameDay,
+  isSameYear,
+  startOfDay,
+} from "date-fns";
 import { HiOutlinePaperClip } from "react-icons/hi";
 import {
   HiBars3BottomLeft,
@@ -14,6 +21,40 @@ import LabelIcon from "~/components/LabelIcon";
 import { useLocalisation } from "~/hooks/useLocalisation";
 import { derivePastelColor } from "~/utils/colorUtils";
 import { getAvatarUrl } from "~/utils/helpers";
+
+// Due date urgency levels for visual feedback
+type DueDateUrgency = "overdue" | "today" | "thisWeek" | "default";
+
+const getDueDateUrgency = (dueDate: Date): DueDateUrgency => {
+  const now = new Date();
+  const today = startOfDay(now);
+  const dueDateStart = startOfDay(dueDate);
+
+  if (isBefore(dueDateStart, today)) return "overdue";
+  if (isSameDay(dueDateStart, today)) return "today";
+  if (differenceInDays(dueDateStart, today) <= 7) return "thisWeek";
+  return "default";
+};
+
+// Tailwind classes for each urgency level (supports dark mode)
+const dueDateUrgencyStyles: Record<
+  DueDateUrgency,
+  { className: string; useThemeColor: boolean }
+> = {
+  overdue: {
+    className: "text-red-600 dark:text-red-400",
+    useThemeColor: false,
+  },
+  today: {
+    className: "text-orange-500 dark:text-orange-400",
+    useThemeColor: false,
+  },
+  thisWeek: {
+    className: "text-yellow-600 dark:text-yellow-500",
+    useThemeColor: false,
+  },
+  default: { className: "", useThemeColor: true },
+};
 
 const Card = ({
   title,
@@ -51,7 +92,11 @@ const Card = ({
 }) => {
   const { dateLocale } = useLocalisation();
   const showYear = dueDate ? !isSameYear(dueDate, new Date()) : false;
-  const isOverdue = dueDate ? isBefore(dueDate, startOfDay(new Date())) : false;
+
+  // Calculate due date urgency for color coding
+  const dueDateUrgency = dueDate ? getDueDateUrgency(dueDate) : "default";
+  const urgencyStyle = dueDateUrgencyStyles[dueDateUrgency];
+
   const completedItems = checklists.reduce((acc, checklist) => {
     return acc + checklist.items.filter((item) => item.completed).length;
   }, 0);
@@ -114,11 +159,13 @@ const Card = ({
                 <div
                   className={twMerge(
                     "flex items-center gap-1",
-                    isOverdue ? "text-red-600 dark:text-red-400" : "",
+                    urgencyStyle.className,
                   )}
                   style={{
-                    color: isOverdue ? undefined : "var(--kan-pages-text)",
-                    opacity: isOverdue ? 1 : 0.7,
+                    color: urgencyStyle.useThemeColor
+                      ? "var(--kan-pages-text)"
+                      : undefined,
+                    opacity: urgencyStyle.useThemeColor ? 0.7 : 1,
                   }}
                 >
                   <HiOutlineClock className="h-4 w-4" />

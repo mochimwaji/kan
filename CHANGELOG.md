@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Due Date Urgency Coloring**: Cards now show due dates in contextual colors based on urgency: red (overdue), orange (due today), yellow (due within a week), default (later dates).
+- **Collapsible Lists**: Lists can be collapsed/expanded by clicking the chevron toggle in the header. Collapse state persists across page refreshes using localStorage. Collapsed lists show a card count badge.
+- **CollapsibleSection Component**: New reusable animated component for smooth collapse/expand transitions.
 - **Board Transition Animations**: Smooth morph animation when navigating between boards list and board view using `BoardTransitionOverlay` and `BoardTransitionProvider`.
 - **Sidebar Toggle Animations**: Smooth sliding transitions for left and right sidebar open/close states with visual feedback.
 - **Card Right Sidebar Icons**: Added Lottie animations and icons for List, Labels, Members, and Due date sections in the card right panel.
@@ -23,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved page transition animations across workspace navigation (Boards, Templates, Members, Settings).
 - Enhanced settings tab navigation with tab content fade transitions.
 - Refined right sidebar button alignment to match left sidebar structure.
+- List header now includes collapse toggle button and card count badge when collapsed.
 
 ### Fixed
 
