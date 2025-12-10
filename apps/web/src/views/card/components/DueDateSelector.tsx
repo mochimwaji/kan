@@ -184,22 +184,15 @@ export function DueDateSelector({
             )}
             onClick={handleBackdropClick}
           />
-          {/* Calendar popup with fade - uses fixed positioning to avoid clipping */}
+          {/* Calendar popup with fade - uses absolute positioning relative to button */}
           <div
             className={twMerge(
-              "fixed z-50 rounded-md border border-light-200 shadow-lg transition-all duration-150 dark:border-dark-200",
+              "absolute left-0 top-full z-50 mt-2 rounded-md border border-light-200 shadow-lg transition-all duration-150 dark:border-dark-200",
               animateIn
                 ? "scale-100 opacity-100"
                 : "pointer-events-none scale-95 opacity-0",
             )}
-            style={{
-              backgroundColor: "var(--kan-menu-bg)",
-              // Position will be set by the parent's position context
-              // Using fixed to ensure it overlays everything
-              top: "auto",
-              left: "auto",
-              marginTop: "8px",
-            }}
+            style={{ backgroundColor: "var(--kan-menu-bg)" }}
             onClick={(e) => {
               e.stopPropagation();
             }}
