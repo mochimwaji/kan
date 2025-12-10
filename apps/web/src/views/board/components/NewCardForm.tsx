@@ -475,11 +475,12 @@ export function NewCardForm({
             {isDateSelectorOpen && (
               <>
                 <div
-                  className="fixed inset-0 z-10"
+                  className="fixed inset-0 z-40"
                   onClick={() => setIsDateSelectorOpen(false)}
                 />
                 <div
-                  className="absolute left-0 top-full z-20 mt-2 rounded-md border border-light-200 bg-light-50 shadow-lg dark:border-dark-200 dark:bg-dark-100"
+                  className="absolute left-0 top-full z-50 mt-2 animate-fade-in rounded-md border border-light-200 shadow-lg dark:border-dark-200"
+                  style={{ backgroundColor: "var(--kan-menu-bg)" }}
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
