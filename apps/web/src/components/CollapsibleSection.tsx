@@ -10,7 +10,8 @@ interface CollapsibleSectionProps {
 
 /**
  * A reusable collapsible container with smooth animated transitions.
- * Uses max-height and opacity for smooth collapse/expand animation.
+ * Uses a two-phase animation: height changes first, then content fades in/out.
+ * This prevents the "jerky" feeling of simultaneous height+opacity changes.
  */
 export default function CollapsibleSection({
   children,
@@ -18,35 +19,63 @@ export default function CollapsibleSection({
   className,
 }: CollapsibleSectionProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | "auto">(isOpen ? "auto" : 0);
+  const [contentOpacity, setContentOpacity] = useState(isOpen ? 1 : 0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    if (!contentRef.current) return;
+    if (!innerRef.current) return;
 
     if (isOpen) {
-      // Expanding: set to actual height, then transition to auto
-      const contentHeight = contentRef.current.scrollHeight;
+      // EXPANDING: First set height, then fade in content
+      setIsAnimating(true);
+
+      // Step 1: Animate height from 0 to actual content height
+      const contentHeight = innerRef.current.scrollHeight;
       setHeight(contentHeight);
 
-      // After transition completes, set to auto for dynamic content
-      const timer = setTimeout(() => {
+      // Step 2: After height animation completes, fade in content and set height to auto
+      const heightTimer = setTimeout(() => {
+        setContentOpacity(1);
         setHeight("auto");
-      }, 200); // Match transition duration
+        setIsAnimating(false);
+      }, 200); // Match height transition duration
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout(heightTimer);
     } else {
-      // Collapsing: set to current height first, then animate to 0
-      const contentHeight = contentRef.current.scrollHeight;
-      setHeight(contentHeight);
+      // COLLAPSING: First fade out content, then collapse height
+      setIsAnimating(true);
 
-      // Force a reflow to ensure the height is set before transition
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      contentRef.current.offsetHeight;
+      // Step 1: Fade out content immediately
+      setContentOpacity(0);
 
-      // Use requestAnimationFrame to ensure the browser has painted
-      requestAnimationFrame(() => {
-        setHeight(0);
+      // Step 2: Set height to current value (from auto) to enable transition
+      if (innerRef.current) {
+        const currentHeight = innerRef.current.scrollHeight;
+        setHeight(currentHeight);
+      }
+
+      // Step 3: After a brief delay to set the explicit height, animate to 0
+      const setupTimer = requestAnimationFrame(() => {
+        // Force a reflow to ensure height is set before animating
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        contentRef.current?.offsetHeight;
+
+        requestAnimationFrame(() => {
+          setHeight(0);
+        });
       });
+
+      // Mark animation complete after full sequence
+      const completeTimer = setTimeout(() => {
+        setIsAnimating(false);
+      }, 350); // height transition + buffer
+
+      return () => {
+        cancelAnimationFrame(setupTimer);
+        clearTimeout(completeTimer);
+      };
     }
   }, [isOpen]);
 
@@ -54,15 +83,22 @@ export default function CollapsibleSection({
     <div
       ref={contentRef}
       className={twMerge(
-        "overflow-hidden transition-all duration-200 ease-in-out",
+        "overflow-hidden transition-[height] duration-200 ease-in-out",
         className,
       )}
       style={{
         height: typeof height === "number" ? `${height}px` : height,
-        opacity: isOpen ? 1 : 0,
       }}
     >
-      {children}
+      <div
+        ref={innerRef}
+        className="transition-opacity duration-150 ease-in-out"
+        style={{
+          opacity: contentOpacity,
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }
