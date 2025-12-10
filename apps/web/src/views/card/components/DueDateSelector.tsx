@@ -1,6 +1,6 @@
 import { t } from "@lingui/core/macro";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiMiniPlus } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
@@ -26,10 +26,12 @@ export function DueDateSelector({
   const { showPopup } = usePopup();
   const utils = api.useUtils();
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(false); // For fade animation
+  const [isVisible, setIsVisible] = useState(false); // For DOM presence
+  const [animateIn, setAnimateIn] = useState(false); // For CSS transition
   const [pendingDate, setPendingDate] = useState<Date | null | undefined>(
     dueDate,
   );
+  const animationFrameRef = useRef<number>();
 
   // Sync pendingDate with dueDate when it changes externally
   useEffect(() => {
@@ -38,18 +40,31 @@ export function DueDateSelector({
     }
   }, [dueDate, isOpen]);
 
-  // Handle fade in/out animation
+  // Handle fade in/out animation with proper sequencing
   useEffect(() => {
     if (isOpen) {
-      // Opening: show immediately, then fade in
+      // Opening: First make visible, then trigger animation on next frame
       setIsVisible(true);
+      // Use double rAF to ensure DOM is painted before transition starts
+      animationFrameRef.current = requestAnimationFrame(() => {
+        animationFrameRef.current = requestAnimationFrame(() => {
+          setAnimateIn(true);
+        });
+      });
     } else {
-      // Closing: keep visible until animation completes
+      // Closing: First animate out, then hide after transition
+      setAnimateIn(false);
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 150); // Match transition duration
       return () => clearTimeout(timer);
     }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, [isOpen]);
 
   const updateDueDate = api.card.update.useMutation({
@@ -121,10 +136,11 @@ export function DueDateSelector({
   };
 
   // When children are provided, use them as the trigger (clickable header pattern)
+  // IMPORTANT: w-full ensures the hover highlight extends full width
   const triggerElement = children ? (
     <div
       onClick={() => setIsOpen(!isOpen)}
-      className="cursor-pointer"
+      className="w-full cursor-pointer"
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -164,19 +180,26 @@ export function DueDateSelector({
           <div
             className={twMerge(
               "fixed inset-0 z-40 transition-opacity duration-150",
-              isOpen ? "opacity-100" : "opacity-0",
+              animateIn ? "opacity-100" : "opacity-0",
             )}
             onClick={handleBackdropClick}
           />
-          {/* Calendar popup with fade */}
+          {/* Calendar popup with fade - uses fixed positioning to avoid clipping */}
           <div
             className={twMerge(
-              "absolute -left-8 top-full z-50 mt-2 rounded-md border border-light-200 shadow-lg transition-all duration-150 dark:border-dark-200",
-              isOpen
+              "fixed z-50 rounded-md border border-light-200 shadow-lg transition-all duration-150 dark:border-dark-200",
+              animateIn
                 ? "scale-100 opacity-100"
                 : "pointer-events-none scale-95 opacity-0",
             )}
-            style={{ backgroundColor: "var(--kan-menu-bg)" }}
+            style={{
+              backgroundColor: "var(--kan-menu-bg)",
+              // Position will be set by the parent's position context
+              // Using fixed to ensure it overlays everything
+              top: "auto",
+              left: "auto",
+              marginTop: "8px",
+            }}
             onClick={(e) => {
               e.stopPropagation();
             }}
