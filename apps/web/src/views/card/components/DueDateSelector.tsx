@@ -2,6 +2,7 @@ import { t } from "@lingui/core/macro";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { HiMiniPlus } from "react-icons/hi2";
+import { twMerge } from "tailwind-merge";
 
 import DateSelector from "~/components/DateSelector";
 import { usePopup } from "~/providers/popup";
@@ -25,6 +26,7 @@ export function DueDateSelector({
   const { showPopup } = usePopup();
   const utils = api.useUtils();
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); // For fade animation
   const [pendingDate, setPendingDate] = useState<Date | null | undefined>(
     dueDate,
   );
@@ -35,6 +37,20 @@ export function DueDateSelector({
       setPendingDate(dueDate);
     }
   }, [dueDate, isOpen]);
+
+  // Handle fade in/out animation
+  useEffect(() => {
+    if (isOpen) {
+      // Opening: show immediately, then fade in
+      setIsVisible(true);
+    } else {
+      // Closing: keep visible until animation completes
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 150); // Match transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   const updateDueDate = api.card.update.useMutation({
     onMutate: async (update) => {
@@ -92,7 +108,7 @@ export function DueDateSelector({
       }
     }
 
-    // Close popover immediately
+    // Close popover with animation
     setIsOpen(false);
 
     // Fire mutation if date changed (optimistic update will handle UI)
@@ -142,11 +158,24 @@ export function DueDateSelector({
       className={`relative flex w-full items-center ${isCollapsed ? "justify-center" : "text-left"}`}
     >
       {triggerElement}
-      {isOpen && (
+      {isVisible && (
         <>
-          <div className="fixed inset-0 z-10" onClick={handleBackdropClick} />
+          {/* Backdrop with fade */}
           <div
-            className="absolute -left-8 top-full z-20 mt-2 rounded-md border border-light-200 shadow-lg dark:border-dark-200"
+            className={twMerge(
+              "fixed inset-0 z-40 transition-opacity duration-150",
+              isOpen ? "opacity-100" : "opacity-0",
+            )}
+            onClick={handleBackdropClick}
+          />
+          {/* Calendar popup with fade */}
+          <div
+            className={twMerge(
+              "absolute -left-8 top-full z-50 mt-2 rounded-md border border-light-200 shadow-lg transition-all duration-150 dark:border-dark-200",
+              isOpen
+                ? "scale-100 opacity-100"
+                : "pointer-events-none scale-95 opacity-0",
+            )}
             style={{ backgroundColor: "var(--kan-menu-bg)" }}
             onClick={(e) => {
               e.stopPropagation();
