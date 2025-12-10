@@ -105,6 +105,62 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     group: "BOARD_VIEW",
   });
 
+  const boardId = params?.boardId
+    ? Array.isArray(params.boardId)
+      ? params.boardId[0]
+      : params.boardId
+    : null;
+
+  const updateBoard = api.board.update.useMutation();
+
+  const { register, handleSubmit, setValue } = useForm<UpdateBoardInput>({
+    values: {
+      boardPublicId: boardId ?? "",
+      name: "",
+    },
+  });
+
+  const onSubmit = (values: UpdateBoardInput) => {
+    updateBoard.mutate({
+      boardPublicId: values.boardPublicId,
+      name: values.name,
+    });
+  };
+
+  const semanticFilters = formatToArray(router.query.dueDate) as (
+    | "overdue"
+    | "today"
+    | "tomorrow"
+    | "next-week"
+    | "next-month"
+    | "no-due-date"
+  )[];
+
+  const queryParams: {
+    boardPublicId: string;
+    members: string[];
+    labels: string[];
+    lists: string[];
+    dueDate: ReturnType<typeof convertDueDateFiltersToRanges>;
+    type: "regular" | "template";
+  } = {
+    boardPublicId: boardId ?? "",
+    members: formatToArray(router.query.members),
+    labels: formatToArray(router.query.labels),
+    lists: formatToArray(router.query.lists),
+    dueDate: convertDueDateFiltersToRanges(semanticFilters),
+    type: isTemplate ? "template" : "regular",
+  };
+
+  const {
+    data: boardData,
+    isSuccess,
+    isLoading: isQueryLoading,
+  } = api.board.byId.useQuery(queryParams, {
+    enabled: !!boardId,
+    placeholderData: keepPreviousData,
+  });
+
   // List collapse state version - increment to force List component re-render
   const [listCollapseVersion, setListCollapseVersion] = useState(0);
 
@@ -187,62 +243,6 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     action: () => toggleListCollapse(8),
     description: t`Toggle list 9`,
     group: "BOARD_VIEW",
-  });
-
-  const boardId = params?.boardId
-    ? Array.isArray(params.boardId)
-      ? params.boardId[0]
-      : params.boardId
-    : null;
-
-  const updateBoard = api.board.update.useMutation();
-
-  const { register, handleSubmit, setValue } = useForm<UpdateBoardInput>({
-    values: {
-      boardPublicId: boardId ?? "",
-      name: "",
-    },
-  });
-
-  const onSubmit = (values: UpdateBoardInput) => {
-    updateBoard.mutate({
-      boardPublicId: values.boardPublicId,
-      name: values.name,
-    });
-  };
-
-  const semanticFilters = formatToArray(router.query.dueDate) as (
-    | "overdue"
-    | "today"
-    | "tomorrow"
-    | "next-week"
-    | "next-month"
-    | "no-due-date"
-  )[];
-
-  const queryParams: {
-    boardPublicId: string;
-    members: string[];
-    labels: string[];
-    lists: string[];
-    dueDate: ReturnType<typeof convertDueDateFiltersToRanges>;
-    type: "regular" | "template";
-  } = {
-    boardPublicId: boardId ?? "",
-    members: formatToArray(router.query.members),
-    labels: formatToArray(router.query.labels),
-    lists: formatToArray(router.query.lists),
-    dueDate: convertDueDateFiltersToRanges(semanticFilters),
-    type: isTemplate ? "template" : "regular",
-  };
-
-  const {
-    data: boardData,
-    isSuccess,
-    isLoading: isQueryLoading,
-  } = api.board.byId.useQuery(queryParams, {
-    enabled: !!boardId,
-    placeholderData: keepPreviousData,
   });
 
   const refetchBoard = async () => {
