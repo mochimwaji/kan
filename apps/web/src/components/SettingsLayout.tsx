@@ -53,7 +53,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     stroke: { key: "1" },
     action: () => router.push("/settings/account"),
     description: t`Account settings`,
-    group: "NAVIGATION",
+    group: "SETTINGS",
   });
 
   useKeyboardShortcut({
@@ -61,7 +61,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     stroke: { key: "2" },
     action: () => router.push("/settings/workspace"),
     description: t`Workspace settings`,
-    group: "NAVIGATION",
+    group: "SETTINGS",
   });
 
   useKeyboardShortcut({
@@ -69,7 +69,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     stroke: { key: "3" },
     action: () => router.push("/settings/api"),
     description: t`API settings`,
-    group: "NAVIGATION",
+    group: "SETTINGS",
   });
 
   useKeyboardShortcut({
@@ -77,7 +77,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     stroke: { key: "4" },
     action: () => router.push("/settings/integrations"),
     description: t`Integrations`,
-    group: "NAVIGATION",
+    group: "SETTINGS",
   });
 
   // Memoize availableTabs to prevent infinite re-renders

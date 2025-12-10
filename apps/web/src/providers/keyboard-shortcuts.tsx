@@ -45,6 +45,10 @@ const ModifierKeyInfo: Record<
 export const ShortcutGroup = {
   GENERAL: "GENERAL",
   NAVIGATION: "NAVIGATION",
+  BOARDS: "BOARDS",
+  BOARD_VIEW: "BOARD_VIEW",
+  CARD_VIEW: "CARD_VIEW",
+  SETTINGS: "SETTINGS",
   ACTIONS: "ACTIONS",
 } as const;
 export type ShortcutGroup = (typeof ShortcutGroup)[keyof typeof ShortcutGroup];
@@ -55,6 +59,10 @@ export const getShortcutGroupInfo = (): Record<
 > => ({
   GENERAL: { label: t`General` },
   NAVIGATION: { label: t`Navigation` },
+  BOARDS: { label: t`Boards Page` },
+  BOARD_VIEW: { label: t`Board View` },
+  CARD_VIEW: { label: t`Card View` },
+  SETTINGS: { label: t`Settings` },
   ACTIONS: { label: t`Actions` },
 });
 

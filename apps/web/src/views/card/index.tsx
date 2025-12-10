@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlineCalendar,
@@ -91,6 +91,42 @@ export function CardRightPanel({
   const workspaceMembers = board?.workspace.members;
   const selectedLabels = card?.labels;
   const selectedMembers = card?.members;
+
+  // Refs for keyboard shortcuts to programmatically click selectors
+  const listSelectorRef = useRef<HTMLDivElement>(null);
+  const labelSelectorRef = useRef<HTMLDivElement>(null);
+  const memberSelectorRef = useRef<HTMLDivElement>(null);
+  const dueDateSelectorRef = useRef<HTMLDivElement>(null);
+
+  // Card sidebar keyboard shortcuts: l=list, k=labels, j=members, d=due date
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "l" },
+    action: () => listSelectorRef.current?.click(),
+    description: t`List selector`,
+    group: "CARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "k" },
+    action: () => labelSelectorRef.current?.click(),
+    description: t`Labels selector`,
+    group: "CARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "j" },
+    action: () => memberSelectorRef.current?.click(),
+    description: t`Members selector`,
+    group: "CARD_VIEW",
+  });
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "d" },
+    action: () => dueDateSelectorRef.current?.click(),
+    description: t`Due date picker`,
+    group: "CARD_VIEW",
+  });
 
   const formattedLabels =
     labels?.map((label) => {
@@ -269,10 +305,12 @@ export function CardRightPanel({
             lists={formattedLists}
             isLoading={!card}
           >
-            <SidebarSectionHeader
-              icon={<HiOutlineRectangleStack size={20} />}
-              title={t`List`}
-            />
+            <div ref={listSelectorRef}>
+              <SidebarSectionHeader
+                icon={<HiOutlineRectangleStack size={20} />}
+                title={t`List`}
+              />
+            </div>
           </ListSelector>
         </li>
         <li>
@@ -281,10 +319,12 @@ export function CardRightPanel({
             labels={formattedLabels}
             isLoading={!card}
           >
-            <SidebarSectionHeader
-              icon={<HiOutlineTag size={20} />}
-              title={t`Labels`}
-            />
+            <div ref={labelSelectorRef}>
+              <SidebarSectionHeader
+                icon={<HiOutlineTag size={20} />}
+                title={t`Labels`}
+              />
+            </div>
           </LabelSelector>
         </li>
         {!isTemplate && (
@@ -294,10 +334,12 @@ export function CardRightPanel({
               members={formattedMembers}
               isLoading={!card}
             >
-              <SidebarSectionHeader
-                icon={<HiOutlineUsers size={20} />}
-                title={t`Members`}
-              />
+              <div ref={memberSelectorRef}>
+                <SidebarSectionHeader
+                  icon={<HiOutlineUsers size={20} />}
+                  title={t`Members`}
+                />
+              </div>
             </MemberSelector>
           </li>
         )}
@@ -307,10 +349,12 @@ export function CardRightPanel({
             dueDate={card?.dueDate}
             isLoading={!card}
           >
-            <SidebarSectionHeader
-              icon={<HiOutlineCalendar size={20} />}
-              title={t`Due date`}
-            />
+            <div ref={dueDateSelectorRef}>
+              <SidebarSectionHeader
+                icon={<HiOutlineCalendar size={20} />}
+                title={t`Due date`}
+              />
+            </div>
           </DueDateSelector>
         </li>
       </ul>
@@ -368,9 +412,9 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   const boardId = board?.publicId;
   const activities = card?.activities;
 
-  // Esc shortcut to close card and return to board
+  // Esc shortcut to close card and return to board (only when no modal is open)
   const closeCardHref = useCallback(() => {
-    if (boardId) {
+    if (boardId && !isOpen) {
       setOpacity(0);
       setTimeout(() => {
         router.push(
@@ -378,14 +422,14 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
         );
       }, 300);
     }
-  }, [boardId, isTemplate, router]);
+  }, [boardId, isTemplate, router, isOpen]);
 
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "Escape" },
     action: closeCardHref,
     description: t`Close card`,
-    group: "ACTIONS",
+    group: "CARD_VIEW",
   });
 
   const updateCard = api.card.update.useMutation({
