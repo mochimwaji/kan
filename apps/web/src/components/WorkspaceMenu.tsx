@@ -21,22 +21,23 @@ export default function WorkspaceMenu({
   const [isOpen, setIsOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
+  // Ctrl+/ to open command palette (search + shortcuts)
   const { tooltipContent: commandPaletteShortcutTooltipContent } =
     useKeyboardShortcut({
       type: "PRESS",
       stroke: {
-        key: "k",
-        modifiers: ["META"],
+        key: "/",
+        modifiers: ["CONTROL"],
       },
       action: () => setIsOpen(true),
-      description: t`Open command menu`,
+      description: t`Search`,
       group: "GENERAL",
     });
 
-  // 'l' shortcut to open workspace menu
+  // 'w' shortcut to open workspace menu
   useKeyboardShortcut({
     type: "PRESS",
-    stroke: { key: "l" },
+    stroke: { key: "w" },
     action: () => {
       // Programmatically click the menu button to open it
       menuButtonRef.current?.click();

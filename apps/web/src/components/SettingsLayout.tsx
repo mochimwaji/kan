@@ -47,10 +47,10 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
 
   const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
 
-  // Settings keyboard shortcuts
+  // Settings keyboard shortcuts (1-4 for tabs)
   useKeyboardShortcut({
     type: "PRESS",
-    stroke: { key: "a" },
+    stroke: { key: "1" },
     action: () => router.push("/settings/account"),
     description: t`Account settings`,
     group: "NAVIGATION",
@@ -58,7 +58,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
 
   useKeyboardShortcut({
     type: "PRESS",
-    stroke: { key: "w" },
+    stroke: { key: "2" },
     action: () => router.push("/settings/workspace"),
     description: t`Workspace settings`,
     group: "NAVIGATION",
@@ -66,7 +66,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
 
   useKeyboardShortcut({
     type: "PRESS",
-    stroke: { key: "p" },
+    stroke: { key: "3" },
     action: () => router.push("/settings/api"),
     description: t`API settings`,
     group: "NAVIGATION",
@@ -74,7 +74,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
 
   useKeyboardShortcut({
     type: "PRESS",
-    stroke: { key: "i" },
+    stroke: { key: "4" },
     action: () => router.push("/settings/integrations"),
     description: t`Integrations`,
     group: "NAVIGATION",
