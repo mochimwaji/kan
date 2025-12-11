@@ -342,23 +342,39 @@ export function KeyboardShortcutProvider({
         <div className="fixed inset-0 flex min-h-full w-screen items-center justify-center overflow-y-auto p-4">
           <DialogPanel
             transition
-            className="relative w-full max-w-sm transform overflow-hidden rounded-lg border border-light-600 bg-white shadow-3xl-light dark:border-dark-600 dark:bg-dark-100 dark:shadow-3xl-dark"
+            className="relative w-full max-w-sm transform overflow-hidden rounded-lg border shadow-3xl-light dark:shadow-3xl-dark"
+            style={{
+              backgroundColor: "var(--kan-menu-bg)",
+              borderColor: "var(--kan-menu-border)",
+            }}
           >
-            <div className="flex items-center justify-between border-b border-light-300 px-6 py-4 dark:border-dark-300">
-              <DialogTitle className="text-[14px] font-semibold text-neutral-900 dark:text-dark-1000">
+            <div
+              className="flex items-center justify-between border-b px-6 py-4"
+              style={{ borderColor: "var(--kan-menu-border)" }}
+            >
+              <DialogTitle
+                className="text-[14px] font-semibold"
+                style={{ color: "var(--kan-menu-text)" }}
+              >
                 {t`Keyboard Shortcuts`}
               </DialogTitle>
               <button
                 onClick={() => setIsLegendOpen(false)}
                 className="rounded p-1 hover:bg-light-200 dark:hover:bg-dark-200"
               >
-                <HiXMark className="h-5 w-5 text-neutral-700 dark:text-dark-700" />
+                <HiXMark
+                  className="h-5 w-5"
+                  style={{ color: "var(--kan-menu-text)" }}
+                />
               </button>
             </div>
 
             <div className="max-h-[60vh] overflow-y-auto p-6">
               {shortcutsArray.length === 0 ? (
-                <p className="text-center text-sm text-neutral-600 dark:text-dark-600">
+                <p
+                  className="text-center text-sm"
+                  style={{ color: "var(--kan-menu-text)", opacity: 0.7 }}
+                >
                   {t`No keyboard shortcuts registered.`}
                 </p>
               ) : (
@@ -369,7 +385,10 @@ export function KeyboardShortcutProvider({
                     const groupInfo = getShortcutGroupInfo();
                     return (
                       <div key={`${group}-${idx}`}>
-                        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-light-1000 dark:text-dark-1000">
+                        <h3
+                          className="mb-3 text-xs font-semibold uppercase tracking-wide"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        >
                           {groupInfo[group].label}
                         </h3>
                         <div className="flex flex-col gap-y-2">
@@ -463,7 +482,7 @@ export function useKeyboardShortcut(shortcut: KeyboardShortcut): {
 function ShortcutListItem({ shortcut }: { shortcut: KeyboardShortcut }) {
   return (
     <div className="flex items-center justify-between gap-2">
-      <span className="text-sm text-dark-50 dark:text-dark-900">
+      <span className="text-sm" style={{ color: "var(--kan-menu-text)" }}>
         {shortcut.description}
       </span>
       <FormattedShortcut shortcut={shortcut} />
