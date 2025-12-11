@@ -1,5 +1,5 @@
 import { t } from "@lingui/core/macro";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
 
@@ -33,6 +33,7 @@ export function NewListForm({
 }) {
   const { closeModal } = useModal();
   const { showPopup } = usePopup();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const utils = api.useUtils();
 
@@ -86,10 +87,12 @@ export function NewListForm({
     },
   });
 
+  // Autofocus with delay to ensure modal transition completes
   useEffect(() => {
-    const nameElement: HTMLElement | null =
-      document.querySelector<HTMLElement>("#list-name");
-    if (nameElement) nameElement.focus();
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   const onSubmit = (data: NewListInput) => {
@@ -132,6 +135,12 @@ export function NewListForm({
           id="list-name"
           placeholder={t`List name`}
           {...register("name")}
+          ref={(e) => {
+            register("name").ref(e);
+            (
+              inputRef as React.MutableRefObject<HTMLInputElement | null>
+            ).current = e;
+          }}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
               e.preventDefault();

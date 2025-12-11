@@ -136,20 +136,28 @@ const Card = ({
       )}
       style={{ ...cardStyle, color: "var(--kan-pages-text)" }}
     >
-      {/* Title with optional selection checkbox inline */}
+      {/* Title with optional selection radio button inline */}
       <div className="flex items-start gap-2">
         {onToggleSelect && (
-          <input
-            type="checkbox"
-            checked={isSelected ?? false}
-            onChange={(e) => {
+          <button
+            type="button"
+            onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               onToggleSelect();
             }}
-            onClick={(e) => e.stopPropagation()}
-            className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-          />
+            className={`mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer rounded-full border-2 transition-all duration-150 ${
+              isSelected
+                ? "border-blue-500 bg-blue-500"
+                : "border-gray-400 bg-transparent hover:border-blue-400"
+            }`}
+          >
+            {isSelected && (
+              <span className="flex h-full w-full items-center justify-center">
+                <span className="h-1.5 w-1.5 rounded-full bg-white" />
+              </span>
+            )}
+          </button>
         )}
         <span className="flex-1">{title}</span>
       </div>
