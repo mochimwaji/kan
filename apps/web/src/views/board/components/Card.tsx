@@ -66,6 +66,9 @@ const Card = ({
   attachments,
   dueDate,
   listColor,
+  isSelected,
+  isDeleting,
+  onToggleSelect,
 }: {
   title: string;
   labels: { name: string; colourCode: string | null }[];
@@ -89,6 +92,9 @@ const Card = ({
   attachments?: { publicId: string }[];
   dueDate?: Date | null;
   listColor?: string | null;
+  isSelected?: boolean;
+  isDeleting?: boolean;
+  onToggleSelect?: () => void;
 }) => {
   const { dateLocale } = useLocalisation();
   const showYear = dueDate ? !isSameYear(dueDate, new Date()) : false;
@@ -121,13 +127,31 @@ const Card = ({
   return (
     <div
       className={twMerge(
-        "flex flex-col rounded-md border px-3 py-2 text-sm",
+        "flex flex-col rounded-md border px-3 py-2 text-sm transition-all duration-200",
         listColor
           ? "border-opacity-30"
           : "border-light-200 bg-light-50 dark:border-dark-200 dark:bg-dark-200 dark:hover:bg-dark-300",
+        isSelected ? "selected-item" : "",
+        isDeleting ? "delete-fade-out" : "",
       )}
       style={{ ...cardStyle, color: "var(--kan-pages-text)" }}
     >
+      {/* Selection checkbox */}
+      {onToggleSelect && (
+        <div className="mb-1 flex items-center">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleSelect();
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+          />
+        </div>
+      )}
       <span>{title}</span>
       {labels.length ||
       members.length ||
