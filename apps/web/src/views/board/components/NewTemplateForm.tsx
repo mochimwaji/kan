@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "@lingui/core/macro";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
 import { z } from "zod";
@@ -39,6 +39,7 @@ export function NewTemplateForm({
   const router = useRouter();
   const { closeModal } = useModal();
   const { showPopup } = usePopup();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -91,10 +92,12 @@ export function NewTemplateForm({
     });
   };
 
+  // Autofocus with delay to ensure modal transition completes
   useEffect(() => {
-    const titleElement: HTMLElement | null =
-      document.querySelector<HTMLElement>("#name");
-    if (titleElement) titleElement.focus();
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -117,6 +120,12 @@ export function NewTemplateForm({
           id="name"
           placeholder={t`Name`}
           {...register("name", { required: true })}
+          ref={(e) => {
+            register("name").ref(e);
+            (
+              inputRef as React.MutableRefObject<HTMLInputElement | null>
+            ).current = e;
+          }}
           errorMessage={errors.name?.message}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {

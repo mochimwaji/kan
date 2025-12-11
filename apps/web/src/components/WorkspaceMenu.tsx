@@ -132,9 +132,13 @@ export default function WorkspaceMenu({
         >
           <Menu.Items
             className={twMerge(
-              "absolute left-0 z-10 origin-top-left rounded-md border border-light-600 bg-light-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-dark-600 dark:bg-dark-300",
+              "absolute left-0 z-10 origin-top-left rounded-md border shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
               isCollapsed ? "w-48" : "w-full",
             )}
+            style={{
+              backgroundColor: "var(--kan-menu-bg)",
+              borderColor: "var(--kan-menu-border)",
+            }}
           >
             <div className="p-1">
               {availableWorkspaces.map((availableWorkspace) => (
@@ -168,7 +172,10 @@ export default function WorkspaceMenu({
                 </div>
               ))}
             </div>
-            <div className="border-t-[1px] border-light-600 p-1 dark:border-dark-500">
+            <div
+              className="border-t-[1px] p-1"
+              style={{ borderColor: "var(--kan-menu-border)" }}
+            >
               <Menu.Item>
                 <button
                   onClick={() => openModal("NEW_WORKSPACE")}
