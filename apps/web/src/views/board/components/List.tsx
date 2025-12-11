@@ -212,12 +212,12 @@ export default function List({
               {isCollapsed ? (
                 <HiChevronRight
                   className="h-4 w-4"
-                  style={{ color: "var(--kan-pages-text)" }}
+                  style={{ color: "inherit" }}
                 />
               ) : (
                 <HiChevronDown
                   className="h-4 w-4"
-                  style={{ color: "var(--kan-pages-text)" }}
+                  style={{ color: "inherit" }}
                 />
               )}
             </button>
@@ -231,26 +231,26 @@ export default function List({
                 {...register("name")}
                 onBlur={handleSubmit(onSubmit)}
                 className="w-full border-0 bg-transparent px-2 pt-1 text-sm font-medium focus:ring-0 focus-visible:outline-none"
-                style={{ color: "var(--kan-pages-text)" }}
+                style={{ color: "inherit" }}
               />
             </form>
             {/* Card count badge - shown when collapsed */}
             {isCollapsed && cardCount > 0 && (
               <span
                 className="mr-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-light-400 px-1.5 text-[10px] font-medium dark:bg-dark-300"
-                style={{ color: "var(--kan-pages-text)" }}
+                style={{ color: "inherit" }}
               >
                 {cardCount}
               </span>
             )}
             <div className="flex items-center">
               <button
-                className="mx-1 inline-flex h-fit items-center rounded-md p-1 px-1 text-sm font-semibold text-dark-50 hover:bg-light-400 dark:hover:bg-dark-200"
+                className="mx-1 inline-flex h-fit items-center rounded-md p-1 px-1 text-sm font-semibold hover:bg-light-400 dark:hover:bg-dark-200"
                 onClick={() => openNewCardForm(list.publicId)}
               >
                 <HiOutlinePlusSmall
                   className="h-5 w-5"
-                  style={{ color: "var(--kan-pages-text)" }}
+                  style={{ color: "inherit" }}
                   aria-hidden="true"
                 />
               </button>
@@ -291,7 +291,7 @@ export default function List({
                 >
                   <HiEllipsisHorizontal
                     className="h-5 w-5"
-                    style={{ color: "var(--kan-pages-text)" }}
+                    style={{ color: "inherit" }}
                   />
                 </Dropdown>
                 {isColorPickerOpen && (
