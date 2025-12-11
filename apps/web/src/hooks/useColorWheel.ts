@@ -22,8 +22,14 @@ interface UseColorWheelReturn {
   lightness: number;
   /** Currently selected color (hex string or null) */
   selectedColor: string | null;
+  /** Color currently being hovered (for preview) */
+  hoverColor: string | null;
   /** Handle canvas click to select a color */
   handleCanvasClick: (e: React.MouseEvent<HTMLCanvasElement>) => void;
+  /** Handle mouse move for hover preview */
+  handleMouseMove: (e: React.MouseEvent<HTMLCanvasElement>) => void;
+  /** Handle mouse leave to reset hover preview */
+  handleMouseLeave: () => void;
   /** Handle lightness slider change */
   handleLightnessChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /** Callback ref for canvas initialization */
@@ -54,6 +60,36 @@ export function useColorWheel({
     initialColor,
   );
 
+  const [hoverColor, setHoverColor] = useState<string | null>(null);
+
+  // Calculate color at a given canvas position
+  const getColorAtPosition = useCallback(
+    (x: number, y: number, canvas: HTMLCanvasElement): string | null => {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 2;
+
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Only calculate color within the wheel (outside center preview area)
+      if (distance <= radius && distance > radius * 0.25) {
+        let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        if (angle < 0) angle += 360;
+
+        const saturation = Math.min(
+          100,
+          Math.max(50, ((distance - radius * 0.25) / (radius * 0.75)) * 100),
+        );
+
+        return hslToHex(Math.round(angle), Math.round(saturation), lightness);
+      }
+      return null;
+    },
+    [lightness],
+  );
+
   // Draw the color wheel on canvas
   const drawColorWheel = useCallback(
     (canvas: HTMLCanvasElement) => {
@@ -80,17 +116,45 @@ export function useColorWheel({
         ctx.fill();
       }
 
-      // Draw center circle with currently selected color
+      // Draw center circle with hover color (if hovering) or selected color
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius * 0.25, 0, 2 * Math.PI);
-      ctx.fillStyle = selectedColor || "#cccccc";
+      ctx.fillStyle = hoverColor || selectedColor || "#cccccc";
       ctx.fill();
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 2;
       ctx.stroke();
     },
-    [lightness, selectedColor],
+    [lightness, selectedColor, hoverColor],
   );
+
+  // Handle mouse move for hover preview
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const color = getColorAtPosition(x, y, canvas);
+      setHoverColor(color);
+
+      // Redraw canvas to update center preview
+      drawColorWheel(canvas);
+    },
+    [getColorAtPosition, drawColorWheel],
+  );
+
+  // Handle mouse leave to reset hover preview
+  const handleMouseLeave = useCallback(() => {
+    setHoverColor(null);
+    const canvas = canvasRef.current;
+    if (canvas) {
+      drawColorWheel(canvas);
+    }
+  }, [drawColorWheel]);
 
   // Handle canvas click to select color
   const handleCanvasClick = useCallback(
@@ -102,36 +166,13 @@ export function useColorWheel({
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const radius = Math.min(centerX, centerY) - 2;
-
-      const dx = x - centerX;
-      const dy = y - centerY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      // Only register clicks within the wheel (outside center preview area)
-      if (distance <= radius && distance > radius * 0.25) {
-        let angle = Math.atan2(dy, dx) * (180 / Math.PI);
-        if (angle < 0) angle += 360;
-
-        // Calculate saturation based on distance from center
-        const saturation = Math.min(
-          100,
-          Math.max(50, ((distance - radius * 0.25) / (radius * 0.75)) * 100),
-        );
-
-        const newColor = hslToHex(
-          Math.round(angle),
-          Math.round(saturation),
-          lightness,
-        );
-
+      const newColor = getColorAtPosition(x, y, canvas);
+      if (newColor) {
         setSelectedColor(newColor);
         onColorChange?.(newColor);
       }
     },
-    [lightness, onColorChange],
+    [getColorAtPosition, onColorChange],
   );
 
   // Handle lightness slider change
@@ -166,7 +207,10 @@ export function useColorWheel({
     canvasRef,
     lightness,
     selectedColor,
+    hoverColor,
     handleCanvasClick,
+    handleMouseMove,
+    handleMouseLeave,
     handleLightnessChange,
     handleCanvasRef,
     setSelectedColor,
