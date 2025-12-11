@@ -177,18 +177,26 @@ export default function List({
           }}
         >
           <div className="mb-2 flex items-center justify-between">
-            {/* Selection checkbox */}
+            {/* Selection radio button */}
             {onToggleSelect && (
-              <input
-                type="checkbox"
-                checked={isSelected ?? false}
-                onChange={(e) => {
+              <button
+                type="button"
+                onClick={(e) => {
                   e.stopPropagation();
                   onToggleSelect();
                 }}
-                onClick={(e) => e.stopPropagation()}
-                className="mr-1 h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-              />
+                className={`mr-1 h-4 w-4 flex-shrink-0 cursor-pointer rounded-full border-2 transition-all duration-150 ${
+                  isSelected
+                    ? "border-blue-500 bg-blue-500"
+                    : "border-gray-400 bg-transparent hover:border-blue-400"
+                }`}
+              >
+                {isSelected && (
+                  <span className="flex h-full w-full items-center justify-center">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                  </span>
+                )}
+              </button>
             )}
             {/* Collapse toggle button */}
             <button
