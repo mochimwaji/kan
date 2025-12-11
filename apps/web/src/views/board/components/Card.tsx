@@ -19,7 +19,7 @@ import Badge from "~/components/Badge";
 import CircularProgress from "~/components/CircularProgress";
 import LabelIcon from "~/components/LabelIcon";
 import { useLocalisation } from "~/hooks/useLocalisation";
-import { derivePastelColor } from "~/utils/colorUtils";
+import { derivePastelColor, getContrastColor } from "~/utils/colorUtils";
 import { getAvatarUrl } from "~/utils/helpers";
 
 // Due date urgency levels for visual feedback
@@ -119,10 +119,15 @@ const Card = ({
   const hasAttachments = attachments && attachments.length > 0;
   const hasDueDate = !!dueDate;
 
-  // Compute card background color from list color
-  const cardStyle = listColor
-    ? { backgroundColor: derivePastelColor(listColor) }
+  // Compute card background and text color from list color
+  const cardBackground = listColor ? derivePastelColor(listColor) : null;
+  const cardStyle = cardBackground
+    ? { backgroundColor: cardBackground }
     : undefined;
+  // Use contrast color for text when card has a background color
+  const cardTextColor = cardBackground
+    ? getContrastColor(cardBackground)
+    : "var(--kan-pages-text)";
 
   return (
     <div
@@ -134,7 +139,7 @@ const Card = ({
         isSelected ? "selected-item" : "",
         isDeleting ? "delete-fade-out" : "",
       )}
-      style={{ ...cardStyle, color: "var(--kan-pages-text)" }}
+      style={{ ...cardStyle, color: cardTextColor }}
     >
       {/* Title with optional selection radio button inline */}
       <div className="flex items-start gap-2">
