@@ -1,7 +1,9 @@
 import { t } from "@lingui/core/macro";
+import { useState } from "react";
 import { HiXMark } from "react-icons/hi2";
 
 import { useColorWheel } from "~/hooks/useColorWheel";
+import { isValidHexColor } from "~/utils/colorUtils";
 
 interface ListColorPickerProps {
   currentColor: string | null;
@@ -11,7 +13,7 @@ interface ListColorPickerProps {
 
 /**
  * Color picker component specifically designed for list color selection.
- * Features a color wheel, lightness slider, and remove color option.
+ * Features a color wheel, lightness slider, hex input, and remove color option.
  * Uses shared useColorWheel hook for canvas logic.
  */
 export default function ListColorPicker({
@@ -19,8 +21,11 @@ export default function ListColorPicker({
   onColorSelect,
   onClose,
 }: ListColorPickerProps) {
+  const [hexInput, setHexInput] = useState(currentColor || "");
+
   const {
     lightness,
+    selectedColor,
     handleCanvasClick,
     handleMouseMove,
     handleMouseLeave,
@@ -28,12 +33,32 @@ export default function ListColorPicker({
     handleCanvasRef,
   } = useColorWheel({
     initialColor: currentColor,
-    onColorChange: (color) => {
+    onColorSelect: (color) => {
+      // Clicking on color wheel selects and closes
       onColorSelect(color);
       onClose();
     },
+    onColorPreview: (color) => {
+      // Slider preview updates color but doesn't close
+      onColorSelect(color);
+      setHexInput(color);
+    },
     canvasSize: 100,
   });
+
+  // Handle hex input change
+  const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setHexInput(value);
+  };
+
+  // Handle hex input submit (Enter key or blur)
+  const handleHexSubmit = () => {
+    if (hexInput && isValidHexColor(hexInput)) {
+      onColorSelect(hexInput);
+      onClose();
+    }
+  };
 
   return (
     <div className="absolute left-0 top-full z-50 mt-1 w-56 rounded-lg border border-light-300 bg-light-50 p-3 shadow-lg dark:border-dark-400 dark:bg-dark-200">
@@ -61,6 +86,29 @@ export default function ListColorPicker({
           onMouseLeave={handleMouseLeave}
           className="cursor-crosshair rounded-full"
         />
+
+        {/* Current color preview and hex input */}
+        <div className="flex items-center gap-2">
+          <div
+            className="h-8 w-8 rounded-md border border-light-400 dark:border-dark-400"
+            style={{
+              backgroundColor: selectedColor || currentColor || "#cccccc",
+            }}
+          />
+          <input
+            type="text"
+            value={hexInput}
+            onChange={handleHexInputChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleHexSubmit();
+              }
+            }}
+            onBlur={handleHexSubmit}
+            className="w-20 rounded-md border border-light-400 bg-light-50 px-2 py-1 text-xs dark:border-dark-400 dark:bg-dark-300"
+            placeholder="#000000"
+          />
+        </div>
 
         {/* Lightness slider */}
         <div className="flex w-full items-center gap-2">

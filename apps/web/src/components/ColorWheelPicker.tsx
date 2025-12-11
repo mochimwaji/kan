@@ -26,7 +26,8 @@ export default function ColorWheelPicker({
     handleCanvasRef,
   } = useColorWheel({
     initialColor: value,
-    onColorChange: onChange,
+    onColorSelect: onChange,
+    onColorPreview: onChange,
     canvasSize: 120,
   });
 
