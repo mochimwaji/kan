@@ -26,6 +26,9 @@ interface ListProps {
   index: number;
   list: List;
   cardCount: number;
+  isSelected?: boolean;
+  isDeleting?: boolean;
+  onToggleSelect?: () => void;
   setSelectedPublicListId: (publicListId: PublicListId) => void;
 }
 
@@ -50,6 +53,9 @@ export default function List({
   index,
   list,
   cardCount,
+  isSelected,
+  isDeleting,
+  onToggleSelect,
   setSelectedPublicListId,
 }: ListProps) {
   const { openModal } = useModal();
@@ -157,10 +163,12 @@ export default function List({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={twMerge(
-            "mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border py-2 pl-2 pr-1",
+            "mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border py-2 pl-2 pr-1 transition-all duration-200",
             list.color
               ? "border-opacity-50"
               : "border-light-400 bg-light-300 dark:border-dark-300 dark:bg-dark-100",
+            isSelected ? "selected-item-list" : "",
+            isDeleting ? "delete-fade-out" : "",
           )}
           style={{
             ...provided.draggableProps.style,
@@ -169,6 +177,19 @@ export default function List({
           }}
         >
           <div className="mb-2 flex items-center justify-between">
+            {/* Selection checkbox */}
+            {onToggleSelect && (
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  onToggleSelect();
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="mr-1 h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              />
+            )}
             {/* Collapse toggle button */}
             <button
               onClick={toggleCollapse}

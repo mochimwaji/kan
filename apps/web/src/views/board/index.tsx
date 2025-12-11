@@ -59,6 +59,16 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     useState<PublicListId>("");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
+  // Multi-select delete state
+  const [selectedCardIds, setSelectedCardIds] = useState<Set<string>>(
+    new Set(),
+  );
+  const [selectedListIds, setSelectedListIds] = useState<Set<string>>(
+    new Set(),
+  );
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   // Transition integration
   /* Transition integration */
   const { animationPhase, fromBoardsPage } = useBoardTransition();
@@ -416,6 +426,95 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     setSelectedPublicListId(publicBoardId);
   };
 
+  // Multi-select toggle handlers
+  const toggleCardSelection = useCallback((cardId: string) => {
+    setSelectedCardIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(cardId)) {
+        next.delete(cardId);
+      } else {
+        next.add(cardId);
+      }
+      return next;
+    });
+  }, []);
+
+  const toggleListSelection = useCallback((listId: string) => {
+    setSelectedListIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(listId)) {
+        next.delete(listId);
+      } else {
+        next.add(listId);
+      }
+      return next;
+    });
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedCardIds(new Set());
+    setSelectedListIds(new Set());
+  }, []);
+
+  const hasSelection = selectedCardIds.size > 0 || selectedListIds.size > 0;
+
+  // Delete mutations for bulk delete
+  const deleteCardMutation = api.card.delete.useMutation({
+    onError: () => {
+      showPopup({
+        header: t`Unable to delete card`,
+        message: t`Please try again later.`,
+        icon: "error",
+      });
+    },
+  });
+
+  const deleteListMutation = api.list.delete.useMutation({
+    onError: () => {
+      showPopup({
+        header: t`Unable to delete list`,
+        message: t`Please try again later.`,
+        icon: "error",
+      });
+    },
+  });
+
+  // Bulk delete handler with fade animation
+  const handleBulkDelete = useCallback(async () => {
+    // Combine all IDs for fade animation
+    const allIds = new Set([...selectedCardIds, ...selectedListIds]);
+    setDeletingIds(allIds);
+    setShowDeleteConfirm(false);
+
+    // Wait for fade animation to complete
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
+    // Delete all selected cards
+    for (const cardId of selectedCardIds) {
+      deleteCardMutation.mutate({ cardPublicId: cardId });
+    }
+
+    // Delete all selected lists
+    for (const listId of selectedListIds) {
+      deleteListMutation.mutate({ listPublicId: listId });
+    }
+
+    // Clear selection and deleting state
+    setDeletingIds(new Set());
+    clearSelection();
+
+    // Invalidate to refresh data
+    await utils.board.byId.invalidate(queryParams);
+  }, [
+    selectedCardIds,
+    selectedListIds,
+    deleteCardMutation,
+    deleteListMutation,
+    queryParams,
+    utils,
+    clearSelection,
+  ]);
+
   const onDragEnd = ({
     source: _source,
     destination,
@@ -717,6 +816,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                               key={list.publicId}
                               list={list}
                               cardCount={list.cards.length}
+                              isSelected={selectedListIds.has(list.publicId)}
+                              isDeleting={deletingIds.has(list.publicId)}
+                              onToggleSelect={() =>
+                                toggleListSelection(list.publicId)
+                              }
                               setSelectedPublicListId={(publicListId) =>
                                 setSelectedPublicListId(publicListId)
                               }
@@ -771,6 +875,17 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                               attachments={card.attachments}
                                               dueDate={card.dueDate ?? null}
                                               listColor={list.color}
+                                              isSelected={selectedCardIds.has(
+                                                card.publicId,
+                                              )}
+                                              isDeleting={deletingIds.has(
+                                                card.publicId,
+                                              )}
+                                              onToggleSelect={() =>
+                                                toggleCardSelection(
+                                                  card.publicId,
+                                                )
+                                              }
                                             />
                                           </Link>
                                         )}
@@ -794,6 +909,70 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           </div>
         </div>
         {renderModalContent()}
+
+        {/* Floating delete button - appears when items are selected */}
+        {hasSelection && (
+          <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 animate-fade-in">
+            <div className="flex items-center gap-3 rounded-lg bg-red-600 px-4 py-3 text-white shadow-lg">
+              <span className="text-sm font-medium">
+                {selectedCardIds.size + selectedListIds.size} selected
+              </span>
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="rounded-md bg-white/20 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-white/30"
+              >
+                {t`Delete`}
+              </button>
+              <button
+                onClick={clearSelection}
+                className="rounded-md px-2 py-1 text-sm transition-colors hover:bg-white/10"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Bulk delete confirmation modal */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div
+              className="mx-4 w-full max-w-sm animate-fade-in rounded-lg p-6 shadow-xl"
+              style={{ backgroundColor: "var(--kan-menu-bg)" }}
+            >
+              <h3
+                className="mb-4 text-lg font-semibold"
+                style={{ color: "var(--kan-menu-text)" }}
+              >
+                {t`Delete selected items?`}
+              </h3>
+              <p
+                className="mb-6 text-sm"
+                style={{ color: "var(--kan-menu-text)", opacity: 0.8 }}
+              >
+                {t`This will permanently delete ${selectedCardIds.size} card(s) and ${selectedListIds.size} list(s). This action cannot be undone.`}
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="rounded-md border px-4 py-2 text-sm font-medium transition-colors"
+                  style={{
+                    borderColor: "var(--kan-menu-border)",
+                    color: "var(--kan-menu-text)",
+                  }}
+                >
+                  {t`Cancel`}
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                >
+                  {t`Delete`}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
