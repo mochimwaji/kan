@@ -1,7 +1,7 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlineBarsArrowDown,
@@ -54,6 +54,7 @@ export function NewCardForm({
 }: NewCardFormProps) {
   const { showPopup } = usePopup();
   const { closeModal, openModal, modalStates, clearModalState } = useModal();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const utils = api.useUtils();
 
@@ -94,6 +95,14 @@ export function NewCardForm({
     });
     return () => subscription.unsubscribe();
   }, [watch, saveFormState]);
+
+  // Autofocus with delay to ensure modal transition completes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   const { data: boardData } = api.board.byId.useQuery(queryParams, {
     enabled: !!boardPublicId,
@@ -321,6 +330,12 @@ export function NewCardForm({
             id="title"
             placeholder={t`Card title`}
             {...register("title")}
+            ref={(e) => {
+              register("title").ref(e);
+              (
+                inputRef as React.MutableRefObject<HTMLInputElement | null>
+              ).current = e;
+            }}
             onKeyDown={async (e) => {
               if (e.key === "Enter") {
                 e.preventDefault();

@@ -1,5 +1,5 @@
 import { t } from "@lingui/core/macro";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
 
@@ -19,6 +19,7 @@ interface NewChecklistFormInput {
 export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
   const { closeModal, setModalState } = useModal();
   const { showPopup } = usePopup();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const utils = api.useUtils();
 
@@ -76,10 +77,12 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
     },
   });
 
+  // Autofocus with delay to ensure modal transition completes
   useEffect(() => {
-    const nameElement: HTMLElement | null =
-      document.querySelector<HTMLElement>("#checklist-name");
-    if (nameElement) nameElement.focus();
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   const onSubmit = (data: NewChecklistFormInput) => {
@@ -98,7 +101,10 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4">
-          <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="text-sm font-bold"
+            style={{ color: "var(--kan-menu-text)" }}
+          >
             {t`New checklist`}
           </h2>
           <button
@@ -109,7 +115,7 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
               closeModal();
             }}
           >
-            <HiXMark size={18} className="text-light-900 dark:text-dark-900" />
+            <HiXMark size={18} style={{ color: "var(--kan-menu-text)" }} />
           </button>
         </div>
 
@@ -117,6 +123,12 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
           id="checklist-name"
           placeholder={t`Checklist name`}
           {...register("name")}
+          ref={(e) => {
+            register("name").ref(e);
+            (
+              inputRef as React.MutableRefObject<HTMLInputElement | null>
+            ).current = e;
+          }}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
