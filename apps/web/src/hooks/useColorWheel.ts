@@ -9,8 +9,10 @@ import { hexToHsl, hslToHex, isValidHexColor } from "~/utils/colorUtils";
 interface UseColorWheelOptions {
   /** Initial color value (hex string or null) */
   initialColor: string | null;
-  /** Callback when a color is selected from the wheel */
-  onColorChange?: (color: string) => void;
+  /** Callback when a color is selected from the wheel (click) */
+  onColorSelect?: (color: string) => void;
+  /** Callback when color is previewed (slider change, not final selection) */
+  onColorPreview?: (color: string) => void;
   /** Canvas size in pixels (width and height) */
   canvasSize?: number;
 }
@@ -44,7 +46,8 @@ interface UseColorWheelReturn {
  */
 export function useColorWheel({
   initialColor,
-  onColorChange,
+  onColorSelect,
+  onColorPreview,
   canvasSize = 100,
 }: UseColorWheelOptions): UseColorWheelReturn {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -169,13 +172,13 @@ export function useColorWheel({
       const newColor = getColorAtPosition(x, y, canvas);
       if (newColor) {
         setSelectedColor(newColor);
-        onColorChange?.(newColor);
+        onColorSelect?.(newColor);
       }
     },
-    [getColorAtPosition, onColorChange],
+    [getColorAtPosition, onColorSelect],
   );
 
-  // Handle lightness slider change
+  // Handle lightness slider change (preview only, no selection)
   const handleLightnessChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newLightness = parseInt(e.target.value, 10);
@@ -186,10 +189,11 @@ export function useColorWheel({
         const hsl = hexToHsl(selectedColor);
         const newColor = hslToHex(hsl.h, hsl.s, newLightness);
         setSelectedColor(newColor);
-        onColorChange?.(newColor);
+        // Use preview callback for slider (doesn't close menu)
+        onColorPreview?.(newColor);
       }
     },
-    [selectedColor, onColorChange],
+    [selectedColor, onColorPreview],
   );
 
   // Canvas ref callback for initialization
