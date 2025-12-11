@@ -66,7 +66,7 @@ export function NewCardForm({
       listPublicId,
       labelPublicIds: [],
       memberPublicIds: [],
-      isCreateAnotherEnabled: false,
+      isCreateAnotherEnabled: true,
       position: "start",
       dueDate: null,
     },

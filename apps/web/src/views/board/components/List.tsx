@@ -181,7 +181,7 @@ export default function List({
             {onToggleSelect && (
               <input
                 type="checkbox"
-                checked={isSelected}
+                checked={isSelected ?? false}
                 onChange={(e) => {
                   e.stopPropagation();
                   onToggleSelect();

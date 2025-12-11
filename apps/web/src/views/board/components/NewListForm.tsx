@@ -41,7 +41,7 @@ export function NewListForm({
       defaultValues: {
         name: "",
         boardPublicId: boardPublicId,
-        isCreateAnotherEnabled: false,
+        isCreateAnotherEnabled: true,
       },
     });
 
