@@ -20,6 +20,8 @@ export default function ColorWheelPicker({
   const {
     lightness,
     handleCanvasClick,
+    handleMouseMove,
+    handleMouseLeave,
     handleLightnessChange,
     handleCanvasRef,
   } = useColorWheel({
@@ -41,6 +43,8 @@ export default function ColorWheelPicker({
           width={120}
           height={120}
           onClick={handleCanvasClick}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
           className="cursor-crosshair rounded-full"
         />
 

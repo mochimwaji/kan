@@ -32,19 +32,42 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
     { enabled: workspace.publicId ? true : false },
   );
 
-  // 1-9 shortcuts to navigate to boards
+  // 1-9 shortcuts to navigate to boards with morph animation
   const navigateToBoard = useCallback(
     (index: number) => {
       if (data && index < data.length) {
         const board = data[index];
         if (board) {
-          router.push(
-            `${isTemplate ? "/templates" : "/boards"}/${board.publicId}`,
-          );
+          const element = boardRefs.current.get(board.publicId);
+          if (element) {
+            // Trigger morph animation like click does
+            const rect = element.getBoundingClientRect();
+            startTransition(
+              {
+                top: rect.top,
+                left: rect.left,
+                width: rect.width,
+                height: rect.height,
+              },
+              board.publicId,
+              board.name,
+            );
+            // Navigate after starting animation
+            setTimeout(() => {
+              router.push(
+                `${isTemplate ? "/templates" : "/boards"}/${board.publicId}`,
+              );
+            }, 50);
+          } else {
+            // Fallback: navigate without animation if element not found
+            router.push(
+              `${isTemplate ? "/templates" : "/boards"}/${board.publicId}`,
+            );
+          }
         }
       }
     },
-    [data, isTemplate, router],
+    [data, isTemplate, router, startTransition],
   );
 
   // Register shortcuts for keys 1-9
