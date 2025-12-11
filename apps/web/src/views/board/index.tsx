@@ -458,9 +458,25 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
 
   const hasSelection = selectedCardIds.size > 0 || selectedListIds.size > 0;
 
-  // Delete mutations for bulk delete
+  // Delete mutations for bulk delete with optimistic updates
   const deleteCardMutation = api.card.delete.useMutation({
-    onError: () => {
+    onMutate: async (args) => {
+      await utils.board.byId.cancel();
+      const currentState = utils.board.byId.getData(queryParams);
+      utils.board.byId.setData(queryParams, (oldBoard) => {
+        if (!oldBoard) return oldBoard;
+        const updatedLists = oldBoard.lists.map((list) => ({
+          ...list,
+          cards: list.cards.filter(
+            (card) => card.publicId !== args.cardPublicId,
+          ),
+        }));
+        return { ...oldBoard, lists: updatedLists };
+      });
+      return { previousState: currentState };
+    },
+    onError: (_error, _args, context) => {
+      utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
         header: t`Unable to delete card`,
         message: t`Please try again later.`,
@@ -470,7 +486,20 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   });
 
   const deleteListMutation = api.list.delete.useMutation({
-    onError: () => {
+    onMutate: async (args) => {
+      await utils.board.byId.cancel();
+      const currentState = utils.board.byId.getData(queryParams);
+      utils.board.byId.setData(queryParams, (oldBoard) => {
+        if (!oldBoard) return oldBoard;
+        const updatedLists = oldBoard.lists.filter(
+          (list) => list.publicId !== args.listPublicId,
+        );
+        return { ...oldBoard, lists: updatedLists };
+      });
+      return { previousState: currentState };
+    },
+    onError: (_error, _args, context) => {
+      utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
         header: t`Unable to delete list`,
         message: t`Please try again later.`,
@@ -483,28 +512,28 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const handleBulkDelete = useCallback(async () => {
     // Combine all IDs for fade animation
     const allIds = new Set([...selectedCardIds, ...selectedListIds]);
+    const cardIdsToDelete = [...selectedCardIds];
+    const listIdsToDelete = [...selectedListIds];
+
     setDeletingIds(allIds);
     setShowDeleteConfirm(false);
+    clearSelection(); // Clear selection immediately so checkboxes reset
 
     // Wait for fade animation to complete
     await new Promise((resolve) => setTimeout(resolve, 400));
 
-    // Delete all selected cards
-    for (const cardId of selectedCardIds) {
+    // Delete all selected cards (optimistic updates handle UI removal)
+    for (const cardId of cardIdsToDelete) {
       deleteCardMutation.mutate({ cardPublicId: cardId });
     }
 
-    // Delete all selected lists
-    for (const listId of selectedListIds) {
+    // Delete all selected lists (optimistic updates handle UI removal)
+    for (const listId of listIdsToDelete) {
       deleteListMutation.mutate({ listPublicId: listId });
     }
 
-    // Clear selection and deleting state
-    setDeletingIds(new Set());
-    clearSelection();
-
-    // Invalidate to refresh data
-    await utils.board.byId.invalidate(queryParams);
+    // Clear deleting state after a brief delay
+    setTimeout(() => setDeletingIds(new Set()), 100);
   }, [
     selectedCardIds,
     selectedListIds,

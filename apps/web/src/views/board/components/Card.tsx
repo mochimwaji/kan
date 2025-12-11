@@ -136,23 +136,23 @@ const Card = ({
       )}
       style={{ ...cardStyle, color: "var(--kan-pages-text)" }}
     >
-      {/* Selection checkbox */}
-      {onToggleSelect && (
-        <div className="mb-1 flex items-center">
+      {/* Title with optional selection checkbox inline */}
+      <div className="flex items-start gap-2">
+        {onToggleSelect && (
           <input
             type="checkbox"
-            checked={isSelected}
+            checked={isSelected ?? false}
             onChange={(e) => {
               e.preventDefault();
               e.stopPropagation();
               onToggleSelect();
             }}
             onClick={(e) => e.stopPropagation()}
-            className="h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+            className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-blue-500"
           />
-        </div>
-      )}
-      <span>{title}</span>
+        )}
+        <span className="flex-1">{title}</span>
+      </div>
       {labels.length ||
       members.length ||
       checklists.length > 0 ||
