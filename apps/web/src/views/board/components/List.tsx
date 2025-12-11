@@ -19,7 +19,7 @@ import Dropdown from "~/components/Dropdown";
 import ListColorPicker from "~/components/ListColorPicker";
 import { useModal } from "~/providers/modal";
 import { api } from "~/utils/api";
-import { deriveListBackground } from "~/utils/colorUtils";
+import { deriveListBackground, getContrastColor } from "~/utils/colorUtils";
 
 interface ListProps {
   children: ReactNode;
@@ -149,10 +149,15 @@ export default function List({
     [list.publicId, updateList],
   );
 
-  // Compute background style based on list color
-  const listStyle = list.color
-    ? { backgroundColor: deriveListBackground(list.color) }
+  // Compute background and text color based on list color
+  const listBackground = list.color ? deriveListBackground(list.color) : null;
+  const listStyle = listBackground
+    ? { backgroundColor: listBackground }
     : undefined;
+  // Use contrast color for text when list has a background color
+  const listTextColor = listBackground
+    ? getContrastColor(listBackground)
+    : "var(--kan-pages-text)";
 
   return (
     <Draggable key={list.publicId} draggableId={list.publicId} index={index}>
@@ -173,7 +178,7 @@ export default function List({
           style={{
             ...provided.draggableProps.style,
             ...listStyle,
-            color: "var(--kan-pages-text)",
+            color: listTextColor,
           }}
         >
           <div className="mb-2 flex items-center justify-between">

@@ -310,7 +310,10 @@ export function NewCardForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-5">
-          <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="text-sm font-bold"
+            style={{ color: "var(--kan-menu-text)" }}
+          >
             {t`New card`}
           </h2>
           <button
@@ -321,7 +324,7 @@ export function NewCardForm({
               e.preventDefault();
             }}
           >
-            <HiXMark size={18} className="text-light-900 dark:text-dark-900" />
+            <HiXMark size={18} style={{ color: "var(--kan-menu-text)" }} />
           </button>
         </div>
 
