@@ -1,0 +1,12 @@
+services:
+  web:
+    image: ghcr.io/kanbn/kan:latest
+    container_name: kan-web
+    ports:
+      - "${KAN_WEB_PORT}:3000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile  # <--- Changed from Dockerfile.new
