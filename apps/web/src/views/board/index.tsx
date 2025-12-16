@@ -1,11 +1,11 @@
-import type { DropResult } from "react-beautiful-dnd";
+import type { DropResult } from "@hello-pangea/dnd";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { DragDropContext, Draggable } from "@hello-pangea/dnd";
 import { t } from "@lingui/core/macro";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { DragDropContext, Draggable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import {
   HiOutlinePlusSmall,

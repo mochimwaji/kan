@@ -40,7 +40,13 @@
   "pnpm": {
     "overrides": {
       "@types/minimatch": "npm:minimatch@*",
-      "@types/glob": "npm:@types/glob@^8.1.0"
+      "@types/glob": "npm:@types/glob@^8.1.0",
+      "next@>=15.0.0 <15.5.8": "15.5.9",
+      "glob@>=10.2.0 <10.5.0": "^10.5.0",
+      "glob@>=11.0.0 <11.1.0": "^11.1.0",
+      "js-yaml@>=4.0.0 <4.1.1": "^4.1.1",
+      "mdast-util-to-hast@>=13.0.0 <13.2.1": "^13.2.1",
+      "axios@>=1.0.0 <1.12.0": "^1.12.0"
     }
   }
 }

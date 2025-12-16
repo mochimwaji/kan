@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
+import { Draggable } from "@hello-pangea/dnd";
 import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import {
   HiChevronDown,
