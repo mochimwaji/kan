@@ -115,12 +115,12 @@ importers:
       '@kan/db':
         specifier: workspace:^
         version: link:../../packages/db
+      '@kan/logger':
+        specifier: workspace:*
+        version: link:../../packages/logger
       '@kan/shared':
         specifier: workspace:^
         version: link:../../packages/shared
-      '@lingui/babel-preset-react':
-        specifier: ^2.9.2
-        version: 2.9.2
       '@lingui/conf':
         specifier: ^5.3.2
         version: 5.4.1(typescript@5.9.2)
@@ -2644,20 +2644,6 @@ packages:
     peerDependenciesMeta:
       babel-plugin-macros:
         optional: true
-
-  '@lingui/babel-plugin-transform-js@2.9.2':
-    resolution: {integrity: sha512-yWoyhOfjRa9744TbVb/WN1OWxZYFLuXcWH5aVCu/sZ2b1YpsGCtfhplc5lRVWN8QcsfpjYmFiPqzU6swE5OFdQ==}
-    engines: {node: '>=4.0'}
-    deprecated: package deprecated, use @lingui/macro instead
-
-  '@lingui/babel-plugin-transform-react@2.9.2':
-    resolution: {integrity: sha512-bxvrepiS6J9vZqRtpRiAgBIASQscjvu7aFmPqH4Y6001TDXrYuyhhNRt1BI3k2E6C2SckHh5vRtSpsqpjEiY3A==}
-    engines: {node: '>=4.0'}
-    deprecated: package deprecated, use @lingui/macro instead
-
-  '@lingui/babel-preset-react@2.9.2':
-    resolution: {integrity: sha512-M+nfK/83+FnLEr63bBox5DKsSYgwPPmhfiLJAbc2BZBlmF1Nfqv/dHL+d2ynyEKNKCSVts476eDeiOFwv2MTNw==}
-    deprecated: package deprecated, use @lingui/macro instead
 
   '@lingui/cli@5.4.1':
     resolution: {integrity: sha512-UAKA9Iz4zMDJS7fzWMZ4hzQWontrTBnI5XCsPm7ttB0Ed0F4Pwph/Vu7pg4bJdiYr4d6nqEpRWd9aTxcC15/IA==}
@@ -10420,15 +10406,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
-
-  '@lingui/babel-plugin-transform-js@2.9.2': {}
-
-  '@lingui/babel-plugin-transform-react@2.9.2': {}
-
-  '@lingui/babel-preset-react@2.9.2':
-    dependencies:
-      '@lingui/babel-plugin-transform-js': 2.9.2
-      '@lingui/babel-plugin-transform-react': 2.9.2
 
   '@lingui/cli@5.4.1(typescript@5.9.2)':
     dependencies:
