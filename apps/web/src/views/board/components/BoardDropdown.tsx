@@ -1,5 +1,4 @@
 import { t } from "@lingui/core/macro";
-import { useState } from "react";
 import {
   HiEllipsisHorizontal,
   HiLink,
@@ -17,27 +16,17 @@ export default function BoardDropdown({
   isLoading,
   boardPublicId,
   workspacePublicId,
+  quickDeleteEnabled,
+  onToggleQuickDelete,
 }: {
   isTemplate: boolean;
   isLoading: boolean;
   boardPublicId: string;
   workspacePublicId: string;
+  quickDeleteEnabled: boolean;
+  onToggleQuickDelete: () => void;
 }) {
   const { openModal } = useModal();
-
-  // Quick delete toggle state with localStorage persistence
-  const [quickDeleteEnabled, setQuickDeleteEnabled] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("quick-delete-enabled") === "true";
-  });
-
-  const toggleQuickDelete = () => {
-    setQuickDeleteEnabled((prev) => {
-      const newValue = !prev;
-      localStorage.setItem("quick-delete-enabled", String(newValue));
-      return newValue;
-    });
-  };
 
   return (
     <Dropdown
@@ -63,7 +52,7 @@ export default function BoardDropdown({
           label: quickDeleteEnabled
             ? t`Disable quick delete ⚡`
             : t`Enable quick delete`,
-          action: toggleQuickDelete,
+          action: onToggleQuickDelete,
           icon: quickDeleteEnabled ? (
             <HiOutlineBolt className="h-[16px] w-[16px] text-yellow-500" />
           ) : (

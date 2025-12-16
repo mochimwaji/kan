@@ -829,6 +829,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 isLoading={!boardData}
                 boardPublicId={boardId ?? ""}
                 workspacePublicId={workspace.publicId}
+                quickDeleteEnabled={quickDeleteEnabled}
+                onToggleQuickDelete={toggleQuickDelete}
               />
             </div>
           </div>
