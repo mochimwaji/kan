@@ -1,3 +1,7 @@
+/**
+ * Predefined color palette for labels and UI elements.
+ * Each color includes a display name and hex code.
+ */
 export const colours: { name: string; code: string }[] = [
   { name: "Teal", code: "#0d9488" },
   { name: "Green", code: "#65a30d" },
@@ -9,4 +13,5 @@ export const colours: { name: string; code: string }[] = [
   { name: "Pink", code: "#db2777" },
 ] as const;
 
+/** Type representing a single color from the palette */
 export type Colour = (typeof colours)[number];
