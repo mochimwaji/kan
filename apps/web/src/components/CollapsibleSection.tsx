@@ -6,6 +6,8 @@ interface CollapsibleSectionProps {
   children: ReactNode;
   isOpen: boolean;
   className?: string;
+  /** Skip animation and render instantly in the target state (useful for hydration) */
+  skipAnimation?: boolean;
 }
 
 /**
@@ -17,14 +19,26 @@ export default function CollapsibleSection({
   children,
   isOpen,
   className,
+  skipAnimation = false,
 }: CollapsibleSectionProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | "auto">(isOpen ? "auto" : 0);
   const [contentOpacity, setContentOpacity] = useState(isOpen ? 1 : 0);
   const [isAnimating, setIsAnimating] = useState(false);
+  // Track if we've done the initial render to skip animation on first paint
+  const hasRenderedRef = useRef(false);
 
   useEffect(() => {
+    // On first effect run, just sync state without animation if skipAnimation is true
+    if (!hasRenderedRef.current) {
+      hasRenderedRef.current = true;
+      if (skipAnimation) {
+        setHeight(isOpen ? "auto" : 0);
+        setContentOpacity(isOpen ? 1 : 0);
+        return;
+      }
+    }
     if (!innerRef.current) return;
 
     if (isOpen) {

@@ -62,22 +62,28 @@ export default function List({
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   // Collapse state with localStorage persistence
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    // Only access localStorage on client-side
-    if (typeof window === "undefined") return false;
-    return (
-      localStorage.getItem(`${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`) ===
-      "true"
-    );
-  });
+  // Use null initially to indicate "not yet loaded from localStorage"
+  const [isCollapsed, setIsCollapsed] = useState<boolean | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Sync collapse state to localStorage
+  // Read collapse state from localStorage after hydration (client-side only)
   useEffect(() => {
-    localStorage.setItem(
+    const stored = localStorage.getItem(
       `${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`,
-      String(isCollapsed),
     );
-  }, [isCollapsed, list.publicId]);
+    setIsCollapsed(stored === "true");
+    setIsHydrated(true);
+  }, [list.publicId]);
+
+  // Sync collapse state to localStorage (only after initial hydration)
+  useEffect(() => {
+    if (isHydrated && isCollapsed !== null) {
+      localStorage.setItem(
+        `${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`,
+        String(isCollapsed),
+      );
+    }
+  }, [isCollapsed, list.publicId, isHydrated]);
 
   const toggleCollapse = useCallback(() => {
     setIsCollapsed((prev) => !prev);
@@ -304,7 +310,7 @@ export default function List({
               </div>
             </div>
           </div>
-          <CollapsibleSection isOpen={!isCollapsed}>
+          <CollapsibleSection isOpen={!isCollapsed} skipAnimation={!isHydrated}>
             {children}
           </CollapsibleSection>
         </div>
