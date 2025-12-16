@@ -29,6 +29,13 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+/**
+ * Retrieves all boards for a workspace with their lists and labels.
+ * @param db - Database client instance
+ * @param workspaceId - Internal workspace ID
+ * @param opts - Optional filters for board type
+ * @returns Array of boards with publicId, name, lists, and labels
+ */
 export const getAllByWorkspaceId = (
   db: dbClient,
   workspaceId: number,
@@ -64,6 +71,12 @@ export const getAllByWorkspaceId = (
   });
 };
 
+/**
+ * Retrieves the internal board ID and type by public ID.
+ * @param db - Database client instance
+ * @param boardPublicId - Public board identifier
+ * @returns Board with internal id and type, or undefined if not found
+ */
 export const getIdByPublicId = async (db: dbClient, boardPublicId: string) => {
   const board = await db.query.boards.findFirst({
     columns: {
@@ -76,12 +89,25 @@ export const getIdByPublicId = async (db: dbClient, boardPublicId: string) => {
   return board;
 };
 
+/**
+ * Filter configuration for card due dates.
+ * Used to filter cards by date ranges or by absence of due date.
+ */
 interface DueDateFilter {
+  /** Start of date range (inclusive) */
   startDate?: Date;
+  /** End of date range (exclusive) */
   endDate?: Date;
+  /** If true, matches cards without any due date */
   hasNoDueDate?: boolean;
 }
 
+/**
+ * Builds a Drizzle ORM where clause for filtering cards by due date.
+ * Supports multiple filter conditions combined with OR logic.
+ * @param filters - Array of due date filter configurations
+ * @returns Drizzle where clause or undefined if no filters
+ */
 const buildDueDateWhere = (filters: DueDateFilter[]) => {
   if (!filters.length) return undefined;
 
@@ -109,6 +135,15 @@ const buildDueDateWhere = (filters: DueDateFilter[]) => {
   return or(...clauses);
 };
 
+/**
+ * Retrieves a board by its public ID with full nested data.
+ * Includes workspace members, labels, lists with cards, and all card relations.
+ * Supports filtering by members, labels, lists, and due dates.
+ * @param db - Database client instance
+ * @param boardPublicId - Public board identifier
+ * @param filters - Filter configuration for members, labels, lists, due dates, and board type
+ * @returns Formatted board with nested data or null if not found
+ */
 export const getByPublicId = async (
   db: dbClient,
   boardPublicId: string,
@@ -331,6 +366,16 @@ export const getByPublicId = async (
   return formattedResult;
 };
 
+/**
+ * Retrieves a public board by its slug and workspace.
+ * Similar to getByPublicId but for public board access.
+ * Only returns boards with visibility set to 'public'.
+ * @param db - Database client instance
+ * @param boardSlug - URL-friendly board slug
+ * @param workspaceId - Internal workspace ID
+ * @param filters - Filter configuration for members, labels, lists, and due dates
+ * @returns Formatted board with nested data or null if not found
+ */
 export const getBySlug = async (
   db: dbClient,
   boardSlug: string,
@@ -502,6 +547,13 @@ export const getBySlug = async (
   return formattedResult;
 };
 
+/**
+ * Retrieves a board with its list IDs by public ID.
+ * Lightweight query for operations that only need list references.
+ * @param db - Database client instance
+ * @param boardPublicId - Public board identifier
+ * @returns Board with internal id, workspaceId, and list ids
+ */
 export const getWithListIdsByPublicId = (
   db: dbClient,
   boardPublicId: string,
@@ -522,6 +574,12 @@ export const getWithListIdsByPublicId = (
   });
 };
 
+/**
+ * Retrieves a board with the latest list index for ordering new lists.
+ * @param db - Database client instance
+ * @param boardPublicId - Public board identifier
+ * @returns Board with latest list index or empty lists array
+ */
 export const getWithLatestListIndexByPublicId = (
   db: dbClient,
   boardPublicId: string,
@@ -545,6 +603,12 @@ export const getWithLatestListIndexByPublicId = (
   });
 };
 
+/**
+ * Creates a new board with the specified configuration.
+ * @param db - Database client instance
+ * @param boardInput - Board creation parameters
+ * @returns Created board with id, publicId, and name
+ */
 export const create = async (
   db: dbClient,
   boardInput: {
@@ -579,6 +643,12 @@ export const create = async (
   return result;
 };
 
+/**
+ * Updates an existing board's name, slug, or visibility.
+ * @param db - Database client instance
+ * @param boardInput - Update parameters including boardPublicId
+ * @returns Updated board with publicId and name
+ */
 export const update = async (
   db: dbClient,
   boardInput: {
@@ -605,6 +675,13 @@ export const update = async (
   return result;
 };
 
+/**
+ * Soft deletes a board by setting deletedAt and deletedBy.
+ * The board remains in the database but is excluded from queries.
+ * @param db - Database client instance
+ * @param args - Delete parameters including boardId, deletedAt, and deletedBy
+ * @returns Deleted board with publicId and name
+ */
 export const softDelete = async (
   db: dbClient,
   args: {
@@ -625,6 +702,13 @@ export const softDelete = async (
   return result;
 };
 
+/**
+ * Permanently deletes all boards in a workspace.
+ * Used for workspace cleanup operations.
+ * @param db - Database client instance
+ * @param workspaceId - Internal workspace ID
+ * @returns Last deleted board with publicId and name
+ */
 export const hardDelete = async (db: dbClient, workspaceId: number) => {
   const [result] = await db
     .delete(boards)
@@ -637,6 +721,12 @@ export const hardDelete = async (db: dbClient, workspaceId: number) => {
   return result;
 };
 
+/**
+ * Checks if a board slug is unique within a workspace.
+ * @param db - Database client instance
+ * @param args - Slug and workspaceId to check
+ * @returns True if slug is unique, false if already exists
+ */
 export const isSlugUnique = async (
   db: dbClient,
   args: { slug: string; workspaceId: number },
@@ -655,6 +745,13 @@ export const isSlugUnique = async (
   return result === undefined;
 };
 
+/**
+ * Retrieves internal workspace and board IDs by board public ID.
+ * Lightweight query for authorization checks.
+ * @param db - Database client instance
+ * @param boardPublicId - Public board identifier
+ * @returns Object with id and workspaceId, or undefined
+ */
 export const getWorkspaceAndBoardIdByBoardPublicId = async (
   db: dbClient,
   boardPublicId: string,
@@ -670,6 +767,13 @@ export const getWorkspaceAndBoardIdByBoardPublicId = async (
   return result;
 };
 
+/**
+ * Checks if a board slug is available for use in a workspace.
+ * @param db - Database client instance
+ * @param boardSlug - Proposed board slug
+ * @param workspaceId - Internal workspace ID
+ * @returns True if slug is available, false if taken
+ */
 export const isBoardSlugAvailable = async (
   db: dbClient,
   boardSlug: string,
@@ -689,7 +793,15 @@ export const isBoardSlugAvailable = async (
   return result === undefined;
 };
 
-// Create a new board (regular/template) from a full board snapshot
+/**
+ * Creates a new board from a complete board snapshot.
+ * Used for cloning boards or creating from templates.
+ * Creates all nested entities (labels, lists, cards, checklists) in a transaction.
+ * Also creates activity records for each created entity.
+ * @param db - Database client instance
+ * @param args - Snapshot source data and creation parameters
+ * @returns Created board with id, publicId, and name
+ */
 export const createFromSnapshot = async (
   db: dbClient,
   args: {

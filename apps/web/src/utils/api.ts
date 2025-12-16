@@ -53,7 +53,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// @ts-expect-error
+// @ts-expect-error - tRPC/Next.js type compatibility issue with RC version
 export const api = createTRPCNext<AppRouter>({
   config() {
     return {
