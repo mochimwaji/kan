@@ -1,18 +1,49 @@
+# Environment & Docker
 .env
-
+.env.*
 docker-compose.override.yml
-
-Dockerfile
-./**/*/Dockerfile
-
 .dockerignore
 
+# Dockerfiles (copied explicitly if needed)
+Dockerfile
+**/Dockerfile
+
+# Dependencies (installed fresh in container)
 node_modules
-./**/*/node_modules
+**/node_modules
 
-pnpm-debug.log
-./**/*/pnpm-debug.log
-
-README.md
+# Build caches (regenerated in container)
 .next
+**/.next
+.turbo
+**/.turbo
+
+# Logs
+*.log
+pnpm-debug.log*
+npm-debug.log*
+
+# Git
 .git
+.gitignore
+
+# Documentation
+README.md
+CHANGELOG.md
+*.md
+!packages/**/README.md
+
+# IDE/Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# Test & Coverage
+coverage
+**/.coverage
+.nyc_output
+
+# OS files
+.DS_Store
+Thumbs.db

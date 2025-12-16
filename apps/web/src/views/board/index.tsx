@@ -69,6 +69,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  // Quick delete toggle - skip confirmation when enabled
+  const [quickDeleteEnabled, setQuickDeleteEnabled] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("quick-delete-enabled") === "true";
+  });
+
   // Transition integration
   /* Transition integration */
   const { animationPhase, fromBoardsPage } = useBoardTransition();
@@ -457,6 +463,37 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   }, []);
 
   const hasSelection = selectedCardIds.size > 0 || selectedListIds.size > 0;
+
+  // Toggle quick delete setting
+  const toggleQuickDelete = useCallback(() => {
+    setQuickDeleteEnabled((prev) => {
+      const newValue = !prev;
+      localStorage.setItem("quick-delete-enabled", String(newValue));
+      return newValue;
+    });
+  }, []);
+
+  // Delete handler - respects quick delete toggle
+  const handleDelete = useCallback(() => {
+    if (quickDeleteEnabled) {
+      handleBulkDelete();
+    } else {
+      setShowDeleteConfirm(true);
+    }
+  }, [quickDeleteEnabled, handleBulkDelete]);
+
+  // Del key shortcut to delete selected items
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Delete" },
+    action: () => {
+      if (hasSelection) {
+        handleDelete();
+      }
+    },
+    description: t`Delete selected items`,
+    group: "BOARD_VIEW",
+  });
 
   // Delete mutations for bulk delete with optimistic updates
   const deleteCardMutation = api.card.delete.useMutation({
@@ -946,11 +983,27 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
               <span className="text-sm font-medium">
                 {selectedCardIds.size + selectedListIds.size} selected
               </span>
+              {/* Quick delete toggle */}
               <button
-                onClick={() => setShowDeleteConfirm(true)}
+                onClick={toggleQuickDelete}
+                className={`rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                  quickDeleteEnabled
+                    ? "bg-white/30 hover:bg-white/40"
+                    : "bg-white/10 hover:bg-white/20"
+                }`}
+                title={
+                  quickDeleteEnabled
+                    ? t`Quick delete ON - no confirmation`
+                    : t`Quick delete OFF - shows confirmation`
+                }
+              >
+                {quickDeleteEnabled ? "⚡" : "🛡"}
+              </button>
+              <button
+                onClick={handleDelete}
                 className="rounded-md bg-white/20 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-white/30"
               >
-                {t`Delete`}
+                {t`Delete`} {quickDeleteEnabled && "⚡"}
               </button>
               <button
                 onClick={clearSelection}
