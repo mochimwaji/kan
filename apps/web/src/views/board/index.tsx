@@ -473,28 +473,6 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     });
   }, []);
 
-  // Delete handler - respects quick delete toggle
-  const handleDelete = useCallback(() => {
-    if (quickDeleteEnabled) {
-      handleBulkDelete();
-    } else {
-      setShowDeleteConfirm(true);
-    }
-  }, [quickDeleteEnabled, handleBulkDelete]);
-
-  // Del key shortcut to delete selected items
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "Delete" },
-    action: () => {
-      if (hasSelection) {
-        handleDelete();
-      }
-    },
-    description: t`Delete selected items`,
-    group: "BOARD_VIEW",
-  });
-
   // Delete mutations for bulk delete with optimistic updates
   const deleteCardMutation = api.card.delete.useMutation({
     onMutate: async (args) => {
@@ -581,6 +559,27 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     clearSelection,
   ]);
 
+  // Delete handler - respects quick delete toggle
+  const handleDelete = useCallback(() => {
+    if (quickDeleteEnabled) {
+      handleBulkDelete();
+    } else {
+      setShowDeleteConfirm(true);
+    }
+  }, [quickDeleteEnabled, handleBulkDelete]);
+
+  // Del key shortcut to delete selected items
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Delete" },
+    action: () => {
+      if (hasSelection) {
+        handleDelete();
+      }
+    },
+    description: t`Delete selected items`,
+    group: "BOARD_VIEW",
+  });
   const onDragEnd = ({
     source: _source,
     destination,
