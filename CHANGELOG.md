@@ -20,9 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **IRSA Support**: Added IAM Roles for Service Accounts (IRSA) support for S3 authentication (#265).
 - **OIDC Domain Limiting**: Added ability to limit OIDC logins to specific domains (#263).
 - **SMTP SSL Configuration**: Added `SMTP_REJECT_UNAUTHORIZED` env var to allow invalid SSL certificates (#262).
+- **JSDoc Documentation**: Added comprehensive JSDoc to `board.repo.ts` (15+ functions) and all shared utility functions.
 
 ### Changed
 
+- **Drag-and-Drop Library**: Migrated from deprecated `react-beautiful-dnd` to actively maintained `@hello-pangea/dnd` (API-compatible drop-in replacement).
+- **React Query Configuration**: Added explicit stale time (30s), garbage collection time (5min), and disabled refetchOnWindowFocus for better performance.
 - Improved page transition animations across workspace navigation (Boards, Templates, Members, Settings).
 - Enhanced settings tab navigation with tab content fade transitions.
 - Refined right sidebar button alignment to match left sidebar structure.
@@ -30,9 +33,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed `@ts-expect-error` in `ChecklistItemRow.tsx` by using proper `React.FocusEvent` type.
 - Fixed flashing issues during board navigation transitions.
 - Fixed sidebar toggle icon directions for right-side drawer.
 - Resolved scrollbar inconsistency in settings tabs.
+
+### Security
+
+- Upgraded dependencies to reduce vulnerabilities from 34 to 10 (0 critical, 0 high).
+- Updated `next` to ^15.5.8, `better-auth` to ^1.2.8, `nodemailer` to ^6.10.1.
+- Added `pnpm.overrides` for transitive dependency security fixes.
+
+### Removed
+
+- Removed deprecated `@lingui/babel-preset-react` (replaced by Lingui 5.x macro system).
+- Removed `StrictModeDroppable.tsx` wrapper (no longer needed with `@hello-pangea/dnd`).
 
 ## [0.3.0](https://github.com/kanbn/kan/compare/v0.2.4...v0.3.0) - 2025-12-09
 
