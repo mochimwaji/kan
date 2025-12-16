@@ -5,7 +5,6 @@ export default function TrelloAuthorize() {
         const hash = window.location.hash;
         const token = hash.split("=")[1];
         if (token) {
-            console.log("Posting token to /api/trello/authenticate", token);
             fetch("/api/trello/authenticate", {
                 method: "POST",
                 headers: {

@@ -3,6 +3,7 @@ import type { Readable } from "node:stream";
 
 import { createNextApiContext } from "@kan/api/trpc";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { apiLogger } from "@kan/logger";
 import { createStripeClient } from "@kan/stripe";
 
 async function buffer(readable: Readable) {
@@ -56,12 +57,12 @@ export default async function handler(
         break;
       }
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        apiLogger.info(`Unhandled Stripe webhook event type: ${event.type}`);
     }
 
     return res.status(200).json({ received: true });
   } catch (err) {
-    console.error("Webhook error:", err);
+    apiLogger.error("Stripe webhook error", err);
     return res.status(400).json({ message: "Webhook handler failed" });
   }
 }

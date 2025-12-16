@@ -74,8 +74,8 @@ export function LabelForm({
           };
           reset(newFormState);
         }
-      } catch (e) {
-        console.log(e);
+      } catch {
+        // Error during refetch - UI state is already updated
       }
     },
   });

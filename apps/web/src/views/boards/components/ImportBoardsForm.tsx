@@ -201,8 +201,8 @@ const ImportTrello: React.FC = () => {
       try {
         await refetchBoards();
         closeModal();
-      } catch (e) {
-        console.log(e);
+      } catch {
+        // Error during refetch - not actionable
       }
     },
     onError: () => {
