@@ -166,6 +166,7 @@ export const update = async (
     title?: string;
     description?: string;
     dueDate?: Date | null;
+    calendarOrder?: number;
   },
   args: {
     cardPublicId: string;
@@ -177,6 +178,10 @@ export const update = async (
       title: cardInput.title,
       description: cardInput.description,
       dueDate: cardInput.dueDate !== undefined ? cardInput.dueDate : undefined,
+      calendarOrder:
+        cardInput.calendarOrder !== undefined
+          ? cardInput.calendarOrder
+          : undefined,
       updatedAt: new Date(),
     })
     .where(and(eq(cards.publicId, args.cardPublicId), isNull(cards.deletedAt)))
@@ -186,6 +191,7 @@ export const update = async (
       title: cards.title,
       description: cards.description,
       dueDate: cards.dueDate,
+      calendarOrder: cards.calendarOrder,
     });
 
   return result;
@@ -791,6 +797,7 @@ export const reorder = async (
         title: true,
         description: true,
         dueDate: true,
+        calendarOrder: true,
       },
       where: eq(cards.id, card.id),
     });

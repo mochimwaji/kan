@@ -654,6 +654,7 @@ export const cardRouter = createTRPCRouter({
         index: z.number().optional(),
         listPublicId: z.string().min(12).optional(),
         dueDate: z.date().nullable().optional(),
+        calendarOrder: z.number().optional(),
       }),
     )
     .output(z.custom<Awaited<ReturnType<typeof cardRepo.update>>>())
@@ -703,24 +704,26 @@ export const cardRouter = createTRPCRouter({
       }
 
       let result:
-        | {
-            id: number;
-            title: string;
-            description: string | null;
-            publicId: string;
-            dueDate: Date | null;
-          }
-        | undefined;
+        | Awaited<ReturnType<typeof cardRepo.update>>
+        | Awaited<ReturnType<typeof cardRepo.reorder>>;
 
       const previousDueDate = existingCard.dueDate;
 
-      if (input.title || input.description || input.dueDate !== undefined) {
+      if (
+        input.title ||
+        input.description ||
+        input.dueDate !== undefined ||
+        input.calendarOrder !== undefined
+      ) {
         result = await cardRepo.update(
           ctx.db,
           {
             ...(input.title && { title: input.title }),
             ...(input.description && { description: input.description }),
             ...(input.dueDate !== undefined && { dueDate: input.dueDate }),
+            ...(input.calendarOrder !== undefined && {
+              calendarOrder: input.calendarOrder,
+            }),
           },
           { cardPublicId: input.cardPublicId },
         );
@@ -859,6 +862,74 @@ export const cardRouter = createTRPCRouter({
       });
 
       return { success: true, movedCount: cardIds.length };
+    }),
+  bulkUpdate: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          cardPublicId: z.string().min(12),
+          title: z.string().min(1).optional(),
+          description: z.string().optional(),
+          dueDate: z.date().nullable().optional(),
+          calendarOrder: z.number().optional(),
+        }),
+      ),
+    )
+    .output(z.object({ success: z.boolean(), updatedCount: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user.id;
+
+      if (input.length === 0) {
+        return { success: true, updatedCount: 0 };
+      }
+
+      // Get first card to validate workspace access
+      const firstCard = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
+        ctx.db,
+        input[0]!.cardPublicId,
+      );
+
+      if (!firstCard)
+        throw new TRPCError({
+          message: `Card with public ID ${input[0]!.cardPublicId} not found`,
+          code: "NOT_FOUND",
+        });
+
+      await assertUserInWorkspace(ctx.db, userId, firstCard.workspaceId);
+
+      // Update each card
+      let updatedCount = 0;
+      for (const update of input) {
+        const existingCard = await cardRepo.getByPublicId(
+          ctx.db,
+          update.cardPublicId,
+        );
+
+        if (!existingCard) continue;
+
+        const updateData: {
+          title?: string;
+          description?: string;
+          dueDate?: Date | null;
+          calendarOrder?: number;
+        } = {};
+
+        if (update.title !== undefined) updateData.title = update.title;
+        if (update.description !== undefined)
+          updateData.description = update.description;
+        if (update.dueDate !== undefined) updateData.dueDate = update.dueDate;
+        if (update.calendarOrder !== undefined)
+          updateData.calendarOrder = update.calendarOrder;
+
+        if (Object.keys(updateData).length > 0) {
+          await cardRepo.update(ctx.db, updateData, {
+            cardPublicId: update.cardPublicId,
+          });
+          updatedCount++;
+        }
+      }
+
+      return { success: true, updatedCount };
     }),
   delete: protectedProcedure
     .meta({

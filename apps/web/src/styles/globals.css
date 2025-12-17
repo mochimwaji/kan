@@ -160,3 +160,38 @@
     transform: scale(1);
   }
 }
+
+/* Calendar view styles */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.calendar-day {
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile calendar adjustments */
+@media (max-width: 768px) {
+  .calendar-day {
+    min-height: 60px;
+  }
+}
+
+/* View transition fade - Opacity only to prevent DnD offset bugs */
+@keyframes view-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-view-fade {
+  animation: view-fade 200ms ease-out forwards;
+}

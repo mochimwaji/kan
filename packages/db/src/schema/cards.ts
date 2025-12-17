@@ -74,6 +74,7 @@ export const cards = pgTable("card", {
     .references(() => lists.id, { onDelete: "cascade" }),
   importId: bigint("importId", { mode: "number" }).references(() => imports.id),
   dueDate: timestamp("dueDate"),
+  calendarOrder: integer("calendarOrder"),
 }).enableRLS();
 
 export const cardsRelations = relations(cards, ({ one, many }) => ({

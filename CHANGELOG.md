@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Calendar View**: New month calendar view for boards with toggle button and `v` keyboard shortcut. Cards display on their due dates with list colors. Drag-and-drop to reschedule cards or remove due dates. Navigate with `←`/`→` for months and `t` for today. Unscheduled sidebar shows cards without due dates.
 - **Due Date Urgency Coloring**: Cards now show due dates in contextual colors based on urgency: red (overdue), orange (due today), yellow (due within a week), default (later dates).
 - **Collapsible Lists**: Lists can be collapsed/expanded by clicking the chevron toggle in the header. Collapse state persists across page refreshes using localStorage. Collapsed lists show a card count badge.
 - **CollapsibleSection Component**: New reusable animated component for smooth collapse/expand transitions.

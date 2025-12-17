@@ -8,11 +8,12 @@ import { keepPreviousData } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  HiBars4,
+  HiOutlineCalendarDays,
   HiOutlinePlusSmall,
   HiOutlineRectangleStack,
   HiOutlineSquare3Stack3D,
 } from "react-icons/hi2";
-import { twMerge } from "tailwind-merge";
 
 import type { UpdateBoardInput } from "@kan/api/types";
 
@@ -34,6 +35,7 @@ import { api } from "~/utils/api";
 import { convertDueDateFiltersToRanges } from "~/utils/dueDateFilters";
 import { formatToArray } from "~/utils/helpers";
 import BoardDropdown from "./components/BoardDropdown";
+import CalendarView from "./components/CalendarView";
 import Card from "./components/Card";
 import { DeleteBoardConfirmation } from "./components/DeleteBoardConfirmation";
 import { DeleteListConfirmation } from "./components/DeleteListConfirmation";
@@ -47,6 +49,8 @@ import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
 
+// View mode type
+type ViewMode = "kanban" | "calendar";
 type PublicListId = string;
 
 export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
@@ -82,6 +86,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     return localStorage.getItem("quick-delete-enabled") === "true";
   });
 
+  // View mode state with localStorage persistence (per-board)
+  const [viewMode, setViewMode] = useState<ViewMode>("kanban");
+
   // Transition integration
   /* Transition integration */
   const { animationPhase, fromBoardsPage } = useBoardTransition();
@@ -101,8 +108,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       }
     } else {
       // If direct load or return from card, fade in immediately
-      const timer = requestAnimationFrame(() => setShowContent(true));
-      // return () => cancelAnimationFrame(timer); // (Optional cleanup)
+      const _timer = requestAnimationFrame(() => setShowContent(true));
+      // return () => cancelAnimationFrame(_timer); // (Optional cleanup)
     }
   }, [animationPhase, fromBoardsPage]);
 
@@ -121,7 +128,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     stroke: { key: "Escape" },
     action: () => {
       if (!isOpen) {
-        router.push("/boards");
+        void router.push("/boards");
       }
     },
     description: t`Go to boards`,
@@ -133,6 +140,38 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       ? params.boardId[0]
       : params.boardId
     : null;
+
+  // Load view mode from localStorage when boardId changes
+  useEffect(() => {
+    if (boardId && typeof window !== "undefined") {
+      const stored = localStorage.getItem(`board-view-mode-${boardId}`);
+      if (stored === "calendar") {
+        setViewMode("calendar");
+      } else {
+        setViewMode("kanban");
+      }
+    }
+  }, [boardId]);
+
+  // Toggle view mode handler
+  const toggleViewMode = useCallback(() => {
+    setViewMode((prev) => {
+      const next = prev === "kanban" ? "calendar" : "kanban";
+      if (boardId && typeof window !== "undefined") {
+        localStorage.setItem(`board-view-mode-${boardId}`, next);
+      }
+      return next;
+    });
+  }, [boardId]);
+
+  // V shortcut to toggle between Kanban and Calendar view
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "V" },
+    action: toggleViewMode,
+    description: t`Toggle view mode`,
+    group: "BOARD_VIEW",
+  });
 
   const updateBoard = api.board.update.useMutation();
 
@@ -347,7 +386,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         const href = isTemplate
           ? `/templates/${boardId}/cards/${cardPublicId}`
           : `/cards/${cardPublicId}`;
-        router.push(href);
+        void router.push(href);
       }, 300);
     },
     [isTemplate, boardId, router],
@@ -371,9 +410,118 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access -- tRPC types need regeneration
+  const bulkUpdateCardMutation = api.card.bulkUpdate.useMutation({
+    onMutate: async (
+      updates: {
+        cardPublicId: string;
+        title?: string;
+        description?: string;
+        dueDate?: Date | null;
+        calendarOrder?: number;
+      }[],
+    ) => {
+      await utils.board.byId.cancel();
+      const previousBoard = utils.board.byId.getData(queryParams);
+
+      utils.board.byId.setData(queryParams, (old) => {
+        if (!old) return old;
+        const updateMap = new Map(
+          updates.map((u) => [u.cardPublicId, u] as const),
+        );
+        return {
+          ...old,
+          lists: old.lists.map((list) => ({
+            ...list,
+            cards: list.cards.map((card) => {
+              const update = updateMap.get(card.publicId);
+              if (update) {
+                return {
+                  ...card,
+                  ...update,
+                  title: update.title ?? card.title,
+                  description: update.description ?? card.description,
+                  dueDate:
+                    update.dueDate === undefined
+                      ? card.dueDate
+                      : update.dueDate,
+                  calendarOrder:
+                    update.calendarOrder === undefined
+                      ? (card as any).calendarOrder
+                      : update.calendarOrder,
+                };
+              }
+              return card;
+            }),
+          })),
+        };
+      });
+
+      return { previousBoard };
+    },
+    onError: (
+      _err: unknown,
+      _newCard: unknown,
+      context: { previousBoard: typeof boardData } | undefined,
+    ) => {
+      utils.board.byId.setData(queryParams, context?.previousBoard);
+      showPopup({
+        header: t`Unable to update cards`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+    onSettled: async () => {
+      await utils.board.byId.invalidate(queryParams);
+    },
+  });
+
   const updateCardMutation = api.card.update.useMutation({
-    // No onMutate - visual state handles immediate UI update
-    onError: () => {
+    onMutate: async (newCard) => {
+      // Cancel outgoing refetches
+      await utils.board.byId.cancel();
+
+      // Snapshot the previous value
+      const previousBoard = utils.board.byId.getData(queryParams);
+
+      // Optimistically update to the new value
+      utils.board.byId.setData(queryParams, (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          lists: old.lists.map((list) => ({
+            ...list,
+            cards: list.cards.map((card) => {
+              if (card.publicId === newCard.cardPublicId) {
+                return {
+                  ...card,
+                  ...newCard,
+                  title: newCard.title ?? card.title,
+                  description: newCard.description ?? card.description,
+                  dueDate:
+                    newCard.dueDate === undefined
+                      ? card.dueDate
+                      : newCard.dueDate,
+                  calendarOrder:
+                    newCard.calendarOrder === undefined
+                      ? (card as any).calendarOrder
+                      : newCard.calendarOrder,
+                };
+              }
+              return card;
+            }),
+          })),
+        };
+      });
+
+      // Return a context object with the snapshotted value
+      return { previousBoard };
+    },
+    onError: (_err, _newTodo, context) => {
+      // Rollback to the previous value
+      if (context?.previousBoard) {
+        utils.board.byId.setData(queryParams, context.previousBoard);
+      }
       // Reset isDragging so visual state syncs with server data
       setIsDragging(false);
       showPopup({
@@ -537,15 +685,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     selectedListIds,
     deleteCardMutation,
     deleteListMutation,
-    queryParams,
-    utils,
     clearSelection,
   ]);
 
   // Delete handler - respects quick delete toggle
   const handleDelete = useCallback(() => {
     if (quickDeleteEnabled) {
-      handleBulkDelete();
+      void handleBulkDelete();
     } else {
       setShowDeleteConfirm(true);
     }
@@ -629,11 +775,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     draggableId,
     type,
   }: DropResult): void => {
-    // Delay reset of draggingCardId to allow ghost fade-out transition (400ms)
-    setTimeout(() => setDraggingCardId(null), 400);
+    // Reset multi-drag state
+    setDraggingCardId(null);
     // Reset isDragging after drop animation completes
     // This allows visual state to sync with server data again
-    setTimeout(() => setIsDragging(false), 500);
+    setTimeout(() => setIsDragging(false), 300);
 
     if (!destination) {
       return;
@@ -657,6 +803,122 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     }
 
     if (type === "CARD") {
+      // Handle calendar drops (update dueDate)
+      const isCalendarDrop = destination.droppableId.startsWith("calendar-");
+      const isUnscheduledDrop = destination.droppableId === "unscheduled";
+
+      if (isCalendarDrop || isUnscheduledDrop) {
+        // Parse the date from droppableId (calendar-YYYY-MM-DD)
+        let newDueDate: Date | null = null;
+        let year = 0;
+        let month = 0;
+        let day = 0;
+
+        if (isCalendarDrop) {
+          const dateStr = destination.droppableId.replace("calendar-", "");
+          const parts = dateStr.split("-").map(Number);
+          year = parts[0] ?? 2024;
+          month = parts[1] ?? 1;
+          day = parts[2] ?? 1;
+          newDueDate = new Date(year, month - 1, day, 12, 0, 0, 0);
+        }
+
+        // Determine cards to move
+        const cardsToMove = selectedCardIds.has(draggableId)
+          ? getOrderedSelectedCards(draggableId)
+          : [draggableId];
+
+        // 1. Get all cards currently on the target date (excluding the ones being moved)
+        // We need this to calculate the new order relative to existing cards.
+        const allCards = (visualLists ?? []).flatMap((l, listIndex) =>
+          l.cards.map((c) => ({ ...c, listIndex })),
+        );
+        const targetCards = allCards
+          .filter((c) => {
+            if (cardsToMove.includes(c.publicId)) return false; // Exclude moving cards
+            if (isUnscheduledDrop) return !c.dueDate;
+            if (!c.dueDate) return false;
+            // Check if same day (using local time components to match logic above)
+            return (
+              c.dueDate.getFullYear() === year &&
+              c.dueDate.getMonth() === month - 1 &&
+              c.dueDate.getDate() === day
+            );
+          })
+          .sort((a, b) => {
+            // Sort by existing order (stable fallback using listIndex)
+            const orderA =
+              (a as any).calendarOrder ??
+              a.listIndex * 100000 + (a as any).index * 1000;
+            const orderB =
+              (b as any).calendarOrder ??
+              b.listIndex * 100000 + (b as any).index * 1000;
+            return orderA - orderB;
+          });
+
+        // 2. Insert moving cards at destination.index to determine new orders
+        // destination.index is the position in the *target list*.
+        // Since we filtered out moving cards, this index should be correct for insertion.
+        const prevCard = targetCards[destination.index - 1];
+        const nextCard = targetCards[destination.index];
+
+        const prevOrder =
+          (prevCard as any)?.calendarOrder ??
+          (prevCard?.listIndex !== undefined
+            ? prevCard.listIndex * 100000 + (prevCard as any).index * 1000
+            : 0);
+        const nextOrder =
+          (nextCard as any)?.calendarOrder ??
+          (nextCard?.listIndex !== undefined
+            ? nextCard.listIndex * 100000 + (nextCard as any).index * 1000
+            : prevOrder + 10000);
+
+        // Calculate step for distributing new orders
+        // If sorting sequentially: [prev, ...movers, next]
+        const step = (nextOrder - prevOrder) / (cardsToMove.length + 1);
+
+        const newOrders = new Map<string, number>();
+        cardsToMove.forEach((cardId, index) => {
+          newOrders.set(cardId, Math.round(prevOrder + step * (index + 1)));
+        });
+
+        // Update visual state immediately
+        setVisualLists((prev) => {
+          if (!prev) return prev;
+          return prev.map((list) => ({
+            ...list,
+            cards: list.cards.map((card) => {
+              if (cardsToMove.includes(card.publicId)) {
+                return {
+                  ...card,
+                  dueDate: newDueDate,
+                  calendarOrder:
+                    newOrders.get(card.publicId) ?? card.calendarOrder,
+                };
+              }
+              return card;
+            }),
+          }));
+        });
+
+        // Fire mutation to update due date AND order for each card
+        if (cardsToMove.length > 0) {
+          bulkUpdateCardMutation.mutate(
+            cardsToMove.map((cardId) => ({
+              cardPublicId: cardId,
+              dueDate: newDueDate,
+              calendarOrder: newOrders.get(cardId),
+            })),
+          );
+        }
+
+        // Clear selection after drop
+        setSelectedCardIds(new Set());
+        setLastSelectedCardId(null);
+
+        return;
+      }
+
       // Determine cards to move (all selected if dragging selected, else just dragged)
       const cardsToMove = selectedCardIds.has(draggableId)
         ? getOrderedSelectedCards(draggableId)
@@ -717,6 +979,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           index: destination.index,
         });
       }
+
+      // Clear selection after drop
+      setSelectedCardIds(new Set());
+      setLastSelectedCardId(null);
     }
   };
 
@@ -921,6 +1187,38 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                   )}
                 </>
               )}
+              {/* View toggle button */}
+              {boardData && (
+                <Tooltip
+                  content={
+                    viewMode === "kanban"
+                      ? t`Switch to Calendar view (V)`
+                      : t`Switch to Kanban view (V)`
+                  }
+                >
+                  <button
+                    onClick={toggleViewMode}
+                    className="inline-flex items-center justify-center rounded-md border border-light-300 bg-light-50 p-2 text-sm font-semibold shadow-sm transition-colors hover:bg-light-100 dark:border-dark-300 dark:bg-dark-50 dark:hover:bg-dark-100"
+                    aria-label={
+                      viewMode === "kanban"
+                        ? t`Switch to Calendar view`
+                        : t`Switch to Kanban view`
+                    }
+                  >
+                    {viewMode === "kanban" ? (
+                      <HiOutlineCalendarDays
+                        className="h-5 w-5"
+                        style={{ color: "var(--kan-button-text)" }}
+                      />
+                    ) : (
+                      <HiBars4
+                        className="h-5 w-5"
+                        style={{ color: "var(--kan-button-text)" }}
+                      />
+                    )}
+                  </button>
+                </Tooltip>
+              )}
               <Tooltip content={createListShortcutTooltipContent}>
                 <Button
                   iconLeft={
@@ -981,122 +1279,156 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     onDragStart={onDragStart}
                     onDragEnd={onDragEnd}
                   >
-                    <Droppable
-                      droppableId="all-lists"
-                      direction="horizontal"
-                      type="LIST"
-                    >
-                      {(provided) => (
-                        <div
-                          className="flex"
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
+                    {viewMode === "calendar" ? (
+                      <div
+                        key="calendar-view"
+                        className="animate-view-fade h-full px-8 pb-4"
+                      >
+                        <CalendarView
+                          lists={listsToRender}
+                          onCardClick={handleCardClick}
+                          onExpandCard={handleExpandCard}
+                          selectedCardIds={selectedCardIds}
+                          deletingIds={deletingIds}
+                          draggingCardId={draggingCardId}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        key="kanban-view"
+                        className="animate-view-fade flex h-full"
+                      >
+                        <Droppable
+                          droppableId="all-lists"
+                          direction="horizontal"
+                          type="LIST"
                         >
-                          <div className="min-w-[2rem]" />
-                          {listsToRender.map((list, index) => (
-                            <List
-                              index={index}
-                              key={list.publicId}
-                              list={list}
-                              cardCount={list.cards.length}
-                              isSelected={selectedListIds.has(list.publicId)}
-                              isDeleting={deletingIds.has(list.publicId)}
-                              onToggleSelect={() =>
-                                toggleListSelection(list.publicId)
-                              }
-                              setSelectedPublicListId={(publicListId) =>
-                                setSelectedPublicListId(publicListId)
-                              }
+                          {(provided) => (
+                            <div
+                              className="flex"
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
                             >
-                              <Droppable
-                                droppableId={`${list.publicId}`}
-                                type="CARD"
-                              >
-                                {(provided) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.droppableProps}
-                                    className="scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-w-[8px] z-10 h-full max-h-[calc(100vh-225px)] min-h-[2rem] overflow-y-auto pr-1 scrollbar dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-600"
+                              <div className="min-w-[2rem]" />
+                              {listsToRender.map((list, index) => (
+                                <List
+                                  index={index}
+                                  key={list.publicId}
+                                  list={list}
+                                  cardCount={list.cards.length}
+                                  isSelected={selectedListIds.has(
+                                    list.publicId,
+                                  )}
+                                  isDeleting={deletingIds.has(list.publicId)}
+                                  onToggleSelect={() =>
+                                    toggleListSelection(list.publicId)
+                                  }
+                                  setSelectedPublicListId={(publicListId) =>
+                                    setSelectedPublicListId(publicListId)
+                                  }
+                                >
+                                  <Droppable
+                                    droppableId={`${list.publicId}`}
+                                    type="CARD"
                                   >
-                                    {list.cards.map((card, index) => (
-                                      <Draggable
-                                        key={card.publicId}
-                                        draggableId={card.publicId}
-                                        index={index}
+                                    {(provided) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}
+                                        className="scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-w-[8px] z-10 h-full max-h-[calc(100vh-225px)] min-h-[2rem] overflow-y-auto pr-1 scrollbar dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-600"
                                       >
-                                        {(provided) => (
-                                          <Link
-                                            onClick={(e) =>
-                                              handleCardClick(e, card.publicId)
-                                            }
+                                        {list.cards.map((card, index) => (
+                                          <Draggable
                                             key={card.publicId}
-                                            href={
-                                              isTemplate
-                                                ? `/templates/${boardId}/cards/${card.publicId}`
-                                                : `/cards/${card.publicId}`
-                                            }
-                                            className={`mb-2 flex !cursor-pointer flex-col ${
-                                              card.publicId.startsWith(
-                                                "PLACEHOLDER",
-                                              )
-                                                ? "pointer-events-none"
-                                                : ""
-                                            }`}
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
+                                            draggableId={card.publicId}
+                                            index={index}
                                           >
-                                            <Card
-                                              title={card.title}
-                                              labels={card.labels}
-                                              members={card.members}
-                                              checklists={card.checklists ?? []}
-                                              description={
-                                                card.description ?? null
-                                              }
-                                              comments={card.comments ?? []}
-                                              attachments={card.attachments}
-                                              dueDate={card.dueDate ?? null}
-                                              listColor={list.color}
-                                              isSelected={selectedCardIds.has(
-                                                card.publicId,
-                                              )}
-                                              isDeleting={deletingIds.has(
-                                                card.publicId,
-                                              )}
-                                              isGhosting={
-                                                draggingCardId !== null &&
-                                                selectedCardIds.has(
-                                                  card.publicId,
-                                                ) &&
-                                                card.publicId !== draggingCardId
-                                              }
-                                              onExpand={() =>
-                                                handleExpandCard(card.publicId)
-                                              }
-                                            />
-                                            {/* Multi-drag count badge */}
-                                            {draggingCardId === card.publicId &&
-                                              selectedCardIds.size > 1 && (
-                                                <MultiDragBadge
-                                                  count={selectedCardIds.size}
+                                            {(provided) => (
+                                              <Link
+                                                onClick={(e) =>
+                                                  handleCardClick(
+                                                    e,
+                                                    card.publicId,
+                                                  )
+                                                }
+                                                key={card.publicId}
+                                                href={
+                                                  isTemplate
+                                                    ? `/templates/${boardId}/cards/${card.publicId}`
+                                                    : `/cards/${card.publicId}`
+                                                }
+                                                className={`mb-2 flex !cursor-pointer flex-col ${
+                                                  card.publicId.startsWith(
+                                                    "PLACEHOLDER",
+                                                  )
+                                                    ? "pointer-events-none"
+                                                    : ""
+                                                }`}
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                              >
+                                                <Card
+                                                  title={card.title}
+                                                  labels={card.labels}
+                                                  members={card.members}
+                                                  checklists={
+                                                    card.checklists ?? []
+                                                  }
+                                                  description={
+                                                    card.description ?? null
+                                                  }
+                                                  comments={card.comments ?? []}
+                                                  attachments={card.attachments}
+                                                  dueDate={card.dueDate ?? null}
+                                                  listColor={list.color}
+                                                  isSelected={selectedCardIds.has(
+                                                    card.publicId,
+                                                  )}
+                                                  isDeleting={deletingIds.has(
+                                                    card.publicId,
+                                                  )}
+                                                  isGhosting={
+                                                    draggingCardId !== null &&
+                                                    selectedCardIds.has(
+                                                      card.publicId,
+                                                    ) &&
+                                                    card.publicId !==
+                                                      draggingCardId
+                                                  }
+                                                  onExpand={() =>
+                                                    handleExpandCard(
+                                                      card.publicId,
+                                                    )
+                                                  }
                                                 />
-                                              )}
-                                          </Link>
-                                        )}
-                                      </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                  </div>
-                                )}
-                              </Droppable>
-                            </List>
-                          ))}
-                          <div className="min-w-[0.75rem]" />
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
+                                                {/* Multi-drag count badge */}
+                                                {draggingCardId ===
+                                                  card.publicId &&
+                                                  selectedCardIds.size > 1 && (
+                                                    <MultiDragBadge
+                                                      count={
+                                                        selectedCardIds.size
+                                                      }
+                                                    />
+                                                  )}
+                                              </Link>
+                                            )}
+                                          </Draggable>
+                                        ))}
+                                        {provided.placeholder}
+                                      </div>
+                                    )}
+                                  </Droppable>
+                                </List>
+                              ))}
+                              <div className="min-w-[0.75rem]" />
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+                      </div>
+                    )}
                   </DragDropContext>
                 )}
               </>
@@ -1105,8 +1437,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         </div>
         {renderModalContent()}
 
-        {/* Floating delete button - appears when items are selected */}
-        {hasSelection && (
+        {/* Floating delete button - appears when items are selected (KANBAN ONLY) */}
+        {hasSelection && viewMode === "kanban" && (
           <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 animate-fade-in">
             <div className="flex items-center gap-3 rounded-lg bg-red-600 px-4 py-3 text-white shadow-lg">
               <span className="text-sm font-medium">
