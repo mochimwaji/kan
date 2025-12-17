@@ -8,6 +8,7 @@ import {
 } from "date-fns";
 import { HiOutlinePaperClip } from "react-icons/hi";
 import {
+  HiArrowsPointingOut,
   HiBars3BottomLeft,
   HiChatBubbleLeft,
   HiOutlineClock,
@@ -68,7 +69,8 @@ const Card = ({
   listColor,
   isSelected,
   isDeleting,
-  onToggleSelect,
+  isGhosting,
+  onExpand,
 }: {
   title: string;
   labels: { name: string; colourCode: string | null }[];
@@ -94,7 +96,8 @@ const Card = ({
   listColor?: string | null;
   isSelected?: boolean;
   isDeleting?: boolean;
-  onToggleSelect?: () => void;
+  isGhosting?: boolean;
+  onExpand?: () => void;
 }) => {
   const { dateLocale } = useLocalisation();
   const showYear = dueDate ? !isSameYear(dueDate, new Date()) : false;
@@ -132,39 +135,39 @@ const Card = ({
   return (
     <div
       className={twMerge(
-        "transition-dnd-safe flex flex-col rounded-md border px-3 py-2 text-sm",
+        "transition-dnd-safe group relative flex flex-col rounded-md border px-3 py-2 text-sm",
         listColor
           ? "border-opacity-30"
           : "border-light-200 bg-light-50 dark:border-dark-200 dark:bg-dark-200 dark:hover:bg-dark-300",
         isSelected ? "selected-item" : "",
         isDeleting ? "delete-fade-out" : "",
+        isGhosting ? "multi-drag-ghost pointer-events-none" : "",
       )}
       style={{ ...cardStyle, color: cardTextColor }}
     >
-      {/* Title with optional selection radio button inline */}
-      <div className="flex items-start gap-2">
-        {onToggleSelect && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onToggleSelect();
-            }}
-            className={`mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer rounded-full border-2 transition-all duration-150 ${
-              isSelected
-                ? "border-blue-500 bg-blue-500"
-                : "border-gray-400 bg-transparent hover:border-blue-400"
-            }`}
-          >
-            {isSelected && (
-              <span className="flex h-full w-full items-center justify-center">
-                <span className="h-1.5 w-1.5 rounded-full bg-white" />
-              </span>
-            )}
-          </button>
-        )}
-        <span className="flex-1">{title}</span>
+      {/* Expand button - fades in on hover or when selected */}
+      {onExpand && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onExpand();
+          }}
+          className={twMerge(
+            "absolute right-1.5 top-1.5 z-10 rounded p-1 opacity-0 transition-opacity duration-150",
+            "hover:bg-light-300 dark:hover:bg-dark-400",
+            "group-hover:opacity-60 hover:!opacity-100",
+            isSelected && "opacity-60",
+          )}
+          aria-label="Open card"
+        >
+          <HiArrowsPointingOut className="h-3.5 w-3.5" />
+        </button>
+      )}
+      {/* Card title */}
+      <div className="flex items-start">
+        <span className="flex-1 pr-6">{title}</span>
       </div>
       {labels.length ||
       members.length ||

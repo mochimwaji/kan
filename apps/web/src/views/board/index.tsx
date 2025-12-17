@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { DragDropContext, Draggable } from "@hello-pangea/dnd";
 import { t } from "@lingui/core/macro";
 import { keepPreviousData } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlinePlusSmall,
@@ -39,6 +39,7 @@ import { DeleteBoardConfirmation } from "./components/DeleteBoardConfirmation";
 import { DeleteListConfirmation } from "./components/DeleteListConfirmation";
 import Filters from "./components/Filters";
 import List from "./components/List";
+import MultiDragBadge from "./components/MultiDragBadge";
 import { NewCardForm } from "./components/NewCardForm";
 import { NewListForm } from "./components/NewListForm";
 import { NewTemplateForm } from "./components/NewTemplateForm";
@@ -68,6 +69,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   );
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Multi-drag state
+  const [lastSelectedCardId, setLastSelectedCardId] = useState<string | null>(
+    null,
+  );
+  const [draggingCardId, setDraggingCardId] = useState<string | null>(null);
 
   // Quick delete toggle - skip confirmation when enabled
   const [quickDeleteEnabled, setQuickDeleteEnabled] = useState(() => {
@@ -190,8 +197,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     }
   }, [boardData?.lists, isDragging]);
 
-  // Use visual lists for rendering, fallback to boardData
-  const listsToRender = visualLists ?? boardData?.lists ?? [];
+  // Use visual lists for rendering, fallback to boardData (memoized for stable dependencies)
+  const listsToRender = useMemo(
+    () => visualLists ?? boardData?.lists ?? [],
+    [visualLists, boardData?.lists],
+  );
 
   // Helper to toggle list collapse via custom event
   const toggleListCollapse = useCallback(
@@ -293,24 +303,55 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   // We add 'isExiting' for exit animation
   const [isExiting, setIsExiting] = useState(false);
 
+  // Click card to select (shift+click for range selection)
   const handleCardClick = (e: React.MouseEvent, cardPublicId: string) => {
     if (cardPublicId.startsWith("PLACEHOLDER")) {
       e.preventDefault();
       return;
     }
-
-    // Start exit animation
     e.preventDefault();
-    setIsExiting(true);
 
-    // Navigate after animation
-    setTimeout(() => {
-      const href = isTemplate
-        ? `/templates/${boardId}/cards/${cardPublicId}`
-        : `/cards/${cardPublicId}`;
-      router.push(href);
-    }, 300); // 300ms match transition duration
+    if (e.shiftKey && lastSelectedCardId) {
+      // Shift+click: select range
+      selectCardRange(lastSelectedCardId, cardPublicId);
+    } else {
+      // Normal click: toggle selection
+      toggleCardSelection(cardPublicId);
+      setLastSelectedCardId(cardPublicId);
+    }
   };
+
+  // Range selection helper for shift+click
+  const selectCardRange = useCallback(
+    (fromId: string, toId: string) => {
+      const allCardIds = listsToRender.flatMap((list) =>
+        list.cards.map((c) => c.publicId),
+      );
+      const fromIdx = allCardIds.indexOf(fromId);
+      const toIdx = allCardIds.indexOf(toId);
+      if (fromIdx === -1 || toIdx === -1) return;
+
+      const [start, end] =
+        fromIdx < toIdx ? [fromIdx, toIdx] : [toIdx, fromIdx];
+      setSelectedCardIds(new Set(allCardIds.slice(start, end + 1)));
+      setLastSelectedCardId(toId);
+    },
+    [listsToRender],
+  );
+
+  // Expand card (navigate to card detail)
+  const handleExpandCard = useCallback(
+    (cardPublicId: string) => {
+      setIsExiting(true);
+      setTimeout(() => {
+        const href = isTemplate
+          ? `/templates/${boardId}/cards/${cardPublicId}`
+          : `/cards/${cardPublicId}`;
+        router.push(href);
+      }, 300);
+    },
+    [isTemplate, boardId, router],
+  );
 
   const updateListMutation = api.list.update.useMutation({
     // No onMutate - visual state handles immediate UI update
@@ -344,6 +385,21 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     onSettled: async () => {
       // Always invalidate to get fresh server data
       // Visual state will sync when isDragging becomes false
+      await utils.board.byId.invalidate(queryParams);
+    },
+  });
+
+  // Bulk move mutation for multi-card drag (single atomic operation)
+  const bulkMoveMutation = api.card.bulkMove.useMutation({
+    onError: () => {
+      setIsDragging(false);
+      showPopup({
+        header: t`Unable to move cards`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+    onSettled: async () => {
       await utils.board.byId.invalidate(queryParams);
     },
   });
@@ -507,10 +563,65 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     description: t`Delete selected items`,
     group: "BOARD_VIEW",
   });
-  // Two-Phase State: onDragStart sets isDragging to prevent visual sync from cache
-  const onDragStart = () => {
+
+  // Escape key to clear selection (if any selected)
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Escape" },
+    action: () => {
+      if (hasSelection) {
+        clearSelection();
+      }
+    },
+    description: t`Clear selection`,
+    group: "BOARD_VIEW",
+  });
+
+  // Enter key shortcut to open first selected card
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Enter" },
+    action: () => {
+      if (selectedCardIds.size > 0) {
+        const firstSelected = [...selectedCardIds][0];
+        if (firstSelected) handleExpandCard(firstSelected);
+      }
+    },
+    description: t`Open selected card`,
+    group: "BOARD_VIEW",
+  });
+
+  // Two-Phase State: onDragStart sets isDragging and tracks multi-drag
+  const onDragStart = (start: { draggableId: string; type: string }) => {
     setIsDragging(true);
+
+    if (start.type === "CARD") {
+      const draggedId = start.draggableId;
+      setDraggingCardId(draggedId);
+
+      // If dragging unselected card, clear selection and select only it
+      if (!selectedCardIds.has(draggedId)) {
+        setSelectedCardIds(new Set([draggedId]));
+        setLastSelectedCardId(draggedId);
+      }
+    }
   };
+
+  // Helper: Get selected cards in order (dragged first, then by index)
+  const getOrderedSelectedCards = useCallback(
+    (draggedId: string): string[] => {
+      const allCards = listsToRender.flatMap((l) => l.cards);
+      return allCards
+        .filter((c) => selectedCardIds.has(c.publicId))
+        .sort((a, b) => {
+          if (a.publicId === draggedId) return -1;
+          if (b.publicId === draggedId) return 1;
+          return a.index - b.index;
+        })
+        .map((c) => c.publicId);
+    },
+    [listsToRender, selectedCardIds],
+  );
 
   const onDragEnd = ({
     source,
@@ -518,9 +629,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     draggableId,
     type,
   }: DropResult): void => {
+    // Delay reset of draggingCardId to allow ghost fade-out transition (400ms)
+    setTimeout(() => setDraggingCardId(null), 400);
     // Reset isDragging after drop animation completes
     // This allows visual state to sync with server data again
-    setTimeout(() => setIsDragging(false), 300);
+    setTimeout(() => setIsDragging(false), 500);
 
     if (!destination) {
       return;
@@ -544,6 +657,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     }
 
     if (type === "CARD") {
+      // Determine cards to move (all selected if dragging selected, else just dragged)
+      const cardsToMove = selectedCardIds.has(draggableId)
+        ? getOrderedSelectedCards(draggableId)
+        : [draggableId];
+
       setVisualLists((prev) => {
         if (!prev) return prev;
         // Deep copy lists and cards to avoid mutation
@@ -551,19 +669,32 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           ...list,
           cards: [...list.cards],
         }));
-        const sourceList = updated.find((l) =>
-          l.cards.some((c) => c.publicId === draggableId),
-        );
+
+        // Remove all cards to move from their source lists
+        const movedCards: (typeof updated)[0]["cards"] = [];
+        for (const list of updated) {
+          for (let i = list.cards.length - 1; i >= 0; i--) {
+            const cardId = list.cards[i]?.publicId;
+            if (cardId && cardsToMove.includes(cardId)) {
+              movedCards.push(...list.cards.splice(i, 1));
+            }
+          }
+        }
+
+        // Sort moved cards to maintain order (dragged first, then by original selection order)
+        movedCards.sort((a, b) => {
+          const aIdx = cardsToMove.indexOf(a.publicId);
+          const bIdx = cardsToMove.indexOf(b.publicId);
+          return aIdx - bIdx;
+        });
+
+        // Insert at destination
         const destList = updated.find(
           (l) => l.publicId === destination.droppableId,
         );
-        if (!sourceList || !destList) return prev;
-
-        const cardIndex = sourceList.cards.findIndex(
-          (c) => c.publicId === draggableId,
-        );
-        const [removed] = sourceList.cards.splice(cardIndex, 1);
-        if (removed) destList.cards.splice(destination.index, 0, removed);
+        if (destList) {
+          destList.cards.splice(destination.index, 0, ...movedCards);
+        }
 
         // Update indices
         return updated.map((list) => ({
@@ -572,12 +703,20 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         }));
       });
 
-      // Fire mutation (backend update - visual already updated above)
-      updateCardMutation.mutate({
-        cardPublicId: draggableId,
-        listPublicId: destination.droppableId,
-        index: destination.index,
-      });
+      // Fire mutation: single atomic bulkMove for multi-card, single update for one card
+      if (cardsToMove.length > 1) {
+        bulkMoveMutation.mutate({
+          cardPublicIds: cardsToMove,
+          listPublicId: destination.droppableId,
+          startIndex: destination.index,
+        });
+      } else {
+        updateCardMutation.mutate({
+          cardPublicId: draggableId,
+          listPublicId: destination.droppableId,
+          index: destination.index,
+        });
+      }
     }
   };
 
@@ -925,12 +1064,24 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                               isDeleting={deletingIds.has(
                                                 card.publicId,
                                               )}
-                                              onToggleSelect={() =>
-                                                toggleCardSelection(
+                                              isGhosting={
+                                                draggingCardId !== null &&
+                                                selectedCardIds.has(
                                                   card.publicId,
-                                                )
+                                                ) &&
+                                                card.publicId !== draggingCardId
+                                              }
+                                              onExpand={() =>
+                                                handleExpandCard(card.publicId)
                                               }
                                             />
+                                            {/* Multi-drag count badge */}
+                                            {draggingCardId === card.publicId &&
+                                              selectedCardIds.size > 1 && (
+                                                <MultiDragBadge
+                                                  count={selectedCardIds.size}
+                                                />
+                                              )}
                                           </Link>
                                         )}
                                       </Draggable>

@@ -799,6 +799,124 @@ export const reorder = async (
   });
 };
 
+/**
+ * Atomically move multiple cards to a destination list at consecutive indices.
+ * All cards are moved together in a single transaction to avoid race conditions.
+ */
+export const bulkReorder = async (
+  db: dbClient,
+  args: {
+    cardIds: number[];
+    newListId: number;
+    startIndex: number;
+  },
+) => {
+  if (args.cardIds.length === 0) return [];
+
+  return db.transaction(async (tx) => {
+    // Get current list info for each card
+    const cardsToMove = await tx.query.cards.findMany({
+      columns: { id: true, index: true, listId: true },
+      where: and(inArray(cards.id, args.cardIds), isNull(cards.deletedAt)),
+    });
+
+    if (cardsToMove.length === 0) {
+      throw new Error("No cards found to move");
+    }
+
+    // Collect source list IDs (for index adjustment)
+    const sourceListIds = [...new Set(cardsToMove.map((c) => c.listId))];
+
+    // 1. Remove cards from source lists (set to temporary negative indices)
+    await tx
+      .update(cards)
+      .set({ index: sql`-1 * id` }) // Temp: negative to avoid conflicts
+      .where(inArray(cards.id, args.cardIds));
+
+    // 2. Shift down indices in source lists to fill gaps
+    for (const listId of sourceListIds) {
+      await tx.execute(sql`
+        WITH ordered AS (
+          SELECT id, ROW_NUMBER() OVER (ORDER BY "index", id) - 1 AS new_index
+          FROM "card"
+          WHERE "listId" = ${listId} AND "deletedAt" IS NULL AND "index" >= 0
+        )
+        UPDATE "card" c
+        SET "index" = o.new_index
+        FROM ordered o
+        WHERE c.id = o.id;
+      `);
+    }
+
+    // 3. Make room at destination for the incoming cards
+    const numCards = args.cardIds.length;
+    await tx.execute(sql`
+      UPDATE card
+      SET index = index + ${numCards}
+      WHERE "listId" = ${args.newListId} AND index >= ${args.startIndex} AND "deletedAt" IS NULL;
+    `);
+
+    // 4. Move all cards to destination at consecutive indices (preserving order from args.cardIds)
+    for (let i = 0; i < args.cardIds.length; i++) {
+      const cardId = args.cardIds[i];
+      await tx
+        .update(cards)
+        .set({ listId: args.newListId, index: args.startIndex + i })
+        .where(eq(cards.id, cardId!));
+    }
+
+    // 5. Auto-heal: compact indices for all affected lists
+    const affectedListIds = [...new Set([...sourceListIds, args.newListId])];
+    const countExpr = sql<number>`COUNT(*)`.mapWith(Number);
+
+    const duplicateIndices = await tx
+      .select({ listId: cards.listId, index: cards.index, count: countExpr })
+      .from(cards)
+      .where(
+        and(inArray(cards.listId, affectedListIds), isNull(cards.deletedAt)),
+      )
+      .groupBy(cards.listId, cards.index)
+      .having(gt(countExpr, 1));
+
+    if (duplicateIndices.length > 0) {
+      await tx.execute(sql`
+        WITH ordered AS (
+          SELECT id,
+                 ROW_NUMBER() OVER (PARTITION BY "listId" ORDER BY "index", id) - 1 AS new_index
+          FROM "card"
+          WHERE "listId" IN (${sql.join(affectedListIds, sql`,`)}) AND "deletedAt" IS NULL
+        )
+        UPDATE "card" c
+        SET "index" = o.new_index
+        FROM ordered o
+        WHERE c.id = o.id;
+      `);
+
+      // Verify fix
+      const postFixDupes = await tx
+        .select({ count: countExpr })
+        .from(cards)
+        .where(
+          and(inArray(cards.listId, affectedListIds), isNull(cards.deletedAt)),
+        )
+        .groupBy(cards.listId, cards.index)
+        .having(gt(countExpr, 1));
+
+      if (postFixDupes.length > 0) {
+        throw new Error(
+          "Invariant violation: duplicate card indices after bulk reorder",
+        );
+      }
+    }
+
+    // Return moved cards
+    return tx.query.cards.findMany({
+      columns: { id: true, publicId: true, index: true, listId: true },
+      where: inArray(cards.id, args.cardIds),
+    });
+  });
+};
+
 export const softDelete = async (
   db: dbClient,
   args: {

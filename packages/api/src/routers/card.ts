@@ -804,6 +804,62 @@ export const cardRouter = createTRPCRouter({
 
       return result;
     }),
+  bulkMove: protectedProcedure
+    .input(
+      z.object({
+        cardPublicIds: z.array(z.string().min(12)).min(1),
+        listPublicId: z.string().min(12),
+        startIndex: z.number().min(0),
+      }),
+    )
+    .output(z.object({ success: z.boolean(), movedCount: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user.id;
+
+      // Get first card to validate workspace access
+      const firstCard = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
+        ctx.db,
+        input.cardPublicIds[0]!,
+      );
+
+      if (!firstCard)
+        throw new TRPCError({
+          message: `Card with public ID ${input.cardPublicIds[0]} not found`,
+          code: "NOT_FOUND",
+        });
+
+      await assertUserInWorkspace(ctx.db, userId, firstCard.workspaceId);
+
+      // Get destination list
+      const destList = await listRepo.getByPublicId(ctx.db, input.listPublicId);
+      if (!destList)
+        throw new TRPCError({
+          message: `List with public ID ${input.listPublicId} not found`,
+          code: "NOT_FOUND",
+        });
+
+      // Resolve all card public IDs to internal IDs (preserving order)
+      const cardIds: number[] = [];
+      for (const publicId of input.cardPublicIds) {
+        const c = await cardRepo.getByPublicId(ctx.db, publicId);
+        if (c) cardIds.push(c.id);
+      }
+
+      if (cardIds.length === 0)
+        throw new TRPCError({
+          message: "No valid cards found",
+          code: "NOT_FOUND",
+        });
+
+      // Perform atomic bulk move
+      await cardRepo.bulkReorder(ctx.db, {
+        cardIds,
+        newListId: destList.id,
+        startIndex: input.startIndex,
+      });
+
+      return { success: true, movedCount: cardIds.length };
+    }),
   delete: protectedProcedure
     .meta({
       openapi: {

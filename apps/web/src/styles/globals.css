@@ -138,3 +138,25 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 200ms;
 }
+
+/* Multi-drag ghost cards - fade out at source */
+.multi-drag-ghost {
+  opacity: 0.3 !important;
+  transition: opacity 400ms ease-out !important;
+}
+
+/* Cards appearing at destination - fade in */
+.multi-drag-entering {
+  animation: cardFadeIn 300ms ease-out;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
