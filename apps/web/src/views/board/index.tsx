@@ -18,7 +18,7 @@ import {
 import type { UpdateBoardInput } from "@kan/api/types";
 
 import Button from "~/components/Button";
-import { DeleteLabelConfirmation } from "~/components/DeleteLabelConfirmation";
+import { DeleteConfirmation } from "~/components/DeleteConfirmation";
 import { LabelForm } from "~/components/LabelForm";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
@@ -37,8 +37,6 @@ import { formatToArray } from "~/utils/helpers";
 import BoardDropdown from "./components/BoardDropdown";
 import CalendarView from "./components/CalendarView";
 import Card from "./components/Card";
-import { DeleteBoardConfirmation } from "./components/DeleteBoardConfirmation";
-import { DeleteListConfirmation } from "./components/DeleteListConfirmation";
 import Filters from "./components/Filters";
 import List from "./components/List";
 import MultiDragBadge from "./components/MultiDragBadge";
@@ -59,7 +57,14 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const utils = api.useUtils();
   const { showPopup } = usePopup();
   const { workspace } = useWorkspace();
-  const { openModal, modalContentType, entityId, isOpen } = useModal();
+  const {
+    openModal,
+    closeModal,
+    closeModals,
+    modalContentType,
+    entityId,
+    isOpen,
+  } = useModal();
   const [selectedPublicListId, setSelectedPublicListId] =
     useState<PublicListId>("");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -654,7 +659,38 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
+  // Delete board mutation - navigates to boards/templates on success
+  const deleteBoardMutation = api.board.delete.useMutation({
+    onSuccess: () => {
+      closeModal();
+      void router.push(isTemplate ? `/templates` : `/boards`);
+    },
+    onError: () => {
+      showPopup({
+        header: t`Unable to delete ${isTemplate ? "template" : "board"}`,
+        message: t`Please try again later.`,
+        icon: "error",
+      });
+    },
+  });
+
+  // Delete label mutation - closes modals and refetches on success
+  const deleteLabelMutation = api.label.delete.useMutation({
+    onSuccess: async () => {
+      closeModals(2);
+      await utils.board.byId.invalidate(queryParams);
+    },
+    onError: () => {
+      showPopup({
+        header: t`Error deleting label`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+  });
+
   // Bulk delete handler with fade animation
+
   const handleBulkDelete = useCallback(async () => {
     // Combine all IDs for fade animation
     const allIds = new Set([...selectedCardIds, ...selectedListIds]);
@@ -993,9 +1029,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           modalSize="sm"
           isVisible={isOpen && modalContentType === "DELETE_BOARD"}
         >
-          <DeleteBoardConfirmation
-            isTemplate={!!isTemplate}
-            boardPublicId={boardId ?? ""}
+          <DeleteConfirmation
+            entityType={isTemplate ? "template" : "board"}
+            onConfirm={() =>
+              deleteBoardMutation.mutate({ boardPublicId: boardId ?? "" })
+            }
+            isLoading={deleteBoardMutation.isPending}
           />
         </Modal>
 
@@ -1003,9 +1042,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           modalSize="sm"
           isVisible={isOpen && modalContentType === "DELETE_LIST"}
         >
-          <DeleteListConfirmation
-            listPublicId={selectedPublicListId}
-            queryParams={queryParams}
+          <DeleteConfirmation
+            entityType="list"
+            onConfirm={() => {
+              deleteListMutation.mutate({ listPublicId: selectedPublicListId });
+              closeModal();
+            }}
+            isLoading={deleteListMutation.isPending}
           />
         </Modal>
 
@@ -1060,9 +1103,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           modalSize="sm"
           isVisible={isOpen && modalContentType === "DELETE_LABEL"}
         >
-          <DeleteLabelConfirmation
-            refetch={refetchBoard}
-            labelPublicId={entityId}
+          <DeleteConfirmation
+            entityType="label"
+            onConfirm={() =>
+              deleteLabelMutation.mutate({ labelPublicId: entityId })
+            }
+            isLoading={deleteLabelMutation.isPending}
           />
         </Modal>
 

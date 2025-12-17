@@ -13,6 +13,7 @@ import {
 import { IoChevronForwardSharp } from "react-icons/io5";
 
 import Avatar from "~/components/Avatar";
+import { DeleteConfirmation } from "~/components/DeleteConfirmation";
 import Editor from "~/components/Editor";
 import FeedbackModal from "~/components/FeedbackModal";
 import { LabelForm } from "~/components/LabelForm";
@@ -26,14 +27,10 @@ import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import { formatMemberDisplayName, getAvatarUrl } from "~/utils/helpers";
-import { DeleteLabelConfirmation } from "../../components/DeleteLabelConfirmation";
 import ActivityList from "./components/ActivityList";
 import { AttachmentThumbnails } from "./components/AttachmentThumbnails";
 import { AttachmentUpload } from "./components/AttachmentUpload";
 import Checklists from "./components/Checklists";
-import { DeleteCardConfirmation } from "./components/DeleteCardConfirmation";
-import { DeleteChecklistConfirmation } from "./components/DeleteChecklistConfirmation";
-import { DeleteCommentConfirmation } from "./components/DeleteCommentConfirmation";
 import Dropdown from "./components/Dropdown";
 import { DueDateSelector } from "./components/DueDateSelector";
 import LabelSelector from "./components/LabelSelector";
@@ -369,6 +366,8 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     modalContentType,
     entityId,
     openModal,
+    closeModal,
+    closeModals,
     getModalState,
     clearModalState,
     isOpen,
@@ -457,6 +456,106 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
       if (cardId) {
         await utils.card.byId.invalidate({ cardPublicId: cardId });
       }
+    },
+  });
+
+  // Delete card mutation - navigates to board on success
+  const deleteCardMutation = api.card.delete.useMutation({
+    onMutate: async () => {
+      await utils.board.byId.cancel();
+    },
+    onError: () => {
+      showPopup({
+        header: t`Unable to delete card`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+    onSuccess: () => {
+      closeModal();
+      void router.push(
+        isTemplate ? `/templates/${boardId}` : `/boards/${boardId}`,
+      );
+    },
+    onSettled: async () => {
+      if (boardId) {
+        await utils.board.byId.invalidate({ boardPublicId: boardId });
+      }
+    },
+  });
+
+  // Delete label mutation
+  const deleteLabelMutation = api.label.delete.useMutation({
+    onSuccess: async () => {
+      closeModals(2);
+      await utils.card.byId.invalidate({ cardPublicId: cardId });
+    },
+    onError: () => {
+      showPopup({
+        header: t`Error deleting label`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+  });
+
+  // Delete checklist mutation
+  const deleteChecklistMutation = api.checklist.delete.useMutation({
+    onMutate: async () => {
+      await utils.card.byId.cancel({ cardPublicId: cardId ?? "" });
+      const previous = utils.card.byId.getData({ cardPublicId: cardId ?? "" });
+      utils.card.byId.setData({ cardPublicId: cardId ?? "" }, (old) => {
+        if (!old) return old as typeof previous;
+        const updatedChecklists = old.checklists.filter(
+          (cl) => cl.publicId !== entityId,
+        );
+        return { ...old, checklists: updatedChecklists } as typeof old;
+      });
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous)
+        utils.card.byId.setData({ cardPublicId: cardId ?? "" }, ctx.previous);
+      showPopup({
+        header: t`Unable to delete checklist`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+    onSettled: async () => {
+      closeModal();
+      await utils.card.byId.invalidate({ cardPublicId: cardId });
+    },
+  });
+
+  // Delete comment mutation
+  const deleteCommentMutation = api.card.deleteComment.useMutation({
+    onMutate: async () => {
+      closeModal();
+      await utils.card.byId.cancel();
+      const currentState = utils.card.byId.getData({ cardPublicId: cardId ?? "" });
+      utils.card.byId.setData({ cardPublicId: cardId ?? "" }, (oldCard) => {
+        if (!oldCard) return oldCard;
+        const updatedActivities = oldCard.activities.filter(
+          (activity) => activity.comment?.publicId !== entityId,
+        );
+        return { ...oldCard, activities: updatedActivities };
+      });
+      return { previousState: currentState };
+    },
+    onError: (_error, _newList, context) => {
+      utils.card.byId.setData(
+        { cardPublicId: cardId ?? "" },
+        context?.previousState,
+      );
+      showPopup({
+        header: t`Unable to delete comment`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+    onSettled: async () => {
+      await utils.card.byId.invalidate({ cardPublicId: cardId ?? "" });
     },
   });
 
@@ -705,9 +804,10 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
             modalSize="sm"
             isVisible={isOpen && modalContentType === "DELETE_LABEL"}
           >
-            <DeleteLabelConfirmation
-              refetch={refetchCard}
-              labelPublicId={entityId}
+            <DeleteConfirmation
+              entityType="label"
+              onConfirm={() => deleteLabelMutation.mutate({ labelPublicId: entityId })}
+              isLoading={deleteLabelMutation.isPending}
             />
           </Modal>
 
@@ -715,9 +815,10 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
             modalSize="sm"
             isVisible={isOpen && modalContentType === "DELETE_CARD"}
           >
-            <DeleteCardConfirmation
-              boardPublicId={boardId ?? ""}
-              cardPublicId={cardId}
+            <DeleteConfirmation
+              entityType="card"
+              onConfirm={() => deleteCardMutation.mutate({ cardPublicId: cardId ?? "" })}
+              isLoading={deleteCardMutation.isPending}
             />
           </Modal>
 
@@ -725,9 +826,10 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
             modalSize="sm"
             isVisible={isOpen && modalContentType === "DELETE_COMMENT"}
           >
-            <DeleteCommentConfirmation
-              cardPublicId={cardId}
-              commentPublicId={entityId}
+            <DeleteConfirmation
+              entityType="comment"
+              onConfirm={() => deleteCommentMutation.mutate({ cardPublicId: cardId ?? "", commentPublicId: entityId })}
+              isLoading={deleteCommentMutation.isPending}
             />
           </Modal>
 
@@ -749,9 +851,10 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
             modalSize="sm"
             isVisible={isOpen && modalContentType === "DELETE_CHECKLIST"}
           >
-            <DeleteChecklistConfirmation
-              cardPublicId={cardId}
-              checklistPublicId={entityId}
+            <DeleteConfirmation
+              entityType="checklist"
+              onConfirm={() => deleteChecklistMutation.mutate({ checklistPublicId: entityId })}
+              isLoading={deleteChecklistMutation.isPending}
             />
           </Modal>
         </>
