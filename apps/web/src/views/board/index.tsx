@@ -177,6 +177,22 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     placeholderData: keepPreviousData,
   });
 
+  // Two-Phase State: Visual order drives rendering, decoupled from backend/cache
+  // This prevents "flash" after drop where items briefly appear at old position
+  type VisualList = NonNullable<typeof boardData>["lists"][number];
+  const [visualLists, setVisualLists] = useState<VisualList[] | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Sync visual state from server data only when NOT actively dragging
+  useEffect(() => {
+    if (boardData?.lists && !isDragging) {
+      setVisualLists(boardData.lists);
+    }
+  }, [boardData?.lists, isDragging]);
+
+  // Use visual lists for rendering, fallback to boardData
+  const listsToRender = visualLists ?? boardData?.lists ?? [];
+
   // Helper to toggle list collapse via custom event
   const toggleListCollapse = useCallback(
     (listIndex: number) => {
@@ -297,127 +313,38 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   };
 
   const updateListMutation = api.list.update.useMutation({
-    onMutate: async (args) => {
-      await utils.board.byId.cancel();
-
-      const currentState = utils.board.byId.getData(queryParams);
-
-      utils.board.byId.setData(queryParams, (oldBoard) => {
-        if (!oldBoard) return oldBoard;
-
-        const updatedLists = Array.from(oldBoard.lists);
-
-        const sourceList = updatedLists.find(
-          (list) => list.publicId === args.listPublicId,
-        );
-
-        const currentIndex = sourceList?.index;
-
-        if (currentIndex === undefined) return oldBoard;
-
-        const removedList = updatedLists.splice(currentIndex, 1)[0];
-
-        if (removedList && args.index !== undefined) {
-          updatedLists.splice(args.index, 0, removedList);
-
-          // Update index property on each list to match new array positions
-          const listsWithUpdatedIndexes = updatedLists.map((list, idx) => ({
-            ...list,
-            index: idx,
-          }));
-
-          return {
-            ...oldBoard,
-            lists: listsWithUpdatedIndexes,
-          };
-        }
-      });
-
-      return { previousState: currentState };
-    },
-    onError: (_error, _newList, context) => {
-      utils.board.byId.setData(queryParams, context?.previousState);
+    // No onMutate - visual state handles immediate UI update
+    onError: () => {
+      // Reset isDragging so visual state syncs with server data
+      setIsDragging(false);
       showPopup({
         header: t`Unable to update list`,
         message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
-    onSettled: async (_data, error) => {
-      // Only invalidate on error to restore correct state
-      // On success, the optimistic update is already in place and matches server data
-      if (error) {
-        await utils.board.byId.invalidate(queryParams);
-      }
+    onSettled: async () => {
+      // Always invalidate to get fresh server data
+      // Visual state will sync when isDragging becomes false
+      await utils.board.byId.invalidate(queryParams);
     },
   });
 
   const updateCardMutation = api.card.update.useMutation({
-    onMutate: async (args) => {
-      await utils.board.byId.cancel();
-
-      const currentState = utils.board.byId.getData(queryParams);
-
-      utils.board.byId.setData(queryParams, (oldBoard) => {
-        if (!oldBoard) return oldBoard;
-
-        const updatedLists = Array.from(oldBoard.lists);
-
-        const sourceList = updatedLists.find((list) =>
-          list.cards.some((card) => card.publicId === args.cardPublicId),
-        );
-        const destinationList = updatedLists.find(
-          (list) => list.publicId === args.listPublicId,
-        );
-
-        const cardToMove = sourceList?.cards.find(
-          (card) => card.publicId === args.cardPublicId,
-        );
-
-        if (!cardToMove) return oldBoard;
-
-        const removedCard = sourceList?.cards.splice(cardToMove.index, 1)[0];
-
-        if (
-          sourceList &&
-          destinationList &&
-          removedCard &&
-          args.index !== undefined
-        ) {
-          destinationList.cards.splice(args.index, 0, removedCard);
-
-          // Update index property on cards in affected lists
-          const listsWithUpdatedCardIndexes = updatedLists.map((list) => ({
-            ...list,
-            cards: list.cards.map((card, idx) => ({
-              ...card,
-              index: idx,
-            })),
-          }));
-
-          return {
-            ...oldBoard,
-            lists: listsWithUpdatedCardIndexes,
-          };
-        }
-      });
-
-      return { previousState: currentState };
-    },
-    onError: (_error, _newList, context) => {
-      utils.board.byId.setData(queryParams, context?.previousState);
+    // No onMutate - visual state handles immediate UI update
+    onError: () => {
+      // Reset isDragging so visual state syncs with server data
+      setIsDragging(false);
       showPopup({
         header: t`Unable to update card`,
         message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
-    onSettled: async (_data, error) => {
-      // Only invalidate on error to restore correct state
-      // On success, the optimistic update is already in place and matches server data
-      if (error) {
-        await utils.board.byId.invalidate(queryParams);
-      }
+    onSettled: async () => {
+      // Always invalidate to get fresh server data
+      // Visual state will sync when isDragging becomes false
+      await utils.board.byId.invalidate(queryParams);
     },
   });
 
@@ -580,17 +507,36 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     description: t`Delete selected items`,
     group: "BOARD_VIEW",
   });
+  // Two-Phase State: onDragStart sets isDragging to prevent visual sync from cache
+  const onDragStart = () => {
+    setIsDragging(true);
+  };
+
   const onDragEnd = ({
-    source: _source,
+    source,
     destination,
     draggableId,
     type,
   }: DropResult): void => {
+    // Reset isDragging after drop animation completes
+    // This allows visual state to sync with server data again
+    setTimeout(() => setIsDragging(false), 300);
+
     if (!destination) {
       return;
     }
 
+    // Update visual state IMMEDIATELY (no flash - this drives rendering)
     if (type === "LIST") {
+      setVisualLists((prev) => {
+        if (!prev) return prev;
+        const updated = [...prev];
+        const [removed] = updated.splice(source.index, 1);
+        if (removed) updated.splice(destination.index, 0, removed);
+        return updated.map((list, idx) => ({ ...list, index: idx }));
+      });
+
+      // Fire mutation (backend update - visual already updated above)
       updateListMutation.mutate({
         listPublicId: draggableId,
         index: destination.index,
@@ -598,9 +544,37 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     }
 
     if (type === "CARD") {
+      setVisualLists((prev) => {
+        if (!prev) return prev;
+        // Deep copy lists and cards to avoid mutation
+        const updated = prev.map((list) => ({
+          ...list,
+          cards: [...list.cards],
+        }));
+        const sourceList = updated.find((l) =>
+          l.cards.some((c) => c.publicId === draggableId),
+        );
+        const destList = updated.find(
+          (l) => l.publicId === destination.droppableId,
+        );
+        if (!sourceList || !destList) return prev;
+
+        const cardIndex = sourceList.cards.findIndex(
+          (c) => c.publicId === draggableId,
+        );
+        const [removed] = sourceList.cards.splice(cardIndex, 1);
+        if (removed) destList.cards.splice(destination.index, 0, removed);
+
+        // Update indices
+        return updated.map((list) => ({
+          ...list,
+          cards: list.cards.map((card, idx) => ({ ...card, index: idx })),
+        }));
+      });
+
+      // Fire mutation (backend update - visual already updated above)
       updateCardMutation.mutate({
         cardPublicId: draggableId,
-
         listPublicId: destination.droppableId,
         index: destination.index,
       });
@@ -864,7 +838,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     </Button>
                   </div>
                 ) : (
-                  <DragDropContext onDragEnd={onDragEnd}>
+                  <DragDropContext
+                    onDragStart={onDragStart}
+                    onDragEnd={onDragEnd}
+                  >
                     <Droppable
                       droppableId="all-lists"
                       direction="horizontal"
@@ -877,7 +854,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                           {...provided.droppableProps}
                         >
                           <div className="min-w-[2rem]" />
-                          {boardData.lists.map((list, index) => (
+                          {listsToRender.map((list, index) => (
                             <List
                               index={index}
                               key={list.publicId}

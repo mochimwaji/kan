@@ -132,7 +132,7 @@ const Card = ({
   return (
     <div
       className={twMerge(
-        "flex flex-col rounded-md border px-3 py-2 text-sm transition-all duration-200",
+        "transition-dnd-safe flex flex-col rounded-md border px-3 py-2 text-sm",
         listColor
           ? "border-opacity-30"
           : "border-light-200 bg-light-50 dark:border-dark-200 dark:bg-dark-200 dark:hover:bg-dark-300",
