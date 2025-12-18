@@ -672,6 +672,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         icon: "error",
       });
     },
+    onSettled: async () => {
+      // Invalidate boards list so UI updates after navigation
+      await utils.board.all.invalidate();
+    },
   });
 
   // Delete label mutation - closes modals and refetches on success
