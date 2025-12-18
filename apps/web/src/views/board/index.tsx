@@ -51,6 +51,12 @@ import VisibilityButton from "./components/VisibilityButton";
 type ViewMode = "kanban" | "calendar";
 type PublicListId = string;
 
+// Extended card type that includes calendarOrder (returned by API but not always typed)
+interface CardWithCalendarOrder {
+  calendarOrder: number | null;
+  index?: number;
+}
+
 export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const params = useParams() as { boardId: string | string[] } | null;
   const router = useRouter();
@@ -415,7 +421,6 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access -- tRPC types need regeneration
   const bulkUpdateCardMutation = api.card.bulkUpdate.useMutation({
     onMutate: async (
       updates: {
@@ -451,8 +456,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                       ? card.dueDate
                       : update.dueDate,
                   calendarOrder:
+                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- distinguishes undefined from null
                     update.calendarOrder === undefined
-                      ? (card as any).calendarOrder
+                      ? (card as CardWithCalendarOrder).calendarOrder
                       : update.calendarOrder,
                 };
               }
@@ -508,8 +514,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                       ? card.dueDate
                       : newCard.dueDate,
                   calendarOrder:
+                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                     newCard.calendarOrder === undefined
-                      ? (card as any).calendarOrder
+                      ? (card as CardWithCalendarOrder).calendarOrder
                       : newCard.calendarOrder,
                 };
               }
@@ -887,12 +894,14 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           })
           .sort((a, b) => {
             // Sort by existing order (stable fallback using listIndex)
+            const aExt = a as CardWithCalendarOrder;
+            const bExt = b as CardWithCalendarOrder;
             const orderA =
-              (a as any).calendarOrder ??
-              a.listIndex * 100000 + (a as any).index * 1000;
+              aExt.calendarOrder ??
+              a.listIndex * 100000 + (aExt.index ?? 0) * 1000;
             const orderB =
-              (b as any).calendarOrder ??
-              b.listIndex * 100000 + (b as any).index * 1000;
+              bExt.calendarOrder ??
+              b.listIndex * 100000 + (bExt.index ?? 0) * 1000;
             return orderA - orderB;
           });
 
@@ -902,15 +911,18 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         const prevCard = targetCards[destination.index - 1];
         const nextCard = targetCards[destination.index];
 
+        const prevExt = prevCard as CardWithCalendarOrder | undefined;
+        const nextExt = nextCard as CardWithCalendarOrder | undefined;
+
         const prevOrder =
-          (prevCard as any)?.calendarOrder ??
+          prevExt?.calendarOrder ??
           (prevCard?.listIndex !== undefined
-            ? prevCard.listIndex * 100000 + (prevCard as any).index * 1000
+            ? prevCard.listIndex * 100000 + (prevExt?.index ?? 0) * 1000
             : 0);
         const nextOrder =
-          (nextCard as any)?.calendarOrder ??
+          nextExt?.calendarOrder ??
           (nextCard?.listIndex !== undefined
-            ? nextCard.listIndex * 100000 + (nextCard as any).index * 1000
+            ? nextCard.listIndex * 100000 + (nextExt?.index ?? 0) * 1000
             : prevOrder + 10000);
 
         // Calculate step for distributing new orders
@@ -1135,7 +1147,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           isVisible={isOpen && modalContentType === "CREATE_TEMPLATE"}
         >
           <NewTemplateForm
-            workspacePublicId={workspace.publicId ?? ""}
+            workspacePublicId={workspace.publicId}
             sourceBoardPublicId={boardId ?? ""}
             sourceBoardName={boardData?.name ?? ""}
           />
@@ -1147,7 +1159,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   return (
     <>
       <PageHead
-        title={`${boardData?.name ?? (isTemplate ? t`Board` : t`Template`)} | ${workspace.name ?? t`Workspace`}`}
+        title={`${boardData?.name ?? (isTemplate ? t`Board` : t`Template`)} | ${workspace.name}`}
       />
       <div className="relative flex h-full flex-col">
         {/* Background appears instantly when animation completes */}
@@ -1424,13 +1436,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                                   title={card.title}
                                                   labels={card.labels}
                                                   members={card.members}
-                                                  checklists={
-                                                    card.checklists ?? []
-                                                  }
+                                                  checklists={card.checklists}
                                                   description={
                                                     card.description ?? null
                                                   }
-                                                  comments={card.comments ?? []}
+                                                  comments={card.comments}
                                                   attachments={card.attachments}
                                                   dueDate={card.dueDate ?? null}
                                                   listColor={list.color}
