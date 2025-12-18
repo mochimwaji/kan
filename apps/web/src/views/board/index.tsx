@@ -59,6 +59,9 @@ interface CardWithCalendarOrder {
 }
 
 export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
+  // ============================================================================
+  // STATE & CONTEXT HOOKS
+  // ============================================================================
   const params = useParams() as { boardId: string | string[] } | null;
   const router = useRouter();
   const utils = api.useUtils();
@@ -275,6 +278,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   // We add 'isExiting' for exit animation
   const [isExiting, setIsExiting] = useState(false);
 
+  // ============================================================================
+  // EVENT HANDLERS
+  // ============================================================================
+
   // Click card to select (shift+click for range selection)
   const handleCardClick = (e: React.MouseEvent, cardPublicId: string) => {
     if (cardPublicId.startsWith("PLACEHOLDER")) {
@@ -324,6 +331,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
     [isTemplate, boardId, router],
   );
+
+  // ============================================================================
+  // MUTATIONS
+  // ============================================================================
 
   const updateListMutation = api.list.update.useMutation({
     // No onMutate - visual state handles immediate UI update
@@ -622,6 +633,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
+  // ============================================================================
+  // SELECTION & BULK DELETE HANDLERS
+  // ============================================================================
+
   // Bulk delete handler with fade animation
 
   const handleBulkDelete = useCallback(async () => {
@@ -705,6 +720,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     description: t`Open selected card`,
     group: "BOARD_VIEW",
   });
+
+  // ============================================================================
+  // DRAG-DROP HANDLERS (Two-Phase Visual State)
+  // ============================================================================
+  // Note: Two-phase pattern prevents UI "flash" during drag operations.
+  // Visual state (visualLists) drives rendering, decoupled from server cache.
+  // isDragging flag controls when visual state syncs with server data.
 
   // Two-Phase State: onDragStart sets isDragging and tracks multi-drag
   const onDragStart = (start: { draggableId: string; type: string }) => {
@@ -960,6 +982,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     }
   };
 
+  // ============================================================================
+  // MODAL CONTENT
+  // ============================================================================
+
   const renderModalContent = () => {
     return (
       <>
@@ -1077,6 +1103,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       </>
     );
   };
+
+  // ============================================================================
+  // RENDER
+  // ============================================================================
 
   return (
     <>
