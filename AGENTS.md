@@ -459,6 +459,73 @@ export const complexOperation = async (db: dbClient, ...) => {
 - Use indexed columns in WHERE clauses
 - Limit nested relation fetches in Drizzle queries
 
+### Codebase Quality & Code Organization
+
+#### Large File Guidelines
+
+Some files are intentionally left large due to tight coupling requirements:
+
+| File              | Lines | Reason                                                                                                                                                 |
+| ----------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `board/index.tsx` | ~1500 | Two-phase visual state pattern requires coupling between drag-drop handlers, mutations, and visual state management. Extracting causes animation bugs. |
+| `card.repo.ts`    | ~1100 | Single-table repository with related operations; organized with section headers.                                                                       |
+| `board.repo.ts`   | ~1050 | Complex nested queries require co-location; organized with section headers.                                                                            |
+
+**When reviewing large files**, check for section headers (e.g., `// ============================================================================`) that divide code into logical groups.
+
+#### Two-Phase Visual State Pattern
+
+The board view uses a two-phase rendering strategy to prevent UI flashing during drag-drop:
+
+1. **Visual State** (`visualLists`, `isDragging`): Drives what the user sees
+2. **Server State**: The tRPC query cache
+
+When dragging starts, `isDragging = true` freezes visual state. After drop, mutations update server state, then `isDragging = false` triggers sync. This prevents the brief flash where items appear at old positions.
+
+**Critical**: Do not extract drag-drop handlers and mutations to separate hooks. They must remain coupled to the visual state.
+
+#### Code Organization Patterns
+
+**Section Headers**: Large files use divider comments:
+
+```typescript
+// ============================================================================
+// CREATE OPERATIONS
+// ============================================================================
+```
+
+**Extracted Hooks** (board/index.tsx):
+
+- `useBoardKeyboardShortcuts` - Extracted (~79 lines) because it has no dependency on visual state
+
+**Not Extracted** (intentional):
+
+- Mutations - Call `setIsDragging(false)` on error/success
+- Drag handlers - Control `visualLists` state directly
+
+#### i18n Coverage
+
+All user-facing strings should use the Lingui `t` macro:
+
+```tsx
+import { t } from "@lingui/core/macro";
+
+// In JSX
+<h1>{t`Delete board`}</h1>;
+
+// In objects
+showPopup({
+  header: t`Unable to update card`,
+  message: t`Please try again later.`,
+});
+```
+
+**Known files with complete i18n**:
+
+- `DeleteConfirmation.tsx` (consolidated generic component)
+- `RevokeApiKeyConfirmation.tsx`
+- `NewApiKeyForm.tsx`
+
 ### Known Issues (Low Priority)
 
 The following are pre-existing issues that are known but low priority and do not require immediate fixing:

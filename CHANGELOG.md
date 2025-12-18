@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Calendar View**: New month calendar view for boards with toggle button and `v` keyboard shortcut. Cards display on their due dates with list colors. Drag-and-drop to reschedule cards or remove due dates. Navigate with `←`/`→` for months and `t` for today. Unscheduled sidebar shows cards without due dates.
+- **Multi-Drag Calendar Support**: `bulkUpdate` mutation for updating multiple cards atomically when dragging to calendar dates.
+- **DeleteConfirmation Component**: Generic, reusable delete confirmation dialog with configurable entity types, consolidating 6 separate components (~207 lines removed).
+- **Section Headers**: Added clear section dividers to large files for better navigability:
+  - `board/index.tsx`: State, Event Handlers, Mutations, Selection, Drag-Drop, Modal Content, Render
+  - `card.repo.ts`: CREATE, UPDATE, READ, REORDER, DELETE (5 sections)
+  - `board.repo.ts`: READ, CREATE, UPDATE, DELETE, HELPER (5 sections)
+- **useBoardKeyboardShortcuts Hook**: Extracted keyboard shortcut logic from board/index.tsx (~79 lines).
+- **Codebase Quality Documentation**: Added comprehensive guide in AGENTS.md covering large file rationale, two-phase visual state pattern, and i18n guidelines.
 - **Due Date Urgency Coloring**: Cards now show due dates in contextual colors based on urgency: red (overdue), orange (due today), yellow (due within a week), default (later dates).
 - **Collapsible Lists**: Lists can be collapsed/expanded by clicking the chevron toggle in the header. Collapse state persists across page refreshes using localStorage. Collapsed lists show a card count badge.
 - **CollapsibleSection Component**: New reusable animated component for smooth collapse/expand transitions.
@@ -27,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Drag-and-Drop Library**: Migrated from deprecated `react-beautiful-dnd` to actively maintained `@hello-pangea/dnd` (API-compatible drop-in replacement).
 - **React Query Configuration**: Added explicit stale time (30s), garbage collection time (5min), and disabled refetchOnWindowFocus for better performance.
+- **Code Organization**: Improved structure of large files with section headers instead of extracting to smaller files, preserving critical coupling for two-phase visual state pattern.
 - Improved page transition animations across workspace navigation (Boards, Templates, Members, Settings).
 - Enhanced settings tab navigation with tab content fade transitions.
 - Refined right sidebar button alignment to match left sidebar structure.
@@ -34,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **i18n Coverage**: Added Lingui `t` macro to `RevokeApiKeyConfirmation.tsx` (8 strings) and `NewApiKeyForm.tsx` (4 strings).
+- **Lint Cleanup**: Resolved 34+ lint warnings in `board/index.tsx` including `any` type issues, unsafe member access, and unnecessary conditionals.
+- **calendarOrder Typing**: Added `CardWithCalendarOrder` interface for proper typing of calendar order field.
 - Fixed `@ts-expect-error` in `ChecklistItemRow.tsx` by using proper `React.FocusEvent` type.
 - Fixed flashing issues during board navigation transitions.
 - Fixed sidebar toggle icon directions for right-side drawer.
