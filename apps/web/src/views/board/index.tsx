@@ -1031,9 +1031,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         >
           <DeleteConfirmation
             entityType={isTemplate ? "template" : "board"}
-            onConfirm={() =>
-              deleteBoardMutation.mutate({ boardPublicId: boardId ?? "" })
-            }
+            onConfirm={() => {
+              if (boardId) {
+                deleteBoardMutation.mutate({ boardPublicId: boardId });
+              }
+            }}
             isLoading={deleteBoardMutation.isPending}
           />
         </Modal>
