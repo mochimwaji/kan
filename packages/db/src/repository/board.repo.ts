@@ -29,6 +29,10 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+// ============================================================================
+// READ OPERATIONS
+// ============================================================================
+
 /**
  * Retrieves all boards for a workspace with their lists and labels.
  * @param db - Database client instance
@@ -605,6 +609,10 @@ export const getWithLatestListIndexByPublicId = (
   });
 };
 
+// ============================================================================
+// CREATE OPERATIONS
+// ============================================================================
+
 /**
  * Creates a new board with the specified configuration.
  * @param db - Database client instance
@@ -645,6 +653,10 @@ export const create = async (
   return result;
 };
 
+// ============================================================================
+// UPDATE OPERATIONS
+// ============================================================================
+
 /**
  * Updates an existing board's name, slug, or visibility.
  * @param db - Database client instance
@@ -676,6 +688,10 @@ export const update = async (
 
   return result;
 };
+
+// ============================================================================
+// DELETE OPERATIONS
+// ============================================================================
 
 /**
  * Soft deletes a board by setting deletedAt and deletedBy.
@@ -722,6 +738,10 @@ export const hardDelete = async (db: dbClient, workspaceId: number) => {
 
   return result;
 };
+
+// ============================================================================
+// HELPER OPERATIONS
+// ============================================================================
 
 /**
  * Checks if a board slug is unique within a workspace.

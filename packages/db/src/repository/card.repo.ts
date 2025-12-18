@@ -15,6 +15,10 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+// ============================================================================
+// CREATE OPERATIONS
+// ============================================================================
+
 export const create = async (
   db: dbClient,
   cardInput: {
@@ -160,6 +164,10 @@ export const bulkCreateCardWorkspaceMemberRelationships = async (
   return result;
 };
 
+// ============================================================================
+// UPDATE OPERATIONS
+// ============================================================================
+
 export const update = async (
   db: dbClient,
   cardInput: {
@@ -196,6 +204,10 @@ export const update = async (
 
   return result;
 };
+
+// ============================================================================
+// READ OPERATIONS
+// ============================================================================
 
 export const getCardWithListByPublicId = (
   db: dbClient,
@@ -621,6 +633,10 @@ export const getWithListAndMembersByPublicId = async (
   return formattedResult;
 };
 
+// ============================================================================
+// REORDER OPERATIONS
+// ============================================================================
+
 export const reorder = async (
   db: dbClient,
   args: {
@@ -923,6 +939,10 @@ export const bulkReorder = async (
     });
   });
 };
+
+// ============================================================================
+// DELETE OPERATIONS
+// ============================================================================
 
 export const softDelete = async (
   db: dbClient,
