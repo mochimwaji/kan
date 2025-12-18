@@ -46,6 +46,7 @@ import { NewTemplateForm } from "./components/NewTemplateForm";
 import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
+import { useBoardKeyboardShortcuts } from "./hooks/useBoardKeyboardShortcuts";
 
 // View mode type
 type ViewMode = "kanban" | "calendar";
@@ -253,87 +254,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     [visualLists, boardData?.lists],
   );
 
-  // Helper to toggle list collapse via custom event
-  const toggleListCollapse = useCallback(
-    (listIndex: number) => {
-      const lists = boardData?.lists;
-      if (!lists || listIndex >= lists.length) return;
-      const list = lists[listIndex];
-      if (!list) return;
-      // Dispatch custom event for List component to handle with animation
-      window.dispatchEvent(
-        new CustomEvent("toggle-list-collapse", {
-          detail: { listPublicId: list.publicId },
-        }),
-      );
-    },
-    [boardData?.lists],
-  );
-
-  // 1-9 shortcuts to toggle list collapse
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "1" },
-    action: () => toggleListCollapse(0),
-    description: t`Toggle list 1`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "2" },
-    action: () => toggleListCollapse(1),
-    description: t`Toggle list 2`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "3" },
-    action: () => toggleListCollapse(2),
-    description: t`Toggle list 3`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "4" },
-    action: () => toggleListCollapse(3),
-    description: t`Toggle list 4`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "5" },
-    action: () => toggleListCollapse(4),
-    description: t`Toggle list 5`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "6" },
-    action: () => toggleListCollapse(5),
-    description: t`Toggle list 6`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "7" },
-    action: () => toggleListCollapse(6),
-    description: t`Toggle list 7`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "8" },
-    action: () => toggleListCollapse(7),
-    description: t`Toggle list 8`,
-    group: "BOARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "9" },
-    action: () => toggleListCollapse(8),
-    description: t`Toggle list 9`,
-    group: "BOARD_VIEW",
-  });
+  // Register 1-9 keyboard shortcuts for toggling list collapse
+  useBoardKeyboardShortcuts(boardData?.lists);
 
   const refetchBoard = async () => {
     if (boardId) await utils.board.byId.refetch({ boardPublicId: boardId });
