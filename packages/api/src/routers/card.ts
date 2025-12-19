@@ -9,12 +9,11 @@ import * as labelRepo from "@kan/db/repository/label.repo";
 import * as listRepo from "@kan/db/repository/list.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { apiLogger } from "@kan/logger";
-import { S3_URL_EXPIRATION_SECONDS } from "@kan/shared/constants";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
 import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
-import { generateDownloadUrl } from "../utils/s3";
+import { getPublicUrl } from "../utils/storage";
 
 export const cardRouter = createTRPCRouter({
   create: protectedProcedure
@@ -590,7 +589,6 @@ export const cardRouter = createTRPCRouter({
         });
 
       // Generate URLs for all attachments
-      const bucket = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
       if (result.attachments && Array.isArray(result.attachments)) {
         const attachments = result.attachments as {
           publicId: string;
@@ -600,36 +598,28 @@ export const cardRouter = createTRPCRouter({
           size?: number | null;
         }[];
 
-        const attachmentsWithUrls = await Promise.all(
-          attachments.map(async (attachment) => {
-            const base = {
-              publicId: attachment.publicId,
-              contentType: attachment.contentType,
-              s3Key: attachment.s3Key,
-              originalFilename: attachment.originalFilename,
-              size: attachment.size,
-            };
-            if (!bucket || !attachment.s3Key) {
-              return { ...base, url: null };
-            }
-            try {
-              const url = await generateDownloadUrl(
-                bucket,
-                attachment.s3Key,
-                S3_URL_EXPIRATION_SECONDS,
-              );
-              return { ...base, url };
-            } catch (error) {
-              // Log S3 URL generation failures for debugging
-              apiLogger.warn("Failed to generate S3 download URL", {
-                s3Key: attachment.s3Key,
-                bucket,
-                error: error instanceof Error ? error.message : String(error),
-              });
-              return { ...base, url: null };
-            }
-          }),
-        );
+        const attachmentsWithUrls = attachments.map((attachment) => {
+          const base = {
+            publicId: attachment.publicId,
+            contentType: attachment.contentType,
+            s3Key: attachment.s3Key,
+            originalFilename: attachment.originalFilename,
+            size: attachment.size,
+          };
+          if (!attachment.s3Key) {
+            return { ...base, url: null };
+          }
+          try {
+            const url = getPublicUrl(`attachments/${attachment.s3Key}`);
+            return { ...base, url };
+          } catch (error) {
+            apiLogger.warn("Failed to generate storage URL", {
+              key: attachment.s3Key,
+              error: error instanceof Error ? error.message : String(error),
+            });
+            return { ...base, url: null };
+          }
+        });
         return { ...result, attachments: attachmentsWithUrls };
       }
 

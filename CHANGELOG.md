@@ -68,6 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Docs app** - Removed `apps/docs/` documentation site.
 - **Database cleanup** - Removed `import`, `integrations`, `subscription`, `feedback` tables and `importId`/`stripeCustomerId` columns.
 - **FeedbackModal** - Removed feedback modal component and all usage from views.
+- **S3 Storage** - Replaced S3 cloud storage with local filesystem storage. Removed `@aws-sdk/client-s3`, removed S3 env vars.
+- **User menu links** - Removed Support, Documentation, Feedback menu items.
 
 ## [0.3.0](https://github.com/kanbn/kan/compare/v0.2.4...v0.3.0) - 2025-12-09
 

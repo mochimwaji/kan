@@ -1,4 +1,5 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import * as fs from "fs";
+import * as path from "path";
 import { ChatOrPushProviderEnum } from "@novu/api/models/components";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -252,41 +253,23 @@ export const initAuth = (db: dbClient) => {
             let avatarKey = user.image;
             if (
               user.image &&
-              !user.image.includes(process.env.NEXT_PUBLIC_STORAGE_DOMAIN!)
+              !user.image.startsWith("avatars/")
             ) {
               try {
-                const credentials =
-                  env("S3_ACCESS_KEY_ID") && env("S3_SECRET_ACCESS_KEY")
-                    ? {
-                        accessKeyId: env("S3_ACCESS_KEY_ID")!,
-                        secretAccessKey: env("S3_SECRET_ACCESS_KEY")!,
-                      }
-                    : undefined;
-
-                const client = new S3Client({
-                  region: env("S3_REGION") ?? "",
-                  endpoint: env("S3_ENDPOINT") ?? "",
-                  forcePathStyle: env("S3_FORCE_PATH_STYLE") === "true",
-                  credentials,
-                });
-
+                const STORAGE_ROOT = process.env.STORAGE_PATH || "/app/data";
                 const allowedFileExtensions = ["jpg", "jpeg", "png", "webp"];
 
                 const fileExtension =
                   user.image.split(".").pop()?.split("?")[0] || "jpg";
-                const key = `${user.id}/avatar.${!allowedFileExtensions.includes(fileExtension) ? "jpg" : fileExtension}`;
+                const key = `avatars/${user.id}/avatar.${!allowedFileExtensions.includes(fileExtension) ? "jpg" : fileExtension}`;
 
                 const imageBuffer = await downloadImage(user.image);
 
-                await client.send(
-                  new PutObjectCommand({
-                    Bucket: env("NEXT_PUBLIC_AVATAR_BUCKET_NAME") ?? "",
-                    Key: key,
-                    Body: imageBuffer,
-                    ContentType: `image/${!allowedFileExtensions.includes(fileExtension) ? "jpeg" : fileExtension}`,
-                    ACL: "public-read",
-                  }),
-                );
+                // Save to local filesystem
+                const absolutePath = path.resolve(STORAGE_ROOT, key);
+                const dir = path.dirname(absolutePath);
+                await fs.promises.mkdir(dir, { recursive: true });
+                await fs.promises.writeFile(absolutePath, imageBuffer);
 
                 avatarKey = key;
 
@@ -294,7 +277,7 @@ export const initAuth = (db: dbClient) => {
                   image: key,
                 });
               } catch (error) {
-                authLogger.error("Failed to upload user avatar to S3", error);
+                authLogger.error("Failed to upload user avatar", error);
               }
             }
 

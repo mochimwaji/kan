@@ -12,7 +12,7 @@ import { generateUID } from "@kan/shared/utils";
 import { createTRPCRouter } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
 import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
-import { deleteObject, generateUploadUrl } from "../utils/s3";
+import { deleteFile, getPublicUrl } from "../utils/storage";
 
 export const attachmentRouter = createTRPCRouter({
   generateUploadUrl: protectedProcedure
@@ -63,28 +63,17 @@ export const attachmentRouter = createTRPCRouter({
           code: "NOT_FOUND",
         });
 
-      const bucket = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
-      if (!bucket)
-        throw new TRPCError({
-          message: `Attachments bucket not configured`,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-
       // Sanitize filename
       const sanitizedFilename = input.filename
         .replace(/[^a-zA-Z0-9._-]/g, "_")
         .substring(0, 200);
 
-      const s3Key = `${workspace.publicId}/${input.cardPublicId}/${generateUID()}-${sanitizedFilename}`;
+      const storageKey = `${workspace.publicId}/${input.cardPublicId}/${generateUID()}-${sanitizedFilename}`;
 
-      const url = await generateUploadUrl(
-        bucket,
-        s3Key,
-        input.contentType,
-        3600, // 1 hour
-      );
+      // Return direct upload URL pointing to our upload API
+      const url = `/api/attachments/upload?key=${encodeURIComponent(storageKey)}`;
 
-      return { url, key: s3Key };
+      return { url, key: storageKey };
     }),
   confirm: protectedProcedure
     .meta({
@@ -174,15 +163,13 @@ export const attachmentRouter = createTRPCRouter({
 
       await assertUserInWorkspace(ctx.db, userId, workspaceId);
 
-      const bucket = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
-      if (bucket) {
-        try {
-          await deleteObject(bucket, attachment.s3Key);
-        } catch (error) {
-          apiLogger.error("Failed to delete attachment from S3", error, {
-            s3Key: attachment.s3Key,
-          });
-        }
+      // Delete from local storage
+      try {
+        await deleteFile(`attachments/${attachment.s3Key}`);
+      } catch (error) {
+        apiLogger.error("Failed to delete attachment from storage", error, {
+          key: attachment.s3Key,
+        });
       }
 
       await cardAttachmentRepo.softDelete(ctx.db, {
