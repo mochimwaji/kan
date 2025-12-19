@@ -2,28 +2,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useForm } from "react-hook-form";
-import { HiCheck, HiMiniStar } from "react-icons/hi2";
+import { HiCheck } from "react-icons/hi2";
 import { z } from "zod";
 
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { useDebounce } from "~/hooks/useDebounce";
-import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
 
 const UpdateWorkspaceUrlForm = ({
   workspacePublicId,
   workspaceUrl,
-  workspacePlan,
 }: {
   workspacePublicId: string;
   workspaceUrl: string;
-  workspacePlan: "free" | "pro" | "enterprise";
+  workspacePlan?: "free" | "pro" | "enterprise";
 }) => {
   const utils = api.useUtils();
   const { showPopup } = usePopup();
-  const { openModal } = useModal();
 
   const schema = z.object({
     slug: z
@@ -97,9 +94,6 @@ const UpdateWorkspaceUrlForm = ({
   const onSubmit = (data: FormValues) => {
     if (!isWorkspaceSlugAvailable?.isAvailable) return;
 
-    if (workspacePlan !== "pro" && env("NEXT_PUBLIC_KAN_ENV") === "cloud")
-      return openModal("UPGRADE_TO_PRO", data.slug);
-
     updateWorkspaceSlug.mutate({
       workspacePublicId,
       slug: data.slug,
@@ -112,9 +106,8 @@ const UpdateWorkspaceUrlForm = ({
         <Input
           {...register("slug")}
           className={`${
-            isWorkspaceSlugAvailable?.isAvailable ||
-            (workspacePlan === "pro" && slug === workspaceUrl)
-              ? "focus:ring-yellow-500 dark:focus:ring-yellow-500"
+            isWorkspaceSlugAvailable?.isAvailable
+              ? "focus:ring-green-500 dark:focus:ring-green-500"
               : ""
           }`}
           errorMessage={
@@ -123,17 +116,10 @@ const UpdateWorkspaceUrlForm = ({
               ? t`This workspace username has already been taken`
               : undefined)
           }
-          prefix={
-            env("NEXT_PUBLIC_KAN_ENV") === "cloud"
-              ? "kan.bn/"
-              : `${env("NEXT_PUBLIC_BASE_URL")}/`
-          }
+          prefix={`${env("NEXT_PUBLIC_BASE_URL") ?? ""}/`}
           iconRight={
-            isWorkspaceSlugAvailable?.isAvailable ||
-            (workspacePlan === "pro" && slug === workspaceUrl) ? (
-              <HiMiniStar className="h-4 w-4 text-yellow-500" />
-            ) : isWorkspaceSlugAvailable?.isAvailable ? (
-              <HiCheck className="h-4 w-4 dark:text-dark-1000" />
+            isWorkspaceSlugAvailable?.isAvailable ? (
+              <HiCheck className="h-4 w-4 text-green-500" />
             ) : null
           }
         />

@@ -163,9 +163,7 @@ export default function ChecklistItemRow({
           html={title}
           disabled={viewOnly}
           onChange={(e) => setTitle(e.target.value)}
-          onBlur={(e: React.FocusEvent<HTMLElement>) =>
-            commitTitle((e.target as HTMLElement).innerHTML)
-          }
+          onBlur={() => commitTitle(title)}
           className={twMerge(
             "m-0 min-h-[20px] w-full p-0 text-sm leading-[20px] text-light-950 outline-none focus-visible:outline-none dark:text-dark-950",
             viewOnly && "cursor-default",

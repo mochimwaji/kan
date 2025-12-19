@@ -30,19 +30,25 @@ const integrationProviders: Record<
 };
 
 const SelectSource = ({ handleNextStep }: { handleNextStep: () => void }) => {
-  const { data: integrations, refetch: refetchIntegrations } =
-    api.integration.providers.useQuery();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: integrations, refetch: refetchIntegrations } = (
+    api as any
+  ).integration.providers.useQuery();
   const { control, handleSubmit } = useForm({
     defaultValues: {
       source: integrations?.[0]?.provider ?? "trello",
     },
   });
 
-  const { data: trelloUrl } = api.integration.getAuthorizationUrl.useQuery(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: trelloUrl } = (
+    api as any
+  ).integration.getAuthorizationUrl.useQuery(
     { provider: "trello" },
     {
       enabled: !integrations?.some(
-        (integration) => integration.provider === "trello",
+        (integration: { provider: string }) =>
+          integration.provider === "trello",
       ),
     },
   );
@@ -108,26 +114,31 @@ const SelectSource = ({ handleNextStep }: { handleNextStep: () => void }) => {
                         style={{ color: "var(--kan-menu-text)" }}
                       >
                         {hasIntegrations ? (
-                          integrations.map((integration, index) => (
-                            <Listbox.Option
-                              key={`source_${index}`}
-                              className="relative cursor-default select-none px-1"
-                              value={integration.provider}
-                            >
-                              <div className="flex items-center rounded-[5px] p-1 hover:bg-light-200 dark:hover:bg-dark-400">
-                                {
-                                  integrationProviders[integration.provider]
-                                    ?.icon
-                                }
-                                <span className="ml-2 block truncate text-sm font-normal">
+                          integrations.map(
+                            (
+                              integration: { provider: string },
+                              index: number,
+                            ) => (
+                              <Listbox.Option
+                                key={`source_${index}`}
+                                className="relative cursor-default select-none px-1"
+                                value={integration.provider}
+                              >
+                                <div className="flex items-center rounded-[5px] p-1 hover:bg-light-200 dark:hover:bg-dark-400">
                                   {
                                     integrationProviders[integration.provider]
-                                      ?.name
+                                      ?.icon
                                   }
-                                </span>
-                              </div>
-                            </Listbox.Option>
-                          ))
+                                  <span className="ml-2 block truncate text-sm font-normal">
+                                    {
+                                      integrationProviders[integration.provider]
+                                        ?.name
+                                    }
+                                  </span>
+                                </div>
+                              </Listbox.Option>
+                            ),
+                          )
                         ) : (
                           <Listbox.Option
                             key="trello_placeholder"
@@ -177,8 +188,10 @@ const ImportTrello: React.FC = () => {
 
   const refetchBoards = () => utils.board.all.refetch();
 
-  const { data: boards, isLoading: boardsLoading } =
-    api.import.trello.getBoards.useQuery();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: boards, isLoading: boardsLoading } = (
+    api as any
+  ).import.trello.getBoards.useQuery();
 
   const {
     register: registerBoards,
@@ -187,11 +200,13 @@ const ImportTrello: React.FC = () => {
     watch,
   } = useForm({
     defaultValues: Object.fromEntries(
-      boards?.map((board) => [board.id, true]) ?? [],
+      boards?.map((board: { id: string; name: string }) => [board.id, true]) ??
+        [],
     ),
   });
 
-  const importBoards = api.import.trello.importBoards.useMutation({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const importBoards = (api as any).import.trello.importBoards.useMutation({
     onSuccess: async () => {
       showPopup({
         header: t`Import complete`,
@@ -214,12 +229,15 @@ const ImportTrello: React.FC = () => {
     },
   });
 
-  const boardWatchers = boards?.map((board) => ({
+  const boardWatchers = boards?.map((board: { id: string; name: string }) => ({
     id: board.id,
     value: watch(board.id),
   }));
 
-  const boardCount = boardWatchers?.filter((w) => w.value === true).length || 0;
+  const boardCount =
+    boardWatchers?.filter(
+      (w: { id: string; value: boolean }) => w.value === true,
+    ).length || 0;
 
   const onSubmitBoards = (values: Record<string, boolean>) => {
     const boardIds = Object.keys(values).filter((key) => values[key] === true);
@@ -251,7 +269,7 @@ const ImportTrello: React.FC = () => {
       );
     }
 
-    return boards.map((board) => (
+    return boards.map((board: { id: string; name: string }) => (
       <div key={board.id}>
         <label
           className="flex cursor-pointer items-center rounded-[5px] p-2 hover:bg-light-100 dark:hover:bg-dark-300"
@@ -300,8 +318,10 @@ const ImportTrello: React.FC = () => {
               boardsLoading ||
               !boards?.length ||
               !boards.some(
-                (board) =>
-                  boardWatchers?.find((w) => w.id === board.id)?.value === true,
+                (board: { id: string; name: string }) =>
+                  boardWatchers?.find(
+                    (w: { id: string; value: boolean }) => w.id === board.id,
+                  )?.value === true,
               )
             }
           >

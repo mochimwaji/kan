@@ -1,11 +1,4 @@
-import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
-import { env } from "next-runtime-env";
-import { useEffect, useState } from "react";
-import { HiBolt } from "react-icons/hi2";
-
-import type { Subscription } from "@kan/shared/utils";
-import { hasActiveSubscription } from "@kan/shared/utils";
 
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
@@ -13,41 +6,15 @@ import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
-import { api } from "~/utils/api";
 import ColorSettings from "./components/ColorSettings";
 import { DeleteWorkspaceConfirmation } from "./components/DeleteWorkspaceConfirmation";
 import UpdateWorkspaceDescriptionForm from "./components/UpdateWorkspaceDescriptionForm";
 import UpdateWorkspaceNameForm from "./components/UpdateWorkspaceNameForm";
 import UpdateWorkspaceUrlForm from "./components/UpdateWorkspaceUrlForm";
-import { UpgradeToProConfirmation } from "./components/UpgradeToProConfirmation";
 
 export default function WorkspaceSettings() {
   const { modalContentType, openModal, isOpen } = useModal();
   const { workspace } = useWorkspace();
-  const router = useRouter();
-  const { data } = api.user.getUser.useQuery();
-  const [hasOpenedUpgradeModal, setHasOpenedUpgradeModal] = useState(false);
-
-  const { data: workspaceData } = api.workspace.byId.useQuery({
-    workspacePublicId: workspace.publicId,
-  });
-
-  const subscriptions = workspaceData?.subscriptions as
-    | Subscription[]
-    | undefined;
-
-  // Open upgrade modal if upgrade=pro is in URL params
-  useEffect(() => {
-    if (
-      router.query.upgrade === "pro" &&
-      env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-      !hasActiveSubscription(subscriptions, "pro") &&
-      !hasOpenedUpgradeModal
-    ) {
-      openModal("UPGRADE_TO_PRO");
-      setHasOpenedUpgradeModal(true);
-    }
-  }, [router.query.upgrade, subscriptions, openModal, hasOpenedUpgradeModal]);
 
   return (
     <>
@@ -104,19 +71,6 @@ export default function WorkspaceSettings() {
           <ColorSettings />
         </div>
 
-        {env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-          !hasActiveSubscription(subscriptions, "pro") &&
-          !hasActiveSubscription(subscriptions, "team") && (
-            <div className="my-8">
-              <Button
-                onClick={() => openModal("UPGRADE_TO_PRO")}
-                iconRight={<HiBolt />}
-              >
-                {t`Upgrade to Pro`}
-              </Button>
-            </div>
-          )}
-
         <div className="border-t border-light-300 dark:border-dark-300">
           <h2
             className="mb-4 mt-8 text-[14px] font-bold"
@@ -148,15 +102,6 @@ export default function WorkspaceSettings() {
         isVisible={isOpen && modalContentType === "DELETE_WORKSPACE"}
       >
         <DeleteWorkspaceConfirmation />
-      </Modal>
-      <Modal
-        modalSize="sm"
-        isVisible={isOpen && modalContentType === "UPGRADE_TO_PRO"}
-      >
-        <UpgradeToProConfirmation
-          userId={data?.id ?? ""}
-          workspacePublicId={workspace.publicId}
-        />
       </Modal>
 
       {/* Global modals */}

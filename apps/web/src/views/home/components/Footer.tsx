@@ -34,7 +34,6 @@ const Footer = () => {
       { name: t`Roadmap`, href: "/kan/roadmap" },
       { name: t`GitHub`, href: "https://github.com/kanbn/kan" },
       { name: t`Contact`, href: "mailto:support@kan.bn" },
-      { name: t`OSS Friends`, href: "/oss-friends" },
     ],
     legal: [
       { name: t`Terms of service`, href: "/terms" },
@@ -46,7 +45,6 @@ const Footer = () => {
     ],
     resources: [
       { name: t`Features`, href: "/#features" },
-      { name: t`Pricing`, href: "/#pricing" },
       { name: t`FAQs`, href: "/#faq" },
     ],
   };

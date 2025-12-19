@@ -5,15 +5,11 @@ import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { HiBolt } from "react-icons/hi2";
 import {
   TbLayoutSidebarLeftCollapse,
   TbLayoutSidebarLeftExpand,
 } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
-
-import type { Subscription } from "@kan/shared/utils";
-import { hasActiveSubscription } from "@kan/shared/utils";
 
 import type { KeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import boardsIconDark from "~/assets/boards-dark.json";
@@ -61,10 +57,6 @@ export default function SideNavigation({
     workspacePublicId: workspace.publicId,
   });
 
-  const subscriptions = workspaceData?.subscriptions as
-    | Subscription[]
-    | undefined;
-
   useEffect(() => {
     const savedState = localStorage.getItem("kan_sidebar-collapsed");
     if (savedState !== null) {
@@ -85,8 +77,6 @@ export default function SideNavigation({
   const { pathname } = router;
 
   const { resolvedTheme } = useTheme();
-
-  const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
 
   const { themeColors } = useColorTheme();
 
@@ -230,33 +220,6 @@ export default function SideNavigation({
             isCollapsed={isCollapsed}
             onCloseSideNav={onCloseSideNav}
           />
-          {isCloudEnv &&
-            !hasActiveSubscription(subscriptions, "pro") &&
-            !hasActiveSubscription(subscriptions, "team") && (
-              <div className={twMerge(isCollapsed && "flex justify-center")}>
-                {isCollapsed ? (
-                  <ButtonComponent
-                    iconLeft={<HiBolt />}
-                    variant="secondary"
-                    href="/settings/workspace?upgrade=pro"
-                    aria-label="Upgrade to Pro"
-                    title="Upgrade to Pro"
-                    iconOnly
-                    onClick={() => openModal("UPGRADE_TO_PRO")}
-                  />
-                ) : (
-                  <ButtonComponent
-                    iconLeft={<HiBolt />}
-                    fullWidth
-                    variant="secondary"
-                    href="/settings/workspace?upgrade=pro"
-                    onClick={() => openModal("UPGRADE_TO_PRO")}
-                  >
-                    {t`Upgrade to Pro`}
-                  </ButtonComponent>
-                )}
-              </div>
-            )}
         </div>
       </nav>
     </>

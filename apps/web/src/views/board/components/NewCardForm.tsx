@@ -153,6 +153,7 @@ export function NewCardForm({
               listId: 2,
               description: "",
               dueDate: args.dueDate ?? null,
+              calendarOrder: null,
               labels: oldBoard.labels.filter((label) =>
                 args.labelPublicIds.includes(label.publicId),
               ),
