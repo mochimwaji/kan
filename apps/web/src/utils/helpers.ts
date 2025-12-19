@@ -1,5 +1,3 @@
-import { env } from "next-runtime-env";
-
 export const formatToArray = (
   value: string | string[] | undefined,
 ): string[] => {
@@ -48,9 +46,11 @@ export const formatMemberDisplayName = (
 export const getAvatarUrl = (imageOrKey: string | null) => {
   if (!imageOrKey) return "";
 
+  // Already a full URL
   if (imageOrKey.startsWith("http://") || imageOrKey.startsWith("https://")) {
     return imageOrKey;
   }
 
-  return `${env("NEXT_PUBLIC_STORAGE_URL")}/${env("NEXT_PUBLIC_AVATAR_BUCKET_NAME")}/${imageOrKey}`;
+  // Local storage: serve via file API
+  return `/api/files/${imageOrKey}`;
 };
