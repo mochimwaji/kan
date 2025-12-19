@@ -15,7 +15,6 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 import Avatar from "~/components/Avatar";
 import { DeleteConfirmation } from "~/components/DeleteConfirmation";
 import Editor from "~/components/Editor";
-import FeedbackModal from "~/components/FeedbackModal";
 import { LabelForm } from "~/components/LabelForm";
 import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
@@ -533,7 +532,9 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     onMutate: async () => {
       closeModal();
       await utils.card.byId.cancel();
-      const currentState = utils.card.byId.getData({ cardPublicId: cardId ?? "" });
+      const currentState = utils.card.byId.getData({
+        cardPublicId: cardId ?? "",
+      });
       utils.card.byId.setData({ cardPublicId: cardId ?? "" }, (oldCard) => {
         if (!oldCard) return oldCard;
         const updatedActivities = oldCard.activities.filter(
@@ -776,13 +777,6 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
 
         <>
           <Modal
-            modalSize="md"
-            isVisible={isOpen && modalContentType === "NEW_FEEDBACK"}
-          >
-            <FeedbackModal />
-          </Modal>
-
-          <Modal
             modalSize="sm"
             isVisible={isOpen && modalContentType === "NEW_LABEL"}
           >
@@ -806,7 +800,9 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
           >
             <DeleteConfirmation
               entityType="label"
-              onConfirm={() => deleteLabelMutation.mutate({ labelPublicId: entityId })}
+              onConfirm={() =>
+                deleteLabelMutation.mutate({ labelPublicId: entityId })
+              }
               isLoading={deleteLabelMutation.isPending}
             />
           </Modal>
@@ -817,7 +813,9 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
           >
             <DeleteConfirmation
               entityType="card"
-              onConfirm={() => deleteCardMutation.mutate({ cardPublicId: cardId ?? "" })}
+              onConfirm={() =>
+                deleteCardMutation.mutate({ cardPublicId: cardId ?? "" })
+              }
               isLoading={deleteCardMutation.isPending}
             />
           </Modal>
@@ -828,7 +826,12 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
           >
             <DeleteConfirmation
               entityType="comment"
-              onConfirm={() => deleteCommentMutation.mutate({ cardPublicId: cardId ?? "", commentPublicId: entityId })}
+              onConfirm={() =>
+                deleteCommentMutation.mutate({
+                  cardPublicId: cardId ?? "",
+                  commentPublicId: entityId,
+                })
+              }
               isLoading={deleteCommentMutation.isPending}
             />
           </Modal>
@@ -853,7 +856,9 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
           >
             <DeleteConfirmation
               entityType="checklist"
-              onConfirm={() => deleteChecklistMutation.mutate({ checklistPublicId: entityId })}
+              onConfirm={() =>
+                deleteChecklistMutation.mutate({ checklistPublicId: entityId })
+              }
               isLoading={deleteChecklistMutation.isPending}
             />
           </Modal>

@@ -15,7 +15,6 @@ import { getSubscriptionByPlan, hasUnlimitedSeats } from "@kan/shared/utils";
 import Avatar from "~/components/Avatar";
 import Button from "~/components/Button";
 import Dropdown from "~/components/Dropdown";
-import FeedbackModal from "~/components/FeedbackModal";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
@@ -288,13 +287,6 @@ export default function MembersPage() {
         </div>
 
         <>
-          <Modal
-            modalSize="md"
-            isVisible={isOpen && modalContentType === "NEW_FEEDBACK"}
-          >
-            <FeedbackModal />
-          </Modal>
-
           <Modal
             modalSize="sm"
             isVisible={isOpen && modalContentType === "NEW_WORKSPACE"}

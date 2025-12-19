@@ -67,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **LanguageSelector component** - Removed from settings and footer.
 - **Docs app** - Removed `apps/docs/` documentation site.
 - **Database cleanup** - Removed `import`, `integrations`, `subscription`, `feedback` tables and `importId`/`stripeCustomerId` columns.
+- **FeedbackModal** - Removed feedback modal component and all usage from views.
 
 ## [0.3.0](https://github.com/kanbn/kan/compare/v0.2.4...v0.3.0) - 2025-12-09
 
