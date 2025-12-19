@@ -61,6 +61,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed deprecated `@lingui/babel-preset-react` (replaced by Lingui 5.x macro system).
 - Removed `StrictModeDroppable.tsx` wrapper (no longer needed with `@hello-pangea/dnd`).
+- **Stripe billing** - Removed entire `packages/stripe`, billing UI, subscription schema.
+- **Trello import** - Removed import routers, pages, API routes, and related schemas.
+- **Non-English locales** - Removed fr, de, es, it, nl, pl, ru from `apps/web/src/locales/`.
+- **LanguageSelector component** - Removed from settings and footer.
+- **Docs app** - Removed `apps/docs/` documentation site.
+- **Database cleanup** - Removed `import`, `integrations`, `subscription`, `feedback` tables and `importId`/`stripeCustomerId` columns.
 
 ## [0.3.0](https://github.com/kanbn/kan/compare/v0.2.4...v0.3.0) - 2025-12-09
 

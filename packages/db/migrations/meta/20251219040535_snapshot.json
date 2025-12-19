@@ -1,6 +1,6 @@
 {
-  "id": "4fb840a2-caea-41d4-baf3-8ba081c1ec0a",
-  "prevId": "d16ab16a-b4af-4d34-abb9-e663f4e63307",
+  "id": "4bb1b60c-8e54-4b61-b7bd-aa4f5a013e8d",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -459,12 +459,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "importId": {
-          "name": "importId",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
         "workspaceId": {
           "name": "workspaceId",
           "type": "bigint",
@@ -478,6 +472,20 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'private'"
+        },
+        "type": {
+          "name": "type",
+          "type": "board_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'regular'"
+        },
+        "sourceBoardId": {
+          "name": "sourceBoardId",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -486,6 +494,36 @@
           "columns": [
             {
               "expression": "visibility",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "board_type_idx": {
+          "name": "board_type_idx",
+          "columns": [
+            {
+              "expression": "type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "board_source_idx": {
+          "name": "board_source_idx",
+          "columns": [
+            {
+              "expression": "sourceBoardId",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -544,19 +582,6 @@
             "id"
           ],
           "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "board_importId_import_id_fk": {
-          "name": "board_importId_import_id_fk",
-          "tableFrom": "board",
-          "tableTo": "import",
-          "columnsFrom": [
-            "importId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "board_workspaceId_workspace_id_fk": {
@@ -706,6 +731,24 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "fromDueDate": {
+          "name": "fromDueDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "toDueDate": {
+          "name": "toDueDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sourceBoardId": {
+          "name": "sourceBoardId",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -800,12 +843,140 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
+        },
+        "card_activity_sourceBoardId_board_id_fk": {
+          "name": "card_activity_sourceBoardId_board_id_fk",
+          "tableFrom": "card_activity",
+          "tableTo": "board",
+          "columnsFrom": [
+            "sourceBoardId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "card_activity_publicId_unique": {
           "name": "card_activity_publicId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "publicId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.card_attachment": {
+      "name": "card_attachment",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigserial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "publicId": {
+          "name": "publicId",
+          "type": "varchar(12)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cardId": {
+          "name": "cardId",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "filename": {
+          "name": "filename",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "originalFilename": {
+          "name": "originalFilename",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contentType": {
+          "name": "contentType",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "size": {
+          "name": "size",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "s3Key": {
+          "name": "s3Key",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deletedAt": {
+          "name": "deletedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "card_attachment_cardId_card_id_fk": {
+          "name": "card_attachment_cardId_card_id_fk",
+          "tableFrom": "card_attachment",
+          "tableTo": "card",
+          "columnsFrom": [
+            "cardId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "card_attachment_createdBy_user_id_fk": {
+          "name": "card_attachment_createdBy_user_id_fk",
+          "tableFrom": "card_attachment",
+          "tableTo": "user",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "card_attachment_publicId_unique": {
+          "name": "card_attachment_publicId_unique",
           "nullsNotDistinct": false,
           "columns": [
             "publicId"
@@ -947,9 +1118,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "importId": {
-          "name": "importId",
-          "type": "bigint",
+        "dueDate": {
+          "name": "dueDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "calendarOrder": {
+          "name": "calendarOrder",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
@@ -993,19 +1170,6 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "card_importId_import_id_fk": {
-          "name": "card_importId_import_id_fk",
-          "tableFrom": "card",
-          "tableTo": "import",
-          "columnsFrom": [
-            "importId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1450,151 +1614,6 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
-    "public.feedback": {
-      "name": "feedback",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigserial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "feedback": {
-          "name": "feedback",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "url": {
-          "name": "url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "reviewed": {
-          "name": "reviewed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "feedback_createdBy_user_id_fk": {
-          "name": "feedback_createdBy_user_id_fk",
-          "tableFrom": "feedback",
-          "tableTo": "user",
-          "columnsFrom": [
-            "createdBy"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": true
-    },
-    "public.import": {
-      "name": "import",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigserial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "publicId": {
-          "name": "publicId",
-          "type": "varchar(12)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source": {
-          "name": "source",
-          "type": "source",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "import_createdBy_user_id_fk": {
-          "name": "import_createdBy_user_id_fk",
-          "tableFrom": "import",
-          "tableTo": "user",
-          "columnsFrom": [
-            "createdBy"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "import_publicId_unique": {
-          "name": "import_publicId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "publicId"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": true
-    },
     "public.label": {
       "name": "label",
       "schema": "",
@@ -1648,12 +1667,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "importId": {
-          "name": "importId",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
         "deletedAt": {
           "name": "deletedAt",
           "type": "timestamp",
@@ -1693,19 +1706,6 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "label_importId_import_id_fk": {
-          "name": "label_importId_import_id_fk",
-          "tableFrom": "label",
-          "tableTo": "import",
-          "columnsFrom": [
-            "importId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "label_deletedBy_user_id_fk": {
@@ -1801,9 +1801,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "importId": {
-          "name": "importId",
-          "type": "bigint",
+        "color": {
+          "name": "color",
+          "type": "varchar(7)",
           "primaryKey": false,
           "notNull": false
         }
@@ -1847,19 +1847,6 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "list_importId_import_id_fk": {
-          "name": "list_importId_import_id_fk",
-          "tableFrom": "list",
-          "tableTo": "import",
-          "columnsFrom": [
-            "importId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1925,12 +1912,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "stripeCustomerId": {
-          "name": "stripeCustomerId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -1949,78 +1930,84 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
-    "public.integration": {
-      "name": "integration",
+    "public.workspace_slug_checks": {
+      "name": "workspace_slug_checks",
       "schema": "",
       "columns": {
-        "provider": {
-          "name": "provider",
+        "id": {
+          "name": "id",
+          "type": "bigserial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "userId": {
-          "name": "userId",
-          "type": "uuid",
+        "available": {
+          "name": "available",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "accessToken": {
-          "name": "accessToken",
-          "type": "varchar(255)",
+        "reserved": {
+          "name": "reserved",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "refreshToken": {
-          "name": "refreshToken",
-          "type": "varchar(255)",
+        "workspaceId": {
+          "name": "workspaceId",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
-        "expiresAt": {
-          "name": "expiresAt",
-          "type": "timestamp",
+        "createdBy": {
+          "name": "createdBy",
+          "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "integration_userId_user_id_fk": {
-          "name": "integration_userId_user_id_fk",
-          "tableFrom": "integration",
-          "tableTo": "user",
+        "workspace_slug_checks_workspaceId_workspace_id_fk": {
+          "name": "workspace_slug_checks_workspaceId_workspace_id_fk",
+          "tableFrom": "workspace_slug_checks",
+          "tableTo": "workspace",
           "columnsFrom": [
-            "userId"
+            "workspaceId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "workspace_slug_checks_createdBy_user_id_fk": {
+          "name": "workspace_slug_checks_createdBy_user_id_fk",
+          "tableFrom": "workspace_slug_checks",
+          "tableTo": "user",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "integration_pkey": {
-          "name": "integration_pkey",
-          "columns": [
-            "userId",
-            "provider"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -2269,6 +2256,12 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
+        },
+        "themeColors": {
+          "name": "themeColors",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -2321,8 +2314,8 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
-    "public.subscription": {
-      "name": "subscription",
+    "public.workspace_invite_links": {
+      "name": "workspace_invite_links",
       "schema": "",
       "columns": {
         "id": {
@@ -2331,75 +2324,34 @@
           "primaryKey": true,
           "notNull": true
         },
-        "plan": {
-          "name": "plan",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "referenceId": {
-          "name": "referenceId",
+        "publicId": {
+          "name": "publicId",
           "type": "varchar(12)",
           "primaryKey": false,
           "notNull": true
         },
-        "stripeCustomerId": {
-          "name": "stripeCustomerId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "stripeSubscriptionId": {
-          "name": "stripeSubscriptionId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar(255)",
+        "workspaceId": {
+          "name": "workspaceId",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
-        "periodStart": {
-          "name": "periodStart",
-          "type": "timestamp",
+        "code": {
+          "name": "code",
+          "type": "varchar(12)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "periodEnd": {
-          "name": "periodEnd",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "cancelAtPeriodEnd": {
-          "name": "cancelAtPeriodEnd",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "seats": {
-          "name": "seats",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "unlimitedSeats": {
-          "name": "unlimitedSeats",
-          "type": "boolean",
+        "status": {
+          "name": "status",
+          "type": "invite_link_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": false
+          "default": "'active'"
         },
-        "trialStart": {
-          "name": "trialStart",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "trialEnd": {
-          "name": "trialEnd",
+        "expiresAt": {
+          "name": "expiresAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
@@ -2411,38 +2363,98 @@
           "notNull": true,
           "default": "now()"
         },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updatedAt": {
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
+        },
+        "updatedBy": {
+          "name": "updatedBy",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "subscription_referenceId_workspace_publicId_fk": {
-          "name": "subscription_referenceId_workspace_publicId_fk",
-          "tableFrom": "subscription",
+        "workspace_invite_links_workspaceId_workspace_id_fk": {
+          "name": "workspace_invite_links_workspaceId_workspace_id_fk",
+          "tableFrom": "workspace_invite_links",
           "tableTo": "workspace",
           "columnsFrom": [
-            "referenceId"
+            "workspaceId"
           ],
           "columnsTo": [
-            "publicId"
+            "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "workspace_invite_links_createdBy_user_id_fk": {
+          "name": "workspace_invite_links_createdBy_user_id_fk",
+          "tableFrom": "workspace_invite_links",
+          "tableTo": "user",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "workspace_invite_links_updatedBy_user_id_fk": {
+          "name": "workspace_invite_links_updatedBy_user_id_fk",
+          "tableFrom": "workspace_invite_links",
+          "tableTo": "user",
+          "columnsFrom": [
+            "updatedBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "workspace_invite_links_publicId_unique": {
+          "name": "workspace_invite_links_publicId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "publicId"
+          ]
+        },
+        "workspace_invite_links_code_unique": {
+          "name": "workspace_invite_links_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
     }
   },
   "enums": {
+    "public.board_type": {
+      "name": "board_type",
+      "schema": "public",
+      "values": [
+        "regular",
+        "template"
+      ]
+    },
     "public.board_visibility": {
       "name": "board_visibility",
       "schema": "public",
@@ -2475,23 +2487,12 @@
         "card.updated.checklist.item.completed",
         "card.updated.checklist.item.uncompleted",
         "card.updated.checklist.item.deleted",
+        "card.updated.attachment.added",
+        "card.updated.attachment.removed",
+        "card.updated.dueDate.added",
+        "card.updated.dueDate.updated",
+        "card.updated.dueDate.removed",
         "card.archived"
-      ]
-    },
-    "public.source": {
-      "name": "source",
-      "schema": "public",
-      "values": [
-        "trello"
-      ]
-    },
-    "public.status": {
-      "name": "status",
-      "schema": "public",
-      "values": [
-        "started",
-        "success",
-        "failed"
       ]
     },
     "public.role": {
@@ -2509,7 +2510,8 @@
       "values": [
         "invited",
         "active",
-        "removed"
+        "removed",
+        "paused"
       ]
     },
     "public.slug_type": {
@@ -2527,6 +2529,14 @@
         "free",
         "pro",
         "enterprise"
+      ]
+    },
+    "public.invite_link_status": {
+      "name": "invite_link_status",
+      "schema": "public",
+      "values": [
+        "active",
+        "inactive"
       ]
     }
   },

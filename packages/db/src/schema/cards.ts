@@ -14,7 +14,6 @@ import {
 
 import { boards } from "./boards";
 import { checklists } from "./checklists";
-import { imports } from "./imports";
 import { labels } from "./labels";
 import { lists } from "./lists";
 import { users } from "./users";
@@ -72,7 +71,6 @@ export const cards = pgTable("card", {
   listId: bigint("listId", { mode: "number" })
     .notNull()
     .references(() => lists.id, { onDelete: "cascade" }),
-  importId: bigint("importId", { mode: "number" }).references(() => imports.id),
   dueDate: timestamp("dueDate"),
   calendarOrder: integer("calendarOrder"),
 }).enableRLS();
@@ -95,11 +93,6 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
   }),
   labels: many(cardsToLabels),
   members: many(cardToWorkspaceMembers),
-  import: one(imports, {
-    fields: [cards.importId],
-    references: [imports.id],
-    relationName: "cardsImport",
-  }),
   comments: many(comments),
   activities: many(cardActivities),
   checklists: many(checklists),

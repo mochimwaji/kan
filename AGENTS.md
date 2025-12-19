@@ -21,17 +21,16 @@ Kan is an open-source Kanban board application built as a **monorepo** using:
 ```
 kan/
 ├── apps/
-│   ├── web/                 # Next.js application (main app)
-│   │   ├── src/
-│   │   │   ├── components/  # Reusable UI components
-│   │   │   ├── hooks/       # Custom React hooks
-│   │   │   ├── pages/       # Next.js pages (file-based routing)
-│   │   │   ├── providers/   # React context providers
-│   │   │   ├── views/       # Page-specific view components
-│   │   │   ├── utils/       # Frontend utilities
-│   │   │   └── env.ts       # Environment variable validation
-│   │   └── public/          # Static assets
-│   └── docs/                # Documentation site
+│   └── web/                 # Next.js application (main app)
+│       ├── src/
+│       │   ├── components/  # Reusable UI components
+│       │   ├── hooks/       # Custom React hooks
+│       │   ├── pages/       # Next.js pages (file-based routing)
+│       │   ├── providers/   # React context providers
+│       │   ├── views/       # Page-specific view components
+│       │   ├── utils/       # Frontend utilities
+│       │   └── env.ts       # Environment variable validation
+│       └── public/          # Static assets
 │
 ├── packages/
 │   ├── api/                 # tRPC routers and API logic
@@ -50,9 +49,8 @@ kan/
 │   │
 │   ├── auth/                # Authentication (Better Auth)
 │   ├── email/               # Email service
-│   ├── logger/              # Structured logging (NEW)
-│   ├── shared/              # Shared utilities and constants
-│   └── stripe/              # Stripe integration
+│   ├── logger/              # Structured logging
+│   └── shared/              # Shared utilities and constants
 │
 └── tooling/                 # Shared tooling configs
     ├── eslint/              # ESLint configuration

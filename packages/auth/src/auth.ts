@@ -1,7 +1,4 @@
-import type { Subscription } from "@better-auth/stripe";
-import type Stripe from "stripe";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { stripe } from "@better-auth/stripe";
 import { ChatOrPushProviderEnum } from "@novu/api/models/components";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -13,14 +10,12 @@ import { env } from "next-runtime-env";
 
 import type { dbClient } from "@kan/db/client";
 import * as memberRepo from "@kan/db/repository/member.repo";
-import * as subscriptionRepo from "@kan/db/repository/subscription.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import * as schema from "@kan/db/schema";
 import { notificationClient, sendEmail } from "@kan/email";
 import { authLogger } from "@kan/logger";
 import { createEmailUnsubscribeLink } from "@kan/shared";
-import { createStripeClient } from "@kan/stripe";
 
 export const configuredProviders = socialProviderList.reduce<
   Record<
@@ -173,133 +168,9 @@ export const initAuth = (db: dbClient) => {
       deleteUser: {
         enabled: true,
       },
-      additionalFields: {
-        stripeCustomerId: {
-          type: "string",
-          required: false,
-          defaultValue: null,
-          input: false,
-        },
-      },
     },
     plugins: [
       socialProvidersPlugin(),
-      ...(process.env.NEXT_PUBLIC_KAN_ENV === "cloud"
-        ? [
-            stripe({
-              stripeClient: createStripeClient(),
-              stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
-              createCustomerOnSignUp: true,
-              subscription: {
-                enabled: true,
-                plans: [
-                  {
-                    name: "team",
-                    priceId: process.env.STRIPE_TEAM_PLAN_MONTHLY_PRICE_ID!,
-                    annualDiscountPriceId:
-                      process.env.STRIPE_TEAM_PLAN_YEARLY_PRICE_ID!,
-                    freeTrial: {
-                      days: 14,
-                      onTrialStart: async (subscription) => {
-                        await triggerWorkflow(db, "trial-start", subscription);
-                      },
-                      onTrialEnd: async ({ subscription }) => {
-                        await triggerWorkflow(db, "trial-end", subscription);
-                      },
-                      onTrialExpired: async (subscription) => {
-                        await triggerWorkflow(
-                          db,
-                          "trial-expired",
-                          subscription,
-                        );
-                      },
-                    },
-                  },
-                  {
-                    name: "pro",
-                    priceId: process.env.STRIPE_PRO_PLAN_MONTHLY_PRICE_ID!,
-                    annualDiscountPriceId:
-                      process.env.STRIPE_PRO_PLAN_YEARLY_PRICE_ID!,
-                    freeTrial: {
-                      days: 14,
-                      onTrialStart: async (subscription) => {
-                        await triggerWorkflow(db, "trial-start", subscription);
-                      },
-                      onTrialEnd: async ({ subscription }) => {
-                        await triggerWorkflow(db, "trial-end", subscription);
-                      },
-                      onTrialExpired: async (subscription) => {
-                        await triggerWorkflow(
-                          db,
-                          "trial-expired",
-                          subscription,
-                        );
-                      },
-                    },
-                  },
-                ],
-                authorizeReference: async (data) => {
-                  const workspace = await workspaceRepo.getByPublicId(
-                    db,
-                    data.referenceId,
-                  );
-
-                  if (!workspace) {
-                    return Promise.resolve(false);
-                  }
-
-                  const isUserInWorkspace =
-                    await workspaceRepo.isUserInWorkspace(
-                      db,
-                      data.user.id,
-                      workspace.id,
-                    );
-
-                  return isUserInWorkspace;
-                },
-                getCheckoutSessionParams: () => {
-                  return {
-                    params: {
-                      allow_promotion_codes: true,
-                    },
-                  };
-                },
-                onSubscriptionComplete: async ({
-                  subscription,
-                  stripeSubscription,
-                }) => {
-                  // Set unlimited seats to true for pro plans
-                  if (subscription.plan === "pro") {
-                    await subscriptionRepo.updateByStripeSubscriptionId(
-                      db,
-                      stripeSubscription.id,
-                      {
-                        unlimitedSeats: true,
-                      },
-                    );
-                    authLogger.info(
-                      "Pro subscription activated with unlimited seats",
-                      { stripeSubscriptionId: stripeSubscription.id },
-                    );
-
-                    const workspace = await workspaceRepo.getByPublicId(
-                      db,
-                      subscription.referenceId,
-                    );
-
-                    if (workspace?.id) {
-                      await memberRepo.unpauseAllMembers(db, workspace.id);
-
-                      authLogger.info("Unpausing all members for workspace", {
-                        workspaceId: String(workspace.id),
-                      });
-                    }
-                  }
-                },
-              },
-            }),
-          ]
-        : []),
       // @todo: hasing is disabled due to a bug in the api key plugin
       apiKey({
         disableKeyHashing: true,
@@ -450,7 +321,6 @@ export const initAuth = (db: dbClient) => {
                     avatar: avatarUrl,
                     data: {
                       emailVerified: user.emailVerified,
-                      stripeCustomerId: user.stripeCustomerId,
                       createdAt: user.createdAt,
                       updatedAt: user.updatedAt,
                     },
@@ -515,37 +385,3 @@ export const initAuth = (db: dbClient) => {
     },
   });
 };
-
-async function triggerWorkflow(
-  db: dbClient,
-  workflowId: string,
-  subscription: Subscription,
-  cancellationDetails?: Stripe.Subscription.CancellationDetails | null,
-) {
-  try {
-    if (!subscription.stripeCustomerId || !notificationClient) return;
-
-    const user = await userRepo.getByStripeCustomerId(
-      db,
-      subscription.stripeCustomerId,
-    );
-
-    if (!user || !notificationClient) return;
-
-    const unsubscribeUrl = await createEmailUnsubscribeLink(user.id);
-
-    await notificationClient.trigger({
-      to: {
-        subscriberId: user.id,
-      },
-      payload: {
-        ...subscription,
-        cancellationDetails,
-        emailUnsubscribeUrl: unsubscribeUrl,
-      },
-      workflowId,
-    });
-  } catch (error) {
-    authLogger.error("Error triggering workflow", error, { workflowId });
-  }
-}

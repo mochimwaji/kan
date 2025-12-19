@@ -17,9 +17,10 @@ export default async function handler(
   }
 
   try {
-    const downloadFilename = typeof filename === "string"
-      ? encodeURIComponent(filename)
-      : "attachment";
+    const downloadFilename =
+      typeof filename === "string"
+        ? encodeURIComponent(filename)
+        : "attachment";
 
     const upstream = await fetch(url);
 

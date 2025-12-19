@@ -7,11 +7,9 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { t } from "@lingui/core/macro";
-import { env } from "next-runtime-env";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   HiChevronDown,
-  HiOutlineBanknotes,
   HiOutlineCodeBracketSquare,
   HiOutlineRectangleGroup,
   HiOutlineUser,
@@ -45,9 +43,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   const navRef = useRef<HTMLElement | null>(null);
   const hasInitialized = useRef(false);
 
-  const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
-
-  // Settings keyboard shortcuts (1-4 for tabs)
+  // Settings keyboard shortcuts (1-3 for tabs)
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "1" },
@@ -72,14 +68,6 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     group: "SETTINGS",
   });
 
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "4" },
-    action: () => router.push("/settings/integrations"),
-    description: t`Integrations`,
-    group: "SETTINGS",
-  });
-
   // Memoize availableTabs to prevent infinite re-renders
   const availableTabs = useMemo(() => {
     const settingsTabs = [
@@ -96,26 +84,14 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
         condition: true,
       },
       {
-        key: "billing",
-        label: t`Billing`,
-        icon: <HiOutlineBanknotes />,
-        condition: isCloudEnv,
-      },
-      {
         key: "api",
         icon: <HiOutlineCodeBracketSquare />,
         label: t`API`,
         condition: true,
       },
-      {
-        key: "integrations",
-        icon: <HiOutlineCodeBracketSquare />,
-        label: t`Integrations`,
-        condition: true,
-      },
     ];
     return settingsTabs.filter((tab) => tab.condition);
-  }, [isCloudEnv]);
+  }, []);
 
   // Get the current tab's underline position
   const getCurrentUnderlinePosition = useCallback(() => {

@@ -13,7 +13,6 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { boards } from "./boards";
-import { subscription } from "./subscriptions";
 import { users } from "./users";
 
 // Theme colors type for workspace customization
@@ -77,7 +76,6 @@ export const workspaceRelations = relations(workspaces, ({ one, many }) => ({
   }),
   members: many(workspaceMembers),
   boards: many(boards),
-  subscriptions: many(subscription),
 }));
 
 export const workspaceMembers = pgTable("workspace_members", {

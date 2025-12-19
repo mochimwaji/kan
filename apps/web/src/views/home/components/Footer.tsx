@@ -2,8 +2,6 @@ import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 
-import { LanguageSelector } from "~/components/LanguageSelector";
-
 const StatusMarker = () => (
   <Link
     href="https://kan.openstatus.dev"
@@ -68,7 +66,6 @@ const Footer = () => {
             </div>
 
             <StatusMarker />
-            <LanguageSelector />
           </div>
 
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">

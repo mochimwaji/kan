@@ -10,7 +10,6 @@ export const create = async (
     name: string;
     createdBy: string;
     boardId: number;
-    importId?: number;
   },
 ) => {
   return db.transaction(async (tx) => {
@@ -34,7 +33,6 @@ export const create = async (
         createdBy: listInput.createdBy,
         boardId: listInput.boardId,
         index,
-        importId: listInput.importId,
       })
       .returning({
         id: lists.id,
@@ -99,7 +97,6 @@ export const bulkCreate = async (
     createdBy: string;
     boardId: number;
     index: number;
-    importId?: number;
   }[],
 ) => {
   if (listInput.length === 0) return [];
@@ -119,7 +116,6 @@ export const bulkCreate = async (
       createdBy: string;
       boardId: number;
       index: number;
-      importId?: number;
     }[] = [];
 
     // For each board, append incoming lists after the current max index, preserving their relative order
@@ -142,7 +138,6 @@ export const bulkCreate = async (
           createdBy: it.createdBy,
           boardId: it.boardId,
           index: nextIndex++,
-          importId: it.importId,
         });
       }
     }

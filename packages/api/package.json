@@ -42,7 +42,6 @@
     "@kan/email": "workspace:^",
     "@kan/logger": "workspace:^",
     "@kan/shared": "workspace:^",
-    "@kan/stripe": "workspace:^",
     "@trpc/server": "catalog:",
     "superjson": "2.2.1",
     "trpc-to-openapi": "^2.3.2",

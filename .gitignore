@@ -62,3 +62,4 @@ i18n.cache
 
 # node compile cache
 node-compile-cache/
+/dnd/

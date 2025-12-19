@@ -25,7 +25,6 @@ export const userRouter = createTRPCRouter({
         email: z.string(),
         name: z.string().nullable(),
         image: z.string().nullable(),
-        stripeCustomerId: z.string().nullable(),
         apiKey: z
           .object({
             id: z.number(),
@@ -37,7 +36,6 @@ export const userRouter = createTRPCRouter({
     )
     .query(async ({ ctx }) => {
       const userId = ctx.user.id;
-
 
       const result = await userRepo.getById(ctx.db, userId);
 
@@ -81,7 +79,6 @@ export const userRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-
 
       const result = await userRepo.update(ctx.db, userId, input);
 

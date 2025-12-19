@@ -18,7 +18,6 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   image?: string | null | undefined;
-  stripeCustomerId?: string | null | undefined;
 }
 
 const createAuthWithHeaders = (
@@ -32,11 +31,6 @@ const createAuthWithHeaders = (
         auth.api.signInMagicLink({
           headers,
           body: { email: input.email, callbackURL: input.callbackURL },
-        }),
-      listActiveSubscriptions: (input: { workspacePublicId: string }) =>
-        auth.api.listActiveSubscriptions({
-          headers,
-          query: { referenceId: input.workspacePublicId },
         }),
     },
   };

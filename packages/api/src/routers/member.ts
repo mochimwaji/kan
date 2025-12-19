@@ -4,16 +4,10 @@ import { z } from "zod";
 
 import * as inviteLinkRepo from "@kan/db/repository/inviteLink.repo";
 import * as memberRepo from "@kan/db/repository/member.repo";
-import * as subscriptionRepo from "@kan/db/repository/subscription.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { apiLogger } from "@kan/logger";
-import {
-  generateUID,
-  getSubscriptionByPlan,
-  hasUnlimitedSeats,
-} from "@kan/shared/utils";
-import { updateSubscriptionSeats } from "@kan/stripe";
+import { generateUID } from "@kan/shared/utils";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
@@ -69,50 +63,6 @@ export const memberRouter = createTRPCRouter({
           message: `User with email ${input.email} is already a member of this workspace`,
           code: "CONFLICT",
         });
-      }
-
-      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
-        const subscriptions = await subscriptionRepo.getByReferenceId(
-          ctx.db,
-          workspace.publicId,
-        );
-
-        // get the active subscriptions
-        const activeTeamSubscription = getSubscriptionByPlan(
-          subscriptions,
-          "team",
-        );
-        const activeProSubscription = getSubscriptionByPlan(
-          subscriptions,
-          "pro",
-        );
-        const unlimitedSeats = hasUnlimitedSeats(subscriptions);
-
-        if (!activeTeamSubscription && !activeProSubscription) {
-          throw new TRPCError({
-            message: `Workspace with public ID ${workspace.publicId} does not have an active subscription`,
-            code: "NOT_FOUND",
-          });
-        }
-
-        // Update the Stripe subscription
-        if (activeTeamSubscription?.stripeSubscriptionId && !unlimitedSeats) {
-          try {
-            await updateSubscriptionSeats(
-              activeTeamSubscription.stripeSubscriptionId,
-              1,
-            );
-          } catch (error) {
-            apiLogger.error(
-              "Failed to update Stripe subscription seats",
-              error,
-            );
-            throw new TRPCError({
-              message: `Failed to update subscription for the new member.`,
-              code: "INTERNAL_SERVER_ERROR",
-            });
-          }
-        }
       }
 
       const existingUser = await userRepo.getByEmail(ctx.db, input.email);
@@ -219,36 +169,6 @@ export const memberRouter = createTRPCRouter({
           message: `Failed to delete member with public ID ${input.memberPublicId}`,
           code: "INTERNAL_SERVER_ERROR",
         });
-
-      // Handle subscription seat decrement for cloud environment
-      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
-        const subscriptions = await subscriptionRepo.getByReferenceId(
-          ctx.db,
-          workspace.publicId,
-        );
-
-        // get the active subscriptions
-        const activeTeamSubscription = getSubscriptionByPlan(
-          subscriptions,
-          "team",
-        );
-        const unlimitedSeats = hasUnlimitedSeats(subscriptions);
-
-        // Only decrease seats if there's an active subscription and stripeSubscriptionId
-        if (activeTeamSubscription?.stripeSubscriptionId && !unlimitedSeats) {
-          try {
-            await updateSubscriptionSeats(
-              activeTeamSubscription.stripeSubscriptionId,
-              -1,
-            );
-          } catch (error) {
-            apiLogger.error(
-              "Failed to decrease Stripe subscription seats",
-              error,
-            );
-          }
-        }
-      }
 
       return { success: true };
     }),
@@ -367,30 +287,6 @@ export const memberRouter = createTRPCRouter({
 
       // Check if user is in workspace
       await assertUserInWorkspace(ctx.db, userId, workspace.id, "admin");
-
-      // Check subscription for cloud environment
-      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
-        const subscriptions = await subscriptionRepo.getByReferenceId(
-          ctx.db,
-          workspace.publicId,
-        );
-
-        const activeTeamSubscription = getSubscriptionByPlan(
-          subscriptions,
-          "team",
-        );
-        const activeProSubscription = getSubscriptionByPlan(
-          subscriptions,
-          "pro",
-        );
-
-        if (!activeTeamSubscription && !activeProSubscription) {
-          throw new TRPCError({
-            message: `Invite links require a Team or Pro subscription`,
-            code: "FORBIDDEN",
-          });
-        }
-      }
 
       // Deactivate any existing active invite links
       await inviteLinkRepo.deactivateAllActiveForWorkspace(ctx.db, {
@@ -594,50 +490,6 @@ export const memberRouter = createTRPCRouter({
           message: `User not found`,
           code: "NOT_FOUND",
         });
-
-      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
-        const subscriptions = await subscriptionRepo.getByReferenceId(
-          ctx.db,
-          workspace.publicId,
-        );
-
-        // get the active subscriptions
-        const activeTeamSubscription = getSubscriptionByPlan(
-          subscriptions,
-          "team",
-        );
-        const activeProSubscription = getSubscriptionByPlan(
-          subscriptions,
-          "pro",
-        );
-        const unlimitedSeats = hasUnlimitedSeats(subscriptions);
-
-        if (!activeTeamSubscription && !activeProSubscription) {
-          throw new TRPCError({
-            message: `Workspace with public ID ${workspace.publicId} does not have an active subscription`,
-            code: "NOT_FOUND",
-          });
-        }
-
-        // Update the Stripe subscription
-        if (activeTeamSubscription?.stripeSubscriptionId && !unlimitedSeats) {
-          try {
-            await updateSubscriptionSeats(
-              activeTeamSubscription.stripeSubscriptionId,
-              1,
-            );
-          } catch (error) {
-            apiLogger.error(
-              "Failed to update Stripe subscription seats",
-              error,
-            );
-            throw new TRPCError({
-              message: `Failed to update subscription for the new member.`,
-              code: "INTERNAL_SERVER_ERROR",
-            });
-          }
-        }
-      }
 
       await memberRepo.create(ctx.db, {
         workspaceId: invite.workspaceId,
