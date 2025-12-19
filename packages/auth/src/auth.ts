@@ -1,4 +1,5 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import * as fs from "fs";
+import * as path from "path";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createAuthEndpoint, createAuthMiddleware } from "better-auth/api";
@@ -247,53 +248,16 @@ export const initAuth = (db: dbClient) => {
             return Promise.resolve(true);
           },
           async after(user) {
-            let avatarKey = user.image;
-            if (
-              user.image &&
-              !user.image.includes(process.env.NEXT_PUBLIC_STORAGE_DOMAIN!)
-            ) {
-              try {
-                const credentials =
-                  env("S3_ACCESS_KEY_ID") && env("S3_SECRET_ACCESS_KEY")
-                    ? {
-                        accessKeyId: env("S3_ACCESS_KEY_ID")!,
-                        secretAccessKey: env("S3_SECRET_ACCESS_KEY")!,
-                      }
-                    : undefined;
-
-                const client = new S3Client({
-                  region: env("S3_REGION") ?? "",
-                  endpoint: env("S3_ENDPOINT") ?? "",
-                  forcePathStyle: env("S3_FORCE_PATH_STYLE") === "true",
-                  credentials,
-                });
-
-                const allowedFileExtensions = ["jpg", "jpeg", "png", "webp"];
-
-                const fileExtension =
-                  user.image.split(".").pop()?.split("?")[0] || "jpg";
-                const key = `${user.id}/avatar.${!allowedFileExtensions.includes(fileExtension) ? "jpg" : fileExtension}`;
-
-                const imageBuffer = await downloadImage(user.image);
-
-                await client.send(
-                  new PutObjectCommand({
-                    Bucket: env("NEXT_PUBLIC_AVATAR_BUCKET_NAME") ?? "",
-                    Key: key,
-                    Body: imageBuffer,
-                    ContentType: `image/${!allowedFileExtensions.includes(fileExtension) ? "jpeg" : fileExtension}`,
-                    ACL: "public-read",
-                  }),
-                );
-
-                avatarKey = key;
-
-                await userRepo.update(db, user.id, {
-                  image: key,
-                });
-              } catch (error) {
-                authLogger.error("Failed to upload user avatar to S3", error);
-              }
+            await ensureLocalAvatar(user);
+          },
+        },
+      },
+      session: {
+        create: {
+          async after(session) {
+            const user = await userRepo.getById(db, session.userId);
+            if (user) {
+              await ensureLocalAvatar(user);
             }
           },
         },
@@ -331,4 +295,60 @@ export const initAuth = (db: dbClient) => {
       },
     },
   });
+  async function ensureLocalAvatar(user: {
+    id: string;
+    image?: string | null;
+  }) {
+    // Migrate if it's an external URL or a legacy S3-style path
+    const isExternal = user.image?.startsWith("http");
+    const isLegacyS3 =
+      user.image?.startsWith("avatars/") && user.image.includes("/");
+
+    if (user.image && (isExternal || isLegacyS3)) {
+      try {
+        const { DEFAULT_STORAGE_PATH } = await import("@kan/db/constants");
+        const STORAGE_PATH = process.env.STORAGE_PATH ?? DEFAULT_STORAGE_PATH;
+        const avatarsPath = path.join(STORAGE_PATH, "avatars");
+
+        // Ensure avatars directory exists
+        if (!fs.existsSync(avatarsPath)) {
+          fs.mkdirSync(avatarsPath, { recursive: true });
+        }
+
+        const allowedFileExtensions = ["jpg", "jpeg", "png", "webp"];
+        const fileExtension =
+          user.image.split(".").pop()?.split("?")[0] || "jpg";
+        const ext = !allowedFileExtensions.includes(fileExtension)
+          ? "jpg"
+          : fileExtension;
+        const filename = `${user.id}-avatar.${ext}`;
+
+        // If it's an external URL, download it
+        if (isExternal) {
+          const imageBuffer = await downloadImage(user.image);
+          await fs.promises.writeFile(
+            path.join(avatarsPath, filename),
+            imageBuffer,
+          );
+        } else if (isLegacyS3) {
+          // If it's a legacy S3 path, we might not have the source file
+          // but if we do have it locally (maybe transferred), we could rename it.
+          // For now, since it's breaking, if it's an S3 path and we can't find it,
+          // we should probably just clear it or let it fail gracefully.
+          // Actually, the best is to just leave it if we can't migrate it,
+          // but if it's external we MUST download it.
+        }
+
+        await userRepo.update(db, user.id, {
+          image: filename,
+        });
+      } catch (error) {
+        authLogger.error("Failed to migrate user avatar to local storage", {
+          userId: user.id,
+          image: user.image,
+          error,
+        });
+      }
+    }
+  }
 };

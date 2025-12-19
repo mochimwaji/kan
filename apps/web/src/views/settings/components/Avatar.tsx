@@ -184,32 +184,26 @@ export default function Avatar({
       setUploading(true);
       const blob = await getCroppedBlob();
 
-      const originalExt = selectedFile.name.split(".").pop() ?? "jpg";
-      const fileName = `${userId}/avatar-${generateUID()}.${originalExt}`;
+      const formData = new FormData();
+      formData.append("file", blob, selectedFile.name);
 
-      const response = await fetch(
-        env("NEXT_PUBLIC_BASE_URL") + "/api/upload/image",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ filename: fileName, contentType: blob.type }),
-        },
-      );
-
-      if (!response.ok) throw new Error("Failed to get pre-signed URL");
-
-      const { url } = (await response.json()) as { url: string };
-
-      const uploadResponse = await fetch(url, {
-        method: "PUT",
-        body: blob,
+      const response = await fetch("/api/upload/avatar", {
+        method: "POST",
+        body: formData,
       });
 
-      if (!uploadResponse.ok) throw new Error("Failed to upload profile image");
+      if (!response.ok) {
+        const errorData = (await response.json()) as { message?: string };
+        throw new Error(errorData.message || "Failed to upload profile image");
+      }
 
-      updateUser.mutate({ image: fileName });
+      showPopup({
+        header: t`Profile image updated`,
+        message: t`Your profile image has been updated.`,
+        icon: "success",
+      });
+
+      await utils.user.getUser.refetch();
       setCropDialogOpen(false);
       resetCropState();
     } catch (error) {
@@ -227,8 +221,8 @@ export default function Avatar({
     resetCropState,
     selectedFile,
     showPopup,
-    updateUser,
     userId,
+    utils.user.getUser,
   ]);
 
   return (

@@ -66,41 +66,36 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store \
 # 4. Final image - runner stage to run the application
 FROM base AS runner
 ARG APP_DIRNAME
- 
-# Don't run production as root
+
+# Setup production user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-USER nextjs
-
-WORKDIR /app
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_PUBLIC_USE_STANDALONE_OUTPUT=true
+ENV MIGRATIONS_PATH=/app/migrations
 
-# Copy standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/.next/static ./apps/${APP_DIRNAME}/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/public ./apps/${APP_DIRNAME}/public
-
-# Copy database migrations and migrate script for auto-migration at startup
 COPY --from=builder --chown=nextjs:nodejs /app/packages/db/migrations ./migrations
 COPY --from=builder --chown=nextjs:nodejs /app/packages/db/src/migrate.ts ./migrate.ts
+COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/entrypoint.sh ./entrypoint.sh
 
-# Set migrations path for the migrate script
-ENV MIGRATIONS_PATH=/app/migrations
+# Final root-level setup: generate ESM package.json and set ownership
+USER root
+# We need to ensure /app and /app/data are owned by nextjs
+RUN echo '{"type": "module"}' > /app/package.json && \
+    mkdir -p /app/data/avatars /app/data/attachments && \
+    chown -R nextjs:nodejs /app && \
+    sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
+
+USER nextjs
 
 ARG PORT=3000
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-# We can execute directly from the standalone output
-# But we usually want an entrypoint script for migrations
-COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/entrypoint.sh ./entrypoint.sh
-
-# Fix line endings for Windows compatibility and make executable
-RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
-
 CMD ["./entrypoint.sh"]
-

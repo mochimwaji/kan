@@ -12,7 +12,6 @@ export const create = async (
     originalFilename: string;
     contentType: string;
     size: number;
-    s3Key: string;
     createdBy: string;
   },
 ) => {
@@ -25,7 +24,6 @@ export const create = async (
       originalFilename: attachmentInput.originalFilename,
       contentType: attachmentInput.contentType,
       size: attachmentInput.size,
-      s3Key: attachmentInput.s3Key,
       createdBy: attachmentInput.createdBy,
     })
     .returning({
@@ -35,7 +33,6 @@ export const create = async (
       originalFilename: cardAttachments.originalFilename,
       contentType: cardAttachments.contentType,
       size: cardAttachments.size,
-      s3Key: cardAttachments.s3Key,
       createdBy: cardAttachments.createdBy,
       createdAt: cardAttachments.createdAt,
     });

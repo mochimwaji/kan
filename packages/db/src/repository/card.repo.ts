@@ -440,7 +440,7 @@ export const getWithListAndMembersByPublicId = async (
         columns: {
           publicId: true,
           contentType: true,
-          s3Key: true,
+          filename: true,
           originalFilename: true,
           size: true,
         },

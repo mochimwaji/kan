@@ -23,6 +23,10 @@
     "./repository/*": {
       "types": "./dist/repository/*.d.ts",
       "default": "./src/repository/*.ts"
+    },
+    "./constants": {
+      "types": "./dist/constants.d.ts",
+      "default": "./src/constants.ts"
     }
   },
   "license": "GPL-3.0",
@@ -33,6 +37,7 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "migrate": "pnpm with-env drizzle-kit migrate",
+    "generate": "pnpm with-env drizzle-kit generate",
     "push": "pnpm with-env drizzle-kit push",
     "studio": "pnpm with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",

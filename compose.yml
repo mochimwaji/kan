@@ -9,4 +9,9 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: ./apps/web/Dockerfile  # <--- Changed from Dockerfile.new
+      dockerfile: ./apps/web/Dockerfile
+    volumes:
+      - kan_data:/app/data
+
+volumes:
+  kan_data:

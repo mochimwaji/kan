@@ -1,5 +1,3 @@
-import { env } from "next-runtime-env";
-
 export const formatToArray = (
   value: string | string[] | undefined,
 ): string[] => {
@@ -52,5 +50,14 @@ export const getAvatarUrl = (imageOrKey: string | null) => {
     return imageOrKey;
   }
 
-  return `${env("NEXT_PUBLIC_STORAGE_URL")}/${env("NEXT_PUBLIC_AVATAR_BUCKET_NAME")}/${imageOrKey}`;
+  if (imageOrKey.startsWith("/api/files/avatars/")) {
+    return imageOrKey;
+  }
+
+  // If it already starts with avatars/, just prefix it with /api/files/
+  if (imageOrKey.startsWith("avatars/")) {
+    return `/api/files/${imageOrKey}`;
+  }
+
+  return `/api/files/avatars/${imageOrKey}`;
 };

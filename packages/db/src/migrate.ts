@@ -12,9 +12,9 @@
  * - 1: Failure (connection or migration error)
  */
 
-import { Pool } from "pg";
-import { readFileSync, readdirSync, existsSync } from "fs";
+import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
+import { Pool } from "pg";
 
 async function checkSchemaExists(pool: Pool): Promise<boolean> {
   try {
@@ -43,11 +43,11 @@ async function getMigrationsRun(pool: Pool): Promise<Set<string>> {
         AND table_name = '__drizzle_migrations'
       );
     `);
-    
+
     if (!tableExists.rows[0]?.exists) {
       return new Set();
     }
-    
+
     const result = await pool.query(`
       SELECT hash FROM drizzle.__drizzle_migrations;
     `);
@@ -76,24 +76,20 @@ async function runMigrations(): Promise<void> {
     await pool.query("SELECT 1");
     console.log("Database connection successful");
 
-    // Check if schema exists
+    // Check if schema exists (proxied by the session table)
     const schemaExists = await checkSchemaExists(pool);
 
-    if (schemaExists) {
-      console.log("Database schema already exists, skipping migrations");
-      await pool.end();
-      process.exit(0);
-    }
-
-    console.log("Database schema not found, running migrations...");
-
-    // Get the migrations folder
     const migrationsFolder = process.env.MIGRATIONS_PATH || "./migrations";
-    
     if (!existsSync(migrationsFolder)) {
       console.error(`Migrations folder not found: ${migrationsFolder}`);
       await pool.end();
       process.exit(1);
+    }
+
+    if (!schemaExists) {
+      console.log("Database schema not found, running full setup...");
+    } else {
+      console.log("Database schema exists, checking for new migrations...");
     }
 
     // Get all SQL migration files
@@ -125,7 +121,7 @@ async function runMigrations(): Promise<void> {
     // Run each migration
     for (const file of migrationFiles) {
       const hash = file;
-      
+
       if (migrationsRun.has(hash)) {
         console.log(`  Skipping already run: ${file}`);
         continue;
@@ -133,21 +129,22 @@ async function runMigrations(): Promise<void> {
 
       console.log(`  Running: ${file}`);
       const sql = readFileSync(join(migrationsFolder, file), "utf8");
-      
+
       try {
         // Split by statement breakpoints if present, otherwise run as single statement
-        const statements = sql.split("--\u003e statement-breakpoint")
+        const statements = sql
+          .split("--\u003e statement-breakpoint")
           .map((s: string) => s.trim())
           .filter((s: string) => s.length > 0);
-        
+
         for (const statement of statements) {
           await pool.query(statement);
         }
-        
+
         // Record this migration as run
         await pool.query(
           `INSERT INTO drizzle.__drizzle_migrations (hash) VALUES ($1)`,
-          [hash]
+          [hash],
         );
       } catch (error: unknown) {
         console.error(`  Error running migration ${file}:`, error);

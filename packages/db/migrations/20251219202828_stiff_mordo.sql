@@ -1,0 +1,1 @@
+ALTER TABLE "card_attachment" DROP COLUMN IF EXISTS "s3Key";

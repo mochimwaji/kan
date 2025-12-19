@@ -1,5 +1,4 @@
 import { TRPCError } from "@trpc/server";
-import { env } from "next-runtime-env";
 import { z } from "zod";
 
 import * as cardRepo from "@kan/db/repository/card.repo";
@@ -8,13 +7,10 @@ import * as cardCommentRepo from "@kan/db/repository/cardComment.repo";
 import * as labelRepo from "@kan/db/repository/label.repo";
 import * as listRepo from "@kan/db/repository/list.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
-import { apiLogger } from "@kan/logger";
-import { S3_URL_EXPIRATION_SECONDS } from "@kan/shared/constants";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
 import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
-import { generateDownloadUrl } from "../utils/s3";
 
 export const cardRouter = createTRPCRouter({
   create: protectedProcedure
@@ -548,7 +544,7 @@ export const cardRouter = createTRPCRouter({
           attachments: {
             publicId: string;
             contentType: string;
-            s3Key: string;
+            filename: string;
             originalFilename: string | null;
             size?: number | null;
             url: string | null;
@@ -589,47 +585,26 @@ export const cardRouter = createTRPCRouter({
           code: "NOT_FOUND",
         });
 
-      // Generate URLs for all attachments
-      const bucket = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
-      if (result.attachments && Array.isArray(result.attachments)) {
+      // Generate URLs for all attachments using local file serving
+      if (Array.isArray(result.attachments)) {
         const attachments = result.attachments as {
           publicId: string;
           contentType: string;
-          s3Key: string;
+          filename: string;
           originalFilename: string | null;
           size?: number | null;
         }[];
 
-        const attachmentsWithUrls = await Promise.all(
-          attachments.map(async (attachment) => {
-            const base = {
-              publicId: attachment.publicId,
-              contentType: attachment.contentType,
-              s3Key: attachment.s3Key,
-              originalFilename: attachment.originalFilename,
-              size: attachment.size,
-            };
-            if (!bucket || !attachment.s3Key) {
-              return { ...base, url: null };
-            }
-            try {
-              const url = await generateDownloadUrl(
-                bucket,
-                attachment.s3Key,
-                S3_URL_EXPIRATION_SECONDS,
-              );
-              return { ...base, url };
-            } catch (error) {
-              // Log S3 URL generation failures for debugging
-              apiLogger.warn("Failed to generate S3 download URL", {
-                s3Key: attachment.s3Key,
-                bucket,
-                error: error instanceof Error ? error.message : String(error),
-              });
-              return { ...base, url: null };
-            }
-          }),
-        );
+        const attachmentsWithUrls = attachments.map((attachment) => ({
+          publicId: attachment.publicId,
+          contentType: attachment.contentType,
+          filename: attachment.filename,
+          originalFilename: attachment.originalFilename,
+          size: attachment.size,
+          url: attachment.filename
+            ? `/api/files/attachments/${attachment.filename}`
+            : null,
+        }));
         return { ...result, attachments: attachmentsWithUrls };
       }
 
