@@ -70,9 +70,13 @@ ARG APP_DIRNAME
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-USER nextjs
 
 WORKDIR /app
+
+# Create data directory with proper ownership (must be done before switching to nextjs user)
+RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
+
+USER nextjs
 
 WORKDIR /app
 
