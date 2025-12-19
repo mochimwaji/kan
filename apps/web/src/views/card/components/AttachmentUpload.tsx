@@ -43,7 +43,7 @@ export function AttachmentUpload({ cardPublicId }: { cardPublicId: string }) {
     setUploading(true);
 
     try {
-      // Generate presigned URL
+      // Get upload URL and key from API
       const { url, key } = await generateUploadUrl.mutateAsync({
         cardPublicId,
         filename: file.name,
@@ -51,13 +51,13 @@ export function AttachmentUpload({ cardPublicId }: { cardPublicId: string }) {
         size: file.size,
       });
 
-      // Upload file to S3
+      // Upload file using FormData for local storage
+      const formData = new FormData();
+      formData.append("file", file);
+
       const uploadResponse = await fetch(url, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
+        method: "POST",
+        body: formData,
       });
 
       if (!uploadResponse.ok) {

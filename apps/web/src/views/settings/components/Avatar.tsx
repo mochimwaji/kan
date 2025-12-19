@@ -6,8 +6,6 @@ import ReactCrop from "react-image-crop";
 
 import "react-image-crop/dist/ReactCrop.css";
 
-import { generateUID } from "@kan/shared/utils";
-
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
 import { usePopup } from "~/providers/popup";
@@ -184,32 +182,27 @@ export default function Avatar({
       setUploading(true);
       const blob = await getCroppedBlob();
 
-      const originalExt = selectedFile.name.split(".").pop() ?? "jpg";
-      const fileName = `${userId}/avatar-${generateUID()}.${originalExt}`;
+      // Upload avatar using FormData
+      const formData = new FormData();
+      formData.append(
+        "file",
+        blob,
+        `avatar.${selectedFile.name.split(".").pop() ?? "jpg"}`,
+      );
 
-      const response = await fetch(
-        env("NEXT_PUBLIC_BASE_URL") + "/api/upload/image",
+      const uploadResponse = await fetch(
+        env("NEXT_PUBLIC_BASE_URL") + "/api/upload/avatar",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ filename: fileName, contentType: blob.type }),
+          body: formData,
         },
       );
 
-      if (!response.ok) throw new Error("Failed to get pre-signed URL");
+      if (!uploadResponse.ok) throw new Error("Failed to upload avatar");
 
-      const { url } = (await response.json()) as { url: string };
+      const { key } = (await uploadResponse.json()) as { key: string };
 
-      const uploadResponse = await fetch(url, {
-        method: "PUT",
-        body: blob,
-      });
-
-      if (!uploadResponse.ok) throw new Error("Failed to upload profile image");
-
-      updateUser.mutate({ image: fileName });
+      updateUser.mutate({ image: key });
       setCropDialogOpen(false);
       resetCropState();
     } catch (error) {
