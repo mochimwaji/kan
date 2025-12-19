@@ -33,19 +33,24 @@ export default async function handler(
   }
 
   try {
-    // Require authenticated user
-    const { user } = await createNextApiContext(req);
-    if (!user) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    // Get path from URL
+    // Get path from URL first to determine if it's a public path
     const { path: pathSegments } = req.query;
     if (!pathSegments || !Array.isArray(pathSegments)) {
       return res.status(400).json({ error: "Invalid path" });
     }
 
     const relativePath = pathSegments.join("/");
+
+    // Avatars are public, attachments require authentication
+    const isPublicPath = relativePath.startsWith("avatars/");
+
+    if (!isPublicPath) {
+      // Require authenticated user for non-public paths
+      const { user } = await createNextApiContext(req);
+      if (!user) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+    }
 
     // Validate and resolve path
     const absolutePath = resolvePath(relativePath);
