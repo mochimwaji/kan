@@ -17,63 +17,23 @@ const config = {
   reactStrictMode: true,
 
   /** Enables hot reloading for local packages without a build step */
-  transpilePackages: [
-    "@kan/api",
-    "@kan/db",
-    "@kan/shared",
-    "@kan/auth",
-    "@kan/stripe",
-  ],
+  transpilePackages: ["@kan/api", "@kan/db", "@kan/shared", "@kan/auth"],
 
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 
   images: {
-    remotePatterns: (() => {
-      /** @type {Array<{protocol: "http" | "https", hostname: string}>} */
-      const patterns = [
-        {
-          protocol: "https",
-          hostname:
-            env("S3_FORCE_PATH_STYLE") === "true"
-              ? `${env("NEXT_PUBLIC_STORAGE_DOMAIN")}`
-              : `*.${env("NEXT_PUBLIC_STORAGE_DOMAIN")}`,
-        },
-        {
-          protocol: "http",
-          hostname: "localhost",
-        },
-        {
-          protocol: "https",
-          hostname: "*.googleusercontent.com",
-        },
-      ];
-
-      // Extract root domain from S3_ENDPOINT and add wildcard pattern
-      const s3Endpoint = env("S3_ENDPOINT");
-      if (s3Endpoint) {
-        try {
-          const url = new URL(s3Endpoint);
-          const hostname = url.hostname;
-          const protocol = url.protocol.replace(":", "");
-
-          // Extract root domain (last 2 parts: e.g. cloudflarestorage.com)
-          const parts = hostname.split(".");
-          if (parts.length >= 2) {
-            const rootDomain = parts.slice(-2).join(".");
-            patterns.push({
-              protocol: protocol === "http" ? "http" : "https",
-              hostname: `*.${rootDomain}`,
-            });
-          }
-        } catch {
-          // If S3_ENDPOINT is not a valid URL, ignore it
-        }
-      }
-
-      return patterns;
-    })(),
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      },
+    ],
   },
   webpack(config) {
     config.module.rules.push({

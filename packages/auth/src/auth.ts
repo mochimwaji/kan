@@ -251,10 +251,7 @@ export const initAuth = (db: dbClient) => {
           },
           async after(user) {
             let avatarKey = user.image;
-            if (
-              user.image &&
-              !user.image.startsWith("avatars/")
-            ) {
+            if (user.image && !user.image.startsWith("avatars/")) {
               try {
                 const STORAGE_ROOT = process.env.STORAGE_PATH || "/app/data";
                 const allowedFileExtensions = ["jpg", "jpeg", "png", "webp"];
@@ -288,7 +285,7 @@ export const initAuth = (db: dbClient) => {
                   .filter(Boolean);
                 const lastName = rest.length ? rest.join(" ") : undefined;
                 const avatarUrl = avatarKey
-                  ? `${env("NEXT_PUBLIC_STORAGE_URL")}/${env("NEXT_PUBLIC_AVATAR_BUCKET_NAME")}/${avatarKey}`
+                  ? `/api/files/${avatarKey}`
                   : undefined;
 
                 const unsubscribeUrl = await createEmailUnsubscribeLink(

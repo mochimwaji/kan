@@ -10,7 +10,6 @@ import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { BoardsList } from "./components/BoardsList";
-import { ImportBoardsForm } from "./components/ImportBoardsForm";
 import { NewBoardForm } from "./components/NewBoardForm";
 
 export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
@@ -73,13 +72,6 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
             isVisible={isOpen && modalContentType === "NEW_BOARD"}
           >
             <NewBoardForm isTemplate={!!isTemplate} />
-          </Modal>
-
-          <Modal
-            modalSize="sm"
-            isVisible={isOpen && modalContentType === "IMPORT_BOARDS"}
-          >
-            <ImportBoardsForm />
           </Modal>
 
           <Modal
