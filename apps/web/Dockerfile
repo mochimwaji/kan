@@ -76,6 +76,10 @@ WORKDIR /app
 # Create data directory with proper ownership (must be done before switching to nextjs user)
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
+# Copy entrypoint and fix permissions before switching to nextjs user
+COPY --from=builder /app/apps/${APP_DIRNAME}/entrypoint.sh ./entrypoint.sh
+RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh && chown nextjs:nodejs ./entrypoint.sh
+
 USER nextjs
 
 WORKDIR /app
@@ -99,12 +103,4 @@ ARG PORT=3000
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-# We can execute directly from the standalone output
-# But we usually want an entrypoint script for migrations
-COPY --from=builder --chown=nextjs:nodejs /app/apps/${APP_DIRNAME}/entrypoint.sh ./entrypoint.sh
-
-# Fix line endings for Windows compatibility and make executable
-RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
-
 CMD ["./entrypoint.sh"]
-
