@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-import { ChatOrPushProviderEnum } from "@novu/api/models/components";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createAuthEndpoint, createAuthMiddleware } from "better-auth/api";
@@ -14,9 +13,8 @@ import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import * as schema from "@kan/db/schema";
-import { notificationClient, sendEmail } from "@kan/email";
+import { sendEmail } from "@kan/email";
 import { authLogger } from "@kan/logger";
-import { createEmailUnsubscribeLink } from "@kan/shared";
 
 export const configuredProviders = socialProviderList.reduce<
   Record<
@@ -275,57 +273,6 @@ export const initAuth = (db: dbClient) => {
                 });
               } catch (error) {
                 authLogger.error("Failed to upload user avatar", error);
-              }
-            }
-
-            if (notificationClient) {
-              try {
-                const [firstName, ...rest] = user.name
-                  .split(" ")
-                  .filter(Boolean);
-                const lastName = rest.length ? rest.join(" ") : undefined;
-                const avatarUrl = avatarKey
-                  ? `/api/files/${avatarKey}`
-                  : undefined;
-
-                const unsubscribeUrl = await createEmailUnsubscribeLink(
-                  user.id,
-                );
-
-                await notificationClient.trigger({
-                  to: {
-                    subscriberId: user.id,
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: user.email,
-                    avatar: avatarUrl,
-                    data: {
-                      emailVerified: user.emailVerified,
-                      createdAt: user.createdAt,
-                      updatedAt: user.updatedAt,
-                    },
-                  },
-                  payload: {
-                    emailUnsubscribeUrl: unsubscribeUrl,
-                  },
-                  workflowId: "user-signup",
-                });
-
-                await notificationClient.subscribers.credentials.update(
-                  {
-                    providerId: ChatOrPushProviderEnum.Discord,
-                    credentials: {
-                      webhookUrl: process.env.DISCORD_WEBHOOK_URL!,
-                    },
-                    integrationIdentifier: "discord",
-                  },
-                  user.id,
-                );
-              } catch (error) {
-                authLogger.error(
-                  "Error adding user to notification client",
-                  error,
-                );
               }
             }
           },

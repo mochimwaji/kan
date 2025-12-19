@@ -2,7 +2,7 @@
 
 <div align="center">
   <h3 align="center">Kan</h3>
-  <p>The open-source project management alternative to Trello.</p>
+  <p>The open-source kanban project management app.</p>
 </div>
 
 <p align="center">

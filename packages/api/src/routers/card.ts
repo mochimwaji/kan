@@ -547,7 +547,7 @@ export const cardRouter = createTRPCRouter({
           attachments: {
             publicId: string;
             contentType: string;
-            s3Key: string;
+            storageKey: string;
             originalFilename: string | null;
             size?: number | null;
             url: string | null;
@@ -593,7 +593,7 @@ export const cardRouter = createTRPCRouter({
         const attachments = result.attachments as {
           publicId: string;
           contentType: string;
-          s3Key: string;
+          storageKey: string;
           originalFilename: string | null;
           size?: number | null;
         }[];
@@ -602,19 +602,19 @@ export const cardRouter = createTRPCRouter({
           const base = {
             publicId: attachment.publicId,
             contentType: attachment.contentType,
-            s3Key: attachment.s3Key,
+            storageKey: attachment.storageKey,
             originalFilename: attachment.originalFilename,
             size: attachment.size,
           };
-          if (!attachment.s3Key) {
+          if (!attachment.storageKey) {
             return { ...base, url: null };
           }
           try {
-            const url = getPublicUrl(`attachments/${attachment.s3Key}`);
+            const url = getPublicUrl(`attachments/${attachment.storageKey}`);
             return { ...base, url };
           } catch (error) {
             apiLogger.warn("Failed to generate storage URL", {
-              key: attachment.s3Key,
+              key: attachment.storageKey,
               error: error instanceof Error ? error.message : String(error),
             });
             return { ...base, url: null };

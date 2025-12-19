@@ -18,11 +18,10 @@ export const attachmentRouter = createTRPCRouter({
   generateUploadUrl: protectedProcedure
     .meta({
       openapi: {
-        summary: "Generate presigned URL for attachment upload",
+        summary: "Generate upload URL for attachment",
         method: "POST",
         path: "/cards/{cardPublicId}/attachments/upload-url",
-        description:
-          "Generates a presigned URL for uploading an attachment to S3",
+        description: "Generates an upload URL for an attachment",
         tags: ["Attachments"],
         protect: true,
       },
@@ -90,7 +89,7 @@ export const attachmentRouter = createTRPCRouter({
     .input(
       z.object({
         cardPublicId: z.string().min(12),
-        s3Key: z.string(),
+        storageKey: z.string(),
         filename: z.string(),
         originalFilename: z.string(),
         contentType: z.string(),
@@ -120,7 +119,7 @@ export const attachmentRouter = createTRPCRouter({
         originalFilename: input.originalFilename,
         contentType: input.contentType,
         size: input.size,
-        s3Key: input.s3Key,
+        storageKey: input.storageKey,
         createdBy: userId,
       });
 
@@ -165,10 +164,10 @@ export const attachmentRouter = createTRPCRouter({
 
       // Delete from local storage
       try {
-        await deleteFile(`attachments/${attachment.s3Key}`);
+        await deleteFile(`attachments/${attachment.storageKey}`);
       } catch (error) {
         apiLogger.error("Failed to delete attachment from storage", error, {
-          key: attachment.s3Key,
+          key: attachment.storageKey,
         });
       }
 

@@ -67,7 +67,7 @@ export function AttachmentUpload({ cardPublicId }: { cardPublicId: string }) {
       // Confirm attachment in database
       await confirmAttachment.mutateAsync({
         cardPublicId,
-        s3Key: key,
+        storageKey: key,
         filename: file.name,
         originalFilename: file.name,
         contentType: file.type,

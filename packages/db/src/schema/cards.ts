@@ -282,7 +282,7 @@ export const cardAttachments = pgTable("card_attachment", {
   originalFilename: varchar("originalFilename", { length: 255 }).notNull(),
   contentType: varchar("contentType", { length: 100 }).notNull(),
   size: bigint("size", { mode: "number" }).notNull(),
-  s3Key: varchar("s3Key", { length: 500 }).notNull(),
+  storageKey: varchar("storageKey", { length: 500 }).notNull(),
   createdBy: uuid("createdBy").references(() => users.id, {
     onDelete: "set null",
   }),

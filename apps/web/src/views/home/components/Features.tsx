@@ -8,8 +8,6 @@ import boardVisibilityIconDark from "~/assets/board-visibility-dark.json";
 import boardVisibilityIconLight from "~/assets/board-visibility-light.json";
 import commentsIconDark from "~/assets/comments-dark.json";
 import commentsIconLight from "~/assets/comments-light.json";
-import importsIconDark from "~/assets/imports-dark.json";
-import importsIconLight from "~/assets/imports-light.json";
 import integrationsIconDark from "~/assets/integrations-dark.json";
 import integrationsIconLight from "~/assets/integrations-light.json";
 import labelsIconDark from "~/assets/labels-dark.json";
@@ -90,11 +88,6 @@ const Features = ({ theme }: { theme: "light" | "dark" }) => {
       title: t`Workspace members`,
       description: t`Collaborate seamlessly with your team.`,
       icon: isDark ? membersIconDark : membersIconLight,
-    },
-    {
-      title: t`Trello imports`,
-      description: t`Import your Trello boards and hit the ground running.`,
-      icon: isDark ? importsIconDark : importsIconLight,
     },
     {
       title: t`Labels & Filters`,

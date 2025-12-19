@@ -19,7 +19,7 @@ interface Attachment {
   contentType: string;
   url: string | null;
   originalFilename: string | null;
-  s3Key: string;
+  storageKey: string;
   size?: number | null;
 }
 

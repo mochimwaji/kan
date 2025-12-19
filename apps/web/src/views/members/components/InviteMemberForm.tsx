@@ -12,9 +12,6 @@ import {
 import { z } from "zod";
 
 import type { InviteMemberInput } from "@kan/api/types";
-import type { Subscription } from "@kan/shared/utils";
-import { authClient } from "@kan/auth/client";
-import { getSubscriptionByPlan } from "@kan/shared/utils";
 
 import Button from "~/components/Button";
 import Input from "~/components/Input";
@@ -26,13 +23,9 @@ import { api } from "~/utils/api";
 
 export function InviteMemberForm({
   numberOfMembers,
-  subscriptions,
-  unlimitedSeats,
   userId,
 }: {
   numberOfMembers: number;
-  subscriptions: Subscription[] | undefined;
-  unlimitedSeats: boolean;
   userId: string | undefined;
 }) {
   const utils = api.useUtils();
@@ -113,23 +106,14 @@ export function InviteMemberForm({
       setInviteLink(data.inviteLink);
       setIsLoadingInviteLink(false);
     },
-    onError: (error) => {
+    onError: () => {
       setIsLoadingInviteLink(false);
       setIsShareInviteLinkEnabled(false);
-
-      if (error.data?.code === "FORBIDDEN") {
-        showPopup({
-          header: t`Subscription Required`,
-          message: t`Invite links require a Team or Pro subscription. Please upgrade your workspace.`,
-          icon: "error",
-        });
-      } else {
-        showPopup({
-          header: t`Error creating invite link`,
-          message: t`Please try again later.`,
-          icon: "error",
-        });
-      }
+      showPopup({
+        header: t`Error creating invite link`,
+        message: t`Please try again later.`,
+        icon: "error",
+      });
     },
   });
 
@@ -148,41 +132,11 @@ export function InviteMemberForm({
     },
   });
 
-  const teamSubscription = getSubscriptionByPlan(subscriptions, "team");
-  const proSubscription = getSubscriptionByPlan(subscriptions, "pro");
-
-  const hasTeamSubscription = !!teamSubscription;
-  const hasProSubscription = !!proSubscription;
-
-  let isYearly = false;
-  let price = t`$10/month`;
-  let billingType = t`monthly billing`;
-
-  if (teamSubscription?.periodStart && teamSubscription.periodEnd) {
-    const periodStartDate = new Date(teamSubscription.periodStart);
-    const periodEndDate = new Date(teamSubscription.periodEnd);
-    const diffInDays = Math.round(
-      (periodEndDate.getTime() - periodStartDate.getTime()) /
-        (1000 * 60 * 60 * 24),
-    );
-
-    isYearly = diffInDays > 31;
-    price = isYearly ? t`$8/month` : t`$10/month`;
-    billingType = isYearly ? t`billed annually` : t`billed monthly`;
-  }
-
   const onSubmit = (member: InviteMemberInput) => {
     inviteMember.mutate(member);
   };
 
   const handleInviteLinkToggle = async () => {
-    if (
-      env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-      !hasTeamSubscription &&
-      !hasProSubscription
-    )
-      return handleUpgrade();
-
     setIsLoadingInviteLink(true);
 
     if (isShareInviteLinkEnabled && workspace.publicId) {
@@ -219,31 +173,6 @@ export function InviteMemberForm({
     }
   };
 
-  const handleUpgrade = async () => {
-    const { data, error } = await authClient.subscription.upgrade({
-      plan: "team",
-      referenceId: workspace.publicId,
-      metadata: { userId },
-      seats: numberOfMembers,
-      successUrl: "/members",
-      cancelUrl: "/members",
-      returnUrl: "/members",
-      disableRedirect: true,
-    });
-
-    if (data?.url) {
-      window.location.href = data.url;
-    }
-
-    if (error) {
-      showPopup({
-        header: t`Error upgrading subscription`,
-        message: t`Please try again later, or contact customer support.`,
-        icon: "error",
-      });
-    }
-  };
-
   useEffect(() => {
     const emailElement: HTMLElement | null =
       document.querySelector<HTMLElement>("#email");
@@ -260,7 +189,7 @@ export function InviteMemberForm({
           <h2 className="text-sm font-bold">{t`Add member`}</h2>
           <button
             type="button"
-            className="hover:bg-li ght-300 rounded p-1 focus:outline-none dark:hover:bg-dark-300"
+            className="rounded p-1 hover:bg-light-300 focus:outline-none dark:hover:bg-dark-300"
             onClick={(e) => {
               e.preventDefault();
               closeModal();
@@ -273,11 +202,6 @@ export function InviteMemberForm({
           <Input
             id="email"
             placeholder={t`Email`}
-            disabled={
-              env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-              !hasTeamSubscription &&
-              !hasProSubscription
-            }
             {...register("email", { required: true })}
             onKeyDown={async (e) => {
               if (e.key === "Enter") {
@@ -323,32 +247,6 @@ export function InviteMemberForm({
             </div>
           </div>
         )}
-
-        {env("NEXT_PUBLIC_KAN_ENV") === "cloud" && (
-          <div className="mt-3 rounded-md bg-light-100 p-3 text-xs text-light-900 dark:bg-dark-200 dark:text-dark-900">
-            {hasTeamSubscription || hasProSubscription ? (
-              <div>
-                <span className="font-medium text-emerald-500 dark:text-emerald-400">
-                  {hasTeamSubscription ? t`Team Plan` : t`Pro Plan ∞`}
-                </span>
-                <p className="mt-1">
-                  {unlimitedSeats
-                    ? t`You have unlimited seats with your Pro Plan. There is no additional charge for new members!`
-                    : t`Adding a new member will cost an additional ${price} (${billingType}) per seat.`}
-                </p>
-              </div>
-            ) : (
-              <div>
-                <span className="font-medium text-light-950 dark:text-dark-950">
-                  {t`Free Plan`}
-                </span>
-                <p className="mt-1">
-                  {t`Inviting members requires a Team Plan. You'll be redirected to upgrade your workspace.`}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
@@ -362,21 +260,13 @@ export function InviteMemberForm({
           onChange={handleInviteLinkToggle}
         />
         <div>
-          {env("NEXT_PUBLIC_KAN_ENV") === "cloud" &&
-          !hasTeamSubscription &&
-          !hasProSubscription ? (
-            <Button type="button" onClick={handleUpgrade}>
-              {t`Start 14 day free trial`}
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              disabled={inviteMember.isPending || !isEmailEnabled}
-              isLoading={inviteMember.isPending}
-            >
-              {t`Invite member`}
-            </Button>
-          )}
+          <Button
+            type="submit"
+            disabled={inviteMember.isPending || !isEmailEnabled}
+            isLoading={inviteMember.isPending}
+          >
+            {t`Invite member`}
+          </Button>
         </div>
       </div>
     </form>

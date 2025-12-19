@@ -43,38 +43,19 @@ const Faqs = () => {
       ),
     },
     {
-      question: t`How do I import my Trello boards?`,
-      answer: (
-        <Text>
-          <Trans>
-            Importing your Trello boards into Kan is easy. You can follow our
-            step-by-step guide{" "}
-            <Link
-              href="https://docs.kan.bn/imports/trello"
-              className="underline"
-            >
-              here
-            </Link>
-            .
-          </Trans>
-        </Text>
-      ),
-    },
-    {
       question: t`How do I get a custom URL?`,
       answer: (
         <Text>
           <Trans>
-            You can get a custom workspace URL, like{" "}
-            <Link href="https://kan.bn/kan" className="underline">
-              kan.bn/kan
+            You can set a custom workspace URL, like{" "}
+            <Link href="/settings" className="underline">
+              your-workspace
             </Link>
             , by going into your{" "}
-            <Link href="https://kan.bn/settings" className="underline">
+            <Link href="/settings" className="underline">
               workspace settings
             </Link>{" "}
-            and purchasing a pro workspace subscription. All subscriptions help
-            fund the development of the project!
+            and updating the workspace URL field.
           </Trans>
         </Text>
       ),

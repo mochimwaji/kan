@@ -48,8 +48,6 @@ export const env = createEnv({
     VK_CLIENT_SECRET: z.string().optional(),
     LINKEDIN_CLIENT_ID: z.string().optional(),
     LINKEDIN_CLIENT_SECRET: z.string().optional(),
-    NOVU_API_KEY: z.string().optional(),
-    EMAIL_UNSUBSCRIBE_SECRET: z.string().optional(),
     // Generic OIDC Provider
     OIDC_CLIENT_ID: z.string().optional(),
     OIDC_CLIENT_SECRET: z.string().optional(),
@@ -78,9 +76,6 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_KAN_ENV: z.string().optional(),
-    NEXT_PUBLIC_UMAMI_ID: z.string().optional(),
-    NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
-    NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
     NEXT_PUBLIC_USE_STANDALONE_OUTPUT: z.string().optional(),
     NEXT_PUBLIC_BASE_URL: z.string().url().optional(),
     NEXT_PUBLIC_ALLOW_CREDENTIALS: z
@@ -111,9 +106,6 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     NEXT_PUBLIC_KAN_ENV: process.env.NEXT_PUBLIC_KAN_ENV,
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_UMAMI_ID: process.env.NEXT_PUBLIC_UMAMI_ID,
-    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
-    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_ALLOW_CREDENTIALS: process.env.NEXT_PUBLIC_ALLOW_CREDENTIALS,
     NEXT_PUBLIC_DISABLE_SIGN_UP: process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
