@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **OIDC Domain Limiting**: Added ability to limit OIDC logins to specific domains (#263).
 - **SMTP SSL Configuration**: Added `SMTP_REJECT_UNAUTHORIZED` env var to allow invalid SSL certificates (#262).
 - **JSDoc Documentation**: Added comprehensive JSDoc to `board.repo.ts` (15+ functions) and all shared utility functions.
+- **Local File Storage**: Replaced S3 cloud storage with local filesystem storage for avatars and attachments, with new `/api/files/[...path]` endpoint.
+- **Root Redirect**: Root path (`/`) now redirects to `/login` for streamlined self-hosted experience.
 
 ### Changed
 
@@ -40,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced settings tab navigation with tab content fade transitions.
 - Refined right sidebar button alignment to match left sidebar structure.
 - List header now includes collapse toggle button and card count badge when collapsed.
+- **Self-Hosted Focus**: Streamlined codebase for self-hosted deployments by removing cloud-specific features.
 
 ### Fixed
 
@@ -50,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed flashing issues during board navigation transitions.
 - Fixed sidebar toggle icon directions for right-side drawer.
 - Resolved scrollbar inconsistency in settings tabs.
+- Fixed missed `<Trans>` component in `ActivityList.tsx` and missing `zodResolver` import in `UpdateBoardSlugForm.tsx`.
 
 ### Security
 
@@ -59,6 +63,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- **Lingui i18n**: Removed entire internationalization system (`@lingui/*` packages, translation files, macros). All strings now hardcoded in English.
+- **Marketing Pages**: Removed home page (`/`), FAQs, Testimonials, Features, Logos, and CTA components.
+- **Legal Pages**: Removed `/privacy` and `/terms` cloud service policy pages.
+- **Email Unsubscribe**: Removed `/unsubscribe` page and related functionality.
+- **S3 Storage**: Replaced with local filesystem storage (S3 support removed).
+- **PostHog Analytics**: Removed analytics integration.
+- **Novu Notifications**: Removed notification service integration.
 - Removed deprecated `@lingui/babel-preset-react` (replaced by Lingui 5.x macro system).
 - Removed `StrictModeDroppable.tsx` wrapper (no longer needed with `@hello-pangea/dnd`).
 - **Stripe billing** - Removed entire `packages/stripe`, billing UI, subscription schema.

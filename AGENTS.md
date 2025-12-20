@@ -13,8 +13,9 @@ Kan is an open-source Kanban board application built as a **monorepo** using:
 - **Backend**: tRPC for type-safe APIs
 - **Database**: PostgreSQL with Drizzle ORM
 - **Styling**: Tailwind CSS
-- **i18n**: Lingui
 - **Logging**: @kan/logger
+
+> **Note**: This is a self-hosted focused fork. Marketing pages (home, pricing, terms, privacy) and i18n support have been removed for a streamlined deployment.
 
 ## Directory Structure
 
@@ -501,28 +502,9 @@ When dragging starts, `isDragging = true` freezes visual state. After drop, muta
 - Mutations - Call `setIsDragging(false)` on error/success
 - Drag handlers - Control `visualLists` state directly
 
-#### i18n Coverage
+#### Strings
 
-All user-facing strings should use the Lingui `t` macro:
-
-```tsx
-import { t } from "@lingui/core/macro";
-
-// In JSX
-<h1>{t`Delete board`}</h1>;
-
-// In objects
-showPopup({
-  header: t`Unable to update card`,
-  message: t`Please try again later.`,
-});
-```
-
-**Known files with complete i18n**:
-
-- `DeleteConfirmation.tsx` (consolidated generic component)
-- `RevokeApiKeyConfirmation.tsx`
-- `NewApiKeyForm.tsx`
+All user-facing strings are hardcoded in English. The i18n (Lingui) library was removed to simplify the self-hosted deployment.
 
 ### Known Issues (Low Priority)
 
