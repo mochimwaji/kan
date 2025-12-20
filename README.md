@@ -99,7 +99,17 @@ See `.env.example` for the complete list.
 
 ## What's Different from Upstream
 
-This fork removes cloud-hosted features for simpler self-hosting:
+### Added
+
+- ✅ **Calendar View** - Month view with drag-and-drop rescheduling
+- ✅ **Local File Storage** - No S3 required, files stored locally
+- ✅ **Collapsible Lists** - Collapse/expand lists with persistent state
+- ✅ **Due Date Urgency Colors** - Red/orange/yellow based on deadline
+- ✅ **Theme Presets** - 7 predefined color themes
+- ✅ **Board Transitions** - Smooth animations between boards
+- ✅ **Multi-Card Drag** - Bulk update cards in calendar view
+
+### Removed (for simpler self-hosting)
 
 - ❌ Lingui i18n (English hardcoded)
 - ❌ S3 storage (local filesystem)
