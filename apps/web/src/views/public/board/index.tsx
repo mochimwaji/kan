@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { t } from "@lingui/core/macro";
 import { keepPreviousData } from "@tanstack/react-query";
 import { env } from "next-runtime-env";
 import { useEffect, useState } from "react";
@@ -74,9 +73,9 @@ export default function PublicBoardView() {
           }
 
           showPopup({
-            header: t`Link copied`,
+            header: "Link copied",
             icon: "success",
-            message: t`Board URL copied to clipboard`,
+            message: "Board URL copied to clipboard",
           });
         }}
         className="rounded p-1.5 transition-all hover:bg-light-200 dark:hover:bg-dark-100"
@@ -110,7 +109,7 @@ export default function PublicBoardView() {
   return (
     <>
       <PageHead
-        title={`${data?.name ?? t`Board`} | ${data?.workspace.name ?? t`Workspace`}`}
+        title={`${data?.name ?? "Board"} | ${data?.workspace.name ?? "Workspace"}`}
       />
       <style jsx global>{`
         html {
@@ -138,7 +137,7 @@ export default function PublicBoardView() {
                   <span className="mr-2">
                     <HiOutlineLockClosed />
                   </span>
-                  {t`View only`}
+                  {"View only"}
                 </div>
                 <Filters
                   labels={data.labels ?? []}
@@ -162,13 +161,13 @@ export default function PublicBoardView() {
                 <div className="flex flex-col items-center">
                   <HiOutlineLockClosed className="h-10 w-10 text-light-800 dark:text-dark-800" />
                   <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
-                    {t`Board not found`}
+                    {"Board not found"}
                   </p>
                   <p className="text-[14px] text-light-900 dark:text-dark-900">
-                    {t`This board is private or does not exist`}
+                    {"This board is private or does not exist"}
                   </p>
                 </div>
-                <Button href={`/${workspaceSlug}`}>{t`View workspace`}</Button>
+                <Button href={`/${workspaceSlug}`}>{"View workspace"}</Button>
               </div>
             ) : (
               <div className="flex">

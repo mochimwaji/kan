@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useCallback, useRef, useState } from "react";
 import ReactCrop from "react-image-crop";
@@ -61,8 +60,8 @@ export default function Avatar({
   const updateUser = api.user.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: t`Profile image updated`,
-        message: t`Your profile image has been updated.`,
+        header: "Profile image updated",
+        message: "Your profile image has been updated.",
         icon: "success",
       });
       try {
@@ -74,8 +73,8 @@ export default function Avatar({
     },
     onError: () => {
       showPopup({
-        header: t`Error updating profile image`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error updating profile image",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -88,8 +87,8 @@ export default function Avatar({
     const file = event.target.files?.[0] ?? null;
     if (!file || !userId) {
       return showPopup({
-        header: t`Error uploading profile image`,
-        message: t`Please select a file to upload.`,
+        header: "Error uploading profile image",
+        message: "Please select a file to upload.",
         icon: "error",
       });
     }
@@ -198,8 +197,8 @@ export default function Avatar({
       }
 
       showPopup({
-        header: t`Profile image updated`,
-        message: t`Your profile image has been updated.`,
+        header: "Profile image updated",
+        message: "Your profile image has been updated.",
         icon: "success",
       });
 
@@ -209,8 +208,8 @@ export default function Avatar({
     } catch (error) {
       console.error(error);
       showPopup({
-        header: t`Error uploading profile image`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error uploading profile image",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     } finally {
@@ -263,10 +262,10 @@ export default function Avatar({
           <div className="p-4 sm:p-6">
             <div className="mb-4">
               <h3 className="text-base font-semibold text-light-1000 dark:text-dark-1000">
-                {t`Crop your avatar`}
+                {"Crop your avatar"}
               </h3>
               <p className="mt-1 text-sm text-light-800 dark:text-dark-800">
-                {t`Adjust the square crop to fit your avatar.`}
+                {"Adjust the square crop to fit your avatar."}
               </p>
             </div>
             <div className="max-h-[80vh]">
@@ -297,10 +296,10 @@ export default function Avatar({
                 onClick={handleCancelCrop}
                 disabled={uploading}
               >
-                {t`Cancel`}
+                {"Cancel"}
               </Button>
               <Button onClick={handleSaveCrop} isLoading={uploading}>
-                {t`Save`}
+                {"Save"}
               </Button>
             </div>
           </div>

@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { t } from "@lingui/core/macro";
 import {
   HiMiniXMark,
   HiOutlineClock,
@@ -109,32 +108,32 @@ const Filters = ({
   const dueDateItems = [
     {
       key: "overdue",
-      value: t`Overdue`,
+      value: "Overdue",
       selected: !!router.query.dueDate?.includes("overdue"),
     },
     {
       key: "today",
-      value: t`Due today`,
+      value: "Due today",
       selected: !!router.query.dueDate?.includes("today"),
     },
     {
       key: "tomorrow",
-      value: t`Due tomorrow`,
+      value: "Due tomorrow",
       selected: !!router.query.dueDate?.includes("tomorrow"),
     },
     {
       key: "next-week",
-      value: t`Due next week`,
+      value: "Due next week",
       selected: !!router.query.dueDate?.includes("next-week"),
     },
     {
       key: "next-month",
-      value: t`Due next month`,
+      value: "Due next month",
       selected: !!router.query.dueDate?.includes("next-month"),
     },
     {
       key: "no-due-date",
-      value: t`No dates`,
+      value: "No dates",
       selected: !!router.query.dueDate?.includes("no-due-date"),
     },
   ];
@@ -144,7 +143,7 @@ const Filters = ({
       ? [
           {
             key: "members",
-            label: t`Members`,
+            label: "Members",
             icon: <HiOutlineUserCircle size={16} />,
             items: formattedMembers,
           },
@@ -152,7 +151,7 @@ const Filters = ({
       : []),
     {
       key: "labels",
-      label: t`Labels`,
+      label: "Labels",
       icon: <HiOutlineTag size={16} />,
       items: formattedLabels,
     },
@@ -160,7 +159,7 @@ const Filters = ({
       ? [
           {
             key: "lists",
-            label: t`Lists`,
+            label: "Lists",
             icon: <HiOutlineSquare3Stack3D size={16} />,
             items: formattedLists,
           },
@@ -168,7 +167,7 @@ const Filters = ({
       : []),
     {
       key: "dueDate",
-      label: t`Due date`,
+      label: "Due date",
       icon: <HiOutlineClock size={16} />,
       items: dueDateItems,
     },
@@ -218,13 +217,13 @@ const Filters = ({
           disabled={isLoading}
           iconLeft={<IoFilterOutline />}
         >
-          {t`Filter`}
+          {"Filter"}
         </Button>
         {numOfFilters > 0 && (
           <button
             type="button"
             onClick={clearFilters}
-            aria-label={t`Clear filters`}
+            aria-label={"Clear filters"}
             className="group absolute -right-[8px] -top-[8px] flex h-5 w-5 items-center justify-center rounded-full border-2 border-light-100 bg-light-1000 text-[8px] font-[700] text-light-600 dark:border-dark-50 dark:bg-dark-1000 dark:text-dark-600"
           >
             <span className="group-hover:hidden">{numOfFilters}</span>

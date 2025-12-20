@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import {
   HiEllipsisHorizontal,
   HiLink,
@@ -36,22 +35,22 @@ export default function BoardDropdown({
           ? []
           : [
               {
-                label: t`Make template`,
+                label: "Make template",
                 action: () => openModal("CREATE_TEMPLATE"),
                 icon: (
                   <HiOutlineDocumentDuplicate className="h-[16px] w-[16px] text-dark-900" />
                 ),
               },
               {
-                label: t`Edit board URL`,
+                label: "Edit board URL",
                 action: () => openModal("UPDATE_BOARD_SLUG"),
                 icon: <HiLink className="h-[16px] w-[16px] text-dark-900" />,
               },
             ]),
         {
           label: quickDeleteEnabled
-            ? t`Disable quick delete ⚡`
-            : t`Enable quick delete`,
+            ? "Disable quick delete ⚡"
+            : "Enable quick delete",
           action: onToggleQuickDelete,
           icon: quickDeleteEnabled ? (
             <HiOutlineBolt className="h-[16px] w-[16px] text-yellow-500" />
@@ -60,7 +59,7 @@ export default function BoardDropdown({
           ),
         },
         {
-          label: isTemplate ? t`Delete template` : t`Delete board`,
+          label: isTemplate ? "Delete template" : "Delete board",
           action: () => openModal("DELETE_BOARD"),
           icon: <HiOutlineTrash className="h-[16px] w-[16px] text-dark-900" />,
         },

@@ -5,7 +5,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import {
   createContext,
   useCallback,
@@ -57,13 +56,13 @@ export const getShortcutGroupInfo = (): Record<
   ShortcutGroup,
   { label: string }
 > => ({
-  GENERAL: { label: t`General` },
-  NAVIGATION: { label: t`Navigation` },
-  BOARDS: { label: t`Boards Page` },
-  BOARD_VIEW: { label: t`Board View` },
-  CARD_VIEW: { label: t`Card View` },
-  SETTINGS: { label: t`Settings` },
-  ACTIONS: { label: t`Actions` },
+  GENERAL: { label: "General" },
+  NAVIGATION: { label: "Navigation" },
+  BOARDS: { label: "Boards Page" },
+  BOARD_VIEW: { label: "Board View" },
+  CARD_VIEW: { label: "Card View" },
+  SETTINGS: { label: "Settings" },
+  ACTIONS: { label: "Actions" },
 });
 
 interface KeyStroke {
@@ -180,7 +179,7 @@ export function KeyboardShortcutProvider({
         modifiers: ["CONTROL"],
       },
       action: () => setIsLegendOpen(true),
-      description: t`Open search & shortcuts`,
+      description: "Open search & shortcuts",
       group: ShortcutGroup.GENERAL,
     }),
     [setIsLegendOpen],
@@ -356,7 +355,7 @@ export function KeyboardShortcutProvider({
                 className="text-[14px] font-semibold"
                 style={{ color: "var(--kan-menu-text)" }}
               >
-                {t`Keyboard Shortcuts`}
+                {"Keyboard Shortcuts"}
               </DialogTitle>
               <button
                 onClick={() => setIsLegendOpen(false)}
@@ -375,7 +374,7 @@ export function KeyboardShortcutProvider({
                   className="text-center text-sm"
                   style={{ color: "var(--kan-menu-text)", opacity: 0.7 }}
                 >
-                  {t`No keyboard shortcuts registered.`}
+                  {"No keyboard shortcuts registered."}
                 </p>
               ) : (
                 <div className="space-y-6">

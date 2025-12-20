@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { HiEllipsisHorizontal, HiOutlinePlusSmall } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
@@ -116,7 +115,7 @@ export default function MembersPage() {
               </span>
               {(memberStatus === "invited" || memberStatus === "paused") && (
                 <span className="mt-1 inline-flex items-center rounded-md bg-gray-500/10 px-1.5 py-0.5 text-[10px] font-medium text-gray-400 ring-1 ring-inset ring-gray-500/20 sm:ml-2 sm:mt-0 sm:text-[11px]">
-                  {memberStatus === "invited" ? t`Pending` : t`Paused`}
+                  {memberStatus === "invited" ? "Pending" : "Paused"}
                 </span>
               )}
             </div>
@@ -130,7 +129,7 @@ export default function MembersPage() {
                 <Dropdown
                   items={[
                     {
-                      label: t`Remove member`,
+                      label: "Remove member",
                       action: () =>
                         openModal(
                           "REMOVE_MEMBER",
@@ -155,7 +154,7 @@ export default function MembersPage() {
 
   return (
     <>
-      <PageHead title={t`Members | ${workspace.name ?? t`Workspace`}`} />
+      <PageHead title={`Members | ${workspace.name ?? "Workspace"}`} />
       <div className="m-auto h-full max-w-[1100px] p-6 px-5 md:px-28 md:py-12">
         <div className="mb-8 flex w-full justify-between">
           <div className="flex items-center gap-3">
@@ -163,7 +162,7 @@ export default function MembersPage() {
               className="font-bold tracking-tight sm:text-[1.2rem]"
               style={{ color: "var(--kan-pages-text)" }}
             >
-              {t`Members`}
+              {"Members"}
             </h1>
           </div>
           <div className="flex items-center gap-3">
@@ -172,7 +171,7 @@ export default function MembersPage() {
               iconLeft={<HiOutlinePlusSmall className="h-4 w-4" />}
               disabled={workspace.role !== "admin"}
             >
-              {t`Invite`}
+              {"Invite"}
             </Button>
           </div>
         </div>
@@ -192,14 +191,14 @@ export default function MembersPage() {
                         className="w-full rounded-tl-lg py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:w-[65%] sm:pl-6"
                         style={{ color: "var(--kan-sidebar-text)" }}
                       >
-                        {t`User`}
+                        {"User"}
                       </th>
                       <th
                         scope="col"
                         className="w-auto whitespace-nowrap rounded-tr-lg px-3 py-3.5 text-left text-sm font-semibold sm:w-[35%]"
                         style={{ color: "var(--kan-sidebar-text)" }}
                       >
-                        {t`Role`}
+                        {"Role"}
                       </th>
                     </tr>
                   </thead>

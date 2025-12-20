@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,7 +34,7 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
   const isEmailEnabled = env("NEXT_PUBLIC_DISABLE_EMAIL") !== "true";
 
   const InviteMemberSchema = z.object({
-    email: z.string().email({ message: t`Invalid email address` }),
+    email: z.string().email({ message: "Invalid email address" }),
     workspacePublicId: z.string(),
   });
 
@@ -80,14 +79,14 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
 
       if (error.data?.code === "CONFLICT") {
         showPopup({
-          header: t`Error inviting member`,
-          message: t`User is already a member of this workspace`,
+          header: "Error inviting member",
+          message: "User is already a member of this workspace",
           icon: "error",
         });
       } else {
         showPopup({
-          header: t`Error inviting member`,
-          message: t`Please try again later, or contact customer support.`,
+          header: "Error inviting member",
+          message: "Please try again later, or contact customer support.",
           icon: "error",
         });
       }
@@ -103,8 +102,8 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
       setIsLoadingInviteLink(false);
       setIsShareInviteLinkEnabled(false);
       showPopup({
-        header: t`Error creating invite link`,
-        message: t`Please try again later.`,
+        header: "Error creating invite link",
+        message: "Please try again later.",
         icon: "error",
       });
     },
@@ -118,8 +117,8 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
     onError: () => {
       setIsLoadingInviteLink(false);
       showPopup({
-        header: t`Error deactivating invite link`,
-        message: t`Please try again later.`,
+        header: "Error deactivating invite link",
+        message: "Please try again later.",
         icon: "error",
       });
     },
@@ -153,14 +152,14 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       showPopup({
-        header: t`Invite link copied`,
-        message: t`Invite link copied to clipboard`,
+        header: "Invite link copied",
+        message: "Invite link copied to clipboard",
         icon: "success",
       });
     } catch {
       showPopup({
-        header: t`Error`,
-        message: t`Failed to copy invite link`,
+        header: "Error",
+        message: "Failed to copy invite link",
         icon: "error",
       });
     }
@@ -179,7 +178,7 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
           className="flex w-full items-center justify-between pb-4"
           style={{ color: "var(--kan-menu-text)" }}
         >
-          <h2 className="text-sm font-bold">{t`Add member`}</h2>
+          <h2 className="text-sm font-bold">{"Add member"}</h2>
           <button
             type="button"
             className="hover:bg-li ght-300 rounded p-1 focus:outline-none dark:hover:bg-dark-300"
@@ -194,7 +193,7 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
         {isEmailEnabled && (
           <Input
             id="email"
-            placeholder={t`Email`}
+            placeholder={"Email"}
             {...register("email", { required: true })}
             onKeyDown={async (e) => {
               if (e.key === "Enter") {
@@ -235,7 +234,7 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
                 className="text-xs"
                 style={{ color: "var(--kan-menu-text)", opacity: 0.7 }}
               >
-                {t`Anyone with this link can join your workspace`}
+                {"Anyone with this link can join your workspace"}
               </p>
             </div>
           </div>
@@ -246,8 +245,8 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
         <Toggle
           label={
             isShareInviteLinkEnabled
-              ? t`Deactivate invite link`
-              : t`Create invite link`
+              ? "Deactivate invite link"
+              : "Create invite link"
           }
           isChecked={isShareInviteLinkEnabled}
           onChange={handleInviteLinkToggle}
@@ -258,7 +257,7 @@ export function InviteMemberForm({ userId }: { userId: string | undefined }) {
             disabled={inviteMember.isPending || !isEmailEnabled}
             isLoading={inviteMember.isPending}
           >
-            {t`Invite member`}
+            {"Invite member"}
           </Button>
         </div>
       </div>

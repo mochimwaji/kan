@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import {
   HiEllipsisHorizontal,
   HiOutlineCheckCircle,
@@ -15,14 +14,14 @@ export default function BoardDropdown() {
     <Dropdown
       items={[
         {
-          label: t`Add checklist`,
+          label: "Add checklist",
           action: () => openModal("ADD_CHECKLIST"),
           icon: (
             <HiOutlineCheckCircle className="h-[16px] w-[16px] text-dark-900" />
           ),
         },
         {
-          label: t`Delete card`,
+          label: "Delete card",
           action: () => openModal("DELETE_CARD"),
           icon: <HiOutlineTrash className="h-[16px] w-[16px] text-dark-900" />,
         },

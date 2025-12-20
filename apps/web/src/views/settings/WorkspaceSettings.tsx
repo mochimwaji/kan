@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
@@ -18,14 +17,14 @@ export default function WorkspaceSettings() {
 
   return (
     <>
-      <PageHead title={t`Settings | Workspace`} />
+      <PageHead title={"Settings | Workspace"} />
 
       <div className="mb-8 border-t border-light-300 dark:border-dark-300">
         <h2
           className="mb-4 mt-8 text-[14px] font-bold"
           style={{ color: "var(--kan-pages-text)" }}
         >
-          {t`Workspace name`}
+          {"Workspace name"}
         </h2>
         <UpdateWorkspaceNameForm
           workspacePublicId={workspace.publicId}
@@ -36,7 +35,7 @@ export default function WorkspaceSettings() {
           className="mb-4 mt-8 text-[14px] font-bold"
           style={{ color: "var(--kan-pages-text)" }}
         >
-          {t`Workspace URL`}
+          {"Workspace URL"}
         </h2>
         <UpdateWorkspaceUrlForm
           workspacePublicId={workspace.publicId}
@@ -48,7 +47,7 @@ export default function WorkspaceSettings() {
           className="mb-4 mt-8 text-[14px] font-bold"
           style={{ color: "var(--kan-pages-text)" }}
         >
-          {t`Workspace description`}
+          {"Workspace description"}
         </h2>
         <UpdateWorkspaceDescriptionForm
           workspacePublicId={workspace.publicId}
@@ -60,13 +59,13 @@ export default function WorkspaceSettings() {
             className="mb-4 mt-8 text-[14px] font-bold"
             style={{ color: "var(--kan-pages-text)" }}
           >
-            {t`Colors`}
+            {"Colors"}
           </h2>
           <p
             className="mb-4 text-sm"
             style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
           >
-            {t`Customize the appearance of your workspace with preset themes or custom colors.`}
+            {"Customize the appearance of your workspace with preset themes or custom colors."}
           </p>
           <ColorSettings />
         </div>
@@ -76,13 +75,13 @@ export default function WorkspaceSettings() {
             className="mb-4 mt-8 text-[14px] font-bold"
             style={{ color: "var(--kan-pages-text)" }}
           >
-            {t`Delete workspace`}
+            {"Delete workspace"}
           </h2>
           <p
             className="mb-8 text-sm"
             style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
           >
-            {t`Once you delete your workspace, there is no going back. This action cannot be undone.`}
+            {"Once you delete your workspace, there is no going back. This action cannot be undone."}
           </p>
           <div className="mt-4">
             <Button
@@ -90,7 +89,7 @@ export default function WorkspaceSettings() {
               onClick={() => openModal("DELETE_WORKSPACE")}
               disabled={workspace.role !== "admin"}
             >
-              {t`Delete workspace`}
+              {"Delete workspace"}
             </Button>
           </div>
         </div>

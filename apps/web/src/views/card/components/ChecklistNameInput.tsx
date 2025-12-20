@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -42,8 +41,8 @@ export default function ChecklistNameInput({
       if (ctx?.previous)
         utils.card.byId.setData({ cardPublicId }, ctx.previous);
       showPopup({
-        header: t`Unable to update checklist`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update checklist",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },

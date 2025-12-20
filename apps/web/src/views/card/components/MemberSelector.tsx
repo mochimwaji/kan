@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { t } from "@lingui/core/macro";
 import { HiMiniPlus } from "react-icons/hi2";
 
 import Avatar from "~/components/Avatar";
@@ -79,8 +78,8 @@ export default function MemberSelector({
     onError: (_error, _newList, context) => {
       utils.card.byId.setData({ cardPublicId }, context?.previousCard);
       showPopup({
-        header: t`Unable to update members`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update members",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -116,7 +115,7 @@ export default function MemberSelector({
           });
         }}
         handleCreate={handleInviteMember}
-        createNewItemLabel={t`Invite member`}
+        createNewItemLabel={"Invite member"}
         asChild
       >
         {children}
@@ -135,7 +134,7 @@ export default function MemberSelector({
         });
       }}
       handleCreate={handleInviteMember}
-      createNewItemLabel={t`Invite member`}
+      createNewItemLabel={"Invite member"}
       asChild
     >
       <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 py-1 pl-2 text-left text-xs hover:border-light-300 hover:bg-light-200 dark:border-dark-50 dark:hover:border-dark-200 dark:hover:bg-dark-100">
@@ -154,7 +153,7 @@ export default function MemberSelector({
         ) : (
           <>
             <HiMiniPlus size={22} className="pr-2" />
-            {t`Add member`}
+            {"Add member"}
           </>
         )}
       </div>

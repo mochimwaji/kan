@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -21,8 +20,8 @@ import { useModal } from "~/providers/modal";
 const newApiKeySchema = z.object({
   name: z
     .string()
-    .min(1, { message: t`API key name is required` })
-    .max(30, { message: t`API key name cannot exceed 30 characters` }),
+    .min(1, { message: "API key name is required" })
+    .max(30, { message: "API key name cannot exceed 30 characters" }),
 });
 
 export default function NewApiKeyModal() {
@@ -91,7 +90,7 @@ export default function NewApiKeyModal() {
             className="flex w-full items-center justify-between pb-4"
             style={{ color: "var(--kan-menu-text)" }}
           >
-            <h2 className="text-sm font-bold">{t`API key created`}</h2>
+            <h2 className="text-sm font-bold">{"API key created"}</h2>
             <button
               type="button"
               className="rounded p-1 hover:bg-light-300 focus:outline-none dark:hover:bg-dark-300"
@@ -129,14 +128,14 @@ export default function NewApiKeyModal() {
             <div className="mt-2 flex items-start gap-1">
               <HiInformationCircle className="mt-0.5 h-4 w-4 text-dark-900" />
               <p className="text-xs text-gray-500 dark:text-dark-900">
-                {t`This API key will only be shown once. Please save it in a secure location.`}
+                {"This API key will only be shown once. Please save it in a secure location."}
               </p>
             </div>
           </div>
         </div>
         <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
           <div>
-            <Button onClick={() => closeModal()}>{t`Close`}</Button>
+            <Button onClick={() => closeModal()}>{"Close"}</Button>
           </div>
         </div>
       </div>
@@ -150,7 +149,7 @@ export default function NewApiKeyModal() {
           className="flex w-full items-center justify-between pb-4"
           style={{ color: "var(--kan-menu-text)" }}
         >
-          <h2 className="text-sm font-bold">{t`New API key`}</h2>
+          <h2 className="text-sm font-bold">{"New API key"}</h2>
           <button
             type="button"
             className="rounded p-1 hover:bg-light-300 focus:outline-none dark:hover:bg-dark-300"
@@ -164,7 +163,7 @@ export default function NewApiKeyModal() {
         </div>
         <Input
           id="name"
-          placeholder={t`API key name`}
+          placeholder={"API key name"}
           {...register("name", { required: true })}
           errorMessage={errors.name?.message}
           onKeyDown={async (e) => {
@@ -178,7 +177,7 @@ export default function NewApiKeyModal() {
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <div>
           <Button type="submit" isLoading={createApiKeyMutation.isPending}>
-            {t`Create API key`}
+            {"Create API key"}
           </Button>
         </div>
       </div>

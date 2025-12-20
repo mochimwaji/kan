@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
@@ -77,8 +76,8 @@ export function NewListForm({
     onError: (_error, _newList, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: t`Unable to create list`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to create list",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -117,7 +116,7 @@ export function NewListForm({
             className="text-sm font-bold"
             style={{ color: "var(--kan-pages-text)" }}
           >
-            {t`New list`}
+            {"New list"}
           </h2>
           <button
             type="button"
@@ -133,7 +132,7 @@ export function NewListForm({
 
         <Input
           id="list-name"
-          placeholder={t`List name`}
+          placeholder={"List name"}
           {...register("name")}
           ref={(e) => {
             register("name").ref(e);
@@ -151,7 +150,7 @@ export function NewListForm({
       </div>
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <Toggle
-          label={t`Create another`}
+          label={"Create another"}
           isChecked={isCreateAnotherEnabled}
           onChange={() =>
             setValue("isCreateAnotherEnabled", !isCreateAnotherEnabled)
@@ -163,7 +162,7 @@ export function NewListForm({
             type="submit"
             disabled={createList.isPending || !watch("name")}
           >
-            {t`Create list`}
+            {"Create list"}
           </Button>
         </div>
       </div>

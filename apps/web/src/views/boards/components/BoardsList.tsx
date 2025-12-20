@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useRef } from "react";
 import { HiOutlineRectangleStack } from "react-icons/hi2";
 
@@ -75,64 +74,64 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
     type: "PRESS",
     stroke: { key: "1" },
     action: () => navigateToBoard(0),
-    description: t`Go to board 1`,
-    group: "BOARDS",
+    description: "Go to board 1",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "2" },
     action: () => navigateToBoard(1),
-    description: t`Go to board 2`,
-    group: "BOARDS",
+    description: "Go to board 2",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "3" },
     action: () => navigateToBoard(2),
-    description: t`Go to board 3`,
-    group: "BOARDS",
+    description: "Go to board 3",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "4" },
     action: () => navigateToBoard(3),
-    description: t`Go to board 4`,
-    group: "BOARDS",
+    description: "Go to board 4",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "5" },
     action: () => navigateToBoard(4),
-    description: t`Go to board 5`,
-    group: "BOARDS",
+    description: "Go to board 5",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "6" },
     action: () => navigateToBoard(5),
-    description: t`Go to board 6`,
-    group: "BOARDS",
+    description: "Go to board 6",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "7" },
     action: () => navigateToBoard(6),
-    description: t`Go to board 7`,
-    group: "BOARDS",
+    description: "Go to board 7",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "8" },
     action: () => navigateToBoard(7),
-    description: t`Go to board 8`,
-    group: "BOARDS",
+    description: "Go to board 8",
+        group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "9" },
     action: () => navigateToBoard(8),
-    description: t`Go to board 9`,
-    group: "BOARDS",
+    description: "Go to board 9",
+        group: "BOARDS",
   });
 
   // Handle contract animation when returning to boards page
@@ -211,7 +210,7 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
             className="mb-2 mt-4 text-[14px] font-bold"
             style={{ color: "var(--kan-pages-text)" }}
           >
-            {t`No ${isTemplate ? "templates" : "boards"}`}
+            {`No ${isTemplate ? "templates" : "boards"}`}
           </p>
           <p
             className="text-[14px]"
@@ -220,11 +219,11 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
               opacity: 0.7,
             }}
           >
-            {t`Get started by creating a new ${isTemplate ? "template" : "board"}`}
+            {`Get started by creating a new ${isTemplate ? "template" : "board"}`}
           </p>
         </div>
         <Button onClick={() => openModal("NEW_BOARD")}>
-          {t`Create new ${isTemplate ? "template" : "board"}`}
+          {`Create new ${isTemplate ? "template" : "board"}`}
         </Button>
       </div>
     );

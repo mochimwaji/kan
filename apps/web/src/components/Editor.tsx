@@ -5,7 +5,6 @@ import type {
 } from "@tiptap/suggestion";
 import type { Instance as TippyInstance } from "tippy.js";
 import { Button } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import Link from "@tiptap/extension-link";
 import Mention from "@tiptap/extension-mention";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -446,9 +445,8 @@ export default function Editor({
         StarterKit,
         Markdown,
         Placeholder.configure({
-          placeholder: readOnly
-            ? ""
-            : t`Add description... (type '/' to open commands or '@' to mention)`,
+          placeholder:
+            "Add description... (type '/' to open commands or '@' to mention)",
         }),
         Link.configure({
           openOnClick: true,

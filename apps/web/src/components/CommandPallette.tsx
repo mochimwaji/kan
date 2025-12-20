@@ -8,7 +8,6 @@ import {
   DialogBackdrop,
   DialogPanel,
 } from "@headlessui/react";
-import { t } from "@lingui/macro";
 import { useEffect, useRef, useState } from "react";
 import { HiDocumentText, HiFolder, HiMagnifyingGlass } from "react-icons/hi2";
 
@@ -130,7 +129,7 @@ export default function CommandPallette({
                   autoFocus
                   className="col-start-1 row-start-1 h-12 w-full border-0 bg-transparent pl-11 pr-4 text-sm placeholder:text-light-700 focus:outline-none focus:ring-0 dark:placeholder:text-dark-700"
                   style={{ color: "var(--kan-menu-text)" }}
-                  placeholder={t`Search boards and cards...`}
+                  placeholder={"Search boards and cards..."}
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   onKeyDown={(event) => {
@@ -197,7 +196,7 @@ export default function CommandPallette({
                             </div>
                             {result.type === "card" && (
                               <div className="truncate text-xs text-light-700 dark:text-dark-700">
-                                {`${t`in`} ${result.boardName} → ${result.listName}`}
+                                {`in ${result.boardName} → ${result.listName}`}
                               </div>
                             )}
                           </div>
@@ -214,7 +213,7 @@ export default function CommandPallette({
                 searchResults !== undefined &&
                 results.length === 0 && (
                   <div className="p-4 text-sm text-light-950 dark:text-dark-950">
-                    {t`No results found for "${debouncedQuery}".`}
+                    {`No results found for "${debouncedQuery}".`}
                   </div>
                 )}
 
@@ -226,7 +225,7 @@ export default function CommandPallette({
               >
                 <div className="max-h-[300px] overflow-y-auto border-t border-gray-100 p-4 dark:border-white/10">
                   <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-light-700 dark:text-dark-700">
-                    {t`Keyboard Shortcuts`}
+                    {"Keyboard Shortcuts"}
                   </h3>
                   <div className="space-y-4">
                     {Object.values(ShortcutGroup).map((group) => {

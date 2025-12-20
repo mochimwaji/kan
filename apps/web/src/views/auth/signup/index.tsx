@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
 import { env } from "next-runtime-env";
 import { useState } from "react";
 
@@ -31,7 +29,7 @@ export default function SignUpPage() {
   if (isSignUpDisabled) {
     return (
       <>
-        <PageHead title={t`Sign up | kan.bn`} />
+        <PageHead title="Sign up | kan.bn" />
         <main className="h-screen bg-light-100 pt-20 dark:bg-dark-50 sm:pt-0">
           <div className="justify-top flex h-full flex-col items-center px-4 sm:justify-center">
             <div className="z-10 flex w-full flex-col items-center">
@@ -41,10 +39,10 @@ export default function SignUpPage() {
                 </h1>
               </Link>
               <p className="mb-10 text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
-                {t`Sign up disabled`}
+                {"Sign up disabled"}
               </p>
               <p className="text-md text-center text-light-1000 dark:text-dark-1000">
-                {t`Sign up is currently disabled. Please try again later.`}
+                {"Sign up is currently disabled. Please try again later."}
               </p>
             </div>
             <PatternedBackground />
@@ -56,7 +54,7 @@ export default function SignUpPage() {
 
   return (
     <>
-      <PageHead title={t`Sign up | kan.bn`} />
+      <PageHead title="Sign up | kan.bn" />
       <main className="h-screen bg-light-100 pt-20 dark:bg-dark-50 sm:pt-0">
         <div className="justify-top flex h-full flex-col items-center px-4 sm:justify-center">
           <div className="z-10 flex w-full flex-col items-center">
@@ -66,15 +64,14 @@ export default function SignUpPage() {
               </h1>
             </Link>
             <p className="mb-10 text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
-              {isMagicLinkSent ? t`Check your inbox` : t`Get started`}
+              {isMagicLinkSent ? "Check your inbox" : "Get started"}
             </p>
             {isMagicLinkSent ? (
               <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <p className="text-md mt-2 text-center text-light-1000 dark:text-dark-1000">
-                  <Trans>
-                    Click on the link we've sent to {magicLinkRecipient} to sign
-                    in.
-                  </Trans>
+                  {"Click on the link we've sent to "}
+                  {magicLinkRecipient}
+                  {" to sign in."}
                 </p>
               </div>
             ) : (
@@ -85,14 +82,12 @@ export default function SignUpPage() {
               </div>
             )}
             <p className="mt-4 text-sm text-light-1000 dark:text-dark-1000">
-              <Trans>
-                Already have an account?{" "}
-                <span className="underline">
-                  <Link href={redirect ? `/login?next=${redirect}` : "/login"}>
-                    Sign in
-                  </Link>
-                </span>
-              </Trans>
+              {"Already have an account? "}
+              <span className="underline">
+                <Link href={redirect ? `/login?next=${redirect}` : "/login"}>
+                  {"Sign in"}
+                </Link>
+              </span>
             </p>
           </div>
           <PatternedBackground />

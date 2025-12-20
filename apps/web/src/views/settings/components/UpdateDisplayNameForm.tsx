@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -16,10 +15,10 @@ const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
     name: z
       .string()
       .min(3, {
-        message: t`Display name must be at least 3 characters long`,
+        message: "Display name must be at least 3 characters long",
       })
       .max(280, {
-        message: t`Display name cannot exceed 280 characters`,
+        message: "Display name cannot exceed 280 characters",
       }),
   });
 
@@ -38,8 +37,8 @@ const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
   const updateDisplayName = api.user.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: t`Display name updated`,
-        message: t`Your display name has been updated.`,
+        header: "Display name updated",
+        message: "Your display name has been updated.",
         icon: "success",
       });
       try {
@@ -51,8 +50,8 @@ const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
     },
     onError: () => {
       showPopup({
-        header: t`Error updating display name`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error updating display name",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -77,7 +76,7 @@ const UpdateDisplayNameForm = ({ displayName }: { displayName: string }) => {
             disabled={updateDisplayName.isPending}
             isLoading={updateDisplayName.isPending}
           >
-            {t`Update`}
+            {"Update"}
           </Button>
         </div>
       )}

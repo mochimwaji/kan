@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -11,8 +10,8 @@ import { api } from "~/utils/api";
 const schema = z.object({
   name: z
     .string()
-    .min(3, { message: t`Workspace name must be at least 3 characters long` })
-    .max(64, { message: t`Workspace name cannot exceed 64 characters` }),
+    .min(3, { message: "Workspace name must be at least 3 characters long" })
+    .max(64, { message: "Workspace name cannot exceed 64 characters" }),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -40,8 +39,8 @@ const UpdateWorkspaceNameForm = ({
   const updateWorkspaceName = api.workspace.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: t`Workspace name updated`,
-        message: t`Your workspace name has been updated.`,
+        header: "Workspace name updated",
+        message: "Your workspace name has been updated.",
         icon: "success",
       });
       try {
@@ -53,8 +52,8 @@ const UpdateWorkspaceNameForm = ({
     },
     onError: () => {
       showPopup({
-        header: t`Error updating workspace name`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error updating workspace name",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -80,7 +79,7 @@ const UpdateWorkspaceNameForm = ({
             disabled={updateWorkspaceName.isPending}
             isLoading={updateWorkspaceName.isPending}
           >
-            {t`Update`}
+            {"Update"}
           </Button>
         </div>
       )}

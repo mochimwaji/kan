@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { HiCheck } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
@@ -22,7 +21,7 @@ export default function ThemePresetSelector({
   return (
     <div className={twMerge("flex flex-col gap-3", className)}>
       <h3 className="text-sm font-medium text-neutral-900 dark:text-dark-1000">
-        {t`Theme Presets`}
+        {"Theme Presets"}
       </h3>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
         {presets.map((preset) => {
@@ -47,17 +46,17 @@ export default function ThemePresetSelector({
                 <div
                   className="w-1/4"
                   style={{ backgroundColor: colors.sidebar }}
-                  title={t`Sidebar`}
+                  title={"Sidebar"}
                 />
                 <div
                   className="w-1/2"
                   style={{ backgroundColor: colors.pages }}
-                  title={t`Pages`}
+                  title={"Pages"}
                 />
                 <div
                   className="w-1/4"
                   style={{ backgroundColor: colors.boardBackground }}
-                  title={t`Board`}
+                  title={"Board"}
                 />
               </div>
 
@@ -94,7 +93,7 @@ export default function ThemePresetSelector({
           {/* Custom preview with gradient */}
           <div className="flex h-16 items-center justify-center bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 dark:from-pink-600 dark:via-purple-600 dark:to-indigo-600">
             <span className="text-sm font-medium text-white drop-shadow-md">
-              {t`Custom`}
+              {"Custom"}
             </span>
           </div>
 
@@ -106,7 +105,7 @@ export default function ThemePresetSelector({
             )}
           >
             <span className="text-xs font-medium text-neutral-900 dark:text-dark-1000">
-              {t`Custom Colors`}
+              {"Custom Colors"}
             </span>
             {selectedPresetId === "custom" && (
               <HiCheck className="h-4 w-4 flex-shrink-0 text-blue-500" />

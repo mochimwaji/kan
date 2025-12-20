@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 
 import CheckboxDropdown from "~/components/CheckboxDropdown";
 import { usePopup } from "~/providers/popup";
@@ -52,8 +51,8 @@ export default function ListSelector({
     onError: (_error, _newList, context) => {
       utils.card.byId.setData({ cardPublicId }, context?.previousCard);
       showPopup({
-        header: t`Unable to update list`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update list",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },

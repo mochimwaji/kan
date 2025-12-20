@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,16 +18,16 @@ import LoadingSpinner from "./LoadingSpinner";
 const schema = z.object({
   name: z
     .string()
-    .min(1, { message: t`Workspace name is required` })
-    .max(64, { message: t`Workspace name cannot exceed 64 characters` }),
+    .min(1, { message: "Workspace name is required" })
+    .max(64, { message: "Workspace name cannot exceed 64 characters" }),
   slug: z
     .string()
     .min(3, {
-      message: t`URL must be at least 3 characters long`,
+      message: "URL must be at least 3 characters long",
     })
-    .max(24, { message: t`URL cannot exceed 24 characters` })
+    .max(24, { message: "URL cannot exceed 24 characters" })
     .regex(/^(?![-]+$)[a-zA-Z0-9-]+$/, {
-      message: t`URL can only contain letters, numbers, and hyphens`,
+      message: "URL can only contain letters, numbers, and hyphens",
     })
     .optional()
     .or(z.literal("")),
@@ -104,8 +103,8 @@ export function NewWorkspaceForm() {
     },
     onError: () => {
       showPopup({
-        header: t`Unable to create workspace`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to create workspace",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -141,7 +140,7 @@ export function NewWorkspaceForm() {
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4">
           <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
-            {t`New workspace`}
+            {"New workspace"}
           </h2>
           <button
             type="button"
@@ -160,7 +159,7 @@ export function NewWorkspaceForm() {
 
         <Input
           id="workspace-name"
-          placeholder={t`Workspace name`}
+          placeholder={"Workspace name"}
           {...register("name")}
           errorMessage={errors.name?.message}
           onKeyDown={async (e) => {
@@ -174,7 +173,7 @@ export function NewWorkspaceForm() {
         <div className="mt-4">
           <Input
             id="workspace-slug"
-            placeholder={t`workspace-url`}
+            placeholder={"workspace-url"}
             {...register("slug")}
             className={`${
               isSlugAvailable
@@ -185,9 +184,9 @@ export function NewWorkspaceForm() {
               errors.slug?.message ??
               (isWorkspaceSlugAvailable?.isAvailable === false &&
               isWorkspaceSlugAvailable?.isReserved === false
-                ? t`This workspace URL has already been taken`
+                ? "This workspace URL has already been taken"
                 : isWorkspaceSlugAvailable?.isReserved
-                  ? t`This workspace URL is reserved`
+                  ? "This workspace URL is reserved"
                   : undefined)
             }
             prefix={`${env("NEXT_PUBLIC_BASE_URL") ?? ""}/`}
@@ -222,7 +221,7 @@ export function NewWorkspaceForm() {
                   isTyping))
             }
           >
-            {t`Create workspace`}
+            {"Create workspace"}
           </Button>
         </div>
       </div>

@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { HiArrowDownTray, HiOutlinePlusSmall } from "react-icons/hi2";
 
 import Button from "~/components/Button";
@@ -22,14 +21,14 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
       type: "PRESS",
       stroke: { key: "C" },
       action: () => openModal("NEW_BOARD"),
-      description: t`Create new ${isTemplate ? "template" : "board"}`,
+      description: `Create new ${isTemplate ? "template" : "board"}`,
       group: "ACTIONS",
     });
 
   return (
     <>
       <PageHead
-        title={t`${isTemplate ? "Templates" : "Boards"} | ${workspace.name ?? t`Workspace`}`}
+        title={`${isTemplate ? "Templates" : "Boards"} | ${workspace.name ?? "Workspace"}`}
       />
       <div className="m-auto max-w-[1100px] p-6 px-5 md:px-28 md:py-12">
         <div className="relative z-10 mb-8 flex w-full items-center justify-between">
@@ -37,7 +36,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
             className="font-bold tracking-tight sm:text-[1.2rem]"
             style={{ color: "var(--kan-pages-text)" }}
           >
-            {t`${isTemplate ? "Templates" : "Boards"}`}
+            {isTemplate ? "Templates" : "Boards"}
           </h1>
           <div className="flex gap-2">
             {!isTemplate && (
@@ -49,7 +48,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
                   <HiArrowDownTray aria-hidden="true" className="h-4 w-4" />
                 }
               >
-                {t`Import`}
+                {"Import"}
               </Button>
             )}
             <Tooltip content={createModalShortcutTooltipContent}>
@@ -61,7 +60,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
                   <HiOutlinePlusSmall aria-hidden="true" className="h-4 w-4" />
                 }
               >
-                {t`New`}
+                {"New"}
               </Button>
             </Tooltip>
           </div>

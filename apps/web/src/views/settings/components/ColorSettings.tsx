@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useState } from "react";
 
 import type { ThemeColors } from "~/utils/themePresets";
@@ -182,31 +181,31 @@ export default function ColorSettings() {
       {isCustom && (
         <div className="flex flex-col gap-4 rounded-lg border border-light-300 bg-light-100 p-4 dark:border-dark-400 dark:bg-dark-100">
           <h3 className="text-sm font-medium text-neutral-900 dark:text-dark-1000">
-            {t`Custom Colors`}
+            {"Custom Colors"}
           </h3>
           <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-5">
             <ColorWheelPicker
-              label={t`Sidebar`}
+              label={"Sidebar"}
               value={themeColors.sidebar}
               onChange={handleColorChange("sidebar")}
             />
             <ColorWheelPicker
-              label={t`Pages`}
+              label={"Pages"}
               value={themeColors.pages}
               onChange={handleColorChange("pages")}
             />
             <ColorWheelPicker
-              label={t`Board Background`}
+              label={"Board Background"}
               value={themeColors.boardBackground}
               onChange={handleColorChange("boardBackground")}
             />
             <ColorWheelPicker
-              label={t`Buttons`}
+              label={"Buttons"}
               value={themeColors.button}
               onChange={handleColorChange("button")}
             />
             <ColorWheelPicker
-              label={t`Menus`}
+              label={"Menus"}
               value={themeColors.menu}
               onChange={handleColorChange("menu")}
             />

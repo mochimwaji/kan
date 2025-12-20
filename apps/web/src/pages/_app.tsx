@@ -1,5 +1,4 @@
 import "~/styles/globals.css";
-import "~/utils/i18n";
 
 import type { NextPage, Viewport } from "next";
 import type { AppProps, AppType } from "next/app";
@@ -9,7 +8,6 @@ import { ThemeProvider } from "next-themes";
 
 import { BoardTransitionProvider } from "~/providers/board-transition";
 import { KeyboardShortcutProvider } from "~/providers/keyboard-shortcuts";
-import { LinguiProviderWrapper } from "~/providers/lingui";
 import { ModalProvider } from "~/providers/modal";
 import { PopupProvider } from "~/providers/popup";
 import { api } from "~/utils/api";
@@ -59,22 +57,20 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
       <script src="/__ENV.js" />
       <main className="font-sans">
         <KeyboardShortcutProvider>
-          <LinguiProviderWrapper>
-            <BoardTransitionProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="light"
-                forcedTheme="light"
-                enableSystem={false}
-              >
-                <ModalProvider>
-                  <PopupProvider>
-                    {getLayout(<Component {...pageProps} />)}
-                  </PopupProvider>
-                </ModalProvider>
-              </ThemeProvider>
-            </BoardTransitionProvider>
-          </LinguiProviderWrapper>
+          <BoardTransitionProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              forcedTheme="light"
+              enableSystem={false}
+            >
+              <ModalProvider>
+                <PopupProvider>
+                  {getLayout(<Component {...pageProps} />)}
+                </PopupProvider>
+              </ModalProvider>
+            </ThemeProvider>
+          </BoardTransitionProvider>
         </KeyboardShortcutProvider>
       </main>
     </>

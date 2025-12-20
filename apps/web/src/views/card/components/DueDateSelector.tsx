@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { HiMiniPlus } from "react-icons/hi2";
@@ -90,8 +89,8 @@ export function DueDateSelector({
     onError: (_error, _update, context) => {
       utils.card.byId.setData({ cardPublicId }, context?.previousCard);
       showPopup({
-        header: t`Unable to update due date`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update due date",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -163,7 +162,7 @@ export function DueDateSelector({
       ) : (
         <>
           <HiMiniPlus size={22} className="pr-2" />
-          {t`Set due date`}
+          {"Set due date"}
         </>
       )}
     </button>

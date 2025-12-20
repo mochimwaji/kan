@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { Draggable } from "@hello-pangea/dnd";
-import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -213,7 +212,7 @@ export default function List({
             <button
               onClick={toggleCollapse}
               className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded hover:bg-light-400 dark:hover:bg-dark-200"
-              aria-label={isCollapsed ? t`Expand list` : t`Collapse list`}
+              aria-label={isCollapsed ? "Expand list" : "Collapse list"}
             >
               {isCollapsed ? (
                 <HiChevronRight
@@ -264,7 +263,7 @@ export default function List({
                 <Dropdown
                   items={[
                     {
-                      label: t`Add a card`,
+                      label: "Add a card",
                       action: () => openNewCardForm(list.publicId),
                       icon: (
                         <HiOutlineSquaresPlus
@@ -274,7 +273,7 @@ export default function List({
                       ),
                     },
                     {
-                      label: t`Set color`,
+                      label: "Set color",
                       action: () => setIsColorPickerOpen(true),
                       icon: (
                         <HiOutlinePaintBrush
@@ -284,7 +283,7 @@ export default function List({
                       ),
                     },
                     {
-                      label: t`Delete list`,
+                      label: "Delete list",
                       action: handleOpenDeleteListConfirmation,
                       icon: (
                         <HiOutlineTrash

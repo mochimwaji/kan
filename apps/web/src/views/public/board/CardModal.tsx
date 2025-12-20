@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { t } from "@lingui/core/macro";
 import { useEffect, useRef, useState } from "react";
 import { HiXMark } from "react-icons/hi2";
 
@@ -155,7 +154,7 @@ export function CardModal({
               )}
               <div className="border-t-[1px] border-light-600 pb-4 pt-12 dark:border-dark-400">
                 <h2 className="text-md pb-4 font-medium text-light-900 dark:text-dark-1000">
-                  {t`Activity`}
+                  {"Activity"}
                 </h2>
                 <div>
                   {cardPublicId && (

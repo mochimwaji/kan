@@ -1,5 +1,4 @@
 import { Droppable } from "@hello-pangea/dnd";
-import { t } from "@lingui/core/macro";
 import {
   addMonths,
   eachDayOfInterval,
@@ -96,23 +95,21 @@ export default function CalendarView({
     type: "PRESS",
     stroke: { key: "ArrowLeft" },
     action: goToPreviousMonth,
-    description: t`Previous month`,
+    description: "Previous month",
     group: "BOARD_VIEW",
   });
-
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "ArrowRight" },
     action: goToNextMonth,
-    description: t`Next month`,
+    description: "Next month",
     group: "BOARD_VIEW",
   });
-
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "T" },
     action: goToToday,
-    description: t`Go to today`,
+    description: "Go to today",
     group: "BOARD_VIEW",
   });
 
@@ -225,7 +222,7 @@ export default function CalendarView({
             <button
               onClick={goToPreviousMonth}
               className="rounded p-1.5 hover:bg-light-300 dark:hover:bg-dark-200"
-              aria-label={t`Previous month`}
+              aria-label={"Previous month"}
             >
               <HiChevronLeft
                 className="h-5 w-5"
@@ -237,12 +234,12 @@ export default function CalendarView({
               className="rounded px-2 py-1 text-sm hover:bg-light-300 dark:hover:bg-dark-200"
               style={{ color: "var(--kan-pages-text)" }}
             >
-              {t`Today`}
+              {"Today"}
             </button>
             <button
               onClick={goToNextMonth}
               className="rounded p-1.5 hover:bg-light-300 dark:hover:bg-dark-200"
-              aria-label={t`Next month`}
+              aria-label={"Next month"}
             >
               <HiChevronRight
                 className="h-5 w-5"

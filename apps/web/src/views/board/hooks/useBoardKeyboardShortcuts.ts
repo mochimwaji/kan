@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { useCallback } from "react";
 
 import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
@@ -35,63 +34,63 @@ export function useBoardKeyboardShortcuts(lists: List[] | undefined): void {
     type: "PRESS",
     stroke: { key: "1" },
     action: () => toggleListCollapse(0),
-    description: t`Toggle list 1`,
+    description: "Toggle list 1",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "2" },
     action: () => toggleListCollapse(1),
-    description: t`Toggle list 2`,
+    description: "Toggle list 2",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "3" },
     action: () => toggleListCollapse(2),
-    description: t`Toggle list 3`,
+    description: "Toggle list 3",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "4" },
     action: () => toggleListCollapse(3),
-    description: t`Toggle list 4`,
+    description: "Toggle list 4",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "5" },
     action: () => toggleListCollapse(4),
-    description: t`Toggle list 5`,
+    description: "Toggle list 5",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "6" },
     action: () => toggleListCollapse(5),
-    description: t`Toggle list 6`,
+    description: "Toggle list 6",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "7" },
     action: () => toggleListCollapse(6),
-    description: t`Toggle list 7`,
+    description: "Toggle list 7",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "8" },
     action: () => toggleListCollapse(7),
-    description: t`Toggle list 8`,
+    description: "Toggle list 8",
     group: "BOARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "9" },
     action: () => toggleListCollapse(8),
-    description: t`Toggle list 9`,
+    description: "Toggle list 9",
     group: "BOARD_VIEW",
   });
 }

@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { useState } from "react";
 import { HiXMark } from "react-icons/hi2";
 
@@ -64,7 +63,7 @@ export default function ListColorPicker({
     <div className="absolute left-0 top-full z-50 mt-1 w-56 rounded-lg border border-light-300 bg-light-50 p-3 shadow-lg dark:border-dark-400 dark:bg-dark-200">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-xs font-medium text-neutral-700 dark:text-dark-900">
-          {t`List color`}
+          {"List color"}
         </span>
         <button
           type="button"
@@ -138,7 +137,7 @@ export default function ListColorPicker({
           }}
           className="w-full rounded-md px-2 py-1.5 text-left text-xs text-neutral-700 transition-colors hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-300"
         >
-          {t`Remove color`}
+          {"Remove color"}
         </button>
       </div>
     </div>

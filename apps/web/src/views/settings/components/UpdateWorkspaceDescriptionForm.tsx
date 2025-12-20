@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -22,10 +21,10 @@ const UpdateWorkspaceDescriptionForm = ({
     description: z
       .string()
       .min(3, {
-        message: t`Workspace description must be at least 3 characters long`,
+        message: "Workspace description must be at least 3 characters long",
       })
       .max(280, {
-        message: t`Workspace description cannot exceed 280 characters`,
+        message: "Workspace description cannot exceed 280 characters",
       }),
   });
 
@@ -45,8 +44,8 @@ const UpdateWorkspaceDescriptionForm = ({
   const updateWorkspaceDescription = api.workspace.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: t`Workspace description updated`,
-        message: t`Your workspace description has been updated.`,
+        header: "Workspace description updated",
+        message: "Your workspace description has been updated.",
         icon: "success",
       });
       try {
@@ -58,8 +57,8 @@ const UpdateWorkspaceDescriptionForm = ({
     },
     onError: () => {
       showPopup({
-        header: t`Error updating workspace description`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error updating workspace description",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -88,7 +87,7 @@ const UpdateWorkspaceDescriptionForm = ({
             disabled={updateWorkspaceDescription.isPending}
             isLoading={updateWorkspaceDescription.isPending}
           >
-            {t`Update`}
+            {"Update"}
           </Button>
         </div>
       )}

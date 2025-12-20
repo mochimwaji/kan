@@ -1,5 +1,4 @@
 import type { ChangeEvent } from "react";
-import { t } from "@lingui/core/macro";
 import { useCallback, useState } from "react";
 import { HiCheck } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
@@ -129,7 +128,7 @@ export default function ColorPicker({
         ))}
       </div>
       {!isValid && (
-        <p className="text-xs text-red-500">{t`Enter a valid hex color (e.g., #FF5733)`}</p>
+        <p className="text-xs text-red-500">{"Enter a valid hex color (e.g., #FF5733)"}</p>
       )}
     </div>
   );

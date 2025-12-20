@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { DragDropContext, Draggable } from "@hello-pangea/dnd";
-import { t } from "@lingui/core/macro";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -133,7 +132,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       type: "PRESS",
       stroke: { key: "C" },
       action: () => boardId && openNewListForm(boardId),
-      description: t`Create new list`,
+      description: "Create new list",
       group: "ACTIONS",
     });
 
@@ -146,7 +145,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         void router.push("/boards");
       }
     },
-    description: t`Go to boards`,
+    description: "Go to boards",
     group: "BOARD_VIEW",
   });
 
@@ -184,7 +183,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     type: "PRESS",
     stroke: { key: "V" },
     action: toggleViewMode,
-    description: t`Toggle view mode`,
+    description: "Toggle view mode",
     group: "BOARD_VIEW",
   });
 
@@ -342,8 +341,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       // Reset isDragging so visual state syncs with server data
       setIsDragging(false);
       showPopup({
-        header: t`Unable to update list`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update list",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -410,8 +409,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     ) => {
       utils.board.byId.setData(queryParams, context?.previousBoard);
       showPopup({
-        header: t`Unable to update cards`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update cards",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -470,8 +469,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       // Reset isDragging so visual state syncs with server data
       setIsDragging(false);
       showPopup({
-        header: t`Unable to update card`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update card",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -487,8 +486,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     onError: () => {
       setIsDragging(false);
       showPopup({
-        header: t`Unable to move cards`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to move cards",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -569,8 +568,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     onError: (_error, _args, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: t`Unable to delete card`,
-        message: t`Please try again later.`,
+        header: "Unable to delete card",
+        message: "Please try again later.",
         icon: "error",
       });
     },
@@ -592,8 +591,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     onError: (_error, _args, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: t`Unable to delete list`,
-        message: t`Please try again later.`,
+        header: "Unable to delete list",
+        message: "Please try again later.",
         icon: "error",
       });
     },
@@ -607,8 +606,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
     onError: () => {
       showPopup({
-        header: t`Unable to delete ${isTemplate ? "template" : "board"}`,
-        message: t`Please try again later.`,
+        header: `Unable to delete ${isTemplate ? "template" : "board"}`,
+        message: "Please try again later.",
         icon: "error",
       });
     },
@@ -626,8 +625,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
     onError: () => {
       showPopup({
-        header: t`Error deleting label`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error deleting label",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -690,7 +689,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         handleDelete();
       }
     },
-    description: t`Delete selected items`,
+    description: "Delete selected items",
     group: "BOARD_VIEW",
   });
 
@@ -703,7 +702,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         clearSelection();
       }
     },
-    description: t`Clear selection`,
+    description: "Clear selection",
     group: "BOARD_VIEW",
   });
 
@@ -717,7 +716,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         if (firstSelected) handleExpandCard(firstSelected);
       }
     },
-    description: t`Open selected card`,
+    description: "Open selected card",
     group: "BOARD_VIEW",
   });
 
@@ -1111,7 +1110,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   return (
     <>
       <PageHead
-        title={`${boardData?.name ?? (isTemplate ? t`Board` : t`Template`)} | ${workspace.name}`}
+        title={`${boardData?.name ?? (isTemplate ? "Board" : "Template")} | ${workspace.name}`}
       />
       <div className="relative flex h-full flex-col">
         {/* Background appears instantly when animation completes */}
@@ -1162,7 +1161,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 className="order-2 block p-0 py-0 font-bold leading-[2.3rem] tracking-tight sm:text-[1.2rem] md:order-1"
                 style={{ color: "var(--kan-board-text)" }}
               >
-                {t`${isTemplate ? "Template" : "Board"} not found`}
+                {`${isTemplate ? "Template" : "Board"} not found`}
               </p>
             )}
             <div className="order-1 mb-4 flex items-center justify-end space-x-2 md:order-2 md:mb-0">
@@ -1171,7 +1170,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                   <span className="mr-2">
                     <HiOutlineRectangleStack />
                   </span>
-                  {t`Template`}
+                  {"Template"}
                 </div>
               )}
               {!isTemplate && (
@@ -1208,8 +1207,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 <Tooltip
                   content={
                     viewMode === "kanban"
-                      ? t`Switch to Calendar view (V)`
-                      : t`Switch to Kanban view (V)`
+                      ? "Switch to Calendar view (V)"
+                      : "Switch to Kanban view (V)"
                   }
                 >
                   <button
@@ -1217,8 +1216,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     className="inline-flex items-center justify-center rounded-md border border-light-300 bg-light-50 p-2 text-sm font-semibold shadow-sm transition-colors hover:bg-light-100 dark:border-dark-300 dark:bg-dark-50 dark:hover:bg-dark-100"
                     aria-label={
                       viewMode === "kanban"
-                        ? t`Switch to Calendar view`
-                        : t`Switch to Kanban view`
+                        ? "Switch to Calendar view"
+                        : "Switch to Kanban view"
                     }
                   >
                     {viewMode === "kanban" ? (
@@ -1248,7 +1247,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                   }}
                   disabled={!boardData}
                 >
-                  {t`New list`}
+                  {"New list"}
                 </Button>
               </Tooltip>
               <BoardDropdown
@@ -1276,10 +1275,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     <div className="flex flex-col items-center">
                       <HiOutlineSquare3Stack3D className="h-10 w-10 text-light-800 dark:text-dark-800" />
                       <p className="mb-2 mt-4 text-[14px] font-bold text-light-1000 dark:text-dark-950">
-                        {t`No lists`}
+                        {"No lists"}
                       </p>
                       <p className="text-[14px] text-light-900 dark:text-dark-900">
-                        {t`Get started by creating a new list`}
+                        {"Get started by creating a new list"}
                       </p>
                     </div>
                     <Button
@@ -1287,7 +1286,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                         if (boardId) openNewListForm(boardId);
                       }}
                     >
-                      {t`Create new list`}
+                      {"Create new list"}
                     </Button>
                   </div>
                 ) : (
@@ -1468,8 +1467,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 }`}
                 title={
                   quickDeleteEnabled
-                    ? t`Quick delete ON - no confirmation`
-                    : t`Quick delete OFF - shows confirmation`
+                    ? "Quick delete ON - no confirmation"
+                    : "Quick delete OFF - shows confirmation"
                 }
               >
                 {quickDeleteEnabled ? "⚡" : "🛡"}
@@ -1478,7 +1477,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 onClick={handleDelete}
                 className="rounded-md bg-white/20 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-white/30"
               >
-                {t`Delete`} {quickDeleteEnabled && "⚡"}
+                {"Delete"} {quickDeleteEnabled && "⚡"}
               </button>
               <button
                 onClick={clearSelection}
@@ -1501,13 +1500,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 className="mb-4 text-lg font-semibold"
                 style={{ color: "var(--kan-menu-text)" }}
               >
-                {t`Delete selected items?`}
+                {"Delete selected items?"}
               </h3>
               <p
                 className="mb-6 text-sm"
                 style={{ color: "var(--kan-menu-text)", opacity: 0.8 }}
               >
-                {t`This will permanently delete ${selectedCardIds.size} card(s) and ${selectedListIds.size} list(s). This action cannot be undone.`}
+                {`This will permanently delete ${selectedCardIds.size} card(s) and ${selectedListIds.size} list(s). This action cannot be undone.`}
               </p>
               <div className="flex justify-end gap-3">
                 <button
@@ -1518,13 +1517,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     color: "var(--kan-menu-text)",
                   }}
                 >
-                  {t`Cancel`}
+                  {"Cancel"}
                 </button>
                 <button
                   onClick={handleBulkDelete}
                   className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
                 >
-                  {t`Delete`}
+                  {"Delete"}
                 </button>
               </div>
             </div>

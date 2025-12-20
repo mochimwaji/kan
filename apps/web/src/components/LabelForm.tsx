@@ -1,5 +1,4 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import { Fragment, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { HiChevronUpDown, HiXMark } from "react-icons/hi2";
@@ -116,7 +115,7 @@ export function LabelForm({
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4 text-neutral-900 dark:text-dark-1000">
           <h2 className="text-sm font-medium">
-            {isEdit ? t`Edit label` : t`New label`}
+            {isEdit ? "Edit label" : "New label"}
           </h2>
           <button
             type="button"
@@ -132,7 +131,7 @@ export function LabelForm({
 
         <Input
           id="label-name"
-          placeholder={t`Name`}
+          placeholder={"Name"}
           {...register("name")}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
@@ -210,7 +209,7 @@ export function LabelForm({
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         {!isEdit && (
           <Toggle
-            label={t`Create another`}
+            label={"Create another"}
             isChecked={!!isCreateAnotherEnabled}
             onChange={() =>
               setValue("isCreateAnotherEnabled", !isCreateAnotherEnabled)
@@ -225,7 +224,7 @@ export function LabelForm({
               variant="secondary"
               onClick={() => openModal("DELETE_LABEL", entityId)}
             >
-              {t`Delete`}
+              {"Delete"}
             </Button>
           )}
           <Button
@@ -235,7 +234,7 @@ export function LabelForm({
               !watch("name")
             }
           >
-            {isEdit ? t`Update label` : t`Create label`}
+            {isEdit ? "Update label" : "Create label"}
           </Button>
         </div>
       </div>

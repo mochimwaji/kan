@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { useEffect, useRef } from "react";
 import ContentEditable from "react-contenteditable";
 import { flushSync } from "react-dom";
@@ -87,13 +86,13 @@ const NewChecklistItemForm = ({
           // Temporarily remove placeholder attribute to prevent CSS :empty:before from showing
           const placeholderText = el.getAttribute("placeholder") || "";
           el.removeAttribute("placeholder");
-          
+
           // Reset form and clear content
           flushSync(() => {
             reset({ title: "" });
             el.innerHTML = "";
           });
-          
+
           // Restore placeholder and refocus after the DOM update
           requestAnimationFrame(() => {
             el.setAttribute("placeholder", placeholderText);
@@ -106,8 +105,8 @@ const NewChecklistItemForm = ({
       if (ctx?.previous)
         utils.card.byId.setData({ cardPublicId }, ctx.previous);
       showPopup({
-        header: t`Unable to add checklist item`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to add checklist item",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -127,10 +126,10 @@ const NewChecklistItemForm = ({
                   items: cl.items.map((item) =>
                     item.publicId.startsWith("PLACEHOLDER_")
                       ? { ...item, publicId: data.publicId }
-                      : item
+                      : item,
                   ),
                 }
-              : cl
+              : cl,
           );
           return { ...old, checklists: updatedChecklists };
         });
@@ -180,7 +179,7 @@ const NewChecklistItemForm = ({
           <ContentEditable
             id={`checklist-item-input-${checklistPublicId}`}
             tabIndex={readOnly ? -1 : 0}
-            placeholder={t`Add an item...`}
+            placeholder={"Add an item..."}
             html={title}
             disabled={readOnly}
             onChange={(e) => setValue("title", e.target.value)}

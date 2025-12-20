@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 
 import Button from "~/components/Button";
@@ -20,14 +19,14 @@ export default function AccountSettings() {
 
   return (
     <>
-      <PageHead title={t`Settings | Account`} />
+      <PageHead title={"Settings | Account"} />
 
       <div className="mb-8 border-t border-light-300 dark:border-dark-300">
         <h2
           className="mb-4 mt-8 text-[14px] font-bold"
           style={{ color: "var(--kan-pages-text)" }}
         >
-          {t`Profile picture`}
+          {"Profile picture"}
         </h2>
         <Avatar userId={data?.id} userImage={data?.image} />
 
@@ -36,7 +35,7 @@ export default function AccountSettings() {
             className="mb-4 mt-8 text-[14px] font-bold"
             style={{ color: "var(--kan-pages-text)" }}
           >
-            {t`Display name`}
+            {"Display name"}
           </h2>
           <UpdateDisplayNameForm displayName={data?.name ?? ""} />
         </div>
@@ -46,20 +45,22 @@ export default function AccountSettings() {
             className="mb-4 mt-8 text-[14px] font-bold"
             style={{ color: "var(--kan-pages-text)" }}
           >
-            {t`Delete account`}
+            {"Delete account"}
           </h2>
           <p
             className="mb-8 text-sm"
             style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
           >
-            {t`Once you delete your account, there is no going back. This action cannot be undone.`}
+            {
+              "Once you delete your account, there is no going back. This action cannot be undone."
+            }
           </p>
           <div className="mt-4">
             <Button
               variant="secondary"
               onClick={() => openModal("DELETE_ACCOUNT")}
             >
-              {t`Delete account`}
+              {"Delete account"}
             </Button>
           </div>
         </div>
@@ -70,20 +71,20 @@ export default function AccountSettings() {
               className="mb-4 mt-8 text-[14px] font-bold"
               style={{ color: "var(--kan-pages-text)" }}
             >
-              {t`Change Password`}
+              {"Change Password"}
             </h2>
             <p
               className="mb-8 text-sm"
               style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
             >
-              {t`You are about to change your password.`}
+              {"You are about to change your password."}
             </p>
             <div className="mt-4">
               <Button
                 variant="secondary"
                 onClick={() => openModal("CHANGE_PASSWORD")}
               >
-                {t`Change Password`}
+                {"Change Password"}
               </Button>
             </div>
           </div>

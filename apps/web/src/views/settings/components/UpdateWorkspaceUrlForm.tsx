@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useForm } from "react-hook-form";
 import { HiCheck } from "react-icons/hi2";
@@ -26,11 +25,11 @@ const UpdateWorkspaceUrlForm = ({
     slug: z
       .string()
       .min(3, {
-        message: t`URL must be at least 3 characters long`,
+        message: "URL must be at least 3 characters long",
       })
-      .max(24, { message: t`URL cannot exceed 24 characters` })
+      .max(24, { message: "URL cannot exceed 24 characters" })
       .regex(/^(?![-]+$)[a-zA-Z0-9-]+$/, {
-        message: t`URL can only contain letters, numbers, and hyphens`,
+        message: "URL can only contain letters, numbers, and hyphens",
       }),
   });
 
@@ -54,8 +53,8 @@ const UpdateWorkspaceUrlForm = ({
   const updateWorkspaceSlug = api.workspace.update.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: t`Workspace slug updated`,
-        message: t`Your workspace slug has been updated.`,
+        header: "Workspace slug updated",
+        message: "Your workspace slug has been updated.",
         icon: "success",
       });
       try {
@@ -67,8 +66,8 @@ const UpdateWorkspaceUrlForm = ({
     },
     onError: () => {
       showPopup({
-        header: t`Error updating workspace URL`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error updating workspace URL",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -113,7 +112,7 @@ const UpdateWorkspaceUrlForm = ({
           errorMessage={
             errors.slug?.message ||
             (isWorkspaceSlugAvailable?.isAvailable === false
-              ? t`This workspace username has already been taken`
+              ? "This workspace username has already been taken"
               : undefined)
           }
           prefix={`${env("NEXT_PUBLIC_BASE_URL") ?? ""}/`}
@@ -137,7 +136,7 @@ const UpdateWorkspaceUrlForm = ({
             }
             isLoading={updateWorkspaceSlug.isPending}
           >
-            {t`Update`}
+            {"Update"}
           </Button>
         </div>
       )}

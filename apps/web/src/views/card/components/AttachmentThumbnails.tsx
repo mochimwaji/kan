@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import { Fragment, useEffect, useState } from "react";
 import {
   HiArrowDownTray,
@@ -69,8 +68,8 @@ export function AttachmentThumbnails({
       if (isReadOnly) return;
       utils.card.byId.setData({ cardPublicId }, context?.previousState);
       showPopup({
-        header: t`Unable to delete attachment`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to delete attachment",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -138,8 +137,8 @@ export function AttachmentThumbnails({
   const handleDownload = (attachment: Attachment) => {
     if (!attachment.url) {
       showPopup({
-        header: t`Download failed`,
-        message: t`No download URL available for this attachment.`,
+        header: "Download failed",
+        message: "No download URL available for this attachment.",
         icon: "error",
       });
       return;

@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,7 +36,7 @@ export default function NewApiKeyForm() {
     onError: () => {
       form.setError("name", {
         type: "manual",
-        message: t`Failed to create API key`,
+        message: "Failed to create API key",
       });
     },
   });
@@ -53,16 +52,16 @@ export default function NewApiKeyForm() {
         className="flex flex-col gap-2"
       >
         <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
-          {t`New API key`}
+          {"New API key"}
         </h2>
         <Input
           {...form.register("name")}
-          placeholder={t`Name`}
+          placeholder={"Name"}
           className="w-full"
           errorMessage={form.formState.errors.name?.message}
         />
         <Button type="submit" isLoading={createApiKeyMutation.isPending}>
-          {t`Create`}
+          {"Create"}
         </Button>
       </form>
     </div>

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Menu, Transition } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import { Fragment } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -119,7 +118,7 @@ export default function UserMenu({
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
                   style={{ color: "var(--kan-menu-text)" }}
                 >
-                  {t`Shortcuts`}
+                  {"Shortcuts"}
                 </button>
               </Menu.Item>
             </div>
@@ -130,7 +129,7 @@ export default function UserMenu({
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
                   style={{ color: "var(--kan-menu-text)" }}
                 >
-                  {t`Logout`}
+                  {"Logout"}
                 </button>
               </Menu.Item>
             </div>

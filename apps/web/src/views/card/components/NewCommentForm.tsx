@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import ContentEditable from "react-contenteditable";
 import { useForm } from "react-hook-form";
 import { HiOutlineArrowUp } from "react-icons/hi2";
@@ -27,8 +26,8 @@ const NewCommentForm = ({ cardPublicId }: { cardPublicId: string }) => {
   const addCommentMutation = api.card.addComment.useMutation({
     onError: (_error, _newList) => {
       showPopup({
-        header: t`Unable to add comment`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to add comment",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -54,7 +53,7 @@ const NewCommentForm = ({ cardPublicId }: { cardPublicId: string }) => {
       className="flex w-full max-w-[800px] flex-col rounded-xl border border-light-600 bg-light-100 p-4 text-light-900 focus-visible:outline-none dark:border-dark-400 dark:bg-dark-100 dark:text-dark-1000 sm:text-sm sm:leading-6"
     >
       <ContentEditable
-        placeholder={t`Add a comment...`}
+        placeholder={"Add a comment..."}
         html={watch("comment")}
         disabled={false}
         onChange={(e) => setValue("comment", e.target.value)}

@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
@@ -15,8 +14,8 @@ import { api } from "~/utils/api";
 const schema = z.object({
   name: z
     .string()
-    .min(1, { message: t`Template name is required` })
-    .max(100, { message: t`Template name cannot exceed 100 characters` }),
+    .min(1, { message: "Template name is required" })
+    .max(100, { message: "Template name cannot exceed 100 characters" }),
   workspacePublicId: z.string(),
   sourceBoardPublicId: z.string(),
 });
@@ -58,15 +57,15 @@ export function NewTemplateForm({
     onSuccess: (newTemplate) => {
       if (!newTemplate) {
         showPopup({
-          header: t`Unable to create template`,
-          message: t`Please try again later, or contact customer support.`,
+          header: "Unable to create template",
+          message: "Please try again later, or contact customer support.",
           icon: "error",
         });
       } else {
         router.push(`/templates/${newTemplate.publicId}`);
         showPopup({
-          header: t`Template created`,
-          message: t`Template created successfully`,
+          header: "Template created",
+          message: "Template created successfully",
           icon: "success",
         });
       }
@@ -74,8 +73,8 @@ export function NewTemplateForm({
     },
     onError: () => {
       showPopup({
-        header: t`Unable to create template`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to create template",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -104,7 +103,7 @@ export function NewTemplateForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="text-neutral-9000 flex w-full items-center justify-between pb-4 dark:text-dark-1000">
-          <h2 className="text-sm font-bold">{t`New template`}</h2>
+          <h2 className="text-sm font-bold">{"New template"}</h2>
           <button
             type="button"
             className="hover:bg-li ght-300 rounded p-1 focus:outline-none dark:hover:bg-dark-300"
@@ -118,7 +117,7 @@ export function NewTemplateForm({
         </div>
         <Input
           id="name"
-          placeholder={t`Name`}
+          placeholder={"Name"}
           {...register("name", { required: true })}
           ref={(e) => {
             register("name").ref(e);
@@ -138,7 +137,7 @@ export function NewTemplateForm({
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <div>
           <Button type="submit" isLoading={createBoard.isPending}>
-            {t`Create template`}
+            {"Create template"}
           </Button>
         </div>
       </div>

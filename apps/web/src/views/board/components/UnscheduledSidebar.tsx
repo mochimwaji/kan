@@ -1,5 +1,4 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import { t } from "@lingui/core/macro";
 import { useCallback, useState } from "react";
 import {
   HiArrowsPointingOut,
@@ -74,7 +73,7 @@ export default function UnscheduledSidebar({
       >
         <button
           className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded hover:bg-light-300 dark:hover:bg-dark-200"
-          aria-label={isCollapsed ? t`Expand` : t`Collapse`}
+          aria-label={isCollapsed ? "Expand" : "Collapse"}
         >
           {isCollapsed ? (
             <HiChevronLeft
@@ -98,7 +97,7 @@ export default function UnscheduledSidebar({
               className="flex-1 text-sm font-medium"
               style={{ color: "var(--kan-pages-text)" }}
             >
-              {t`Unscheduled`}
+              {"Unscheduled"}
             </span>
             <span
               className="flex h-5 min-w-5 items-center justify-center rounded-full bg-light-400 px-1.5 text-[10px] font-medium dark:bg-dark-300"
@@ -208,7 +207,7 @@ export default function UnscheduledSidebar({
                   className="py-4 text-center text-sm"
                   style={{ color: "var(--kan-pages-text)", opacity: 0.5 }}
                 >
-                  {t`No unscheduled cards`}
+                  {"No unscheduled cards"}
                 </div>
               )}
             </div>

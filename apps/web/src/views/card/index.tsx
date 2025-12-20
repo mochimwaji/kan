@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -99,28 +98,28 @@ export function CardRightPanel({
     type: "PRESS",
     stroke: { key: "l" },
     action: () => listSelectorRef.current?.click(),
-    description: t`List selector`,
+    description: "List selector",
     group: "CARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "k" },
     action: () => labelSelectorRef.current?.click(),
-    description: t`Labels selector`,
+    description: "Labels selector",
     group: "CARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "j" },
     action: () => memberSelectorRef.current?.click(),
-    description: t`Members selector`,
+    description: "Members selector",
     group: "CARD_VIEW",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "d" },
     action: () => dueDateSelectorRef.current?.click(),
-    description: t`Due date picker`,
+    description: "Due date picker",
     group: "CARD_VIEW",
   });
 
@@ -211,7 +210,7 @@ export function CardRightPanel({
             >
               <SidebarSectionHeader
                 icon={<HiOutlineRectangleStack size={20} />}
-                title={t`List`}
+                title={"List"}
                 isCollapsed
               />
             </ListSelector>
@@ -225,7 +224,7 @@ export function CardRightPanel({
             >
               <SidebarSectionHeader
                 icon={<HiOutlineTag size={20} />}
-                title={t`Labels`}
+                title={"Labels"}
                 isCollapsed
               />
             </LabelSelector>
@@ -240,7 +239,7 @@ export function CardRightPanel({
               >
                 <SidebarSectionHeader
                   icon={<HiOutlineUsers size={20} />}
-                  title={t`Members`}
+                  title={"Members"}
                   isCollapsed
                 />
               </MemberSelector>
@@ -255,7 +254,7 @@ export function CardRightPanel({
             >
               <SidebarSectionHeader
                 icon={<HiOutlineCalendar size={20} />}
-                title={t`Due date`}
+                title={"Due date"}
                 isCollapsed
               />
             </DueDateSelector>
@@ -304,7 +303,7 @@ export function CardRightPanel({
             <div ref={listSelectorRef}>
               <SidebarSectionHeader
                 icon={<HiOutlineRectangleStack size={20} />}
-                title={t`List`}
+                title={"List"}
               />
             </div>
           </ListSelector>
@@ -318,7 +317,7 @@ export function CardRightPanel({
             <div ref={labelSelectorRef}>
               <SidebarSectionHeader
                 icon={<HiOutlineTag size={20} />}
-                title={t`Labels`}
+                title={"Labels"}
               />
             </div>
           </LabelSelector>
@@ -333,7 +332,7 @@ export function CardRightPanel({
               <div ref={memberSelectorRef}>
                 <SidebarSectionHeader
                   icon={<HiOutlineUsers size={20} />}
-                  title={t`Members`}
+                  title={"Members"}
                 />
               </div>
             </MemberSelector>
@@ -348,7 +347,7 @@ export function CardRightPanel({
             <div ref={dueDateSelectorRef}>
               <SidebarSectionHeader
                 icon={<HiOutlineCalendar size={20} />}
-                title={t`Due date`}
+                title={"Due date"}
               />
             </div>
           </DueDateSelector>
@@ -426,15 +425,15 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     type: "PRESS",
     stroke: { key: "Escape" },
     action: closeCardHref,
-    description: t`Close card`,
+    description: "Close card",
     group: "CARD_VIEW",
   });
 
   const updateCard = api.card.update.useMutation({
     onError: () => {
       showPopup({
-        header: t`Unable to update card`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to update card",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -446,8 +445,8 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   const addOrRemoveLabel = api.card.addOrRemoveLabel.useMutation({
     onError: () => {
       showPopup({
-        header: t`Unable to add label`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to add label",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -465,8 +464,8 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
     onError: () => {
       showPopup({
-        header: t`Unable to delete card`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to delete card",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -491,8 +490,8 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
     onError: () => {
       showPopup({
-        header: t`Error deleting label`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Error deleting label",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -516,8 +515,8 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
       if (ctx?.previous)
         utils.card.byId.setData({ cardPublicId: cardId ?? "" }, ctx.previous);
       showPopup({
-        header: t`Unable to delete checklist`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to delete checklist",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -550,8 +549,8 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
         context?.previousState,
       );
       showPopup({
-        header: t`Unable to delete comment`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to delete comment",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -621,7 +620,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   return (
     <>
       <PageHead
-        title={t`${card?.title ?? t`Card`} | ${board?.name ?? t`Board`}`}
+        title={`${card?.title ?? "Card"} | ${board?.name ?? "Board"}`}
       />
       <div
         className="flex h-full flex-1 flex-col overflow-hidden"
@@ -645,7 +644,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
               className="block p-0 py-0 font-bold leading-[1.5rem] tracking-tight sm:text-[1rem]"
               style={{ color: "var(--kan-pages-text)" }}
             >
-              {t`Card not found`}
+              {"Card not found"}
             </p>
           )}
 
@@ -706,7 +705,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
                     className="block p-0 py-0 font-bold leading-[2.3rem] tracking-tight sm:text-[1.2rem]"
                     style={{ color: "var(--kan-pages-text)" }}
                   >
-                    {t`Card not found`}
+                    {"Card not found"}
                   </p>
                 )}
               </div>
@@ -753,7 +752,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
                       className="text-md pb-4 font-medium"
                       style={{ color: "var(--kan-pages-text)" }}
                     >
-                      {t`Activity`}
+                      {"Activity"}
                     </h2>
                     <div>
                       <ActivityList

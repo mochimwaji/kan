@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { Listbox, Transition } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
-import { Plural, Trans } from "@lingui/react/macro";
 import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FaTrello } from "react-icons/fa";
@@ -171,7 +169,7 @@ const SelectSource = ({ handleNextStep }: { handleNextStep: () => void }) => {
               !hasIntegrations ? <HiMiniArrowTopRightOnSquare /> : undefined
             }
           >
-            {hasIntegrations ? t`Select source` : t`Connect Trello`}
+            {hasIntegrations ? "Select source" : "Connect Trello"}
           </Button>
         </div>
       </div>
@@ -209,8 +207,8 @@ const ImportTrello: React.FC = () => {
   const importBoards = (api as any).import.trello.importBoards.useMutation({
     onSuccess: async () => {
       showPopup({
-        header: t`Import complete`,
-        message: t`Your boards have been imported.`,
+        header: "Import complete",
+        message: "Your boards have been imported.",
         icon: "success",
       });
       try {
@@ -222,8 +220,8 @@ const ImportTrello: React.FC = () => {
     },
     onError: () => {
       showPopup({
-        header: t`Import failed`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Import failed",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -263,7 +261,7 @@ const ImportTrello: React.FC = () => {
       return (
         <div className="flex h-full w-full items-center justify-center">
           <p className="text-sm text-neutral-500 dark:text-dark-900">
-            {t`No boards found`}
+            {"No boards found"}
           </p>
         </div>
       );
@@ -298,7 +296,7 @@ const ImportTrello: React.FC = () => {
 
       <div className="mt-12 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <Toggle
-          label={t`Select all`}
+          label={"Select all"}
           isChecked={!!isSelectAllEnabled}
           onChange={() => {
             const newState = !isSelectAllEnabled;
@@ -325,13 +323,7 @@ const ImportTrello: React.FC = () => {
               )
             }
           >
-            <Trans>
-              <Plural
-                value={boardCount}
-                one={`Import board (1)`}
-                other={`Import boards (${boardCount})`}
-              />
-            </Trans>
+            {boardCount === 1 ? `Import board (1)` : `Import boards (${boardCount})`}
           </Button>
         </div>
       </div>
@@ -351,7 +343,7 @@ export function ImportBoardsForm() {
             className="text-sm font-medium"
             style={{ color: "var(--kan-menu-text)" }}
           >
-            {t`New import`}
+            {"New import"}
           </h2>
           <Link
             href="https://docs.kan.bn/imports/trello"

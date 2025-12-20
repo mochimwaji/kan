@@ -1,8 +1,6 @@
 import type { SocialProvider } from "better-auth/social-providers";
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { env } from "next-runtime-env";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -212,8 +210,8 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           {
             onSuccess: () =>
               showPopup({
-                header: t`Success`,
-                message: t`You have been signed up successfully.`,
+                header: "Success",
+                message: "You have been signed up successfully.",
                 icon: "success",
               }),
             onError: ({ error }) => setLoginError(error.message),
@@ -229,8 +227,8 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           {
             onSuccess: () =>
               showPopup({
-                header: t`Success`,
-                message: t`You have been logged in successfully.`,
+                header: "Success",
+                message: "You have been logged in successfully.",
                 icon: "success",
               }),
             onError: ({ error }) => setLoginError(error.message),
@@ -254,8 +252,8 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
         // Provide a clear error feedback when password omitted but magic link unavailable
         setLoginError(
           isSignUp
-            ? t`Password is required to sign up.`
-            : t`Password is required to login.`,
+            ? "Password is required to sign up."
+            : "Password is required to login.",
         );
       }
     }
@@ -288,7 +286,7 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
 
     if (error) {
       setLoginError(
-        t`Failed to login with ${provider.at(0)?.toUpperCase() + provider.slice(1)}. Please try again.`,
+        `Failed to login with ${provider.at(0)?.toUpperCase() + provider.slice(1)}. Please try again.`,
       );
     }
   };
@@ -352,10 +350,7 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
                 fullWidth
                 size="lg"
               >
-                <Trans>
-                  Continue with{" "}
-                  {key === "oidc" ? oidcProviderName : provider.name}
-                </Trans>
+                {`Continue with ${key === "oidc" ? oidcProviderName : provider.name}`}
               </Button>
             );
           })}
@@ -366,7 +361,7 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           <div className="flex w-full items-center gap-4">
             <div className="h-[1px] w-1/3 bg-light-600 dark:bg-dark-600" />
             <span className="text-center text-sm text-light-900 dark:text-dark-900">
-              {t`No authentication methods are currently available`}
+              {"No authentication methods are currently available"}
             </span>
             <div className="h-[1px] w-1/3 bg-light-600 dark:bg-dark-600" />
           </div>
@@ -375,7 +370,7 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
           <div className="mb-[1.5rem] flex w-full items-center gap-4">
             <div className="h-[1px] w-full bg-light-600 dark:bg-dark-600" />
             <span className="text-sm text-light-900 dark:text-dark-900">
-              {t`or`}
+              {"or"}
             </span>
             <div className="h-[1px] w-full bg-light-600 dark:bg-dark-600" />
           </div>
@@ -385,11 +380,11 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
             <div>
               <Input
                 {...register("name", { required: true })}
-                placeholder={t`Enter your name`}
+                placeholder={"Enter your name"}
               />
               {errors.name && (
                 <p className="mt-2 text-xs text-red-400">
-                  {t`Please enter a valid name`}
+                  {"Please enter a valid name"}
                 </p>
               )}
             </div>
@@ -399,11 +394,11 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
               <div>
                 <Input
                   {...register("email", { required: true })}
-                  placeholder={t`Enter your email address`}
+                  placeholder={"Enter your email address"}
                 />
                 {errors.email && (
                   <p className="mt-2 text-xs text-red-400">
-                    {t`Please enter a valid email address`}
+                    {"Please enter a valid email address"}
                   </p>
                 )}
               </div>
@@ -413,12 +408,12 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
                   <Input
                     type="password"
                     {...register("password", { required: true })}
-                    placeholder={t`Enter your password`}
+                    placeholder={"Enter your password"}
                   />
                   {errors.password && (
                     <p className="mt-2 text-xs text-red-400">
                       {errors.password.message ??
-                        t`Please enter a valid password`}
+                        "Please enter a valid password"}
                     </p>
                   )}
                 </div>
@@ -437,8 +432,8 @@ export function Auth({ setIsMagicLinkSent, isSignUp }: AuthProps) {
               size="lg"
               variant="secondary"
             >
-              {isSignUp ? t`Sign up with ` : t`Continue with `}
-              {isMagicLinkMode ? t`magic link` : t`email`}
+              {isSignUp ? "Sign up with " : "Continue with "}
+              {isMagicLinkMode ? "magic link" : "email"}
             </Button>
           </div>
         )}

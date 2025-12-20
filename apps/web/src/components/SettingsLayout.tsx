@@ -6,7 +6,6 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   HiChevronDown,
@@ -48,7 +47,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     type: "PRESS",
     stroke: { key: "1" },
     action: () => router.push("/settings/account"),
-    description: t`Account settings`,
+    description: "Account settings",
     group: "SETTINGS",
   });
 
@@ -56,7 +55,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     type: "PRESS",
     stroke: { key: "2" },
     action: () => router.push("/settings/workspace"),
-    description: t`Workspace settings`,
+    description: "Workspace settings",
     group: "SETTINGS",
   });
 
@@ -64,7 +63,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     type: "PRESS",
     stroke: { key: "3" },
     action: () => router.push("/settings/api"),
-    description: t`API settings`,
+    description: "API settings",
     group: "SETTINGS",
   });
 
@@ -74,19 +73,19 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
       {
         key: "account",
         icon: <HiOutlineUser />,
-        label: t`Account`,
+        label: "Account",
         condition: true,
       },
       {
         key: "workspace",
         icon: <HiOutlineRectangleGroup />,
-        label: t`Workspace`,
+        label: "Workspace",
         condition: true,
       },
       {
         key: "api",
         icon: <HiOutlineCodeBracketSquare />,
-        label: t`API`,
+        label: "API",
         condition: true,
       },
     ];
@@ -222,7 +221,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
               className="font-bold tracking-tight sm:text-[1.2rem]"
               style={{ color: "var(--kan-pages-text)" }}
             >
-              {t`Settings`}
+              {"Settings"}
             </h1>
           </div>
 

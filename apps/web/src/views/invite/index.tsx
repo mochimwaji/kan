@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useEffect, useState } from "react";
 
@@ -38,7 +37,7 @@ export default function InvitePage() {
 
       setError(
         error.message ||
-          t`Failed to accept invitation. Please try again later, or contact customer support.`,
+          "Failed to accept invitation. Please try again later, or contact customer support.",
       );
       setIsProcessing(false);
     },
@@ -76,7 +75,7 @@ export default function InvitePage() {
   ) {
     return (
       <>
-        <PageHead title={t`Join workspace`} />
+        <PageHead title={"Join workspace"} />
         <PatternedBackground />
         <div className="flex min-h-screen items-center justify-center">
           <LoadingSpinner size="lg" />
@@ -88,7 +87,7 @@ export default function InvitePage() {
   const PageWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
       <>
-        <PageHead title={t`Join workspace | kan.bn`} />
+        <PageHead title={"Join workspace | kan.bn"} />
         {children}
       </>
     );
@@ -102,15 +101,15 @@ export default function InvitePage() {
           <div className="z-10 w-full max-w-md space-y-8">
             <div>
               <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
-                {t`Invalid invitation`}
+                {"Invalid invitation"}
               </h2>
               <p className="mt-4 text-center text-sm text-light-900 dark:text-dark-800">
-                {t`This invitation link is invalid or has expired.`}
+                {"This invitation link is invalid or has expired."}
               </p>
             </div>
             <div className="text-center">
               <Button href="/" variant="primary">
-                {t`Go Home`}
+                {"Go Home"}
               </Button>
             </div>
           </div>
@@ -126,13 +125,13 @@ export default function InvitePage() {
         <div className="z-10 w-full max-w-[400px] space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
-              {t`Join workspace`}
+              {"Join workspace"}
             </h2>
             {!error ? (
               <p className="mt-4 text-center text-sm text-light-900 dark:text-dark-800">
                 {isCloudEnv
-                  ? t`You've been invited to join a workspace on kan.bn.`
-                  : t`You've been invited to join a workspace.`}
+                  ? "You've been invited to join a workspace on kan.bn."
+                  : "You've been invited to join a workspace."}
               </p>
             ) : (
               <p className="mt-4 text-center text-sm text-red-500">{error}</p>
@@ -141,7 +140,7 @@ export default function InvitePage() {
           <div className="flex justify-center gap-2">
             {session?.user.id ? (
               <Button href={`/boards`} variant="primary" size="md">
-                {t`Go to app`}
+                {"Go to app"}
               </Button>
             ) : (
               <>
@@ -151,7 +150,7 @@ export default function InvitePage() {
                   variant="primary"
                   size="md"
                 >
-                  {t`Sign In`}
+                  {"Sign In"}
                 </Button>
                 <Button
                   href={`/signup?next=/invite/${inviteCode}`}
@@ -159,7 +158,7 @@ export default function InvitePage() {
                   variant="primary"
                   size="md"
                 >
-                  {t`Sign Up`}
+                  {"Sign Up"}
                 </Button>
               </>
             )}

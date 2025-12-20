@@ -1,5 +1,4 @@
 import { Button, Menu, Transition } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import { Fragment, useRef, useState } from "react";
 import { HiCheck, HiMagnifyingGlass } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
@@ -30,7 +29,7 @@ export default function WorkspaceMenu({
         modifiers: ["CONTROL"],
       },
       action: () => setIsOpen(true),
-      description: t`Search`,
+      description: "Search",
       group: "GENERAL",
     });
 
@@ -42,7 +41,7 @@ export default function WorkspaceMenu({
       // Programmatically click the menu button to open it
       menuButtonRef.current?.click();
     },
-    description: t`Open workspace menu`,
+    description: "Open workspace menu",
     group: "NAVIGATION",
   });
 
@@ -182,7 +181,7 @@ export default function WorkspaceMenu({
                   style={{ color: "var(--kan-menu-text)" }}
                   className="flex w-full items-center justify-between rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
                 >
-                  {t`Create workspace`}
+                  {"Create workspace"}
                 </button>
               </Menu.Item>
             </div>

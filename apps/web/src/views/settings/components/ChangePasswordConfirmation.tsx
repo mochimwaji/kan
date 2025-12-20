@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { t } from "@lingui/core/macro";
 import { useMutation } from "@tanstack/react-query";
 import { env } from "next-runtime-env";
 import { useForm } from "react-hook-form";
@@ -16,19 +15,19 @@ import { api } from "~/utils/api";
 
 const FormSchema = z
   .object({
-    currentPassword: z.string().min(1, t`Current password is required`),
+    currentPassword: z.string().min(1, "Current password is required"),
     newPassword: z
       .string()
-      .min(8, t`Password must be at least 8 characters`)
-      .min(1, t`New password is required`),
-    confirmPassword: z.string().min(1, t`Please confirm your new password`),
+      .min(8, "Password must be at least 8 characters")
+      .min(1, "New password is required"),
+    confirmPassword: z.string().min(1, "Please confirm your new password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: t`Passwords do not match`,
+    message: "Passwords do not match",
     path: ["confirmPassword"],
   })
   .refine((data) => data.currentPassword !== data.newPassword, {
-    message: t`New password must be different from current password`,
+    message: "New password must be different from current password",
     path: ["newPassword"],
   });
 
@@ -66,8 +65,8 @@ export function ChangePasswordFormConfirmation() {
     onSuccess: async () => {
       closeModal();
       showPopup({
-        header: t`Password Changed`,
-        message: t`Your password has been changed.`,
+        header: "Password Changed",
+        message: "Your password has been changed.",
         icon: "success",
       });
 
@@ -81,13 +80,13 @@ export function ChangePasswordFormConfirmation() {
       if (errorMessage.includes("invalid password")) {
         setError("currentPassword", {
           type: "manual",
-          message: t`The current password you entered is incorrect.`,
+          message: "The current password you entered is incorrect.",
         });
       } else {
         closeModal();
         showPopup({
-          header: t`Error Changing Password`,
-          message: t`An unexpected error occurred. Please try again later.`,
+          header: "Error Changing Password",
+          message: "An unexpected error occurred. Please try again later.",
           icon: "error",
         });
       }
@@ -106,9 +105,11 @@ export function ChangePasswordFormConfirmation() {
   return (
     <div className="p-5">
       <div className="flex w-full flex-col justify-between pb-4">
-        <h2 className="text-md pb-4 font-medium dark:text-white">{t`Change Password`}</h2>
+        <h2 className="text-md pb-4 font-medium dark:text-white">
+          {"Change Password"}
+        </h2>
         <p className="mb-4 text-sm text-light-900">
-          {t`Enter your current password and choose a new secure password.`}
+          {"Enter your current password and choose a new secure password."}
         </p>
       </div>
 
@@ -119,7 +120,7 @@ export function ChangePasswordFormConfirmation() {
               id="currentPassword"
               type="password"
               {...register("currentPassword")}
-              placeholder={t`Enter your current password`}
+              placeholder={"Enter your current password"}
             />
             {errors.currentPassword && (
               <p className="mt-2 text-xs text-red-400">
@@ -133,7 +134,7 @@ export function ChangePasswordFormConfirmation() {
               id="newPassword"
               type="password"
               {...register("newPassword")}
-              placeholder={t`Enter your new password`}
+              placeholder={"Enter your new password"}
             />
             {errors.newPassword && (
               <p className="mt-2 text-xs text-red-400">
@@ -147,7 +148,7 @@ export function ChangePasswordFormConfirmation() {
               id="confirmPassword"
               type="password"
               {...register("confirmPassword")}
-              placeholder={t`Confirm your new password`}
+              placeholder={"Confirm your new password"}
             />
             {errors.confirmPassword && (
               <p className="mt-2 text-xs text-red-400">
@@ -165,7 +166,7 @@ export function ChangePasswordFormConfirmation() {
             fullWidth
             size="lg"
           >
-            {t`Cancel`}
+            {"Cancel"}
           </Button>
           <Button
             variant="primary"
@@ -175,7 +176,7 @@ export function ChangePasswordFormConfirmation() {
             fullWidth
             size="lg"
           >
-            {t`Change Password`}
+            {"Change Password"}
           </Button>
         </div>
       </form>

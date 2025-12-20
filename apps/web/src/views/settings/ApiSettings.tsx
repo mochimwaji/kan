@@ -1,5 +1,3 @@
-import { t } from "@lingui/core/macro";
-
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
@@ -14,25 +12,25 @@ export default function ApiSettings() {
 
   return (
     <>
-      <PageHead title={t`Settings | API`} />
+      <PageHead title={"Settings | API"} />
 
       <div className="mb-8 border-t border-light-300 dark:border-dark-300">
         <h2
           className="mb-4 mt-8 text-[14px] font-bold"
           style={{ color: "var(--kan-pages-text)" }}
         >
-          {t`API keys`}
+          {"API keys"}
         </h2>
         <p
           className="mb-8 text-sm"
           style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
         >
-          {t`View and manage your API keys.`}
+          {"View and manage your API keys."}
         </p>
 
         <div className="mb-4 flex items-center justify-between">
           <Button variant="primary" onClick={() => openModal("NEW_API_KEY")}>
-            {t`Create new key`}
+            {"Create new key"}
           </Button>
         </div>
 

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Button } from "@headlessui/react";
-import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -98,7 +97,7 @@ export default function SideNavigation({
     keyboardShortcut: KeyboardShortcut;
   }[] = [
     {
-      name: t`Boards`,
+      name: "Boards",
       href: "/boards",
       icon: isDarkMode ? boardsIconDark : boardsIconLight,
       keyboardShortcut: {
@@ -106,11 +105,11 @@ export default function SideNavigation({
         stroke: { key: "b" },
         action: () => router.push("/boards"),
         group: "NAVIGATION",
-        description: t`Go to boards`,
+        description: "Go to boards",
       },
     },
     {
-      name: t`Templates`,
+      name: "Templates",
       href: "/templates",
       icon: isDarkMode ? templatesIconDark : templatesIconLight,
       keyboardShortcut: {
@@ -118,11 +117,11 @@ export default function SideNavigation({
         stroke: { key: "t" },
         action: () => router.push("/templates"),
         group: "NAVIGATION",
-        description: t`Go to templates`,
+        description: "Go to templates",
       },
     },
     {
-      name: t`Members`,
+      name: "Members",
       href: "/members",
       icon: isDarkMode ? membersIconDark : membersIconLight,
       keyboardShortcut: {
@@ -130,11 +129,11 @@ export default function SideNavigation({
         stroke: { key: "m" },
         action: () => router.push("/members"),
         group: "NAVIGATION",
-        description: t`Go to members`,
+        description: "Go to members",
       },
     },
     {
-      name: t`Settings`,
+      name: "Settings",
       href: "/settings",
       icon: isDarkMode ? settingsIconDark : settingsIconLight,
       keyboardShortcut: {
@@ -142,7 +141,7 @@ export default function SideNavigation({
         stroke: { key: "s" },
         action: () => router.push("/settings"),
         group: "NAVIGATION",
-        description: t`Go to settings`,
+        description: "Go to settings",
       },
     },
   ];

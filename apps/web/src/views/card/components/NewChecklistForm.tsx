@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
@@ -67,8 +66,8 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
           ctx.previous,
         );
       showPopup({
-        header: t`Unable to create checklist`,
-        message: t`Please try again later, or contact customer support.`,
+        header: "Unable to create checklist",
+        message: "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -105,7 +104,7 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
             className="text-sm font-bold"
             style={{ color: "var(--kan-menu-text)" }}
           >
-            {t`New checklist`}
+            {"New checklist"}
           </h2>
           <button
             type="button"
@@ -121,7 +120,7 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
 
         <Input
           id="checklist-name"
-          placeholder={t`Checklist name`}
+          placeholder={"Checklist name"}
           {...register("name")}
           ref={(e) => {
             register("name").ref(e);
@@ -143,7 +142,7 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
             type="submit"
             disabled={createChecklist.isPending || !watch("name")}
           >
-            {t`Create checklist`}
+            {"Create checklist"}
           </Button>
         </div>
       </div>

@@ -1,5 +1,3 @@
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -191,10 +189,10 @@ export function NewCardForm({
     onError: (error, _newList, context) => {
       utils.board.byId.setData(queryParams, context?.previousState);
       showPopup({
-        header: t`Unable to create card`,
+        header: "Unable to create card",
         message: error.data?.zodError?.fieldErrors.title?.[0]
           ? `${error.data.zodError.fieldErrors.title[0].replace("String", "Title")}`
-          : t`Please try again later, or contact customer support.`,
+          : "Please try again later, or contact customer support.",
         icon: "error",
       });
     },
@@ -315,7 +313,7 @@ export function NewCardForm({
             className="text-sm font-bold"
             style={{ color: "var(--kan-menu-text)" }}
           >
-            {t`New card`}
+            {"New card"}
           </h2>
           <button
             type="button"
@@ -332,7 +330,7 @@ export function NewCardForm({
         <div>
           <Input
             id="title"
-            placeholder={t`Card title`}
+            placeholder={"Card title"}
             {...register("title")}
             ref={(e) => {
               register("title").ref(e);
@@ -395,7 +393,7 @@ export function NewCardForm({
               >
                 <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-600 bg-light-200 px-2 py-1 text-left text-xs text-light-800 hover:bg-light-300 dark:border-dark-600 dark:bg-dark-400 dark:text-dark-1000 dark:hover:bg-dark-500">
                   {!memberPublicIds.length ? (
-                    t`Members`
+                    "Members"
                   ) : (
                     <div className="flex -space-x-1 overflow-hidden">
                       {memberPublicIds.map((memberPublicId) => {
@@ -433,11 +431,11 @@ export function NewCardForm({
                 openModal("EDIT_LABEL", labelPublicId)
               }
               handleCreate={() => openModal("NEW_LABEL")}
-              createNewItemLabel={t`Create new label`}
+              createNewItemLabel={"Create new label"}
             >
               <div className="flex h-full w-full items-center rounded-[5px] border-[1px] border-light-600 bg-light-200 px-2 py-1 text-left text-xs text-light-800 hover:bg-light-300 dark:border-dark-600 dark:bg-dark-400 dark:text-dark-1000 dark:hover:bg-dark-500">
                 {!labelPublicIds.length ? (
-                  t`Labels`
+                  "Labels"
                 ) : (
                   <>
                     <div
@@ -471,7 +469,7 @@ export function NewCardForm({
                     </div>
                     {labelPublicIds.length > 1 && (
                       <div className="ml-1">
-                        <Trans>{`${labelPublicIds.length} labels`}</Trans>
+                        {`${labelPublicIds.length} labels`}
                       </div>
                     )}
                   </>
@@ -488,7 +486,7 @@ export function NewCardForm({
               {dueDate ? (
                 <span>{format(dueDate, "MMM d, yyyy")}</span>
               ) : (
-                <>{t`Due date`}</>
+                <>{"Due date"}</>
               )}
             </button>
             {isDateSelectorOpen && (
@@ -536,7 +534,7 @@ export function NewCardForm({
 
       <div className="mt-5 flex items-center justify-end border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         <Toggle
-          label={t`Create another`}
+          label={"Create another"}
           isChecked={isCreateAnotherEnabled}
           onChange={handleToggleCreateAnother}
         />
@@ -546,7 +544,7 @@ export function NewCardForm({
             type="submit"
             disabled={title.length === 0 || createCard.isPending}
           >
-            {t`Create card`}
+            {"Create card"}
           </Button>
         </div>
       </div>
