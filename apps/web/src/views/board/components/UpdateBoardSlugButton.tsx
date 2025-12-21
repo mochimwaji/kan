@@ -27,11 +27,7 @@ const UpdateBoardSlugButton = ({
       className="hidden cursor-pointer items-center gap-2 rounded-full border-[1px] bg-light-50 p-1 pl-4 pr-1 text-sm text-light-950 hover:bg-light-100 dark:border-dark-600 dark:bg-dark-50 dark:text-dark-900 dark:hover:bg-dark-100 xl:flex"
     >
       <div className="flex items-center">
-        <span>
-          {env("NEXT_PUBLIC_KAN_ENV") === "cloud"
-            ? "kan.bn"
-            : env("NEXT_PUBLIC_BASE_URL")}
-        </span>
+        <span>{env("NEXT_PUBLIC_BASE_URL")}</span>
         <div className="mx-1.5 h-4 w-px rotate-[20deg] bg-gray-300 dark:bg-dark-600"></div>
         <span>{workspaceSlug}</span>
         <div className="mx-1.5 h-4 w-px rotate-[20deg] bg-gray-300 dark:bg-dark-600"></div>

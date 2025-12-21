@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { env } from "next-runtime-env";
 import { useEffect, useState } from "react";
 
 import { authClient } from "@kan/auth/client";
@@ -17,8 +16,6 @@ export default function InvitePage() {
   const [error, setError] = useState<string | null>(null);
   const { data: session, isPending: isSessionLoading } =
     authClient.useSession();
-
-  const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
 
   const inviteCode = Array.isArray(code) ? code[0] : code;
 
@@ -129,9 +126,7 @@ export default function InvitePage() {
             </h2>
             {!error ? (
               <p className="mt-4 text-center text-sm text-light-900 dark:text-dark-800">
-                {isCloudEnv
-                  ? "You've been invited to join a workspace on kan.bn."
-                  : "You've been invited to join a workspace."}
+                {"You've been invited to join a workspace."}
               </p>
             ) : (
               <p className="mt-4 text-center text-sm text-red-500">{error}</p>

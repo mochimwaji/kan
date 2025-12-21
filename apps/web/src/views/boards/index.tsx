@@ -1,4 +1,4 @@
-import { HiArrowDownTray, HiOutlinePlusSmall } from "react-icons/hi2";
+import { HiOutlinePlusSmall } from "react-icons/hi2";
 
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
@@ -9,7 +9,6 @@ import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { BoardsList } from "./components/BoardsList";
-import { ImportBoardsForm } from "./components/ImportBoardsForm";
 import { NewBoardForm } from "./components/NewBoardForm";
 
 export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
@@ -39,18 +38,6 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
             {isTemplate ? "Templates" : "Boards"}
           </h1>
           <div className="flex gap-2">
-            {!isTemplate && (
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => openModal("IMPORT_BOARDS")}
-                iconLeft={
-                  <HiArrowDownTray aria-hidden="true" className="h-4 w-4" />
-                }
-              >
-                {"Import"}
-              </Button>
-            )}
             <Tooltip content={createModalShortcutTooltipContent}>
               <Button
                 type="button"
@@ -72,13 +59,6 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
             isVisible={isOpen && modalContentType === "NEW_BOARD"}
           >
             <NewBoardForm isTemplate={!!isTemplate} />
-          </Modal>
-
-          <Modal
-            modalSize="sm"
-            isVisible={isOpen && modalContentType === "IMPORT_BOARDS"}
-          >
-            <ImportBoardsForm />
           </Modal>
 
           <Modal
