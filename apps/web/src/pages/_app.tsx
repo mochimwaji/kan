@@ -19,7 +19,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata = {
   title: "Kan",
-  description: "The open source Trello alternative",
+  description: "Open source Kanban board for teams",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
