@@ -33,6 +33,17 @@
   --kan-menu-text: #ffffff;
 }
 
+/* Hide body initially until theme is applied to prevent grey flash */
+/* JS will add 'theme-ready' class after theme colors are applied */
+body:not(.theme-ready) {
+  opacity: 0;
+}
+
+body.theme-ready {
+  opacity: 1;
+  transition: opacity 150ms ease-out;
+}
+
 [contenteditable="true"]:empty:before {
   content: attr(placeholder);
   display: block;

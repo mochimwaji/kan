@@ -53,8 +53,14 @@ export default function ApiKeyList() {
                     className={twMerge(
                       "mr-2 text-sm font-medium text-light-900 dark:text-dark-900",
                       showSkeleton &&
-                        "md mb-2 h-3 w-[125px] animate-pulse rounded-sm bg-light-200 dark:bg-dark-200",
+                        "md mb-2 h-3 w-[125px] animate-pulse rounded-sm",
                     )}
+                    style={{
+                      color: "var(--kan-pages-text)",
+                      ...(showSkeleton && {
+                        backgroundColor: "var(--kan-sidebar-bg)",
+                      }),
+                    }}
                   >
                     {keyName}
                   </p>
@@ -67,9 +73,12 @@ export default function ApiKeyList() {
           <p
             className={twMerge(
               "text-sm text-light-900 dark:text-dark-900",
-              showSkeleton &&
-                "h-3 w-[80px] animate-pulse rounded-sm bg-light-200 dark:bg-dark-200",
+              showSkeleton && "h-3 w-[80px] animate-pulse rounded-sm",
             )}
+            style={{
+              color: "var(--kan-pages-text)",
+              ...(showSkeleton && { backgroundColor: "var(--kan-sidebar-bg)" }),
+            }}
           >
             {formatDate(createdAt)}
           </p>
@@ -78,9 +87,12 @@ export default function ApiKeyList() {
           <p
             className={twMerge(
               "text-sm text-light-900 dark:text-dark-900",
-              showSkeleton &&
-                "h-3 w-[80px] animate-pulse rounded-sm bg-light-200 dark:bg-dark-200",
+              showSkeleton && "h-3 w-[80px] animate-pulse rounded-sm",
             )}
+            style={{
+              color: "var(--kan-pages-text)",
+              ...(showSkeleton && { backgroundColor: "var(--kan-sidebar-bg)" }),
+            }}
           >
             {formatDate(lastRequest)}
           </p>
@@ -90,9 +102,13 @@ export default function ApiKeyList() {
             <span
               className={twMerge(
                 "inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[11px] font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20",
-                showSkeleton &&
-                  "h-5 w-[50px] animate-pulse bg-light-200 ring-0 dark:bg-dark-200",
+                showSkeleton && "h-5 w-[50px] animate-pulse ring-0",
               )}
+              style={
+                showSkeleton
+                  ? { backgroundColor: "var(--kan-sidebar-bg)" }
+                  : undefined
+              }
             >
               {keyStart}...
             </span>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { HiOutlineRectangleStack } from "react-icons/hi2";
 
 import Button from "~/components/Button";
@@ -22,6 +22,26 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
     fromBoardsPage,
   } = useBoardTransition();
   const boardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  // Control content visibility during board transition animations
+  // Two-phase approach: content is hidden during ALL animation phases, shown only when idle
+  // This ensures no flash before/during any board transition animation
+  const [showContent, setShowContent] = useState(() => {
+    // Start hidden if any animation is in progress
+    return animationPhase === "idle";
+  });
+
+  useEffect(() => {
+    if (animationPhase === "idle") {
+      // Only show content when animation is fully complete
+      // Small delay to ensure overlay has finished rendering
+      const timer = setTimeout(() => setShowContent(true), 50);
+      return () => clearTimeout(timer);
+    } else {
+      // Hide immediately when any animation starts
+      setShowContent(false);
+    }
+  }, [animationPhase]);
 
   const { data, isLoading } = api.board.all.useQuery(
     {
@@ -202,10 +222,22 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
 
   if (isLoading)
     return (
-      <div className="3xl:grid-cols-4 grid h-fit w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
-        <div className="mr-5 flex h-[150px] w-full animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
-        <div className="mr-5 flex h-[150px] w-full animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
-        <div className="mr-5 flex h-[150px] w-full animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
+      <div
+        className="3xl:grid-cols-4 grid h-fit w-full grid-cols-1 gap-4 transition-opacity duration-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
+        style={{ opacity: showContent ? 1 : 0 }}
+      >
+        <div
+          className="mr-5 flex h-[150px] w-full animate-pulse rounded-md"
+          style={{ backgroundColor: "var(--kan-board-bg)" }}
+        />
+        <div
+          className="mr-5 flex h-[150px] w-full animate-pulse rounded-md"
+          style={{ backgroundColor: "var(--kan-board-bg)" }}
+        />
+        <div
+          className="mr-5 flex h-[150px] w-full animate-pulse rounded-md"
+          style={{ backgroundColor: "var(--kan-board-bg)" }}
+        />
       </div>
     );
 
@@ -237,7 +269,10 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
     );
 
   return (
-    <div className="3xl:grid-cols-4 grid h-fit w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3">
+    <div
+      className="3xl:grid-cols-4 grid h-fit w-full grid-cols-1 gap-4 transition-opacity duration-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
+      style={{ opacity: showContent ? 1 : 0 }}
+    >
       {data?.map((board) => (
         <a
           key={board.publicId}

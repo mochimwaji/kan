@@ -74,4 +74,14 @@ export function applyColorsToDocument(
     getContrastColor(resolved.button),
   );
   root.style.setProperty("--kan-menu-text", getContrastColor(resolved.menu));
+
+  // Cache theme colors in localStorage for faster initial load (prevents flash)
+  try {
+    localStorage.setItem("kan-theme-cache", JSON.stringify(resolved));
+  } catch {
+    // Ignore localStorage errors (e.g., private browsing)
+  }
+
+  // Mark body as theme-ready to show content (CSS hides until this class is added)
+  document.body.classList.add("theme-ready");
 }

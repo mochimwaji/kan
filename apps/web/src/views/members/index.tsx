@@ -58,7 +58,10 @@ export default function MembersPage() {
           <div className="flex items-center p-2 sm:p-4">
             <div className="flex-shrink-0">
               {showSkeleton ? (
-                <div className="h-8 w-8 animate-pulse rounded-full bg-light-200 dark:bg-dark-200 sm:h-9 sm:w-9" />
+                <div
+                  className="h-8 w-8 animate-pulse rounded-full sm:h-9 sm:w-9"
+                  style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
+                />
               ) : (
                 <Avatar
                   name={memberName ?? ""}
@@ -74,9 +77,14 @@ export default function MembersPage() {
                     className={twMerge(
                       "mr-2 truncate text-xs font-medium sm:text-sm",
                       showSkeleton &&
-                        "md mb-2 h-3 w-[125px] animate-pulse rounded-sm bg-light-200 dark:bg-dark-200",
+                        "md mb-2 h-3 w-[125px] animate-pulse rounded-sm",
                     )}
-                    style={{ color: "var(--kan-pages-text)" }}
+                    style={{
+                      color: "var(--kan-pages-text)",
+                      ...(showSkeleton && {
+                        backgroundColor: "var(--kan-sidebar-bg)",
+                      }),
+                    }}
                   >
                     {memberName}
                   </p>
@@ -84,10 +92,15 @@ export default function MembersPage() {
                 <p
                   className={twMerge(
                     "truncate text-xs sm:text-sm",
-                    showSkeleton &&
-                      "h-3 w-[175px] animate-pulse rounded-sm bg-light-200 dark:bg-dark-200",
+                    showSkeleton && "h-3 w-[175px] animate-pulse rounded-sm",
                   )}
-                  style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+                  style={{
+                    color: "var(--kan-pages-text)",
+                    opacity: 0.7,
+                    ...(showSkeleton && {
+                      backgroundColor: "var(--kan-sidebar-bg)",
+                    }),
+                  }}
                 >
                   {memberEmail}
                 </p>
