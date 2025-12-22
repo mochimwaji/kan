@@ -49,21 +49,25 @@ export default function ApiKeyList() {
             <div className="ml-2 min-w-0 flex-1">
               <div>
                 <div className="flex items-center">
-                  <p
-                    className={twMerge(
-                      "mr-2 text-sm font-medium text-light-900 dark:text-dark-900",
-                      showSkeleton &&
-                        "md mb-2 h-3 w-[125px] animate-pulse rounded-sm",
-                    )}
-                    style={{
-                      color: "var(--kan-pages-text)",
-                      ...(showSkeleton && {
-                        backgroundColor: "var(--kan-sidebar-bg)",
-                      }),
-                    }}
-                  >
-                    {keyName}
-                  </p>
+                  {showSkeleton ? (
+                    <div className="flex flex-col gap-2">
+                      <div
+                        className="h-3 w-[125px] animate-pulse rounded-sm"
+                        style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <p
+                      className={twMerge(
+                        "mr-2 text-sm font-medium text-light-900 dark:text-dark-900",
+                      )}
+                      style={{
+                        color: "var(--kan-pages-text)",
+                      }}
+                    >
+                      {keyName}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -153,7 +157,10 @@ export default function ApiKeyList() {
         <div className="inline-block min-w-full py-2 pb-12 align-middle">
           <div className="relative h-full shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
             <table className="min-w-[600px] divide-y divide-light-600 dark:divide-dark-600">
-              <thead className="rounded-t-lg bg-light-300 dark:bg-dark-200">
+              <thead
+                className="rounded-t-lg"
+                style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
+              >
                 <tr>
                   <th
                     scope="col"
@@ -187,7 +194,10 @@ export default function ApiKeyList() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-light-600 bg-light-50 dark:divide-dark-600 dark:bg-dark-100">
+              <tbody
+                className="divide-y divide-light-600 dark:divide-dark-600"
+                style={{ backgroundColor: "var(--kan-pages-bg)" }}
+              >
                 {!isLoading &&
                   data?.data?.map((apiKey, index) => (
                     <TableRow

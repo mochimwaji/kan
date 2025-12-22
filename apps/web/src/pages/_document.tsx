@@ -35,6 +35,7 @@ export default function Document() {
           }
           
           // Apply text colors
+          // Apply text colors
           if (colors.sidebar) root.style.setProperty('--kan-sidebar-text', getContrast(colors.sidebar));
           if (colors.pages) root.style.setProperty('--kan-pages-text', getContrast(colors.pages));
           if (colors.boardBackground) root.style.setProperty('--kan-board-text', getContrast(colors.boardBackground));
@@ -42,7 +43,7 @@ export default function Document() {
           if (colors.menu) root.style.setProperty('--kan-menu-text', getContrast(colors.menu));
           
           // Mark as ready since we applied cached theme
-          document.body.classList.add('theme-ready');
+          root.classList.add('theme-ready');
         }
       } catch (e) {
         // Ignore errors (e.g., no localStorage access)

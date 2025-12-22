@@ -176,13 +176,13 @@ export default function List({
             "transition-dnd-safe mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border py-2 pl-2 pr-1",
             list.color
               ? "border-opacity-50"
-              : "border-light-400 bg-light-300 dark:border-dark-300 dark:bg-dark-100",
+              : "border-light-400 dark:border-dark-300",
             isSelected ? "selected-item-list" : "",
             isDeleting ? "delete-fade-out" : "",
           )}
           style={{
             ...provided.draggableProps.style,
-            ...listStyle,
+            backgroundColor: listBackground || "var(--kan-sidebar-bg)",
             color: listTextColor,
           }}
         >

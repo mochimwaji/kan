@@ -82,6 +82,7 @@ export function applyColorsToDocument(
     // Ignore localStorage errors (e.g., private browsing)
   }
 
-  // Mark body as theme-ready to show content (CSS hides until this class is added)
+  // Mark body and root as theme-ready to show content (CSS hides until this class is added)
+  root.classList.add("theme-ready");
   document.body.classList.add("theme-ready");
 }
