@@ -9,31 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Calendar View**: New month calendar view for boards with toggle button and `v` keyboard shortcut. Cards display on their due dates with list colors. Drag-and-drop to reschedule cards or remove due dates. Navigate with `←`/`→` for months and `t` for today. Unscheduled sidebar shows cards without due dates.
-- **Multi-Drag Calendar Support**: `bulkUpdate` mutation for updating multiple cards atomically when dragging to calendar dates.
-- **DeleteConfirmation Component**: Generic, reusable delete confirmation dialog with configurable entity types, consolidating 6 separate components (~207 lines removed).
-- **Section Headers**: Added clear section dividers to large files for better navigability:
-  - `board/index.tsx`: State, Event Handlers, Mutations, Selection, Drag-Drop, Modal Content, Render
-  - `card.repo.ts`: CREATE, UPDATE, READ, REORDER, DELETE (5 sections)
-  - `board.repo.ts`: READ, CREATE, UPDATE, DELETE, HELPER (5 sections)
-- **useBoardKeyboardShortcuts Hook**: Extracted keyboard shortcut logic from board/index.tsx (~79 lines).
-- **Codebase Quality Documentation**: Added comprehensive guide in AGENTS.md covering large file rationale, two-phase visual state pattern, and i18n guidelines.
-- **Due Date Urgency Coloring**: Cards now show due dates in contextual colors based on urgency: red (overdue), orange (due today), yellow (due within a week), default (later dates).
-- **Collapsible Lists**: Lists can be collapsed/expanded by clicking the chevron toggle in the header. Collapse state persists across page refreshes using localStorage. Collapsed lists show a card count badge.
-- **CollapsibleSection Component**: New reusable animated component for smooth collapse/expand transitions.
-- **Board Transition Animations**: Smooth morph animation when navigating between boards list and board view using `BoardTransitionOverlay` and `BoardTransitionProvider`.
-- **Sidebar Toggle Animations**: Smooth sliding transitions for left and right sidebar open/close states with visual feedback.
-- **Card Right Sidebar Icons**: Added Lottie animations and icons for List, Labels, Members, and Due date sections in the card right panel.
-- **Theme Presets**: Added 7 predefined color themes (Default Light/Dark, Ocean Blue, Forest Green, Sunset Warm, Lavender Dream, Slate Gray) with `ThemePresetSelector` component.
-- **Color Utilities**: New `colorUtils.ts` with HSL conversion, pastel color derivation, contrast detection, and color blending functions.
-- **IRSA Support**: Added IAM Roles for Service Accounts (IRSA) support for S3 authentication (#265).
-- **OIDC Domain Limiting**: Added ability to limit OIDC logins to specific domains (#263).
-- **SMTP SSL Configuration**: Added `SMTP_REJECT_UNAUTHORIZED` env var to allow invalid SSL certificates (#262).
-- **JSDoc Documentation**: Added comprehensive JSDoc to `board.repo.ts` (15+ functions) and all shared utility functions.
-- **Local File Storage**: Replaced S3 cloud storage with local filesystem storage for avatars and attachments, with new `/api/files/[...path]` endpoint.
-- **Root Redirect**: Root path (`/`) now redirects to `/login` for streamlined self-hosted experience.
+#### 🎨 UI/UX Enhancements
 
-### Changed
+- **Theme Presets**: Added 7 predefined color themes (Default Light/Dark, Ocean Blue, Forest Green, Sunset Warm, Lavender Dream, Slate Gray) with `ThemePresetSelector`.
+- **Board Transition Animations**: Smooth morph animations when navigating between boards list and board view.
+- **Collapsible Lists**: Lists can be collapsed/expanded with persistent state and card count badges.
+- **Due Date Urgency Coloring**: Contextual colors for due dates (red for overdue, orange for today, yellow for upcoming).
+- **Sidebar Animations**: Smooth sliding transitions for left and right sidebars.
+- **Card Decorations**: Added Lottie animations and icons for card properties (Labels, Members, etc.).
+
+#### 🚀 New Features
+
+- **Calendar View**: Month calendar view for boards (`v` shortcut) with drag-and-drop rescheduling.
+- **Local File Storage**: Replaced S3 with local filesystem storage for avatars and attachments.
+- **Multi-Drag Calendar Support**: Atomic updates when dragging multiple cards to calendar dates.
+
+#### 🛠️ Developer Experience (DX)
+
+- **Section Headers**: Added clear dividers to large files (`board/index.tsx`, `*.repo.ts`) for better navigability.
+- **DeleteConfirmation Component**: Reusable dialog consolidating 6 separate components (~207 lines removed).
+- **useBoardKeyboardShortcuts Hook**: Extracted keyboard logic from the main board component.
+- **JSDoc & Guides**: Added comprehensive JSDoc to repository functions and quality guidelines in `AGENTS.md`.
+
+#### 🔧 Backend & Auth
+
+- **OIDC Domain Limiting**: Ability to restrict logins to specific domains (#263).
+- **SMTP Enhancements**: Added `SMTP_REJECT_UNAUTHORIZED` for custom SSL certificates (#262).
+- **Root Redirect**: Root path (`/`) now redirects to `/login` for easier self-hosting.
 
 - **Drag-and-Drop Library**: Migrated from deprecated `react-beautiful-dnd` to actively maintained `@hello-pangea/dnd` (API-compatible drop-in replacement).
 - **React Query Configuration**: Added explicit stale time (30s), garbage collection time (5min), and disabled refetchOnWindowFocus for better performance.

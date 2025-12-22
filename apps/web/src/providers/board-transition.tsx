@@ -103,41 +103,31 @@ export function BoardTransitionProvider({
     });
   }, []);
 
-  // Listen for route changes to handle back navigation
+  // Listen for route changes - only reset when leaving board context entirely
   useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      // Check if navigating back to boards page
+    const handleRouteChangeStart = (url: string) => {
       const isBoardsPage = url === "/boards" || url.endsWith("/boards");
-      // Check if staying within board/card context (don't reset for card views)
       const isWithinBoardContext =
         url.includes("/boards/") ||
         url.includes("/cards/") ||
         url.includes("/templates/");
 
+      // When leaving board context entirely (e.g., going to Settings), reset without animation
+      // Contract animation is triggered by BoardsList when it mounts with expanded phase
       if (
-        isBoardsPage &&
-        state.animationPhase === "expanded" &&
-        state.sourceRect
+        !isBoardsPage &&
+        !isWithinBoardContext &&
+        state.animationPhase !== "idle"
       ) {
-        // Trigger contract animation immediately to prevent flash
-        startContract(state.sourceRect);
-      } else if (!isWithinBoardContext && state.animationPhase !== "idle") {
-        // Navigating elsewhere (not boards/cards/templates), reset
         reset();
       }
     };
 
-    router.events.on("routeChangeStart", handleRouteChange);
+    router.events.on("routeChangeStart", handleRouteChangeStart);
     return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
+      router.events.off("routeChangeStart", handleRouteChangeStart);
     };
-  }, [
-    router.events,
-    state.animationPhase,
-    state.sourceRect,
-    startContract,
-    reset,
-  ]);
+  }, [router.events, state.animationPhase, reset]);
 
   return (
     <BoardTransitionContext.Provider

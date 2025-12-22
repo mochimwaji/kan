@@ -47,7 +47,7 @@ export function LabelForm({
       values: {
         name: isEdit && label.data?.name ? label.data.name : "",
         colour: (isEdit && label.data?.colourCode
-          ? colours.find((c) => c.code === label.data?.colourCode)
+          ? colours.find((c) => c.code === label.data.colourCode)
           : colours[0]) as Colour,
         isCreateAnotherEnabled: false,
       },
@@ -113,7 +113,10 @@ export function LabelForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
-        <div className="flex w-full items-center justify-between pb-4 text-neutral-900 dark:text-dark-1000">
+        <div
+          className="flex w-full items-center justify-between pb-4"
+          style={{ color: "var(--kan-menu-text)" }}
+        >
           <h2 className="text-sm font-medium">
             {isEdit ? "Edit label" : "New label"}
           </h2>
@@ -230,9 +233,7 @@ export function LabelForm({
           <Button
             type="submit"
             isLoading={updateLabel.isPending || createLabel.isPending}
-            disabled={
-              !watch("name")
-            }
+            disabled={!watch("name")}
           >
             {isEdit ? "Update label" : "Create label"}
           </Button>

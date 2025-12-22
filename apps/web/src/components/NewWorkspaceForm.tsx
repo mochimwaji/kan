@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { env } from "next-runtime-env";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiCheck, HiXMark } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
@@ -86,7 +86,7 @@ export function NewWorkspaceForm() {
   const isWorkspaceSlugAvailable = checkWorkspaceSlugAvailability.data;
 
   const createWorkspace = api.workspace.create.useMutation({
-    onSuccess: async (values) => {
+    onSuccess: (values) => {
       if (values.publicId && values.name) {
         void utils.workspace.all.invalidate();
         switchWorkspace({
@@ -126,7 +126,7 @@ export function NewWorkspaceForm() {
 
     createWorkspace.mutate({
       name: values.name,
-      slug: values.slug || undefined,
+      slug: values.slug ?? undefined,
     });
   };
 
@@ -139,7 +139,10 @@ export function NewWorkspaceForm() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4">
-          <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="text-sm font-bold"
+            style={{ color: "var(--kan-menu-text)" }}
+          >
             {"New workspace"}
           </h2>
           <button

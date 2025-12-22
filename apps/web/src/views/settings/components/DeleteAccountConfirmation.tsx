@@ -20,7 +20,7 @@ export function DeleteAccountConfirmation() {
 
   const deleteAccountMutation = useMutation({
     mutationFn: () => authClient.deleteUser(),
-    onSuccess: async () => {
+    onSuccess: () => {
       closeModal();
       showPopup({
         header: "Account deleted",
@@ -28,7 +28,7 @@ export function DeleteAccountConfirmation() {
         icon: "success",
       });
 
-      utils.invalidate();
+      void utils.invalidate();
 
       router.push("/");
     },
@@ -49,7 +49,10 @@ export function DeleteAccountConfirmation() {
   return (
     <div className="p-5">
       <div className="flex w-full flex-col justify-between pb-4">
-        <h2 className="text-md pb-4 font-medium text-neutral-900 dark:text-dark-1000">
+        <h2
+          className="text-md pb-4 font-medium"
+          style={{ color: "var(--kan-menu-text)" }}
+        >
           {"Are you sure you want to delete your account?"}
         </h2>
         <p className="mb-4 text-sm text-light-900 dark:text-dark-900">

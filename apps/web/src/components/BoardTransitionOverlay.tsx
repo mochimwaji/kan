@@ -67,6 +67,13 @@ export default function BoardTransitionOverlay() {
     setMounted(true);
   }, []);
 
+  // Clear styles when animation is idle to prevent stale styles from showing on next animation
+  useEffect(() => {
+    if (animationPhase === "idle") {
+      setStyles(null);
+    }
+  }, [animationPhase]);
+
   // Handle expanding animation
   useEffect(() => {
     if (animationPhase === "expanding" && sourceRect) {

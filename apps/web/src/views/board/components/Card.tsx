@@ -195,7 +195,7 @@ const Card = ({
                   <HiBars3BottomLeft className="h-4 w-4" />
                 </div>
               )}
-              {hasDueDate && dueDate && (
+              {hasDueDate && (
                 <div
                   className={twMerge(
                     "flex items-center gap-1",
@@ -210,7 +210,7 @@ const Card = ({
                 >
                   <HiOutlineClock className="h-4 w-4" />
                   <span className="text-[11px]">
-                    {format(dueDate, showYear ? "do MMM yyyy" : "do MMM", {
+                    {format(dueDate!, showYear ? "do MMM yyyy" : "do MMM", {
                       locale: dateLocale,
                     })}
                   </span>
@@ -227,7 +227,7 @@ const Card = ({
               {hasAttachments && (
                 <div
                   className="flex items-center gap-1"
-                  style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+                  style={{ color: cardTextColor, opacity: 0.7 }}
                 >
                   <HiOutlinePaperClip className="h-4 w-4" />
                 </div>
@@ -243,7 +243,7 @@ const Card = ({
                   />
                   <span
                     className="text-[10px]"
-                    style={{ color: "var(--kan-pages-text)" }}
+                    style={{ color: cardTextColor }}
                   >
                     {completedItems}/{totalItems}
                   </span>

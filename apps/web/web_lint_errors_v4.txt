@@ -1,0 +1,244 @@
+
+> @kan/web@0.1.0 lint /home/kan/apps/web
+> eslint
+
+
+/home/kan/apps/web/src/components/CollapsibleSection.tsx
+  92:6  warning  React Hook useEffect has a missing dependency: 'skipAnimation'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/kan/apps/web/src/components/Editor.tsx
+  170:11  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+  187:10  error  Unnecessary optional chain on a non-nullish value                                                   @typescript-eslint/no-unnecessary-condition
+  285:11  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+  298:20  error  Unnecessary optional chain on a non-nullish value                                                   @typescript-eslint/no-unnecessary-condition
+  299:11  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+  309:24  error  Unnecessary optional chain on a non-nullish value                                                   @typescript-eslint/no-unnecessary-condition
+  312:10  error  Unnecessary optional chain on a non-nullish value                                                   @typescript-eslint/no-unnecessary-condition
+  330:11  error  Unsafe call of a(n) `any` typed value                                                               @typescript-eslint/no-unsafe-call
+  330:17  error  Unsafe member access .command on an `any` value                                                     @typescript-eslint/no-unsafe-member-access
+  352:22  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  486:22  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+  494:30  error  Unsafe argument of type `any` assigned to a parameter of type `Range`                               @typescript-eslint/no-unsafe-argument
+  574:38  error  Use `String#includes()` method with a string instead                                                @typescript-eslint/prefer-includes
+
+/home/kan/apps/web/src/components/SideNavigation.tsx
+   26:1   warning  All imports in the declaration are only used as types. Use `import type`  @typescript-eslint/consistent-type-imports
+   73:7   error    Unsafe assignment of an error typed value                                 @typescript-eslint/no-unsafe-assignment
+   85:7   error    Unsafe assignment of an error typed value                                 @typescript-eslint/no-unsafe-assignment
+   97:7   error    Unsafe assignment of an error typed value                                 @typescript-eslint/no-unsafe-assignment
+  109:7   error    Unsafe assignment of an error typed value                                 @typescript-eslint/no-unsafe-assignment
+  178:37  error    Unsafe assignment of an error typed value                                 @typescript-eslint/no-unsafe-assignment
+
+/home/kan/apps/web/src/hooks/useModalFormState.ts
+  11:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  33:11  error  Unsafe assignment of an `any` value       @typescript-eslint/no-unsafe-assignment
+  34:11  error  Unsafe assignment of an `any` value       @typescript-eslint/no-unsafe-assignment
+
+/home/kan/apps/web/src/instrumentation.ts
+  2:7  error  NEXT_RUNTIME is not listed as a dependency in the root turbo.json or workspace () turbo.json                      turbo/no-undeclared-env-vars
+  2:7  error  'process.env' is restricted from being used. Use `import { env } from '~/env'` instead to ensure validated types  no-restricted-properties
+
+/home/kan/apps/web/src/pages/_app.tsx
+  58:7  warning  `next/script`'s `beforeInteractive` strategy should not be used outside of `pages/_document.js`. See: https://nextjs.org/docs/messages/no-before-interactive-script-outside-document  @next/next/no-before-interactive-script-outside-document
+
+/home/kan/apps/web/src/pages/api/attachments/upload.ts
+  42:49  error  Unsafe assignment of an `any` value       @typescript-eslint/no-unsafe-assignment
+  42:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/kan/apps/web/src/pages/api/trpc/[trpc].ts
+  11:5  error  'process.env' is restricted from being used. Use `import { env } from '~/env'` instead to ensure validated types  no-restricted-properties
+
+/home/kan/apps/web/src/pages/api/upload/avatar.ts
+  40:49  error  Unsafe assignment of an `any` value       @typescript-eslint/no-unsafe-assignment
+  40:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/kan/apps/web/src/providers/modal.tsx
+   29:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   30:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   31:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   40:65  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   98:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  101:7   error  Unsafe assignment of an `any` value       @typescript-eslint/no-unsafe-assignment
+  107:7   error  Unsafe return of a value of type `any`    @typescript-eslint/no-unsafe-return
+
+/home/kan/apps/web/src/types/contenteditable.d.ts
+  26:13  error  'ContentEditableElement' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/kan/apps/web/src/utils/api.ts
+  42:7   error  'process.env' is restricted from being used. Use `import { env } from '~/env'` instead to ensure validated types  no-restricted-properties
+  42:49  error  'process.env' is restricted from being used. Use `import { env } from '~/env'` instead to ensure validated types  no-restricted-properties
+  43:30  error  'process.env' is restricted from being used. Use `import { env } from '~/env'` instead to ensure validated types  no-restricted-properties
+  63:13  error  'process.env' is restricted from being used. Use `import { env } from '~/env'` instead to ensure validated types  no-restricted-properties
+
+/home/kan/apps/web/src/utils/helpers.ts
+  5:35  error  Unnecessary conditional, the types have no overlap  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/utils/themeUtils.ts
+  36:14  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  37:12  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  38:22  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  39:13  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  40:11  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/board/components/BoardDropdown.tsx
+  16:3  error  'boardPublicId' is defined but never used. Allowed unused args must match /^_/u      @typescript-eslint/no-unused-vars
+  17:3  error  'workspacePublicId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/kan/apps/web/src/views/board/components/Card.tsx
+  199:30  error  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/board/components/List.tsx
+  120:7  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/home/kan/apps/web/src/views/board/components/NewCardForm.tsx
+   80:26  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                                   @typescript-eslint/no-unnecessary-condition
+   81:27  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                                   @typescript-eslint/no-unnecessary-condition
+  111:11  error    Unsafe assignment of an `any` value                                                                                                  @typescript-eslint/no-unsafe-assignment
+  112:62  error    Unsafe argument of type `any` assigned to a parameter of type `string`                                                               @typescript-eslint/no-unsafe-argument
+  113:34  error    Unsafe argument of type `any[]` assigned to a parameter of type `string[]`                                                           @typescript-eslint/no-unsafe-argument
+  115:6   warning  React Hook useEffect has a missing dependency: 'setValue'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+  121:13  error    Unsafe assignment of an `any` value                                                                                                  @typescript-eslint/no-unsafe-assignment
+  123:52  error    Unsafe argument of type `any` assigned to a parameter of type `string`                                                               @typescript-eslint/no-unsafe-argument
+  135:6   warning  React Hook useEffect has missing dependencies: 'clearModalState' and 'setValue'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  159:17  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                                   @typescript-eslint/no-unnecessary-condition
+  358:45  error    Unnecessary optional chain on a non-nullish value                                                                                    @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/board/components/UpdateBoardSlugForm.tsx
+  136:34  error  Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator  @typescript-eslint/prefer-nullish-coalescing
+  173:48  error  Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator  @typescript-eslint/prefer-nullish-coalescing
+
+/home/kan/apps/web/src/views/boards/components/BoardsList.tsx
+   57:15  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+   63:13  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  187:11  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/home/kan/apps/web/src/views/boards/components/NewBoardForm.tsx
+   42:26  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  170:38  error  Unsafe argument of type `any` assigned to a parameter of type `Template | null`                     @typescript-eslint/no-unsafe-argument
+  170:57  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+
+/home/kan/apps/web/src/views/boards/index.tsx
+  30:60  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/card/components/ChecklistItemRow.tsx
+  35:19  error  Unsafe return of a value of type `any`    @typescript-eslint/no-unsafe-return
+  35:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  75:19  error  Unsafe return of a value of type `any`    @typescript-eslint/no-unsafe-return
+  75:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/kan/apps/web/src/views/card/components/ChecklistNameInput.tsx
+  32:19  error  Unsafe return of a value of type `any`    @typescript-eslint/no-unsafe-return
+  32:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/kan/apps/web/src/views/card/components/Checklists.tsx
+  38:7  error  Unnecessary conditional, value is always falsy  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/card/components/Comment.tsx
+  107:19  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  108:20  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/card/components/LabelSelector.tsx
+  26:3  error  'isCollapsed' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/kan/apps/web/src/views/card/components/ListSelector.tsx
+  22:3   error  'isCollapsed' is assigned a value but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  43:19  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  44:20  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/card/components/MemberSelector.tsx
+  28:3  error  'isCollapsed' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/kan/apps/web/src/views/card/components/NewChecklistForm.tsx
+  40:19  error  Unsafe return of a value of type `any`    @typescript-eslint/no-unsafe-return
+  40:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/kan/apps/web/src/views/card/components/NewChecklistItemForm.tsx
+   60:19  error    Unsafe return of a value of type `any`                                                                              @typescript-eslint/no-unsafe-return
+   60:33  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+   87:66  error    Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator           @typescript-eslint/prefer-nullish-coalescing
+  154:25  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                  @typescript-eslint/no-unnecessary-condition
+  168:6   warning  React Hook useEffect has a missing dependency: 'refocusEditable'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  190:34  error    Async arrow function has no 'await' expression                                                                      @typescript-eslint/require-await
+  202:38  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/card/index.tsx
+   12:10  error    'IoChevronForwardSharp' is defined but never used. Allowed unused vars must match /^_/u                                                                             @typescript-eslint/no-unused-vars
+   32:8   error    'Dropdown' is defined but never used. Allowed unused vars must match /^_/u                                                                                          @typescript-eslint/no-unused-vars
+  366:5   error    'openModal' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                @typescript-eslint/no-unused-vars
+  392:7   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  417:9   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  562:45  error    'watch' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                    @typescript-eslint/no-unused-vars
+  580:11  error    Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  589:11  error    Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  594:6   warning  React Hook useEffect has missing dependencies: 'addOrRemoveLabel' and 'clearModalState'. Either include them or remove the dependency array                         react-hooks/exhaustive-deps
+  599:11  error    Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  600:11  error    Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  600:50  error    Unsafe member access .createdChecklistId on an `any` value                                                                                                          @typescript-eslint/no-unsafe-member-access
+  612:9   error    Unnecessary conditional, value is always truthy                                                                                                                     @typescript-eslint/no-unnecessary-condition
+  737:28  error    Unnecessary optional chain on a non-nullish value                                                                                                                   @typescript-eslint/no-unnecessary-condition
+  741:43  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                                                                  @typescript-eslint/no-unnecessary-condition
+  816:59  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                                                                  @typescript-eslint/no-unnecessary-condition
+  830:33  error    Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined                                                                  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/members/components/InviteMemberForm.tsx
+  23:36  error  'userId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/kan/apps/web/src/views/members/index.tsx
+  157:37  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/public/board/CardModal.tsx
+  131:25  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  131:29  error  Unnecessary optional chain on a non-nullish value                                                   @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/public/board/index.tsx
+  138:27  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  140:26  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  154:26  error  Unnecessary conditional, value is always truthy                                                     @typescript-eslint/no-unnecessary-condition
+  154:40  error  Unnecessary conditional, value is always truthy                                                     @typescript-eslint/no-unnecessary-condition
+  202:43  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  205:41  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/home/kan/apps/web/src/views/settings/components/Avatar.tsx
+    2:10  error  'env' is defined but never used. Allowed unused vars must match /^_/u                                      @typescript-eslint/no-unused-vars
+    8:10  error  'generateUID' is defined but never used. Allowed unused vars must match /^_/u                              @typescript-eslint/no-unused-vars
+   60:9   error  'updateUser' is assigned a value but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+  196:43  error  Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator  @typescript-eslint/prefer-nullish-coalescing
+
+/home/kan/apps/web/src/views/settings/components/ChangePasswordConfirmation.tsx
+   4:10  error  'env' is defined but never used. Allowed unused vars must match /^_/u                                                                                               @typescript-eslint/no-unused-vars
+  61:19  error  Unnecessary optional chain on a non-nullish value                                                                                                                   @typescript-eslint/no-unnecessary-condition
+  62:33  error  Unnecessary optional chain on a non-nullish value                                                                                                                   @typescript-eslint/no-unnecessary-condition
+  62:49  error  Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator                                                           @typescript-eslint/prefer-nullish-coalescing
+  65:5   error  Async method 'onSuccess' has no 'await' expression                                                                                                                  @typescript-eslint/require-await
+  73:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  77:5   error  Async method 'onError' has no 'await' expression                                                                                                                    @typescript-eslint/require-await
+  77:28  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  78:13  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  78:28  error  Unsafe call of a(n) `any` typed value                                                                                                                               @typescript-eslint/no-unsafe-call
+  78:34  error  Unsafe member access .message on an `any` value                                                                                                                     @typescript-eslint/no-unsafe-member-access
+  80:11  error  Unsafe call of a(n) `any` typed value                                                                                                                               @typescript-eslint/no-unsafe-call
+  80:24  error  Unsafe member access .includes on an `any` value                                                                                                                    @typescript-eslint/no-unsafe-member-access
+
+/home/kan/apps/web/src/views/settings/components/ColorSettings.tsx
+    4:8  error  'Button' is defined but never used. Allowed unused vars must match /^_/u                                                                                            @typescript-eslint/no-unused-vars
+   63:7  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  100:9  error  'isDirty' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                  @typescript-eslint/no-unused-vars
+  157:9  error  'handleSave' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                               @typescript-eslint/no-unused-vars
+
+/home/kan/apps/web/src/views/settings/components/DeleteAccountConfirmation.tsx
+  23:5  error  Async method 'onSuccess' has no 'await' expression                                                                                                                  @typescript-eslint/require-await
+  31:7  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/home/kan/apps/web/src/views/settings/components/NewApiKeyForm.tsx
+  31:7  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/home/kan/apps/web/src/views/settings/components/NewApiKeyModal.tsx
+  56:11  error  Prefer using an optional chain expression instead, as it's more concise and easier to read  @typescript-eslint/prefer-optional-chain
+
+/home/kan/apps/web/src/views/settings/components/UpdateWorkspaceUrlForm.tsx
+  113:34  error  Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator  @typescript-eslint/prefer-nullish-coalescing
+
+✖ 149 problems (142 errors, 7 warnings)
+  1 error and 1 warning potentially fixable with the `--fix` option.
+
+ ELIFECYCLE  Command failed with exit code 1.

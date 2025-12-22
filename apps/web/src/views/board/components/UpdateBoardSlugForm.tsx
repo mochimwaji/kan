@@ -111,7 +111,10 @@ export function UpdateBoardSlugForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-4">
-          <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
+          <h2
+            className="text-sm font-bold"
+            style={{ color: "var(--kan-menu-text)" }}
+          >
             {"Edit board URL"}
           </h2>
           <button
@@ -130,7 +133,7 @@ export function UpdateBoardSlugForm({
           id="board-slug"
           {...register("slug")}
           errorMessage={
-            errors.slug?.message ||
+            errors.slug?.message ??
             (isBoardSlugAvailable?.isReserved
               ? "This board URL has already been taken"
               : undefined)
@@ -168,7 +171,7 @@ export function UpdateBoardSlugForm({
               updateBoardSlug.isPending ||
               errors.slug?.message !== undefined ||
               isBoardSlugAvailable?.isReserved ||
-              checkBoardSlugAvailability.isLoading
+              checkBoardSlugAvailability.isPending
             }
           >
             {"Update"}

@@ -2,21 +2,20 @@
 
 A self-hosted Kanban board application for personal/team use. Forked from [kanbn/kan](https://github.com/kanbn/kan).
 
-> **This is a modified version.** Per the AGPLv3 license, this fork removes cloud-specific features (Lingui i18n, S3 storage, marketing pages, billing, analytics) for streamlined self-hosting.
+> **This is a modified version.** Per the AGPLv3 license, this fork [mochimwaji/kan](https://github.com/mochimwaji/kan) removes cloud-specific features (Lingui i18n, S3 storage, marketing pages, billing, analytics) for streamlined self-hosting.
 
 ## Features
 
 - 👁️ **Board Visibility**: Control who can view and edit your boards
 - 🤝 **Workspace Members**: Invite members and collaborate with your team
 - 🎨 **Customizable Lists**: Color code your lists for better organization
-- 🎨 **Theme Presets**: Choose from 7 beautiful color themes
+- 🎨 **Theme Presets**: Choose from 7 beautiful color themes (Ocean Blue, Forest Green, etc.)
 - 📅 **Calendar View**: View cards by due date with drag-and-drop rescheduling
 - 🔍 **Labels & Filters**: Organize and find cards quickly
 - 💬 **Comments**: Discuss and collaborate with your team
 - 📝 **Activity Log**: Track all card changes with detailed history
-- 🎨 **Templates**: Save time with reusable board templates
-- ✨ **Smooth Animations**: Beautiful transitions between pages and boards
 - 📁 **Local File Storage**: Avatars and attachments stored locally (no S3 required)
+- ✨ **Enhanced Animations**: Smooth transitions for page navigation and sidebar toggles
 
 ## Quick Start (Docker)
 
@@ -24,7 +23,7 @@ A self-hosted Kanban board application for personal/team use. Forked from [kanbn
 # docker-compose.yml
 services:
   web:
-    image: ghcr.io/kanbn/kan:latest
+    image: ghcr.io/mochimwaji/kan:latest
     container_name: kan-web
     ports:
       - "3000:3000"
@@ -111,9 +110,9 @@ See `.env.example` for the complete list.
 
 ### Removed (for simpler self-hosting)
 
-- ❌ Lingui i18n (English hardcoded)
+- ❌ Lingui i18n (English only)
 - ❌ S3 storage (local filesystem)
-- ❌ Marketing pages (home, pricing)
+- ❌ Marketing pages (home, pricing, testimonials)
 - ❌ Legal pages (privacy, terms)
 - ❌ Analytics (PostHog, Umami)
 - ❌ Notifications (Novu)
@@ -124,4 +123,4 @@ See `.env.example` for the complete list.
 
 [AGPLv3](LICENSE) - Original work by [kanbn](https://github.com/kanbn/kan)
 
-Per the license, this modified version provides source code access and carries prominent notices of modifications. See [CHANGELOG.md](CHANGELOG.md) for details.
+Per the license, this modified version [mochimwaji/kan](https://github.com/mochimwaji/kan) provides source code access and carries prominent notices of modifications. See [CHANGELOG.md](CHANGELOG.md) for details.

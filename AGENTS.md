@@ -510,11 +510,10 @@ All user-facing strings are hardcoded in English. The i18n (Lingui) library was 
 
 The following are pre-existing issues that are known but low priority and do not require immediate fixing:
 
-| Issue                                 | Location                   | Description                                                                   | Workaround                                                   |
-| ------------------------------------- | -------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `TS2741: Property 'NODE_ENV' missing` | `apps/web/public/__ENV.js` | TypeScript error in auto-generated environment file. Does not affect runtime. | Ignore during typecheck; file is regenerated at runtime      |
-| Turbo cache errors                    | `pnpm typecheck`           | Occasional `unable to determine why task exited` errors from Turborepo.       | Re-run command or run typecheck directly on specific package |
-| ESLint unused expression warning      | `CollapsibleSection.tsx`   | `contentRef.current.offsetHeight` used for forcing reflow.                    | Suppressed with eslint-disable comment                       |
+| Issue                            | Location                 | Description                                                             | Workaround                                                   |
+| -------------------------------- | ------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Turbo cache errors               | `pnpm typecheck`         | Occasional `unable to determine why task exited` errors from Turborepo. | Re-run command or run typecheck directly on specific package |
+| ESLint unused expression warning | `CollapsibleSection.tsx` | `contentRef.current.offsetHeight` used for forcing reflow.              | Suppressed with eslint-disable comment                       |
 
 ## Quick Reference
 

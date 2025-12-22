@@ -62,9 +62,13 @@ export default function UnscheduledSidebar({
   return (
     <div
       className={twMerge(
-        "flex flex-col rounded-md border border-light-400 bg-light-200 transition-all dark:border-dark-300 dark:bg-dark-100",
+        "flex flex-col rounded-md border transition-all",
         isCollapsed ? "w-10" : "w-64",
       )}
+      style={{
+        backgroundColor: "var(--kan-pages-bg)",
+        borderColor: "var(--kan-menu-border, var(--kan-pages-bg))",
+      }}
     >
       {/* Header */}
       <div

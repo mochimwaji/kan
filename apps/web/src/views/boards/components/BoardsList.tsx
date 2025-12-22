@@ -53,13 +53,13 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
             );
             // Navigate after starting animation
             setTimeout(() => {
-              router.push(
+              void router.push(
                 `${isTemplate ? "/templates" : "/boards"}/${board.publicId}`,
               );
             }, 50);
           } else {
             // Fallback: navigate without animation if element not found
-            router.push(
+            void router.push(
               `${isTemplate ? "/templates" : "/boards"}/${board.publicId}`,
             );
           }
@@ -75,69 +75,77 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
     stroke: { key: "1" },
     action: () => navigateToBoard(0),
     description: "Go to board 1",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "2" },
     action: () => navigateToBoard(1),
     description: "Go to board 2",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "3" },
     action: () => navigateToBoard(2),
     description: "Go to board 3",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "4" },
     action: () => navigateToBoard(3),
     description: "Go to board 4",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "5" },
     action: () => navigateToBoard(4),
     description: "Go to board 5",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "6" },
     action: () => navigateToBoard(5),
     description: "Go to board 6",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "7" },
     action: () => navigateToBoard(6),
     description: "Go to board 7",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "8" },
     action: () => navigateToBoard(7),
     description: "Go to board 8",
-        group: "BOARDS",
+    group: "BOARDS",
   });
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "9" },
     action: () => navigateToBoard(8),
     description: "Go to board 9",
-        group: "BOARDS",
+    group: "BOARDS",
   });
 
   // Handle contract animation when returning to boards page
   useEffect(() => {
-    if (animationPhase === "expanded" && boardId && fromBoardsPage) {
-      // Find the board element and start contract animation
+    if (animationPhase !== "expanded") {
+      return;
+    }
+
+    // Use window.location.pathname for accurate current URL
+    const currentPath = window.location.pathname;
+    const isOnBoardsPage =
+      currentPath === "/boards" || currentPath === "/templates";
+
+    if (isOnBoardsPage && boardId && fromBoardsPage) {
       const targetElement = boardRefs.current.get(boardId);
       if (targetElement) {
         const rect = targetElement.getBoundingClientRect();
@@ -172,7 +180,7 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
         );
         // Navigate after starting animation
         setTimeout(() => {
-          router.push(
+          void router.push(
             `${isTemplate ? "templates" : "boards"}/${board.publicId}`,
           );
         }, 50);

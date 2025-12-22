@@ -35,6 +35,7 @@ export function AttachmentUpload({ cardPublicId }: { cardPublicId: string }) {
       }
 
       await utils.card.byId.invalidate({ cardPublicId });
+      await utils.board.byId.invalidate();
 
       showPopup({
         header: "Attachment uploaded",

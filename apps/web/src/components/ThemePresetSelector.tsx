@@ -20,7 +20,10 @@ export default function ThemePresetSelector({
 }: ThemePresetSelectorProps) {
   return (
     <div className={twMerge("flex flex-col gap-3", className)}>
-      <h3 className="text-sm font-medium text-neutral-900 dark:text-dark-1000">
+      <h3
+        className="text-sm font-medium"
+        style={{ color: "var(--kan-menu-text)" }}
+      >
         {"Theme Presets"}
       </h3>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
@@ -67,7 +70,7 @@ export default function ThemePresetSelector({
                   "bg-light-100 dark:bg-dark-200",
                 )}
               >
-                <span className="truncate text-xs font-medium text-neutral-900 dark:text-dark-1000">
+                <span className="truncate text-xs font-medium text-light-900 dark:text-dark-1000">
                   {preset.name}
                 </span>
                 {isSelected && (
@@ -104,7 +107,7 @@ export default function ThemePresetSelector({
               "bg-light-100 dark:bg-dark-200",
             )}
           >
-            <span className="text-xs font-medium text-neutral-900 dark:text-dark-1000">
+            <span className="text-xs font-medium text-light-900 dark:text-dark-1000">
               {"Custom Colors"}
             </span>
             {selectedPresetId === "custom" && (

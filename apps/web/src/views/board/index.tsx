@@ -1213,7 +1213,8 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 >
                   <button
                     onClick={toggleViewMode}
-                    className="inline-flex items-center justify-center rounded-md border border-light-300 bg-light-50 p-2 text-sm font-semibold shadow-sm transition-colors hover:bg-light-100 dark:border-dark-300 dark:bg-dark-50 dark:hover:bg-dark-100"
+                    className="inline-flex items-center justify-center rounded-md border border-light-300 p-2 text-sm font-semibold shadow-sm transition-colors hover:opacity-80 dark:border-dark-300"
+                    style={{ backgroundColor: "var(--kan-button-bg)" }}
                     aria-label={
                       viewMode === "kanban"
                         ? "Switch to Calendar view"
