@@ -35,6 +35,7 @@ export default function Checklists({
 }: ChecklistsProps) {
   const { openModal } = useModal();
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive early return
   if (!checklists || checklists.length === 0) return null;
 
   return (

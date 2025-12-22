@@ -32,12 +32,24 @@ export function resolveThemeColors(
     colors.preset,
     isDark ? "dark" : "light",
   );
+  // presetColors is always defined for known presets
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check for unknown presets
+  if (presetColors) {
+    return {
+      sidebar: presetColors.sidebar,
+      pages: presetColors.pages,
+      boardBackground: presetColors.boardBackground,
+      button: presetColors.button,
+      menu: presetColors.menu,
+    };
+  }
+  // Fallback to custom colors if preset not found
   return {
-    sidebar: presetColors?.sidebar ?? colors.sidebar,
-    pages: presetColors?.pages ?? colors.pages,
-    boardBackground: presetColors?.boardBackground ?? colors.boardBackground,
-    button: presetColors?.button ?? colors.button,
-    menu: presetColors?.menu ?? colors.menu,
+    sidebar: colors.sidebar,
+    pages: colors.pages,
+    boardBackground: colors.boardBackground,
+    button: colors.button,
+    menu: colors.menu,
   };
 }
 

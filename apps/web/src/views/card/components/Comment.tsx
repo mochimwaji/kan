@@ -104,7 +104,9 @@ const Comment = ({
         <div className="flex items-center space-x-2">
           <Avatar
             size="sm"
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Props can be null at runtime
             name={name ?? ""}
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Props can be null at runtime
             email={email ?? ""}
             isLoading={isLoading}
           />

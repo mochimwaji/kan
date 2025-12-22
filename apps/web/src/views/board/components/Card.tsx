@@ -124,13 +124,14 @@ const Card = ({
 
   // Compute card background and text color from list color
   const cardBackground = listColor ? derivePastelColor(listColor) : null;
-  const cardStyle = cardBackground
+
+  const _cardStyle = cardBackground
     ? { backgroundColor: cardBackground }
     : undefined;
   // Use contrast color for text when card has a background color
   const cardTextColor = cardBackground
     ? getContrastColor(cardBackground)
-    : "var(--kan-pages-text)";
+    : "var(--kan-board-text)";
 
   return (
     <div
@@ -138,12 +139,16 @@ const Card = ({
         "transition-dnd-safe group relative flex flex-col rounded-md border px-3 py-2 text-sm",
         listColor
           ? "border-opacity-30"
-          : "border-light-200 bg-light-50 dark:border-dark-200 dark:bg-dark-200 dark:hover:bg-dark-300",
+          : "border-light-200 hover:opacity-90 dark:border-dark-300",
         isSelected ? "selected-item" : "",
         isDeleting ? "delete-fade-out" : "",
         isGhosting ? "multi-drag-ghost pointer-events-none" : "",
       )}
-      style={{ ...cardStyle, color: cardTextColor }}
+      style={{
+        backgroundColor: cardBackground ?? "var(--kan-board-bg)",
+        color: cardTextColor,
+        borderColor: !listColor ? "var(--kan-sidebar-bg)" : undefined,
+      }}
     >
       {/* Expand button - fades in on hover or when selected */}
       {onExpand && (
@@ -210,7 +215,7 @@ const Card = ({
                 >
                   <HiOutlineClock className="h-4 w-4" />
                   <span className="text-[11px]">
-                    {format(dueDate!, showYear ? "do MMM yyyy" : "do MMM", {
+                    {format(dueDate, showYear ? "do MMM yyyy" : "do MMM", {
                       locale: dateLocale,
                     })}
                   </span>

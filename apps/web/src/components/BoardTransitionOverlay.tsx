@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import PatternedBackground from "~/components/PatternedBackground";
@@ -75,7 +75,7 @@ export default function BoardTransitionOverlay() {
   }, [animationPhase]);
 
   // Handle expanding animation
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (animationPhase === "expanding" && sourceRect) {
       const contentBounds = getContentAreaBounds();
       const TITLE_FADE_DURATION = 150;
@@ -139,7 +139,7 @@ export default function BoardTransitionOverlay() {
   }, [animationPhase, sourceRect, completeExpand]);
 
   // Handle contracting animation
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (animationPhase === "contracting" && sourceRect) {
       const contentBounds = getContentAreaBounds();
 

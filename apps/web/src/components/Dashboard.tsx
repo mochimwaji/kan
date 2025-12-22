@@ -44,7 +44,8 @@ export default function Dashboard({
   rightPanel,
   hasRightPanel = false,
 }: DashboardProps) {
-  const { resolvedTheme } = useTheme();
+   
+  const { resolvedTheme: _resolvedTheme } = useTheme();
   const { openModal } = useModal();
   const { availableWorkspaces, hasLoaded } = useWorkspace();
 
@@ -124,8 +125,6 @@ export default function Dashboard({
       openModal("NEW_WORKSPACE", undefined, undefined, false);
     }
   }, [hasLoaded, availableWorkspaces.length, openModal]);
-
-  const isDarkMode = resolvedTheme === "dark";
 
   return (
     <>

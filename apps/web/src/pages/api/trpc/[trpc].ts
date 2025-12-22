@@ -8,6 +8,7 @@ const nextApiHandler = createNextApiHandler({
   router: appRouter,
   createContext: createTRPCContext,
   onError:
+    // eslint-disable-next-line no-restricted-properties -- NODE_ENV check for development error logging
     process.env.NODE_ENV === "development"
       ? ({ path, error }) => {
           console.error(

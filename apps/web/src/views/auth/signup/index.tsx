@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { env } from "next-runtime-env";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { authClient } from "@kan/auth/client";
 
@@ -17,9 +17,24 @@ export default function SignUpPage() {
 
   const redirect = useSearchParams().get("next");
 
-  const { data } = authClient.useSession();
+  const { data, isPending } = authClient.useSession();
 
-  if (data?.user.id) router.push("/boards");
+  // Add app-ready class on mount since auth pages don't use Dashboard layout
+  // which normally handles this. This makes the page visible (CSS sets html opacity:0 by default).
+  useEffect(() => {
+    document.documentElement.classList.add("app-ready");
+  }, []);
+
+  // Redirect if already authenticated
+  if (data?.user.id) {
+    void router.push("/boards");
+    return null;
+  }
+
+  // Show nothing while checking auth status to avoid flash
+  if (isPending) {
+    return null;
+  }
 
   const handleMagicLinkSent = (value: boolean, recipient: string) => {
     setIsMagicLinkSent(value);

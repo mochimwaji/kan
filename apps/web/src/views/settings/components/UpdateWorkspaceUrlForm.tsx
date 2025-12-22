@@ -110,7 +110,7 @@ const UpdateWorkspaceUrlForm = ({
               : ""
           }`}
           errorMessage={
-            errors.slug?.message ||
+            errors.slug?.message ??
             (isWorkspaceSlugAvailable?.isAvailable === false
               ? "This workspace username has already been taken"
               : undefined)

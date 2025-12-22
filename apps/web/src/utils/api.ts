@@ -39,7 +39,9 @@ const authLink: TRPCLink<AppRouter> = () => {
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+  // eslint-disable-next-line no-restricted-properties -- SSR needs direct process.env for Vercel URL detection
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  // eslint-disable-next-line no-restricted-properties -- SSR needs direct process.env for port detection
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
@@ -60,6 +62,7 @@ export const api = createTRPCNext<AppRouter>({
       links: [
         loggerLink({
           enabled: (opts) =>
+            // eslint-disable-next-line no-restricted-properties -- NODE_ENV check for development logging
             process.env.NODE_ENV === "development" ||
             (opts.direction === "down" && opts.result instanceof Error),
         }),

@@ -51,7 +51,7 @@ export const ColorThemeProvider: React.FC<{ children: ReactNode }> = ({
   const updateThemeMutation = api.workspace.updateThemeColors.useMutation({
     onSuccess: () => {
       setSavedColors(themeColors);
-      utils.workspace.byId.invalidate({
+      void utils.workspace.byId.invalidate({
         workspacePublicId: workspace.publicId,
       });
     },

@@ -54,6 +54,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
           position: relative;
         }
       `}</style>
+      {/* eslint-disable-next-line @next/next/no-sync-scripts -- Intentional for runtime env vars */}
       <script src="/__ENV.js" />
       <main className="font-sans">
         <KeyboardShortcutProvider>

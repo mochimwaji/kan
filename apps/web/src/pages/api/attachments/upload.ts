@@ -39,7 +39,9 @@ export default async function handler(
   try {
     const db = createDrizzleClient();
     const auth = initAuth(db);
-    const session = await auth.api.getSession({ headers: req.headers as any });
+    const session = await auth.api.getSession({
+      headers: req.headers as unknown as Headers,
+    });
 
     if (!session?.user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -85,7 +87,7 @@ export default async function handler(
     }
 
     // Sanitize and generate unique filename
-    const originalFilename = uploadedFile.originalFilename || "attachment";
+    const originalFilename = uploadedFile.originalFilename ?? "attachment";
     const sanitizedFilename = originalFilename
       .replace(/[^a-zA-Z0-9._-]/g, "_")
       .substring(0, 200);
@@ -108,7 +110,7 @@ export default async function handler(
       cardId: card.id,
       filename: uniqueFilename,
       originalFilename: originalFilename,
-      contentType: uploadedFile.mimetype || "application/octet-stream",
+      contentType: uploadedFile.mimetype ?? "application/octet-stream",
       size: uploadedFile.size,
       createdBy: userId,
     });

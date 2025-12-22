@@ -135,9 +135,9 @@ export default function PublicBoardView() {
                   {"View only"}
                 </div>
                 <Filters
-                  labels={data.labels ?? []}
+                  labels={data.labels}
                   members={[]}
-                  lists={data.allLists ?? []}
+                  lists={data.allLists}
                   isLoading={isLoading}
                 />
               </div>
@@ -151,7 +151,7 @@ export default function PublicBoardView() {
                 <div className="0 mr-5 h-[275px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
                 <div className="0 mr-5 h-[375px] w-[18rem] animate-pulse rounded-md bg-light-200 dark:bg-dark-100" />
               </div>
-            ) : !data && !isLoading && router.isReady && !!boardSlug ? (
+            ) : !data && boardSlug ? (
               <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-8 pb-[150px]">
                 <div className="flex flex-col items-center">
                   <HiOutlineLockClosed className="h-10 w-10 text-light-800 dark:text-dark-800" />
@@ -199,12 +199,12 @@ export default function PublicBoardView() {
                             <Card
                               title={card.title}
                               labels={card.labels}
-                              checklists={card.checklists ?? []}
+                              checklists={card.checklists}
                               members={[]}
                               description={card.description}
-                              comments={card.comments ?? []}
+                              comments={card.comments}
                               attachments={card.attachments}
-                              dueDate={card.dueDate ?? null}
+                              dueDate={card.dueDate}
                             />
                           </Link>
                         );

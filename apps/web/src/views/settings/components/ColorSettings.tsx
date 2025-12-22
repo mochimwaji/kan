@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
 import type { ThemeColors } from "~/utils/themePresets";
-import Button from "~/components/Button";
 import ColorWheelPicker from "~/components/ColorWheelPicker";
 import ThemePresetSelector from "~/components/ThemePresetSelector";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
-import { getContrastColor } from "~/utils/colorUtils";
 import {
   DEFAULT_THEME_COLORS,
   getPresetColors,
@@ -19,7 +17,8 @@ export default function ColorSettings() {
 
   const [themeColors, setThemeColors] =
     useState<ThemeColors>(DEFAULT_THEME_COLORS);
-  const [savedColors, setSavedColors] =
+
+  const [_savedColors, setSavedColors] =
     useState<ThemeColors>(DEFAULT_THEME_COLORS);
   const [activeTheme, setActiveTheme] = useState<"light" | "dark">("light");
 
@@ -33,7 +32,7 @@ export default function ColorSettings() {
   const updateThemeMutation = api.workspace.updateThemeColors.useMutation({
     onSuccess: () => {
       setSavedColors(themeColors);
-      utils.workspace.byId.invalidate({
+      void utils.workspace.byId.invalidate({
         workspacePublicId: workspace.publicId,
       });
     },
@@ -70,7 +69,6 @@ export default function ColorSettings() {
   // Only apply colors here when user actively changes them (in handlePresetSelect/handleColorChange)
 
   const isCustom = themeColors.preset === "custom";
-  const isDirty = JSON.stringify(themeColors) !== JSON.stringify(savedColors);
 
   const handlePresetSelect = useCallback(
     async (presetId: string) => {
@@ -127,20 +125,7 @@ export default function ColorSettings() {
     };
   };
 
-  const handleSave = async () => {
-    if (!workspace.publicId) return;
-
-    await updateThemeMutation.mutateAsync({
-      workspacePublicId: workspace.publicId,
-      themeColors,
-    });
-  };
-
-  if (isLoading) {
-    return (
-      <div className="h-32 animate-pulse rounded-lg bg-light-200 dark:bg-dark-200" />
-    );
-  }
+  if (isLoading) return null;
 
   return (
     <div className="flex flex-col gap-6">

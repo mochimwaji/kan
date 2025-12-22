@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Button } from "@headlessui/react";
-import { env } from "next-runtime-env";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import {
   TbLayoutSidebarLeftCollapse,
@@ -19,14 +17,11 @@ import settingsIconDark from "~/assets/settings-dark.json";
 import settingsIconLight from "~/assets/settings-light.json";
 import templatesIconDark from "~/assets/templates-dark.json";
 import templatesIconLight from "~/assets/templates-light.json";
-import ButtonComponent from "~/components/Button";
 import ReactiveButton from "~/components/ReactiveButton";
 import UserMenu from "~/components/UserMenu";
 import WorkspaceMenu from "~/components/WorkspaceMenu";
 import { useColorTheme } from "~/providers/colorTheme";
-import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
-import { api } from "~/utils/api";
 import { getContrastColor } from "~/utils/colorUtils";
 import { getPresetColors } from "~/utils/themePresets";
 
@@ -47,14 +42,10 @@ export default function SideNavigation({
   onCloseSideNav,
 }: SideNavigationProps) {
   const router = useRouter();
-  const { workspace } = useWorkspace();
+   
+  const { workspace: _workspace } = useWorkspace();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInitialised, setIsInitialised] = useState(false);
-  const { openModal } = useModal();
-
-  const { data: workspaceData } = api.workspace.byId.useQuery({
-    workspacePublicId: workspace.publicId,
-  });
 
   useEffect(() => {
     const savedState = localStorage.getItem("kan_sidebar-collapsed");
@@ -74,8 +65,6 @@ export default function SideNavigation({
   }, [isCollapsed, isInitialised]);
 
   const { pathname } = router;
-
-  const { resolvedTheme } = useTheme();
 
   const { themeColors } = useColorTheme();
 
@@ -103,7 +92,7 @@ export default function SideNavigation({
       keyboardShortcut: {
         type: "PRESS",
         stroke: { key: "b" },
-        action: () => router.push("/boards"),
+        action: () => void router.push("/boards"),
         group: "NAVIGATION",
         description: "Go to boards",
       },
@@ -115,7 +104,7 @@ export default function SideNavigation({
       keyboardShortcut: {
         type: "PRESS",
         stroke: { key: "t" },
-        action: () => router.push("/templates"),
+        action: () => void router.push("/templates"),
         group: "NAVIGATION",
         description: "Go to templates",
       },
@@ -127,7 +116,7 @@ export default function SideNavigation({
       keyboardShortcut: {
         type: "PRESS",
         stroke: { key: "m" },
-        action: () => router.push("/members"),
+        action: () => void router.push("/members"),
         group: "NAVIGATION",
         description: "Go to members",
       },
@@ -139,7 +128,7 @@ export default function SideNavigation({
       keyboardShortcut: {
         type: "PRESS",
         stroke: { key: "s" },
-        action: () => router.push("/settings"),
+        action: () => void router.push("/settings"),
         group: "NAVIGATION",
         description: "Go to settings",
       },

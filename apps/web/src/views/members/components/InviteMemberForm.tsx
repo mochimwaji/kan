@@ -20,7 +20,12 @@ import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 
-export function InviteMemberForm({ userId }: { userId: string | undefined }) {
+ 
+export function InviteMemberForm({
+  userId: _userId,
+}: {
+  userId: string | undefined;
+}) {
   const utils = api.useUtils();
   const [isShareInviteLinkEnabled, setIsShareInviteLinkEnabled] =
     useState(false);

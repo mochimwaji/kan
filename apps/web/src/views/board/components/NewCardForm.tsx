@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlineBarsArrowDown,
@@ -77,8 +77,16 @@ export function NewCardForm({
       values: formState,
     });
 
-  const labelPublicIds = watch("labelPublicIds") || [];
-  const memberPublicIds = watch("memberPublicIds") || [];
+  const watchedLabelPublicIds = watch("labelPublicIds");
+  const watchedMemberPublicIds = watch("memberPublicIds");
+  const labelPublicIds = useMemo(
+    () => watchedLabelPublicIds,
+    [watchedLabelPublicIds],
+  );
+  const memberPublicIds = useMemo(
+    () => watchedMemberPublicIds,
+    [watchedMemberPublicIds],
+  );
   const isCreateAnotherEnabled = watch("isCreateAnotherEnabled");
   const position = watch("position");
   const title = watch("title");
@@ -108,17 +116,17 @@ export function NewCardForm({
 
   // this adds the new created label to selected labels
   useEffect(() => {
-    const newLabelId = modalStates.NEW_LABEL_CREATED;
+    const newLabelId = modalStates.NEW_LABEL_CREATED as string | undefined;
     if (newLabelId !== undefined && !labelPublicIds.includes(newLabelId)) {
       setValue("labelPublicIds", [...labelPublicIds, newLabelId]);
     }
-  }, [modalStates, labelPublicIds]);
+  }, [modalStates, labelPublicIds, setValue]);
 
   // this removes the deleted label from selected labels if it is selected
   useEffect(() => {
     if (boardData?.labels) {
       const availableLabelIds = boardData.labels.map((label) => label.publicId);
-      const newLabelId = modalStates.NEW_LABEL_CREATED;
+      const newLabelId = modalStates.NEW_LABEL_CREATED as string | undefined;
 
       if (newLabelId && availableLabelIds.includes(newLabelId)) {
         clearModalState("NEW_LABEL_CREATED");
@@ -132,7 +140,13 @@ export function NewCardForm({
         setValue("labelPublicIds", validLabelIds);
       }
     }
-  }, [boardData?.labels, labelPublicIds, modalStates.NEW_LABEL_CREATED]);
+  }, [
+    boardData?.labels,
+    labelPublicIds,
+    modalStates.NEW_LABEL_CREATED,
+    clearModalState,
+    setValue,
+  ]);
 
   const createCard = api.card.create.useMutation({
     onMutate: async (args) => {
@@ -155,15 +169,15 @@ export function NewCardForm({
               labels: oldBoard.labels.filter((label) =>
                 args.labelPublicIds.includes(label.publicId),
               ),
-              members:
-                oldBoard.workspace.members
-                  .filter((member) =>
-                    args.memberPublicIds.includes(member.publicId),
-                  )
-                  .map((member) => ({
-                    ...member,
-                    deletedAt: null,
-                  })) ?? [],
+
+              members: oldBoard.workspace.members
+                .filter((member) =>
+                  args.memberPublicIds.includes(member.publicId),
+                )
+                .map((member) => ({
+                  ...member,
+                  deletedAt: null,
+                })),
               _filteredLabels: labelPublicIds.map((id) => ({ publicId: id })),
               _filteredMembers: memberPublicIds.map((id) => ({ publicId: id })),
               index: position === "start" ? 0 : list.cards.length,
@@ -355,6 +369,7 @@ export function NewCardForm({
                 saveFormState({ ...formState, description: value });
               }}
               workspaceMembers={
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check
                 boardData?.workspace.members?.map(
                   (member): WorkspaceMember => ({
                     publicId: member.publicId,
@@ -453,7 +468,7 @@ export function NewCardForm({
                         return (
                           <>
                             <svg
-                              fill={label?.colourCode ?? "#3730a3"}
+                              fill={label?.colourCode}
                               className="h-2 w-2"
                               viewBox="0 0 6 6"
                               aria-hidden="true"

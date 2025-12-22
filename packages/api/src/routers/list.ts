@@ -51,6 +51,7 @@ export const listRouter = createTRPCRouter({
         boardId: board.id,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check
       if (!result)
         throw new TRPCError({
           message: `Failed to create list`,
@@ -100,6 +101,7 @@ export const listRouter = createTRPCRouter({
         deletedBy: userId,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check
       if (!deletedList)
         throw new TRPCError({
           message: `Failed to delete list`,

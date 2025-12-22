@@ -39,6 +39,7 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
   const [showTemplates, setShowTemplates] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { data: templates } = api.board.all.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
     { workspacePublicId: workspace.publicId ?? "", type: "template" },
     { enabled: !!workspace.publicId },
   );
@@ -167,7 +168,19 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
             onChange={() => {
               setShowTemplates(!showTemplates);
               if (!showTemplates && !currentTemplate) {
-                setValue("template", (templates?.[0] as any) ?? null);
+                const firstTemplate = templates?.[0];
+                setValue(
+                  "template",
+                  firstTemplate
+                    ? {
+                        id: firstTemplate.publicId,
+                        sourceBoardPublicId: firstTemplate.publicId,
+                        name: firstTemplate.name,
+                        lists: firstTemplate.lists.map((list) => list.name),
+                        labels: firstTemplate.labels.map((label) => label.name),
+                      }
+                    : null,
+                );
               }
             }}
           />

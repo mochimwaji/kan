@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { DragDropContext, Draggable } from "@hello-pangea/dnd";
 import { keepPreviousData } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiBars4,
@@ -45,11 +45,7 @@ import { NewTemplateForm } from "./components/NewTemplateForm";
 import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
-import {
-  useBoardKeyboardShortcuts,
-  useMultiSelect,
-  useVisualLists,
-} from "./hooks";
+import { useBoardKeyboardShortcuts, useVisualLists } from "./hooks";
 
 // View mode type
 type ViewMode = "kanban" | "calendar";
@@ -245,11 +241,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   // This prevents "flash" after drop where items briefly appear at old position
   const {
     listsToRender,
-    isDragging,
+    isDragging: _isDragging,
     setIsDragging,
-    reorderLists,
-    reorderCards,
-    updateCardsInVisualState,
+    reorderLists: _reorderLists,
+     
+    reorderCards: _reorderCards,
+     
+    updateCardsInVisualState: _updateCardsInVisualState,
     setVisualLists,
   } = useVisualLists(boardData);
 

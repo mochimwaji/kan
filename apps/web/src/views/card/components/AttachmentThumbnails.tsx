@@ -80,7 +80,11 @@ export function AttachmentThumbnails({
     },
     onSettled: async () => {
       if (isReadOnly) return;
-      await utils.card.byId.invalidate({ cardPublicId });
+      await Promise.all([
+        utils.card.byId.invalidate({ cardPublicId }),
+        utils.board.byId.invalidate(),
+        utils.board.all.invalidate(),
+      ]);
     },
   });
 

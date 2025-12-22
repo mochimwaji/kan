@@ -21,9 +21,11 @@
  * const mutation = api.card.delete.useMutation(deleteCallbacks);
  */
 
-type QueryKey = readonly unknown[];
+ 
+type _QueryKey = readonly unknown[];
 
-interface OptimisticCallbacksOptions<TData, TInput, TContext> {
+ 
+interface _OptimisticCallbacksOptions<TData, TInput, _TContext> {
   /** tRPC utils for cache manipulation */
   utils: {
     cancel: () => Promise<void>;

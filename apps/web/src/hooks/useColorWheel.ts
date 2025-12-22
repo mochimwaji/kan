@@ -48,7 +48,8 @@ export function useColorWheel({
   initialColor,
   onColorSelect,
   onColorPreview,
-  canvasSize = 100,
+   
+  canvasSize: _canvasSize = 100,
 }: UseColorWheelOptions): UseColorWheelReturn {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -122,7 +123,7 @@ export function useColorWheel({
       // Draw center circle with hover color (if hovering) or selected color
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius * 0.25, 0, 2 * Math.PI);
-      ctx.fillStyle = hoverColor || selectedColor || "#cccccc";
+      ctx.fillStyle = hoverColor ?? selectedColor ?? "#cccccc";
       ctx.fill();
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 2;

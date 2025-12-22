@@ -186,10 +186,7 @@ export const update = async (
       title: cardInput.title,
       description: cardInput.description,
       dueDate: cardInput.dueDate !== undefined ? cardInput.dueDate : undefined,
-      calendarOrder:
-        cardInput.calendarOrder !== undefined
-          ? cardInput.calendarOrder
-          : undefined,
+      calendarOrder: cardInput.calendarOrder ?? undefined,
       updatedAt: new Date(),
     })
     .where(and(eq(cards.publicId, args.cardPublicId), isNull(cards.deletedAt)))
@@ -882,10 +879,11 @@ export const bulkReorder = async (
     // 4. Move all cards to destination at consecutive indices (preserving order from args.cardIds)
     for (let i = 0; i < args.cardIds.length; i++) {
       const cardId = args.cardIds[i];
+      if (cardId === undefined) continue;
       await tx
         .update(cards)
         .set({ listId: args.newListId, index: args.startIndex + i })
-        .where(eq(cards.id, cardId!));
+        .where(eq(cards.id, cardId));
     }
 
     // 5. Auto-heal: compact indices for all affected lists

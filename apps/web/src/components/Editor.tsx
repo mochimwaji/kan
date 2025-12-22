@@ -62,7 +62,8 @@ export interface SlashCommandItem {
 export interface SlashCommandsOptions {
   suggestion?: Partial<SuggestionOptions>;
   commandItems?: SlashCommandItem[];
-  options?: any;
+
+  options?: unknown;
 }
 
 function filterSlashCommandItems(items: SlashCommandItem[], query: string) {
@@ -159,6 +160,7 @@ const RenderSuggestions = () => {
         editor: props.editor,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Props may be undefined at runtime
       if (!props.clientRect) return;
 
       popup = tippy("body", {
@@ -174,6 +176,7 @@ const RenderSuggestions = () => {
     onUpdate(props: RenderSuggestionsProps) {
       reactRenderer.updateProps(props);
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Props may be undefined at runtime
       if (!props.clientRect) return;
 
       popup[0]?.setProps({
@@ -278,12 +281,19 @@ const MentionList = forwardRef<
 
 MentionList.displayName = "MentionList";
 
+interface MentionSuggestionsProps {
+  editor: TiptapEditor;
+  clientRect?: (() => DOMRect | null) | null;
+  items: MentionItem[];
+  command: (item: MentionItem) => void;
+}
+
 const renderMentionSuggestions = () => {
   let reactRenderer: ReactRenderer;
   let popup: TippyInstance[];
 
   return {
-    onStart: (props: any) => {
+    onStart: (props: MentionSuggestionsProps) => {
       reactRenderer = new ReactRenderer(MentionList, {
         props,
         editor: props.editor,
@@ -291,6 +301,7 @@ const renderMentionSuggestions = () => {
 
       if (!props.clientRect) return;
 
+      // @ts-expect-error - Tippy types expect Element but accepts selector string
       popup = tippy("body", {
         getReferenceClientRect: props.clientRect,
         appendTo: () => document.body,
@@ -301,9 +312,10 @@ const renderMentionSuggestions = () => {
         placement: "bottom-start",
       });
     },
-    onUpdate(props: any) {
+    onUpdate(props: MentionSuggestionsProps) {
       reactRenderer.updateProps(props);
       if (!props.clientRect) return;
+      // @ts-expect-error - Tiptap/Tippy type incompatibility with clientRect function type
       popup[0]?.setProps({ getReferenceClientRect: props.clientRect });
     },
     onKeyDown(props: SuggestionKeyDownProps) {
@@ -328,12 +340,14 @@ const renderMentionSuggestions = () => {
 
 const SlashCommands = Extension.create<SlashCommandsOptions>({
   name: "slash-commands",
+  // @ts-expect-error - Tiptap extension options type incompatibility
   addOptions() {
     return {
       suggestion: {
         char: "/",
         command: ({ editor, range, props }) => {
           editor.chain().focus().deleteRange(range).run();
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access -- Tiptap internal typing
           props.command({ editor, range });
         },
         items: ({ query }: { query: string }) => {
@@ -345,17 +359,18 @@ const SlashCommands = Extension.create<SlashCommandsOptions>({
         render: () => {
           let component: ReturnType<typeof RenderSuggestions>;
           return {
-            onStart: (props: any) => {
+            onStart: (props: RenderSuggestionsProps) => {
               component = RenderSuggestions();
               component.onStart(props);
             },
-            onUpdate(props: any) {
+            onUpdate(props: RenderSuggestionsProps) {
               component.onUpdate(props);
             },
-            onKeyDown(props: any) {
+            onKeyDown(props: SuggestionKeyDownProps) {
               if (props.event.key === "Escape") {
                 return true;
               }
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
               return component.onKeyDown(props) ?? false;
             },
             onExit: () => {
@@ -477,14 +492,23 @@ export default function Editor({
               const all: MentionItem[] = workspaceMembers.map(
                 (member: WorkspaceMember) => ({
                   id: member.publicId,
-                  label: member?.user?.name ?? member.email,
-                  image: member?.user?.image ?? null,
+                  label: member.user?.name ?? member.email,
+                  image: member.user?.image ?? null,
                 }),
               );
               const q = query.toLowerCase();
               return all.filter((u) => u.label.toLowerCase().includes(q));
             },
-            command: ({ editor, range, props }: any) => {
+            // @ts-expect-error - Tiptap mention command props type incompatibility
+            command: ({
+              editor,
+              range,
+              props,
+            }: {
+              editor: TiptapEditor;
+              range: { from: number; to: number };
+              props: MentionItem;
+            }) => {
               const mentionHTML = `<span data-type="mention" data-id="${props.id}" data-label="${props.label}">@${props.label}</span>&nbsp;`;
 
               editor

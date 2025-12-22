@@ -25,7 +25,8 @@ export default function MemberSelector({
   cardPublicId,
   members,
   isLoading,
-  isCollapsed = false,
+   
+  isCollapsed: _isCollapsed = false,
   children,
 }: MemberSelectorProps) {
   const router = useRouter();

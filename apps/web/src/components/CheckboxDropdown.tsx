@@ -194,7 +194,7 @@ export default function CheckboxDropdown({
                 <>
                   {groups?.find((g) => g.key === selectedGroup)?.items &&
                     renderMenuItems(
-                      groups.find((g) => g.key === selectedGroup)?.items || [],
+                      groups.find((g) => g.key === selectedGroup)?.items ?? [],
                       selectedGroup,
                     )}
                 </>

@@ -23,7 +23,8 @@ declare module "react-contenteditable" {
 
   class ContentEditable extends React.Component<ContentEditableProps> {}
 
-  interface ContentEditableElement extends HTMLElement {
+   
+  interface _ContentEditableElement extends HTMLElement {
     value: string;
   }
 

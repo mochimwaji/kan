@@ -22,7 +22,6 @@ export default function ApiKeyList() {
     createdAt,
     lastRequest,
     isLastRow,
-    showSkeleton,
   }: {
     keyId?: string;
     keyName?: string | null | undefined;
@@ -30,7 +29,6 @@ export default function ApiKeyList() {
     createdAt?: Date | null;
     lastRequest?: Date | null;
     isLastRow?: boolean | undefined;
-    showSkeleton?: boolean | undefined;
   }) => {
     const formatDate = (date?: Date | string | null) => {
       if (!date) return "Never";
@@ -49,25 +47,12 @@ export default function ApiKeyList() {
             <div className="ml-2 min-w-0 flex-1">
               <div>
                 <div className="flex items-center">
-                  {showSkeleton ? (
-                    <div className="flex flex-col gap-2">
-                      <div
-                        className="h-3 w-[125px] animate-pulse rounded-sm"
-                        style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
-                      ></div>
-                    </div>
-                  ) : (
-                    <p
-                      className={twMerge(
-                        "mr-2 text-sm font-medium text-light-900 dark:text-dark-900",
-                      )}
-                      style={{
-                        color: "var(--kan-pages-text)",
-                      }}
-                    >
-                      {keyName}
-                    </p>
-                  )}
+                  <p
+                    className="mr-2 text-sm font-medium text-light-900 dark:text-dark-900"
+                    style={{ color: "var(--kan-pages-text)" }}
+                  >
+                    {keyName}
+                  </p>
                 </div>
               </div>
             </div>
@@ -75,45 +60,23 @@ export default function ApiKeyList() {
         </td>
         <td className="w-[20%] px-3 py-4">
           <p
-            className={twMerge(
-              "text-sm text-light-900 dark:text-dark-900",
-              showSkeleton && "h-3 w-[80px] animate-pulse rounded-sm",
-            )}
-            style={{
-              color: "var(--kan-pages-text)",
-              ...(showSkeleton && { backgroundColor: "var(--kan-sidebar-bg)" }),
-            }}
+            className="text-sm text-light-900 dark:text-dark-900"
+            style={{ color: "var(--kan-pages-text)" }}
           >
             {formatDate(createdAt)}
           </p>
         </td>
         <td className="w-[20%] px-3 py-4">
           <p
-            className={twMerge(
-              "text-sm text-light-900 dark:text-dark-900",
-              showSkeleton && "h-3 w-[80px] animate-pulse rounded-sm",
-            )}
-            style={{
-              color: "var(--kan-pages-text)",
-              ...(showSkeleton && { backgroundColor: "var(--kan-sidebar-bg)" }),
-            }}
+            className="text-sm text-light-900 dark:text-dark-900"
+            style={{ color: "var(--kan-pages-text)" }}
           >
             {formatDate(lastRequest)}
           </p>
         </td>
         <td className="w-[25%] px-3 py-4">
           <div>
-            <span
-              className={twMerge(
-                "inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[11px] font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20",
-                showSkeleton && "h-5 w-[50px] animate-pulse ring-0",
-              )}
-              style={
-                showSkeleton
-                  ? { backgroundColor: "var(--kan-sidebar-bg)" }
-                  : undefined
-              }
-            >
+            <span className="inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[11px] font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
               {keyStart}...
             </span>
           </div>
@@ -147,7 +110,11 @@ export default function ApiKeyList() {
     );
   };
 
-  if (!isLoading && (!data?.data || data.data.length === 0)) {
+  if (isLoading) {
+    return null;
+  }
+
+  if (!data?.data || data.data.length === 0) {
     return null;
   }
 
@@ -198,26 +165,17 @@ export default function ApiKeyList() {
                 className="divide-y divide-light-600 dark:divide-dark-600"
                 style={{ backgroundColor: "var(--kan-pages-bg)" }}
               >
-                {!isLoading &&
-                  data?.data?.map((apiKey, index) => (
-                    <TableRow
-                      key={apiKey.id}
-                      keyId={apiKey.id}
-                      keyName={apiKey.name}
-                      keyStart={apiKey.start}
-                      createdAt={apiKey.createdAt}
-                      lastRequest={apiKey.lastRequest}
-                      isLastRow={index === data.data.length - 1}
-                    />
-                  ))}
-
-                {isLoading && (
-                  <>
-                    <TableRow showSkeleton />
-                    <TableRow showSkeleton />
-                    <TableRow showSkeleton isLastRow />
-                  </>
-                )}
+                {data.data.map((apiKey, index) => (
+                  <TableRow
+                    key={apiKey.id}
+                    keyId={apiKey.id}
+                    keyName={apiKey.name}
+                    keyStart={apiKey.start}
+                    createdAt={apiKey.createdAt}
+                    lastRequest={apiKey.lastRequest}
+                    isLastRow={index === data.data.length - 1}
+                  />
+                ))}
               </tbody>
             </table>
           </div>

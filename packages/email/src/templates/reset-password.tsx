@@ -12,10 +12,10 @@ import { env } from "next-runtime-env";
 
 export const ResetPasswordTemplate = ({
   resetPasswordUrl,
-  resetPasswordToken,
+  _resetPasswordToken,
 }: {
   resetPasswordUrl?: string;
-  resetPasswordToken?: string;
+  _resetPasswordToken?: string;
 }) => (
   <Html>
     <Head />
@@ -81,7 +81,8 @@ export const ResetPasswordTemplate = ({
             color: "#7e7e7e",
           }}
         >
-          If you didn&apos;t try to reset your password, you can safely ignore this email.
+          If you didn&apos;t try to reset your password, you can safely ignore
+          this email.
         </Text>
         <Hr
           style={{

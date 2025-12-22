@@ -9,7 +9,6 @@ import {
   HiOutlineUsers,
   HiXMark,
 } from "react-icons/hi2";
-import { IoChevronForwardSharp } from "react-icons/io5";
 
 import Avatar from "~/components/Avatar";
 import { DeleteConfirmation } from "~/components/DeleteConfirmation";
@@ -30,7 +29,6 @@ import ActivityList from "./components/ActivityList";
 import { AttachmentThumbnails } from "./components/AttachmentThumbnails";
 import { AttachmentUpload } from "./components/AttachmentUpload";
 import Checklists from "./components/Checklists";
-import Dropdown from "./components/Dropdown";
 import { DueDateSelector } from "./components/DueDateSelector";
 import LabelSelector from "./components/LabelSelector";
 import ListSelector from "./components/ListSelector";
@@ -364,7 +362,8 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   const {
     modalContentType,
     entityId,
-    openModal,
+
+    openModal: _openModal,
     closeModal,
     closeModals,
     getModalState,
@@ -383,7 +382,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
 
   const handleClose = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
-    triggerExit(() => router.push(href));
+    triggerExit(() => void router.push(href));
   };
 
   const cardId = Array.isArray(router.query.cardId)
@@ -405,10 +404,11 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   // Esc shortcut to close card and return to board (only when no modal is open)
   const closeCardHref = useCallback(() => {
     if (boardId && !isOpen) {
-      triggerExit(() =>
-        router.push(
-          isTemplate ? `/templates/${boardId}` : `/boards/${boardId}`,
-        ),
+      triggerExit(
+        () =>
+          void router.push(
+            isTemplate ? `/templates/${boardId}` : `/boards/${boardId}`,
+          ),
       );
     }
   }, [boardId, isTemplate, router, isOpen, triggerExit]);
@@ -551,7 +551,13 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
-  const { register, handleSubmit, setValue, watch } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+
+    watch: _watch,
+  } = useForm<FormValues>({
     values: {
       cardId: cardId ?? "",
       title: card?.title ?? "",
@@ -569,7 +575,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
 
   // this adds the new created label to selected labels
   useEffect(() => {
-    const newLabelId = modalStates.NEW_LABEL_CREATED;
+    const newLabelId = modalStates.NEW_LABEL_CREATED as string | undefined;
     if (newLabelId && cardId) {
       const isAlreadyAdded = card?.labels.some(
         (label) => label.publicId === newLabelId,
@@ -583,12 +589,20 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
       }
       clearModalState("NEW_LABEL_CREATED");
     }
-  }, [modalStates.NEW_LABEL_CREATED, card, cardId]);
+  }, [
+    modalStates.NEW_LABEL_CREATED,
+    card,
+    cardId,
+    addOrRemoveLabel,
+    clearModalState,
+  ]);
 
   // Open the new item form after creating a new checklist
   useEffect(() => {
     if (!card) return;
-    const state = getModalState("ADD_CHECKLIST");
+    const state = getModalState("ADD_CHECKLIST") as
+      | { createdChecklistId?: string }
+      | undefined;
     const createdId: string | undefined = state?.createdChecklistId;
     if (createdId) {
       setActiveChecklistForm(createdId);
@@ -601,6 +615,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     const titleTextarea = document.getElementById(
       "title",
     ) as HTMLTextAreaElement;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- DOM element may not exist
     if (titleTextarea) {
       titleTextarea.style.height = "auto";
       titleTextarea.style.height = `${titleTextarea.scrollHeight}px`;
@@ -726,10 +741,12 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
                   />
                   {!isTemplate && (
                     <>
+                      {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive array check */}
                       {card?.attachments.length > 0 && (
                         <div className="mt-6">
                           <AttachmentThumbnails
                             attachments={card.attachments}
+                            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
                             cardPublicId={cardId ?? ""}
                           />
                         </div>
@@ -805,6 +822,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
             <DeleteConfirmation
               entityType="card"
               onConfirm={() =>
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
                 deleteCardMutation.mutate({ cardPublicId: cardId ?? "" })
               }
               isLoading={deleteCardMutation.isPending}
@@ -819,6 +837,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
               entityType="comment"
               onConfirm={() =>
                 deleteCommentMutation.mutate({
+                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
                   cardPublicId: cardId ?? "",
                   commentPublicId: entityId,
                 })

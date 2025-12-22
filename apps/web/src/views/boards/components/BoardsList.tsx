@@ -220,26 +220,7 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
     [],
   );
 
-  if (isLoading)
-    return (
-      <div
-        className="3xl:grid-cols-4 grid h-fit w-full grid-cols-1 gap-4 transition-opacity duration-200 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
-        style={{ opacity: showContent ? 1 : 0 }}
-      >
-        <div
-          className="mr-5 flex h-[150px] w-full animate-pulse rounded-md"
-          style={{ backgroundColor: "var(--kan-board-bg)" }}
-        />
-        <div
-          className="mr-5 flex h-[150px] w-full animate-pulse rounded-md"
-          style={{ backgroundColor: "var(--kan-board-bg)" }}
-        />
-        <div
-          className="mr-5 flex h-[150px] w-full animate-pulse rounded-md"
-          style={{ backgroundColor: "var(--kan-board-bg)" }}
-        />
-      </div>
-    );
+  if (isLoading) return null;
 
   if (data?.length === 0)
     return (

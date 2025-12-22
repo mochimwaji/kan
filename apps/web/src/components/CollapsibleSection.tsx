@@ -25,7 +25,6 @@ export default function CollapsibleSection({
   const innerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | "auto">(isOpen ? "auto" : 0);
   const [contentOpacity, setContentOpacity] = useState(isOpen ? 1 : 0);
-  const [isAnimating, setIsAnimating] = useState(false);
   // Track if we've done the initial render to skip animation on first paint
   const hasRenderedRef = useRef(false);
 
@@ -43,7 +42,6 @@ export default function CollapsibleSection({
 
     if (isOpen) {
       // EXPANDING: First set height, then fade in content
-      setIsAnimating(true);
 
       // Step 1: Animate height from 0 to actual content height
       const contentHeight = innerRef.current.scrollHeight;
@@ -53,18 +51,17 @@ export default function CollapsibleSection({
       const heightTimer = setTimeout(() => {
         setContentOpacity(1);
         setHeight("auto");
-        setIsAnimating(false);
       }, 200); // Match height transition duration
 
       return () => clearTimeout(heightTimer);
     } else {
       // COLLAPSING: First fade out content, then collapse height
-      setIsAnimating(true);
 
       // Step 1: Fade out content immediately
       setContentOpacity(0);
 
       // Step 2: Set height to current value (from auto) to enable transition
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Runtime safety check
       if (innerRef.current) {
         const currentHeight = innerRef.current.scrollHeight;
         setHeight(currentHeight);
@@ -81,17 +78,11 @@ export default function CollapsibleSection({
         });
       });
 
-      // Mark animation complete after full sequence
-      const completeTimer = setTimeout(() => {
-        setIsAnimating(false);
-      }, 350); // height transition + buffer
-
       return () => {
         cancelAnimationFrame(setupTimer);
-        clearTimeout(completeTimer);
       };
     }
-  }, [isOpen]);
+  }, [isOpen, skipAnimation]);
 
   return (
     <div

@@ -117,7 +117,7 @@ export default function List({
   const utils = api.useUtils();
   const updateList = api.list.update.useMutation({
     onSuccess: () => {
-      utils.board.byId.invalidate();
+      void utils.board.byId.invalidate();
     },
   });
 
@@ -156,7 +156,8 @@ export default function List({
 
   // Compute background and text color based on list color
   const listBackground = list.color ? deriveListBackground(list.color) : null;
-  const listStyle = listBackground
+
+  const _listStyle = listBackground
     ? { backgroundColor: listBackground }
     : undefined;
   // Use contrast color for text when list has a background color
@@ -182,7 +183,7 @@ export default function List({
           )}
           style={{
             ...provided.draggableProps.style,
-            backgroundColor: listBackground || "var(--kan-sidebar-bg)",
+            backgroundColor: listBackground ?? "var(--kan-sidebar-bg)",
             color: listTextColor,
           }}
         >

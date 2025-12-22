@@ -1,4 +1,4 @@
-import { and, eq, gt } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import { workspaceInviteLinks } from "@kan/db/schema";

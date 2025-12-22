@@ -4,9 +4,13 @@ import { createLogger, isDbLoggingEnabled, logger } from "./index";
 
 describe("logger", () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(console, "debug").mockImplementation(() => {});
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(console, "info").mockImplementation(() => {});
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(console, "warn").mockImplementation(() => {});
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
 
@@ -73,7 +77,7 @@ describe("logger", () => {
       testLogger.info("test message", { userId: "123" });
       expect(console.info).toHaveBeenCalled();
       const logOutput = (console.info as ReturnType<typeof vi.fn>).mock
-        .calls[0]![0] as string;
+        .calls[0]?.[0] as string;
       expect(logOutput).toContain("userId");
       expect(logOutput).toContain("123");
     });
@@ -84,7 +88,7 @@ describe("logger", () => {
       const childLogger = parentLogger.child({ requestId: "req_123" });
       childLogger.info("test message");
       const logOutput = (console.info as ReturnType<typeof vi.fn>).mock
-        .calls[0]![0] as string;
+        .calls[0]?.[0] as string;
       expect(logOutput).toContain("api");
       expect(logOutput).toContain("req_123");
     });
@@ -95,7 +99,7 @@ describe("logger", () => {
       const childLogger = parentLogger.child({ userId: "child" });
       childLogger.info("test message");
       const logOutput = (console.info as ReturnType<typeof vi.fn>).mock
-        .calls[0]![0] as string;
+        .calls[0]?.[0] as string;
       expect(logOutput).toContain("child");
     });
   });
@@ -107,7 +111,7 @@ describe("logger", () => {
       const testError = new Error("Test error message");
       testLogger.error("Something went wrong", testError);
       const logOutput = (console.error as ReturnType<typeof vi.fn>).mock
-        .calls[0]![0] as string;
+        .calls[0]?.[0] as string;
       expect(logOutput).toContain("Test error message");
     });
   });

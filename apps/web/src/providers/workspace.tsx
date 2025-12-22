@@ -106,6 +106,7 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({
           localStorage.setItem("workspacePublicId", workspacePublicId);
         }
       }
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check for data existence
     } else if (data && data.length > 0) {
       const primaryWorkspace = data[0]?.workspace;
       const primaryWorkspaceRole = data[0]?.role;

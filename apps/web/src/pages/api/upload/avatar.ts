@@ -36,7 +36,9 @@ export default async function handler(
   try {
     const db = createDrizzleClient();
     const auth = initAuth(db);
-    const session = await auth.api.getSession({ headers: req.headers as any });
+    const session = await auth.api.getSession({
+      headers: req.headers as unknown as Headers,
+    });
 
     if (!session?.user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -50,7 +52,7 @@ export default async function handler(
       keepExtensions: true,
     });
 
-    const [fields, files] = await form.parse(req);
+    const [_fields, files] = await form.parse(req);
     const uploadedFile = files.file?.[0];
 
     if (!uploadedFile) {
@@ -59,7 +61,7 @@ export default async function handler(
 
     // Sanitize and generate filename
     const fileExtension =
-      uploadedFile.originalFilename?.split(".").pop() || "jpg";
+      uploadedFile.originalFilename?.split(".").pop() ?? "jpg";
     const allowedExtensions = ["jpg", "jpeg", "png", "webp"];
     const ext = allowedExtensions.includes(fileExtension.toLowerCase())
       ? fileExtension.toLowerCase()

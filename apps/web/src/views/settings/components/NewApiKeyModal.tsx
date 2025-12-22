@@ -53,7 +53,7 @@ export default function NewApiKeyModal() {
       void qc.invalidateQueries({
         queryKey: ["apiKeys"],
       });
-      if (apiKey && apiKey.key && apiKey.name) {
+      if (apiKey?.key && apiKey.name) {
         setCreatedApiKey({
           key: apiKey.key,
           name: apiKey.name,
@@ -128,7 +128,9 @@ export default function NewApiKeyModal() {
             <div className="mt-2 flex items-start gap-1">
               <HiInformationCircle className="mt-0.5 h-4 w-4 text-dark-900" />
               <p className="text-xs text-gray-500 dark:text-dark-900">
-                {"This API key will only be shown once. Please save it in a secure location."}
+                {
+                  "This API key will only be shown once. Please save it in a secure location."
+                }
               </p>
             </div>
           </div>

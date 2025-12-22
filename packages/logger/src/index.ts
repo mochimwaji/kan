@@ -22,7 +22,7 @@ export interface Logger {
   debug(message: string, context?: LogContext): void;
   info(message: string, context?: LogContext): void;
   warn(message: string, context?: LogContext): void;
-  error(message: string, error?: Error | unknown, context?: LogContext): void;
+  error(message: string, error?: unknown, context?: LogContext): void;
   child(defaultContext: LogContext): Logger;
 }
 
@@ -70,7 +70,7 @@ function formatLog(
   level: LogLevel,
   message: string,
   context?: LogContext,
-  error?: Error | unknown
+  error?: unknown,
 ): string {
   const timestamp = new Date().toISOString();
   const isProd = process.env.NODE_ENV === "production";
@@ -137,26 +137,32 @@ function createLogger(defaultContext: LogContext = {}): Logger {
   return {
     debug(message: string, context?: LogContext) {
       if (shouldLog("debug")) {
-        console.debug(formatLog("debug", message, { ...defaultContext, ...context }));
+        console.debug(
+          formatLog("debug", message, { ...defaultContext, ...context }),
+        );
       }
     },
 
     info(message: string, context?: LogContext) {
       if (shouldLog("info")) {
-        console.info(formatLog("info", message, { ...defaultContext, ...context }));
+        console.info(
+          formatLog("info", message, { ...defaultContext, ...context }),
+        );
       }
     },
 
     warn(message: string, context?: LogContext) {
       if (shouldLog("warn")) {
-        console.warn(formatLog("warn", message, { ...defaultContext, ...context }));
+        console.warn(
+          formatLog("warn", message, { ...defaultContext, ...context }),
+        );
       }
     },
 
-    error(message: string, error?: Error | unknown, context?: LogContext) {
+    error(message: string, error?: unknown, context?: LogContext) {
       if (shouldLog("error")) {
         console.error(
-          formatLog("error", message, { ...defaultContext, ...context }, error)
+          formatLog("error", message, { ...defaultContext, ...context }, error),
         );
       }
     },

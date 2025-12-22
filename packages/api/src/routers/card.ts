@@ -794,15 +794,22 @@ export const cardRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
 
+      const firstCardPublicId = input.cardPublicIds[0];
+      if (!firstCardPublicId)
+        throw new TRPCError({
+          message: `No card public IDs provided`,
+          code: "BAD_REQUEST",
+        });
+
       // Get first card to validate workspace access
       const firstCard = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
-        input.cardPublicIds[0]!,
+        firstCardPublicId,
       );
 
       if (!firstCard)
         throw new TRPCError({
-          message: `Card with public ID ${input.cardPublicIds[0]} not found`,
+          message: `Card with public ID ${firstCardPublicId} not found`,
           code: "NOT_FOUND",
         });
 
@@ -858,15 +865,18 @@ export const cardRouter = createTRPCRouter({
         return { success: true, updatedCount: 0 };
       }
 
+      const firstUpdate = input[0];
+      if (!firstUpdate) return { success: true, updatedCount: 0 };
+
       // Get first card to validate workspace access
       const firstCard = await cardRepo.getWorkspaceAndCardIdByCardPublicId(
         ctx.db,
-        input[0]!.cardPublicId,
+        firstUpdate.cardPublicId,
       );
 
       if (!firstCard)
         throw new TRPCError({
-          message: `Card with public ID ${input[0]!.cardPublicId} not found`,
+          message: `Card with public ID ${firstUpdate.cardPublicId} not found`,
           code: "NOT_FOUND",
         });
 

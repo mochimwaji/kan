@@ -35,7 +35,6 @@ export default function MembersPage() {
     memberRole,
     memberStatus,
     isLastRow,
-    showSkeleton,
   }: {
     memberPublicId?: string;
     memberId?: string | null | undefined;
@@ -45,7 +44,6 @@ export default function MembersPage() {
     memberRole?: string;
     memberStatus?: string;
     isLastRow?: boolean;
-    showSkeleton?: boolean;
   }) => {
     return (
       <tr className="rounded-b-lg">
@@ -57,49 +55,27 @@ export default function MembersPage() {
         >
           <div className="flex items-center p-2 sm:p-4">
             <div className="flex-shrink-0">
-              {showSkeleton ? (
-                <div
-                  className="h-8 w-8 animate-pulse rounded-full sm:h-9 sm:w-9"
-                  style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
-                />
-              ) : (
-                <Avatar
-                  name={memberName ?? ""}
-                  email={memberEmail ?? ""}
-                  imageUrl={memberImage ? getAvatarUrl(memberImage) : undefined}
-                />
-              )}
+              <Avatar
+                name={memberName ?? ""}
+                email={memberEmail ?? ""}
+                imageUrl={memberImage ? getAvatarUrl(memberImage) : undefined}
+              />
             </div>
             <div className="ml-2 min-w-0 flex-1">
               <div>
                 <div className="flex items-center">
                   <p
-                    className={twMerge(
-                      "mr-2 truncate text-xs font-medium sm:text-sm",
-                      showSkeleton &&
-                        "md mb-2 h-3 w-[125px] animate-pulse rounded-sm",
-                    )}
-                    style={{
-                      color: "var(--kan-pages-text)",
-                      ...(showSkeleton && {
-                        backgroundColor: "var(--kan-sidebar-bg)",
-                      }),
-                    }}
+                    className="mr-2 truncate text-xs font-medium sm:text-sm"
+                    style={{ color: "var(--kan-pages-text)" }}
                   >
                     {memberName}
                   </p>
                 </div>
                 <p
-                  className={twMerge(
-                    "truncate text-xs sm:text-sm",
-                    showSkeleton && "h-3 w-[175px] animate-pulse rounded-sm",
-                  )}
+                  className="truncate text-xs sm:text-sm"
                   style={{
                     color: "var(--kan-pages-text)",
                     opacity: 0.7,
-                    ...(showSkeleton && {
-                      backgroundColor: "var(--kan-sidebar-bg)",
-                    }),
                   }}
                 >
                   {memberEmail}
@@ -116,13 +92,7 @@ export default function MembersPage() {
         >
           <div className="flex w-full items-center justify-between px-2 sm:px-3">
             <div className="flex flex-col sm:flex-row sm:items-center">
-              <span
-                className={twMerge(
-                  "inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20 sm:text-[11px]",
-                  showSkeleton &&
-                    "h-5 w-[50px] animate-pulse bg-light-200 ring-0 dark:bg-dark-200",
-                )}
-              >
+              <span className="inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20 sm:text-[11px]">
                 {memberRole &&
                   memberRole.charAt(0).toUpperCase() + memberRole.slice(1)}
               </span>
@@ -135,7 +105,7 @@ export default function MembersPage() {
             <div
               className={twMerge(
                 "relative z-50",
-                (workspace.role !== "admin" || showSkeleton) && "hidden",
+                workspace.role !== "admin" && "hidden",
               )}
             >
               {session?.user.id !== memberId && (
@@ -167,7 +137,7 @@ export default function MembersPage() {
 
   return (
     <>
-      <PageHead title={`Members | ${workspace.name ?? "Workspace"}`} />
+      <PageHead title={`Members | ${workspace.name}`} />
       <div className="m-auto h-full max-w-[1100px] p-6 px-5 md:px-28 md:py-12">
         <div className="mb-8 flex w-full justify-between">
           <div className="flex items-center gap-3">
@@ -233,14 +203,6 @@ export default function MembersPage() {
                           isLastRow={index === data.members.length - 1}
                         />
                       ))}
-
-                    {isLoading && (
-                      <>
-                        <TableRow showSkeleton />
-                        <TableRow showSkeleton />
-                        <TableRow showSkeleton isLastRow />
-                      </>
-                    )}
                   </tbody>
                 </table>
               </div>

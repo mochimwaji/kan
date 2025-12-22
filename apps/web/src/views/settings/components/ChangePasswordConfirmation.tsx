@@ -1,7 +1,6 @@
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { env } from "next-runtime-env";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -58,11 +57,11 @@ export function ChangePasswordFormConfirmation() {
         revokeOtherSessions: true,
       });
 
-      if (response?.error) {
-        throw new Error(response?.error.message || "Invalid Password");
+      if (response.error) {
+        throw new Error(response.error.message ?? "Invalid Password");
       }
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       closeModal();
       showPopup({
         header: "Password Changed",
@@ -70,11 +69,11 @@ export function ChangePasswordFormConfirmation() {
         icon: "success",
       });
 
-      utils.invalidate();
+      void utils.invalidate();
       reset();
       router.push("/");
     },
-    onError: async (error: any) => {
+    onError: (error: Error) => {
       const errorMessage = error.message.toLowerCase();
 
       if (errorMessage.includes("invalid password")) {

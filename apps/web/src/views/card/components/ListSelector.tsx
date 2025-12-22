@@ -1,4 +1,3 @@
-
 import CheckboxDropdown from "~/components/CheckboxDropdown";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
@@ -19,7 +18,8 @@ export default function ListSelector({
   cardPublicId,
   lists,
   isLoading,
-  isCollapsed = false,
+
+  isCollapsed: _isCollapsed = false,
   children,
 }: ListSelectorProps) {
   const utils = api.useUtils();
@@ -39,8 +39,11 @@ export default function ListSelector({
           ...oldCard,
           list: {
             ...oldCard.list,
+             
             publicId: newList.listPublicId ?? "",
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
             name: oldCard.list.name ?? "",
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
             board: oldCard.list.board ?? null,
           },
         };

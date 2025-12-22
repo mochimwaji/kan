@@ -101,6 +101,7 @@ function useEventListener<
     // Define the listening target
     const targetElement: T | Window = element?.current ?? window;
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Runtime safety check for SSR and element validity
     if (!(targetElement && targetElement.addEventListener)) return;
 
     // Create event listener that calls handler function stored in ref

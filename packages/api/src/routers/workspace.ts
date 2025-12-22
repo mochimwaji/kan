@@ -27,7 +27,7 @@ export const workspaceRouter = createTRPCRouter({
       z.custom<Awaited<ReturnType<typeof workspaceRepo.getAllByUserId>>>(),
     )
     .query(async ({ ctx }) => {
-      const userId = ctx.user?.id;
+      const userId = ctx.user.id;
 
       if (!userId)
         throw new TRPCError({
@@ -57,7 +57,7 @@ export const workspaceRouter = createTRPCRouter({
       >(),
     )
     .query(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
+      const userId = ctx.user.id;
 
       if (!userId)
         throw new TRPCError({
@@ -151,8 +151,8 @@ export const workspaceRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof workspaceRepo.create>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
-      const userEmail = ctx.user?.email;
+      const userId = ctx.user.id;
+      const userEmail = ctx.user.email;
 
       if (!userId || !userEmail)
         throw new TRPCError({
@@ -235,7 +235,7 @@ export const workspaceRouter = createTRPCRouter({
     )
     .output(z.custom<Awaited<ReturnType<typeof workspaceRepo.update>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
+      const userId = ctx.user.id;
 
       if (!userId)
         throw new TRPCError({
@@ -311,7 +311,7 @@ export const workspaceRouter = createTRPCRouter({
     .input(z.object({ workspacePublicId: z.string().min(12) }))
     .output(z.custom<Awaited<ReturnType<typeof workspaceRepo.hardDelete>>>())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
+      const userId = ctx.user.id;
 
       if (!userId)
         throw new TRPCError({
@@ -337,6 +337,7 @@ export const workspaceRouter = createTRPCRouter({
         input.workspacePublicId,
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check
       if (!result)
         throw new TRPCError({
           message: `Unable to delete workspace`,
@@ -446,7 +447,7 @@ export const workspaceRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
+      const userId = ctx.user.id;
 
       if (!userId)
         throw new TRPCError({
@@ -527,7 +528,7 @@ export const workspaceRouter = createTRPCRouter({
       ),
     )
     .query(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
+      const userId = ctx.user.id;
 
       if (!userId)
         throw new TRPCError({

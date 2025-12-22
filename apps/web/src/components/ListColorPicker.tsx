@@ -20,7 +20,7 @@ export default function ListColorPicker({
   onColorSelect,
   onClose,
 }: ListColorPickerProps) {
-  const [hexInput, setHexInput] = useState(currentColor || "");
+  const [hexInput, setHexInput] = useState(currentColor ?? "");
 
   const {
     lightness,
@@ -91,7 +91,7 @@ export default function ListColorPicker({
           <div
             className="h-8 w-8 rounded-md border border-light-400 dark:border-dark-400"
             style={{
-              backgroundColor: selectedColor || currentColor || "#cccccc",
+              backgroundColor: selectedColor ?? currentColor ?? "#cccccc",
             }}
           />
           <input

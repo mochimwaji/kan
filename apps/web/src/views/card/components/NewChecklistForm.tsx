@@ -37,7 +37,7 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
         cardPublicId: args.cardPublicId,
       });
       utils.card.byId.setData({ cardPublicId: args.cardPublicId }, (old) => {
-        if (!old) return old as any;
+        if (!old) return old;
         const placeholderChecklist = {
           publicId: `PLACEHOLDER_${generateUID()}`,
           name: args.name,

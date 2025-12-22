@@ -11,7 +11,7 @@ import { env } from "next-runtime-env";
 import type { dbClient } from "@kan/db/client";
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
-import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import * as _workspaceRepo from "@kan/db/repository/workspace.repo";
 import * as schema from "@kan/db/schema";
 import { sendEmail } from "@kan/email";
 import { authLogger } from "@kan/logger";
@@ -131,7 +131,7 @@ async function downloadImage(url: string): Promise<Buffer> {
 
 export const initAuth = (db: dbClient) => {
   return betterAuth({
-    secret: process.env.BETTER_AUTH_SECRET!,
+    secret: process.env.BETTER_AUTH_SECRET ?? "",
     baseURL: env("NEXT_PUBLIC_BASE_URL"),
     trustedOrigins: process.env.BETTER_AUTH_TRUSTED_ORIGINS
       ? [
@@ -317,7 +317,7 @@ export const initAuth = (db: dbClient) => {
 
         const allowedFileExtensions = ["jpg", "jpeg", "png", "webp"];
         const fileExtension =
-          user.image.split(".").pop()?.split("?")[0] || "jpg";
+          user.image.split(".").pop()?.split("?")[0] ?? "jpg";
         const ext = !allowedFileExtensions.includes(fileExtension)
           ? "jpg"
           : fileExtension;

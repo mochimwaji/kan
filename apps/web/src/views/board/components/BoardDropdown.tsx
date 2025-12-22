@@ -13,8 +13,10 @@ import { useModal } from "~/providers/modal";
 export default function BoardDropdown({
   isTemplate,
   isLoading,
-  boardPublicId,
-  workspacePublicId,
+   
+  boardPublicId: _boardPublicId,
+   
+  workspacePublicId: _workspacePublicId,
   quickDeleteEnabled,
   onToggleQuickDelete,
 }: {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import ContentEditable from "react-contenteditable";
 import { flushSync } from "react-dom";
 import { useForm } from "react-hook-form";
@@ -39,7 +39,7 @@ const NewChecklistItemForm = ({
   const editableRef = useRef<HTMLElement | null>(null);
   const keepOpenRef = useRef(false);
 
-  const refocusEditable = () => {
+  const refocusEditable = useCallback(() => {
     const el = editableRef.current;
     if (!el) return;
     if (readOnly) return;
@@ -49,7 +49,7 @@ const NewChecklistItemForm = ({
     setTimeout(() => {
       el.focus();
     }, 100);
-  };
+  }, [readOnly]);
 
   const addChecklistItemMutation = api.checklist.createItem.useMutation({
     onMutate: async (vars) => {
@@ -57,7 +57,7 @@ const NewChecklistItemForm = ({
       const previous = utils.card.byId.getData({ cardPublicId });
 
       utils.card.byId.setData({ cardPublicId }, (old) => {
-        if (!old) return old as any;
+        if (!old) return old;
         const placeholder = {
           publicId: `PLACEHOLDER_${generateUID()}`,
           title: vars.title,
@@ -84,7 +84,7 @@ const NewChecklistItemForm = ({
         const el = editableRef.current;
         if (el) {
           // Temporarily remove placeholder attribute to prevent CSS :empty:before from showing
-          const placeholderText = el.getAttribute("placeholder") || "";
+          const placeholderText = el.getAttribute("placeholder") ?? "";
           el.removeAttribute("placeholder");
 
           // Reset form and clear content
@@ -149,7 +149,7 @@ const NewChecklistItemForm = ({
   const submitIfNotEmpty = (keepOpen: boolean) => {
     if (readOnly) return;
     keepOpenRef.current = keepOpen;
-    const currentHtml = getValues("title") ?? "";
+    const currentHtml = getValues("title");
     const plain = sanitizeHtmlToPlainText(currentHtml);
     if (!plain) {
       onCancel();
@@ -163,7 +163,7 @@ const NewChecklistItemForm = ({
 
   useEffect(() => {
     refocusEditable();
-  }, []);
+  }, [refocusEditable]);
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
@@ -185,7 +185,7 @@ const NewChecklistItemForm = ({
             onChange={(e) => setValue("title", e.target.value)}
             className="m-0 min-h-[20px] w-full p-0 text-sm leading-5 text-light-900 outline-none focus-visible:outline-none dark:text-dark-950"
             onBlur={() => submitIfNotEmpty(false)}
-            onKeyDown={async (e) => {
+            onKeyDown={(e) => {
               if (readOnly) return;
               if (e.key === "Enter") {
                 e.preventDefault();
@@ -197,7 +197,7 @@ const NewChecklistItemForm = ({
               }
             }}
             innerRef={(el) => {
-              editableRef.current = (el as unknown as HTMLElement) ?? null;
+              editableRef.current = el as unknown as HTMLElement | null;
             }}
           />
         </div>

@@ -46,7 +46,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "1" },
-    action: () => router.push("/settings/account"),
+    action: () => void router.push("/settings/account"),
     description: "Account settings",
     group: "SETTINGS",
   });
@@ -54,7 +54,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "2" },
-    action: () => router.push("/settings/workspace"),
+    action: () => void router.push("/settings/workspace"),
     description: "Workspace settings",
     group: "SETTINGS",
   });
@@ -62,7 +62,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   useKeyboardShortcut({
     type: "PRESS",
     stroke: { key: "3" },
-    action: () => router.push("/settings/api"),
+    action: () => void router.push("/settings/api"),
     description: "API settings",
     group: "SETTINGS",
   });
@@ -239,7 +239,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
               >
                 <div className="relative mb-4">
                   <ListboxButton className="w-full appearance-none rounded-lg border-0 bg-light-50 py-2 pl-3 pr-10 text-left text-sm text-light-1000 shadow-sm ring-1 ring-inset ring-light-300 focus:ring-2 focus:ring-inset focus:ring-light-400 dark:bg-dark-50 dark:text-dark-1000 dark:ring-dark-300 dark:focus:ring-dark-500">
-                    {availableTabs[selectedTabIndex]?.label || "Select a tab"}
+                    {availableTabs[selectedTabIndex]?.label ?? "Select a tab"}
                     <HiChevronDown
                       aria-hidden="true"
                       className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-light-900 dark:text-dark-900"

@@ -73,7 +73,6 @@ export default function CommandPallette({
   const {
     data: searchResults,
     isLoading,
-    isFetched,
     isPlaceholderData,
   } = api.workspace.search.useQuery(
     {

@@ -26,7 +26,7 @@ async function checkSchemaExists(pool: Pool): Promise<boolean> {
         AND table_name = 'session'
       );
     `);
-    return result.rows[0]?.exists === true;
+    return (result.rows[0] as { exists: boolean } | undefined)?.exists === true;
   } catch (error) {
     console.error("Error checking schema:", error);
     return false;
@@ -44,7 +44,7 @@ async function getMigrationsRun(pool: Pool): Promise<Set<string>> {
       );
     `);
 
-    if (!tableExists.rows[0]?.exists) {
+    if (!(tableExists.rows[0] as { exists: boolean } | undefined)?.exists) {
       return new Set();
     }
 
@@ -79,7 +79,7 @@ async function runMigrations(): Promise<void> {
     // Check if schema exists (proxied by the session table)
     const schemaExists = await checkSchemaExists(pool);
 
-    const migrationsFolder = process.env.MIGRATIONS_PATH || "./migrations";
+    const migrationsFolder = process.env.MIGRATIONS_PATH ?? "./migrations";
     if (!existsSync(migrationsFolder)) {
       console.error(`Migrations folder not found: ${migrationsFolder}`);
       await pool.end();
@@ -163,4 +163,4 @@ async function runMigrations(): Promise<void> {
   }
 }
 
-runMigrations();
+void runMigrations();

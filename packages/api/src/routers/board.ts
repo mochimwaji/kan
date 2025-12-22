@@ -289,6 +289,7 @@ export const boardRouter = createTRPCRouter({
           sourceBoardId: sourceBoardInfo.id,
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check
         if (!result)
           throw new TRPCError({
             message: `Failed to create board from source`,

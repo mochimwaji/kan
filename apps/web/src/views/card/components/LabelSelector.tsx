@@ -23,7 +23,8 @@ export default function LabelSelector({
   cardPublicId,
   labels,
   isLoading,
-  isCollapsed = false,
+   
+  isCollapsed: _isCollapsed = false,
   children,
 }: LabelSelectorProps) {
   const utils = api.useUtils();

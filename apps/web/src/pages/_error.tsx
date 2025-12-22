@@ -12,7 +12,7 @@ function Error({ statusCode }: ErrorProps) {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="text-center">
         <h1 className="text-6xl font-bold text-gray-900 dark:text-white">
-          {statusCode || "Error"}
+          {statusCode ?? "Error"}
         </h1>
         <p className="mt-4 text-xl text-gray-600 dark:text-gray-400">
           {statusCode === 404

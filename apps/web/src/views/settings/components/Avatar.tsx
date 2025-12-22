@@ -1,11 +1,8 @@
 import Image from "next/image";
-import { env } from "next-runtime-env";
 import { useCallback, useRef, useState } from "react";
 import ReactCrop from "react-image-crop";
 
 import "react-image-crop/dist/ReactCrop.css";
-
-import { generateUID } from "@kan/shared/utils";
 
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
@@ -57,7 +54,7 @@ export default function Avatar({
   const [crop, setCrop] = useState<PercentCrop>();
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  const updateUser = api.user.update.useMutation({
+  const _updateUser = api.user.update.useMutation({
     onSuccess: async () => {
       showPopup({
         header: "Profile image updated",
@@ -193,7 +190,7 @@ export default function Avatar({
 
       if (!response.ok) {
         const errorData = (await response.json()) as { message?: string };
-        throw new Error(errorData.message || "Failed to upload profile image");
+        throw new Error(errorData.message ?? "Failed to upload profile image");
       }
 
       showPopup({
