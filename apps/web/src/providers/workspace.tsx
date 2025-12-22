@@ -91,36 +91,40 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({
         ({ workspace }) => workspace.publicId === storedWorkspaceId,
       );
 
-      if (!selectedWorkspace?.workspace) return;
+      if (selectedWorkspace?.workspace) {
+        setWorkspace({
+          publicId: selectedWorkspace.workspace.publicId,
+          name: selectedWorkspace.workspace.name,
+          slug: selectedWorkspace.workspace.slug,
+          plan: selectedWorkspace.workspace.plan,
+          description: selectedWorkspace.workspace.description,
+          role: selectedWorkspace.role,
+        });
 
-      setWorkspace({
-        publicId: selectedWorkspace.workspace.publicId,
-        name: selectedWorkspace.workspace.name,
-        slug: selectedWorkspace.workspace.slug,
-        plan: selectedWorkspace.workspace.plan,
-        description: selectedWorkspace.workspace.description,
-        role: selectedWorkspace.role,
-      });
-
-      if (workspacePublicId) {
-        router.push(`/boards`);
-        localStorage.setItem("workspacePublicId", workspacePublicId);
+        if (workspacePublicId) {
+          router.push(`/boards`);
+          localStorage.setItem("workspacePublicId", workspacePublicId);
+        }
       }
-    } else {
+    } else if (data && data.length > 0) {
       const primaryWorkspace = data[0]?.workspace;
       const primaryWorkspaceRole = data[0]?.role;
 
-      if (!primaryWorkspace || !primaryWorkspaceRole) return;
-      localStorage.setItem("workspacePublicId", primaryWorkspace.publicId);
-      setWorkspace({
-        publicId: primaryWorkspace.publicId,
-        name: primaryWorkspace.name,
-        slug: primaryWorkspace.slug,
-        plan: primaryWorkspace.plan,
-        description: primaryWorkspace.description,
-        role: primaryWorkspaceRole,
-      });
+      if (primaryWorkspace && primaryWorkspaceRole) {
+        localStorage.setItem("workspacePublicId", primaryWorkspace.publicId);
+        setWorkspace({
+          publicId: primaryWorkspace.publicId,
+          name: primaryWorkspace.name,
+          slug: primaryWorkspace.slug,
+          plan: primaryWorkspace.plan,
+          description: primaryWorkspace.description,
+          role: primaryWorkspaceRole,
+        });
+      }
     }
+
+    // Mark as loaded once any of the above processing is complete
+    setHasLoaded(true);
   }, [data, isLoading, workspacePublicId, router]);
 
   return (

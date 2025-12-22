@@ -103,6 +103,23 @@ export default function Dashboard({
   });
 
   useEffect(() => {
+    // Normal reveal once data is loaded
+    if (hasLoaded && !sessionLoading) {
+      const timer = setTimeout(() => {
+        document.documentElement.classList.add("app-ready");
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+
+    // Failsafe: Reveal anyway after 3 seconds if data is still hanging
+    const failsafe = setTimeout(() => {
+      document.documentElement.classList.add("app-ready");
+    }, 3000);
+
+    return () => clearTimeout(failsafe);
+  }, [hasLoaded, sessionLoading]);
+
+  useEffect(() => {
     if (hasLoaded && availableWorkspaces.length === 0) {
       openModal("NEW_WORKSPACE", undefined, undefined, false);
     }

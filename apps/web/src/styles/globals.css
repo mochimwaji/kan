@@ -33,19 +33,19 @@
   --kan-menu-text: #ffffff;
 }
 
-/* Hide content initially until theme is applied to prevent grey flash */
-/* JS will add 'theme-ready' class to documentElement after theme colors are applied */
-html:not(.theme-ready) {
+/* Hide content initially until app is fully ready (Data + Theme) */
+/* JS will add 'app-ready' class to documentElement after all core data is settled */
+html {
   opacity: 0;
+  transition: opacity 500ms ease-in-out;
 }
 
-html.theme-ready body {
+html.app-ready {
   opacity: 1;
-  transition: opacity 150ms ease-out;
 }
 
 body {
-  /* Default to 0 if theme not ready, but html handles the main hiding */
+  /* Ensure body doesn't conflict with global fade-in */
   opacity: 1;
 }
 

@@ -82,7 +82,6 @@ export function applyColorsToDocument(
     // Ignore localStorage errors (e.g., private browsing)
   }
 
-  // Mark body and root as theme-ready to show content (CSS hides until this class is added)
-  root.classList.add("theme-ready");
-  document.body.classList.add("theme-ready");
+  // Set background color of html immediately to match theme
+  root.style.backgroundColor = resolved.sidebar;
 }

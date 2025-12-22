@@ -35,15 +35,14 @@ export default function Document() {
           }
           
           // Apply text colors
-          // Apply text colors
           if (colors.sidebar) root.style.setProperty('--kan-sidebar-text', getContrast(colors.sidebar));
           if (colors.pages) root.style.setProperty('--kan-pages-text', getContrast(colors.pages));
           if (colors.boardBackground) root.style.setProperty('--kan-board-text', getContrast(colors.boardBackground));
           if (colors.button) root.style.setProperty('--kan-button-text', getContrast(colors.button));
           if (colors.menu) root.style.setProperty('--kan-menu-text', getContrast(colors.menu));
           
-          // Mark as ready since we applied cached theme
-          root.classList.add('theme-ready');
+          // Set background color of html immediately to match theme while invisible
+          if (colors.sidebar) root.style.backgroundColor = colors.sidebar;
         }
       } catch (e) {
         // Ignore errors (e.g., no localStorage access)

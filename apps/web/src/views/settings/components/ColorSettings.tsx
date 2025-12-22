@@ -12,34 +12,7 @@ import {
   getPresetColors,
   THEME_PRESETS,
 } from "~/utils/themePresets";
-
-function applyColorsToDocument(colors: ThemeColors, isDark: boolean) {
-  const root = document.documentElement;
-
-  // Get colors based on preset or custom
-  const isCustom = colors.preset === "custom";
-  const presetColors = !isCustom
-    ? getPresetColors(colors.preset, isDark ? "dark" : "light")
-    : null;
-
-  const sidebar = isCustom
-    ? colors.sidebar
-    : (presetColors?.sidebar ?? colors.sidebar);
-  const pages = isCustom ? colors.pages : (presetColors?.pages ?? colors.pages);
-  const boardBackground = isCustom
-    ? colors.boardBackground
-    : (presetColors?.boardBackground ?? colors.boardBackground);
-
-  // Set background colors
-  root.style.setProperty("--kan-sidebar-bg", sidebar);
-  root.style.setProperty("--kan-pages-bg", pages);
-  root.style.setProperty("--kan-board-bg", boardBackground);
-
-  // Set text contrast colors
-  root.style.setProperty("--kan-sidebar-text", getContrastColor(sidebar));
-  root.style.setProperty("--kan-pages-text", getContrastColor(pages));
-  root.style.setProperty("--kan-board-text", getContrastColor(boardBackground));
-}
+import { applyColorsToDocument } from "~/utils/themeUtils";
 
 export default function ColorSettings() {
   const { workspace } = useWorkspace();
@@ -93,7 +66,7 @@ export default function ColorSettings() {
     }
   }, [workspaceData]);
 
-  // Note: Colors are applied globally by useApplyThemeColors in Dashboard
+  // Note: Colors are applied globally by ColorThemeProvider in Dashboard
   // Only apply colors here when user actively changes them (in handlePresetSelect/handleColorChange)
 
   const isCustom = themeColors.preset === "custom";
