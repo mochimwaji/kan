@@ -45,7 +45,11 @@ import { NewTemplateForm } from "./components/NewTemplateForm";
 import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
-import { useBoardKeyboardShortcuts } from "./hooks/useBoardKeyboardShortcuts";
+import {
+  useBoardKeyboardShortcuts,
+  useMultiSelect,
+  useVisualLists,
+} from "./hooks";
 
 // View mode type
 type ViewMode = "kanban" | "calendar";
@@ -237,24 +241,17 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     placeholderData: keepPreviousData,
   });
 
-  // Two-Phase State: Visual order drives rendering, decoupled from backend/cache
+  // Two-Phase Visual State: Extracted to useVisualLists hook
   // This prevents "flash" after drop where items briefly appear at old position
-  type VisualList = NonNullable<typeof boardData>["lists"][number];
-  const [visualLists, setVisualLists] = useState<VisualList[] | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  // Sync visual state from server data only when NOT actively dragging
-  useEffect(() => {
-    if (boardData?.lists && !isDragging) {
-      setVisualLists(boardData.lists);
-    }
-  }, [boardData?.lists, isDragging]);
-
-  // Use visual lists for rendering, fallback to boardData (memoized for stable dependencies)
-  const listsToRender = useMemo(
-    () => visualLists ?? boardData?.lists ?? [],
-    [visualLists, boardData?.lists],
-  );
+  const {
+    listsToRender,
+    isDragging,
+    setIsDragging,
+    reorderLists,
+    reorderCards,
+    updateCardsInVisualState,
+    setVisualLists,
+  } = useVisualLists(boardData);
 
   // Register 1-9 keyboard shortcuts for toggling list collapse
   useBoardKeyboardShortcuts(boardData?.lists);
@@ -820,7 +817,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
 
         // 1. Get all cards currently on the target date (excluding the ones being moved)
         // We need this to calculate the new order relative to existing cards.
-        const allCards = (visualLists ?? []).flatMap((l, listIndex) =>
+        const allCards = listsToRender.flatMap((l, listIndex) =>
           l.cards.map((c) => ({ ...c, listIndex })),
         );
         const targetCards = allCards

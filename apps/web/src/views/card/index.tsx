@@ -19,6 +19,7 @@ import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
+import { useTransitionState } from "~/hooks/useTransitionState";
 import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
@@ -377,20 +378,12 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     null,
   );
 
-  // Transition state
-  const [opacity, setOpacity] = useState(0);
-
-  useEffect(() => {
-    // Fade in on mount
-    requestAnimationFrame(() => setOpacity(1));
-  }, []);
+  // Transition state (extracted to hook)
+  const { opacity, triggerExit } = useTransitionState(300);
 
   const handleClose = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
-    setOpacity(0);
-    setTimeout(() => {
-      router.push(href);
-    }, 300);
+    triggerExit(() => router.push(href));
   };
 
   const cardId = Array.isArray(router.query.cardId)
@@ -412,14 +405,13 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   // Esc shortcut to close card and return to board (only when no modal is open)
   const closeCardHref = useCallback(() => {
     if (boardId && !isOpen) {
-      setOpacity(0);
-      setTimeout(() => {
+      triggerExit(() =>
         router.push(
           isTemplate ? `/templates/${boardId}` : `/boards/${boardId}`,
-        );
-      }, 300);
+        ),
+      );
     }
-  }, [boardId, isTemplate, router, isOpen]);
+  }, [boardId, isTemplate, router, isOpen, triggerExit]);
 
   useKeyboardShortcut({
     type: "PRESS",
