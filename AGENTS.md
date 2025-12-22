@@ -206,6 +206,52 @@ import TabTransition from "~/components/TabTransition";
 </TabTransition>;
 ```
 
+#### Visual State Hook
+
+Use `useVisualState` to decouple UI rendering from server state (prevents flashing during mutations):
+
+```typescript
+import { useVisualState } from "~/hooks/useVisualState";
+
+const { visualData, setVisualData, freeze, unfreeze, isFrozen } =
+  useVisualState(serverData);
+
+// During drag-drop: freeze() before, setVisualData() during, unfreeze() after
+```
+
+**Critical**: When `isFrozen` is true, server data changes are ignored. Local state takes absolute precedence.
+
+#### Transition State Hook
+
+Use `useTransitionState` for simple opacity fade transitions (card view, settings):
+
+```typescript
+import { useTransitionState } from "~/hooks/useTransitionState";
+
+const { opacity, triggerExit } = useTransitionState(300);
+
+// Fade in happens on mount automatically
+// Fade out: triggerExit(() => router.push('/next'));
+```
+
+**Note**: Do NOT use in board view (use `BoardTransitionProvider` instead).
+
+#### Optimistic Update Helpers
+
+Use factory functions to create standardized tRPC mutation callbacks:
+
+```typescript
+import { createOptimisticUpdate } from "~/utils/optimisticHelpers";
+
+const callbacks = createOptimisticUpdate({
+  utils: { cancel, getData, setData, invalidate },
+  updateFn: (data, input) => ({ ...data, /* changes */ }),
+  onError: (err) => showPopup({ ... }),
+});
+
+const mutation = api.card.update.useMutation(callbacks);
+```
+
 ## Testing
 
 ### Running Tests
