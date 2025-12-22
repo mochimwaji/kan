@@ -51,40 +51,6 @@ The transition may not trigger because:
 
 ---
 
-## Deferred Lint Errors
-
-**Status**: 17 errors remaining (202 fixed from 219 original, 92% reduction)
-
-The following lint errors are deferred as they are defensive runtime checks:
-
-### Unnecessary Condition Errors (~12 errors)
-
-**Files affected**: `Editor.tsx`, `NewWorkspaceForm.tsx`, `NewChecklistItemForm.tsx`, card components, public board views
-
-**Reason for deferral**:
-
-- These are **defensive null checks** that TypeScript considers unnecessary
-- They provide runtime safety for edge cases where data may be undefined
-- Removing them could introduce subtle runtime bugs
-
-### React Hook Dependency Warnings (4 warnings)
-
-**Files affected**: `NewCardForm.tsx`, `NewChecklistItemForm.tsx`, `card/index.tsx`
-
-**Reason for deferral**:
-
-- Intentional exclusions to prevent infinite render loops
-- Adding the suggested dependencies would cause re-renders on every change
-
-### Sync Script Warning (1 warning)
-
-**File affected**: `_app.tsx`
-
-**Reason for deferral**:
-
-- Required for `next-runtime-env` to load environment variables at runtime
-- Cannot be made async without breaking env variable access
-
 ---
 
 ## Completed Simplifications

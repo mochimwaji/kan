@@ -94,13 +94,65 @@ useEffect(() => {
 }, [userId]);
 ```
 
-**If a dependency should be excluded intentionally:**
+**If a dependency should be excluded intentionally (rarely needed if using `useMemo`/`useCallback`):**
 
 ```typescript
 // eslint-disable-next-line react-hooks/exhaustive-deps -- Only run on mount
 useEffect(() => {
   initializeOnce();
 }, []);
+```
+
+### Stable Function and Object Dependencies
+
+To avoid unnecessary re-renders or infinite loops in `useEffect`, wrap objects and functions in `useMemo` or `useCallback`.
+
+**❌ Don't:**
+
+```typescript
+// Recreated on every render, triggering useEffect every time
+const options = { id: 1 };
+const handleClick = () => { ... };
+
+useEffect(() => {
+  doSomething(options);
+}, [options, handleClick]);
+```
+
+**✅ Do:**
+
+```typescript
+const options = useMemo(() => ({ id: 1 }), []);
+const handleClick = useCallback(() => { ... }, []);
+
+useEffect(() => {
+  doSomething(options);
+}, [options, handleClick]);
+```
+
+### Unnecessary Conditionals (Defensive Checks)
+
+The `@typescript-eslint/no-unnecessary-condition` rule flags checks on values that TypeScript believes are always defined.
+
+**❌ Don't (redundant optional chaining):**
+
+```typescript
+const user = { name: "Kan" };
+console.log(user?.name); // Linter: Unnecessary optional chain
+```
+
+**✅ Do - Clean up redundant checks:**
+
+```typescript
+const user = { name: "Kan" };
+console.log(user.name);
+```
+
+**✅ Do - Use `eslint-disable` with explanation for truly defensive runtime checks:**
+
+```typescript
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive check for API consistency
+if (!result) throw new Error("API failure");
 ```
 
 ### Unused Props/Variables
@@ -249,12 +301,13 @@ Don't leave dead code commented out. Use git history to recover if needed.
 
 Before committing, ensure:
 
-1. ✅ `pnpm typecheck` passes
-2. ✅ `pnpm lint` shows no new errors
+1. ✅ `pnpm typecheck` or `npx turbo run build` passes
+2. ✅ `pnpm lint` or `npx turbo run lint` shows no new errors
 3. ✅ No `any` types without justification
-4. ✅ All promises are handled
-5. ✅ No unused imports/variables
-6. ✅ Environment variables use validated access
+4. ✅ All promises are handled (use `void` if intentional fire-and-forget)
+5. ✅ No unnecessary optional chaining or type assertions
+6. ✅ Environment variables are declared in `turbo.json` under `globalEnv`
+7. ✅ Environment variables use validated access
 
 ---
 
