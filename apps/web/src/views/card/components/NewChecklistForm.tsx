@@ -36,10 +36,11 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
       const previous = utils.card.byId.getData({
         cardPublicId: args.cardPublicId,
       });
+      const placeholderId = `PLACEHOLDER_${generateUID()}`;
       utils.card.byId.setData({ cardPublicId: args.cardPublicId }, (old) => {
         if (!old) return old;
         const placeholderChecklist = {
-          publicId: `PLACEHOLDER_${generateUID()}`,
+          publicId: placeholderId,
           name: args.name,
           index: old.checklists.length,
           items: [] as {
@@ -54,10 +55,12 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
           checklists: [...old.checklists, placeholderChecklist],
         } as typeof old;
       });
-      return { previous };
+      return { previous, placeholderId };
     },
-    onSuccess: (data) => {
-      setModalState("ADD_CHECKLIST", { createdChecklistId: data.publicId });
+    onSuccess: (_data, _vars, ctx) => {
+      // Set modal state to PLACEHOLDER ID so activeChecklistForm matches
+      // Don't update publicId - keep placeholder stable for visual state
+      setModalState("ADD_CHECKLIST", { createdChecklistId: ctx.placeholderId });
     },
     onError: (_error, vars, ctx) => {
       if (ctx?.previous)
@@ -71,7 +74,11 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
         icon: "error",
       });
     },
-    onSettled: async (_data, _error, vars) => {
+    onSettled: async (_data, error, vars) => {
+      // Delay invalidation to allow form to render and focus
+      if (!error) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
       await utils.card.byId.invalidate({ cardPublicId: vars.cardPublicId });
     },
   });

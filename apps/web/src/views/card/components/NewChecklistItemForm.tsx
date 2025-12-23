@@ -46,9 +46,10 @@ const NewChecklistItemForm = ({
     el.focus();
 
     // hack to ensure the input is focused after creating new checklist item
+    // Increased to 200ms to allow card data refresh to settle
     setTimeout(() => {
       el.focus();
-    }, 100);
+    }, 200);
   }, [readOnly]);
 
   const addChecklistItemMutation = api.checklist.createItem.useMutation({

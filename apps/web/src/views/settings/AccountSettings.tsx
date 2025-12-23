@@ -15,7 +15,16 @@ export default function AccountSettings() {
   const { modalContentType, openModal, isOpen } = useModal();
   const isCredentialsEnabled =
     env("NEXT_PUBLIC_ALLOW_CREDENTIALS")?.toLowerCase() === "true";
-  const { data } = api.user.getUser.useQuery();
+  const { data, isLoading } = api.user.getUser.useQuery();
+
+  if (isLoading) {
+    return (
+      <>
+        <PageHead title={"Settings | Account"} />
+        <div className="mb-8 border-t border-light-300 dark:border-dark-300" />
+      </>
+    );
+  }
 
   return (
     <>

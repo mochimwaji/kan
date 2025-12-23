@@ -24,12 +24,9 @@ export function BoardsList({ isTemplate }: { isTemplate?: boolean }) {
   const boardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   // Control content visibility during board transition animations
-  // Two-phase approach: content is hidden during ALL animation phases, shown only when idle
-  // This ensures no flash before/during any board transition animation
-  const [showContent, setShowContent] = useState(() => {
-    // Start hidden if any animation is in progress
-    return animationPhase === "idle";
-  });
+  // Two-phase approach: always start hidden, then fade in after mount/animation complete
+  // This ensures no flash on initial load or navigation
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     if (animationPhase === "idle") {

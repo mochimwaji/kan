@@ -52,12 +52,13 @@ export function NewListForm({
       await utils.board.byId.cancel();
 
       const currentState = utils.board.byId.getData(queryParams);
+      const placeholderId = generateUID();
 
       utils.board.byId.setData(queryParams, (oldBoard) => {
         if (!oldBoard) return oldBoard;
 
         const newList = {
-          publicId: generateUID(),
+          publicId: placeholderId,
           name: args.name,
           boardId: 1,
           boardPublicId,
@@ -81,7 +82,12 @@ export function NewListForm({
         icon: "error",
       });
     },
-    onSettled: async () => {
+    onSettled: async (_data, error) => {
+      // Delay invalidation to allow list animation to complete
+      // This prevents flash by giving time for the new list to settle
+      if (!error) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
       await utils.board.byId.invalidate(queryParams);
     },
   });

@@ -23,7 +23,7 @@ export default function LabelSelector({
   cardPublicId,
   labels,
   isLoading,
-   
+
   isCollapsed: _isCollapsed = false,
   children,
 }: LabelSelectorProps) {
@@ -79,6 +79,8 @@ export default function LabelSelector({
     },
     onSettled: async () => {
       await utils.card.byId.invalidate({ cardPublicId });
+      // Also invalidate board to refresh board view
+      await utils.board.byId.invalidate();
     },
   });
 

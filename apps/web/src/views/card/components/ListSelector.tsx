@@ -39,7 +39,7 @@ export default function ListSelector({
           ...oldCard,
           list: {
             ...oldCard.list,
-             
+
             publicId: newList.listPublicId ?? "",
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive fallback
             name: oldCard.list.name ?? "",
@@ -61,6 +61,8 @@ export default function ListSelector({
     },
     onSettled: async () => {
       await utils.card.byId.invalidate({ cardPublicId });
+      // Also invalidate board to refresh board view
+      await utils.board.byId.invalidate();
     },
   });
 

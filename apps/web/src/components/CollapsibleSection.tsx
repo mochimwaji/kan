@@ -27,12 +27,14 @@ export default function CollapsibleSection({
   const [contentOpacity, setContentOpacity] = useState(isOpen ? 1 : 0);
   // Track if we've done the initial render to skip animation on first paint
   const hasRenderedRef = useRef(false);
+  // Store skipAnimation value at mount time so changes don't trigger re-animation
+  const skipAnimationRef = useRef(skipAnimation);
 
   useEffect(() => {
-    // On first effect run, just sync state without animation if skipAnimation is true
+    // On first effect run, just sync state without animation if skipAnimation was true at mount
     if (!hasRenderedRef.current) {
       hasRenderedRef.current = true;
-      if (skipAnimation) {
+      if (skipAnimationRef.current) {
         setHeight(isOpen ? "auto" : 0);
         setContentOpacity(isOpen ? 1 : 0);
         return;
@@ -82,7 +84,7 @@ export default function CollapsibleSection({
         cancelAnimationFrame(setupTimer);
       };
     }
-  }, [isOpen, skipAnimation]);
+  }, [isOpen]);
 
   return (
     <div

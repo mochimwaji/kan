@@ -208,7 +208,7 @@ const Card = ({
                   )}
                   style={{
                     color: urgencyStyle.useThemeColor
-                      ? "var(--kan-pages-text)"
+                      ? cardTextColor
                       : undefined,
                     opacity: urgencyStyle.useThemeColor ? 0.7 : 1,
                   }}

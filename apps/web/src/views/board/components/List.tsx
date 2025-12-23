@@ -61,22 +61,25 @@ export default function List({
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   // Collapse state with localStorage persistence
-  // Use null initially to indicate "not yet loaded from localStorage"
-  const [isCollapsed, setIsCollapsed] = useState<boolean | null>(null);
+  // Initialize directly from localStorage (SSR-safe) to prevent flash on remount
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return (
+      localStorage.getItem(`${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`) ===
+      "true"
+    );
+  });
+  // Start false so skipAnimation=true on initial render, preventing animation flash
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Read collapse state from localStorage after hydration (client-side only)
+  // Mark as hydrated after first render to enable animations on subsequent state changes
   useEffect(() => {
-    const stored = localStorage.getItem(
-      `${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`,
-    );
-    setIsCollapsed(stored === "true");
     setIsHydrated(true);
-  }, [list.publicId]);
+  }, []);
 
   // Sync collapse state to localStorage (only after initial hydration)
   useEffect(() => {
-    if (isHydrated && isCollapsed !== null) {
+    if (isHydrated) {
       localStorage.setItem(
         `${COLLAPSE_STORAGE_KEY_PREFIX}${list.publicId}`,
         String(isCollapsed),

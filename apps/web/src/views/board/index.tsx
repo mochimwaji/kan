@@ -1,4 +1,3 @@
-import type { DropResult } from "@hello-pangea/dnd";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
@@ -17,10 +16,6 @@ import {
 import type { UpdateBoardInput } from "@kan/api/types";
 
 import Button from "~/components/Button";
-import { DeleteConfirmation } from "~/components/DeleteConfirmation";
-import { LabelForm } from "~/components/LabelForm";
-import Modal from "~/components/modal";
-import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
 import PatternedBackground from "~/components/PatternedBackground";
 import { StrictModeDroppable as Droppable } from "~/components/StrictModeDroppable";
@@ -34,28 +29,25 @@ import { api } from "~/utils/api";
 import { convertDueDateFiltersToRanges } from "~/utils/dueDateFilters";
 import { formatToArray } from "~/utils/helpers";
 import BoardDropdown from "./components/BoardDropdown";
+import { BoardModals } from "./components/BoardModals";
 import CalendarView from "./components/CalendarView";
 import Card from "./components/Card";
 import Filters from "./components/Filters";
 import List from "./components/List";
 import MultiDragBadge from "./components/MultiDragBadge";
-import { NewCardForm } from "./components/NewCardForm";
-import { NewListForm } from "./components/NewListForm";
-import { NewTemplateForm } from "./components/NewTemplateForm";
 import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
-import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
-import { useBoardKeyboardShortcuts, useVisualLists } from "./hooks";
+import {
+  useBoardKeyboardShortcuts,
+  useMultiSelect,
+  useVisualLists,
+} from "./hooks";
+import { useBoardDragAndDrop } from "./hooks/useBoardDragAndDrop";
+import { useBoardMutations } from "./hooks/useBoardMutations";
 
 // View mode type
 type ViewMode = "kanban" | "calendar";
 type PublicListId = string;
-
-// Extended card type that includes calendarOrder (returned by API but not always typed)
-interface CardWithCalendarOrder {
-  calendarOrder: number | null;
-  index?: number;
-}
 
 export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   // ============================================================================
@@ -64,41 +56,37 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const params = useParams() as { boardId: string | string[] } | null;
   const router = useRouter();
   const utils = api.useUtils();
-  const { showPopup } = usePopup();
+  const { showPopup: _showPopup } = usePopup();
   const { workspace } = useWorkspace();
   const {
     openModal,
-    closeModal,
-    closeModals,
-    modalContentType,
-    entityId,
+    closeModal: _closeModal,
+    closeModals: _closeModals,
+    modalContentType: _modalContentType,
+    entityId: _entityId,
     isOpen,
   } = useModal();
   const [selectedPublicListId, setSelectedPublicListId] =
     useState<PublicListId>("");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  // Multi-select delete state
-  const [selectedCardIds, setSelectedCardIds] = useState<Set<string>>(
-    new Set(),
-  );
-  const [selectedListIds, setSelectedListIds] = useState<Set<string>>(
-    new Set(),
-  );
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-  // Multi-drag state
-  const [lastSelectedCardId, setLastSelectedCardId] = useState<string | null>(
-    null,
-  );
-  const [draggingCardId, setDraggingCardId] = useState<string | null>(null);
+  const [draggingCardId, _setDraggingCardId] = useState<string | null>(null);
 
   // Quick delete toggle - skip confirmation when enabled
   const [quickDeleteEnabled, setQuickDeleteEnabled] = useState(() => {
     if (typeof window === "undefined") return false;
     return localStorage.getItem("quick-delete-enabled") === "true";
   });
+
+  const toggleQuickDelete = useCallback(() => {
+    setQuickDeleteEnabled((prev) => {
+      const newValue = !prev;
+      localStorage.setItem("quick-delete-enabled", String(newValue));
+      return newValue;
+    });
+  }, []);
 
   // View mode state with localStorage persistence (per-board)
   const [viewMode, setViewMode] = useState<ViewMode>("kanban");
@@ -121,9 +109,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
         setShowContent(false);
       }
     } else {
-      // If direct load or return from card, fade in immediately
-      const _timer = requestAnimationFrame(() => setShowContent(true));
-      // return () => cancelAnimationFrame(_timer); // (Optional cleanup)
+      // If direct load or return from card, fade in after Lists have mounted/hydrated
+      // Small delay ensures localStorage state is read before paint
+      const timer = setTimeout(() => setShowContent(true), 16);
+      return () => clearTimeout(timer);
     }
   }, [animationPhase, fromBoardsPage]);
 
@@ -244,12 +233,25 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     isDragging: _isDragging,
     setIsDragging,
     reorderLists: _reorderLists,
-     
+
     reorderCards: _reorderCards,
-     
+
     updateCardsInVisualState: _updateCardsInVisualState,
     setVisualLists,
   } = useVisualLists(boardData);
+
+  const {
+    selectedCardIds,
+    setSelectedCardIds,
+    selectedListIds,
+    toggleCardSelection,
+    toggleListSelection,
+    clearSelection,
+    getOrderedSelectedCards,
+    hasSelection,
+    lastSelectedCardId,
+    setLastSelectedCardId,
+  } = useMultiSelect(listsToRender);
 
   // Register 1-9 keyboard shortcuts for toggling list collapse
   useBoardKeyboardShortcuts(boardData?.lists);
@@ -309,7 +311,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       setSelectedCardIds(new Set(allCardIds.slice(start, end + 1)));
       setLastSelectedCardId(toId);
     },
-    [listsToRender],
+    [listsToRender, setSelectedCardIds, setLastSelectedCardId],
   );
 
   // Expand card (navigate to card detail)
@@ -330,164 +332,86 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   // MUTATIONS
   // ============================================================================
 
-  const updateListMutation = api.list.update.useMutation({
-    // No onMutate - visual state handles immediate UI update
-    onError: () => {
-      // Reset isDragging so visual state syncs with server data
-      setIsDragging(false);
-      showPopup({
-        header: "Unable to update list",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
+  const mutations = useBoardMutations(queryParams);
+
+  // Fade out when board is being deleted
+  useEffect(() => {
+    if (mutations.deleteBoardMutation.isPending) {
+      setIsExiting(true);
+    }
+  }, [mutations.deleteBoardMutation.isPending]);
+
+  // Delete selected items (cards and lists)
+  const handleBulkDelete = useCallback(() => {
+    // Add to deletingIds for fade-out animation
+    setDeletingIds(new Set([...selectedCardIds, ...selectedListIds]));
+
+    // Delay mutations until animation completes (400ms = CSS animation duration)
+    setTimeout(() => {
+      // Delete cards
+      selectedCardIds.forEach((cardPublicId) => {
+        mutations.deleteCardMutation.mutate({ cardPublicId });
       });
-    },
-    onSettled: async () => {
-      // Always invalidate to get fresh server data
-      // Visual state will sync when isDragging becomes false
-      await utils.board.byId.invalidate(queryParams);
-    },
+      // Delete lists
+      selectedListIds.forEach((listPublicId) => {
+        mutations.deleteListMutation.mutate({ listPublicId });
+      });
+
+      // Clear selections and close modal
+      clearSelection();
+      setShowDeleteConfirm(false);
+      setDeletingIds(new Set());
+    }, 400);
+  }, [
+    selectedCardIds,
+    selectedListIds,
+    mutations.deleteCardMutation,
+    mutations.deleteListMutation,
+    clearSelection,
+  ]);
+
+  const handleDelete = useCallback(() => {
+    if (quickDeleteEnabled) {
+      handleBulkDelete();
+    } else {
+      setShowDeleteConfirm(true);
+    }
+  }, [quickDeleteEnabled, handleBulkDelete]);
+
+  // Delete key shortcut - delete selected items
+  const deleteAction = useCallback(() => {
+    if (hasSelection) handleDelete();
+  }, [hasSelection, handleDelete]);
+
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Delete" },
+    action: deleteAction,
+    description: "Delete selected",
+    group: "BOARD_VIEW",
   });
 
-  const bulkUpdateCardMutation = api.card.bulkUpdate.useMutation({
-    onMutate: async (
-      updates: {
-        cardPublicId: string;
-        title?: string;
-        description?: string;
-        dueDate?: Date | null;
-        calendarOrder?: number;
-      }[],
-    ) => {
-      await utils.board.byId.cancel();
-      const previousBoard = utils.board.byId.getData(queryParams);
-
-      utils.board.byId.setData(queryParams, (old) => {
-        if (!old) return old;
-        const updateMap = new Map(
-          updates.map((u) => [u.cardPublicId, u] as const),
-        );
-        return {
-          ...old,
-          lists: old.lists.map((list) => ({
-            ...list,
-            cards: list.cards.map((card) => {
-              const update = updateMap.get(card.publicId);
-              if (update) {
-                return {
-                  ...card,
-                  ...update,
-                  title: update.title ?? card.title,
-                  description: update.description ?? card.description,
-                  dueDate:
-                    update.dueDate === undefined
-                      ? card.dueDate
-                      : update.dueDate,
-                  calendarOrder:
-                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- distinguishes undefined from null
-                    update.calendarOrder === undefined
-                      ? (card as CardWithCalendarOrder).calendarOrder
-                      : update.calendarOrder,
-                };
-              }
-              return card;
-            }),
-          })),
-        };
-      });
-
-      return { previousBoard };
-    },
-    onError: (
-      _err: unknown,
-      _newCard: unknown,
-      context: { previousBoard: typeof boardData } | undefined,
-    ) => {
-      utils.board.byId.setData(queryParams, context?.previousBoard);
-      showPopup({
-        header: "Unable to update cards",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      await utils.board.byId.invalidate(queryParams);
-    },
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "Backspace" },
+    action: deleteAction,
+    description: "Delete selected",
+    group: "BOARD_VIEW",
   });
 
-  const updateCardMutation = api.card.update.useMutation({
-    onMutate: async (newCard) => {
-      // Cancel outgoing refetches
-      await utils.board.byId.cancel();
-
-      // Snapshot the previous value
-      const previousBoard = utils.board.byId.getData(queryParams);
-
-      // Optimistically update to the new value
-      utils.board.byId.setData(queryParams, (old) => {
-        if (!old) return old;
-        return {
-          ...old,
-          lists: old.lists.map((list) => ({
-            ...list,
-            cards: list.cards.map((card) => {
-              if (card.publicId === newCard.cardPublicId) {
-                return {
-                  ...card,
-                  ...newCard,
-                  title: newCard.title ?? card.title,
-                  description: newCard.description ?? card.description,
-                  dueDate:
-                    newCard.dueDate === undefined
-                      ? card.dueDate
-                      : newCard.dueDate,
-                  calendarOrder:
-                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-                    newCard.calendarOrder === undefined
-                      ? (card as CardWithCalendarOrder).calendarOrder
-                      : newCard.calendarOrder,
-                };
-              }
-              return card;
-            }),
-          })),
-        };
-      });
-
-      // Return a context object with the snapshotted value
-      return { previousBoard };
-    },
-    onError: (_err, _newTodo, context) => {
-      // Rollback to the previous value
-      if (context?.previousBoard) {
-        utils.board.byId.setData(queryParams, context.previousBoard);
-      }
-      // Reset isDragging so visual state syncs with server data
-      setIsDragging(false);
-      showPopup({
-        header: "Unable to update card",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      // Always invalidate to get fresh server data
-      // Visual state will sync when isDragging becomes false
-      await utils.board.byId.invalidate(queryParams);
-    },
-  });
-
-  // Bulk move mutation for multi-card drag (single atomic operation)
-  const bulkMoveMutation = api.card.bulkMove.useMutation({
-    onError: () => {
-      setIsDragging(false);
-      showPopup({
-        header: "Unable to move cards",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      await utils.board.byId.invalidate(queryParams);
+  const { onDragStart, onDragEnd } = useBoardDragAndDrop({
+    listsToRender,
+    selectedCardIds,
+    setSelectedCardIds,
+    setLastSelectedCardId,
+    getOrderedSelectedCards,
+    setVisualLists,
+    setIsDragging,
+    mutations: {
+      bulkMoveMutation: mutations.bulkMoveMutation,
+      updateCardMutation: mutations.updateCardMutation,
+      bulkUpdateCardMutation: mutations.bulkUpdateCardMutation,
+      updateListMutation: mutations.updateListMutation,
     },
   });
 
@@ -502,601 +426,26 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     setSelectedPublicListId(publicBoardId);
   };
 
-  // Multi-select toggle handlers
-  const toggleCardSelection = useCallback((cardId: string) => {
-    setSelectedCardIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(cardId)) {
-        next.delete(cardId);
-      } else {
-        next.add(cardId);
-      }
-      return next;
-    });
-  }, []);
-
-  const toggleListSelection = useCallback((listId: string) => {
-    setSelectedListIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(listId)) {
-        next.delete(listId);
-      } else {
-        next.add(listId);
-      }
-      return next;
-    });
-  }, []);
-
-  const clearSelection = useCallback(() => {
-    setSelectedCardIds(new Set());
-    setSelectedListIds(new Set());
-  }, []);
-
-  const hasSelection = selectedCardIds.size > 0 || selectedListIds.size > 0;
-
-  // Toggle quick delete setting
-  const toggleQuickDelete = useCallback(() => {
-    setQuickDeleteEnabled((prev) => {
-      const newValue = !prev;
-      localStorage.setItem("quick-delete-enabled", String(newValue));
-      return newValue;
-    });
-  }, []);
-
-  // Delete mutations for bulk delete with optimistic updates
-  const deleteCardMutation = api.card.delete.useMutation({
-    onMutate: async (args) => {
-      await utils.board.byId.cancel();
-      const currentState = utils.board.byId.getData(queryParams);
-      utils.board.byId.setData(queryParams, (oldBoard) => {
-        if (!oldBoard) return oldBoard;
-        const updatedLists = oldBoard.lists.map((list) => ({
-          ...list,
-          cards: list.cards.filter(
-            (card) => card.publicId !== args.cardPublicId,
-          ),
-        }));
-        return { ...oldBoard, lists: updatedLists };
-      });
-      return { previousState: currentState };
-    },
-    onError: (_error, _args, context) => {
-      utils.board.byId.setData(queryParams, context?.previousState);
-      showPopup({
-        header: "Unable to delete card",
-        message: "Please try again later.",
-        icon: "error",
-      });
-    },
-  });
-
-  const deleteListMutation = api.list.delete.useMutation({
-    onMutate: async (args) => {
-      await utils.board.byId.cancel();
-      const currentState = utils.board.byId.getData(queryParams);
-      utils.board.byId.setData(queryParams, (oldBoard) => {
-        if (!oldBoard) return oldBoard;
-        const updatedLists = oldBoard.lists.filter(
-          (list) => list.publicId !== args.listPublicId,
-        );
-        return { ...oldBoard, lists: updatedLists };
-      });
-      return { previousState: currentState };
-    },
-    onError: (_error, _args, context) => {
-      utils.board.byId.setData(queryParams, context?.previousState);
-      showPopup({
-        header: "Unable to delete list",
-        message: "Please try again later.",
-        icon: "error",
-      });
-    },
-  });
-
-  // Delete board mutation - navigates to boards/templates on success
-  const deleteBoardMutation = api.board.delete.useMutation({
-    onSuccess: () => {
-      closeModal();
-      void router.push(isTemplate ? `/templates` : `/boards`);
-    },
-    onError: () => {
-      showPopup({
-        header: `Unable to delete ${isTemplate ? "template" : "board"}`,
-        message: "Please try again later.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      // Invalidate boards list so UI updates after navigation
-      await utils.board.all.invalidate();
-    },
-  });
-
-  // Delete label mutation - closes modals and refetches on success
-  const deleteLabelMutation = api.label.delete.useMutation({
-    onSuccess: async () => {
-      closeModals(2);
-      await utils.board.byId.invalidate(queryParams);
-    },
-    onError: () => {
-      showPopup({
-        header: "Error deleting label",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-  });
-
-  // ============================================================================
-  // SELECTION & BULK DELETE HANDLERS
-  // ============================================================================
-
-  // Bulk delete handler with fade animation
-
-  const handleBulkDelete = useCallback(async () => {
-    // Combine all IDs for fade animation
-    const allIds = new Set([...selectedCardIds, ...selectedListIds]);
-    const cardIdsToDelete = [...selectedCardIds];
-    const listIdsToDelete = [...selectedListIds];
-
-    setDeletingIds(allIds);
-    setShowDeleteConfirm(false);
-    clearSelection(); // Clear selection immediately so checkboxes reset
-
-    // Wait for fade animation to complete
-    await new Promise((resolve) => setTimeout(resolve, 400));
-
-    // Delete all selected cards (optimistic updates handle UI removal)
-    for (const cardId of cardIdsToDelete) {
-      deleteCardMutation.mutate({ cardPublicId: cardId });
-    }
-
-    // Delete all selected lists (optimistic updates handle UI removal)
-    for (const listId of listIdsToDelete) {
-      deleteListMutation.mutate({ listPublicId: listId });
-    }
-
-    // Clear deleting state after a brief delay
-    setTimeout(() => setDeletingIds(new Set()), 100);
-  }, [
-    selectedCardIds,
-    selectedListIds,
-    deleteCardMutation,
-    deleteListMutation,
-    clearSelection,
-  ]);
-
-  // Delete handler - respects quick delete toggle
-  const handleDelete = useCallback(() => {
-    if (quickDeleteEnabled) {
-      void handleBulkDelete();
-    } else {
-      setShowDeleteConfirm(true);
-    }
-  }, [quickDeleteEnabled, handleBulkDelete]);
-
-  // Del key shortcut to delete selected items
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "Delete" },
-    action: () => {
-      if (hasSelection) {
-        handleDelete();
-      }
-    },
-    description: "Delete selected items",
-    group: "BOARD_VIEW",
-  });
-
-  // Escape key to clear selection (if any selected)
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "Escape" },
-    action: () => {
-      if (hasSelection) {
-        clearSelection();
-      }
-    },
-    description: "Clear selection",
-    group: "BOARD_VIEW",
-  });
-
-  // Enter key shortcut to open first selected card
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "Enter" },
-    action: () => {
-      if (selectedCardIds.size > 0) {
-        const firstSelected = [...selectedCardIds][0];
-        if (firstSelected) handleExpandCard(firstSelected);
-      }
-    },
-    description: "Open selected card",
-    group: "BOARD_VIEW",
-  });
-
-  // ============================================================================
-  // DRAG-DROP HANDLERS (Two-Phase Visual State)
-  // ============================================================================
-  // Note: Two-phase pattern prevents UI "flash" during drag operations.
-  // Visual state (visualLists) drives rendering, decoupled from server cache.
-  // isDragging flag controls when visual state syncs with server data.
-
-  // Two-Phase State: onDragStart sets isDragging and tracks multi-drag
-  const onDragStart = (start: { draggableId: string; type: string }) => {
-    setIsDragging(true);
-
-    if (start.type === "CARD") {
-      const draggedId = start.draggableId;
-      setDraggingCardId(draggedId);
-
-      // If dragging unselected card, clear selection and select only it
-      if (!selectedCardIds.has(draggedId)) {
-        setSelectedCardIds(new Set([draggedId]));
-        setLastSelectedCardId(draggedId);
-      }
-    }
-  };
-
-  // Helper: Get selected cards in order (dragged first, then by index)
-  const getOrderedSelectedCards = useCallback(
-    (draggedId: string): string[] => {
-      const allCards = listsToRender.flatMap((l) => l.cards);
-      return allCards
-        .filter((c) => selectedCardIds.has(c.publicId))
-        .sort((a, b) => {
-          if (a.publicId === draggedId) return -1;
-          if (b.publicId === draggedId) return 1;
-          return a.index - b.index;
-        })
-        .map((c) => c.publicId);
-    },
-    [listsToRender, selectedCardIds],
-  );
-
-  const onDragEnd = ({
-    source,
-    destination,
-    draggableId,
-    type,
-  }: DropResult): void => {
-    // Reset multi-drag state
-    setDraggingCardId(null);
-    // Reset isDragging after drop animation completes
-    // This allows visual state to sync with server data again
-    setTimeout(() => setIsDragging(false), 300);
-
-    if (!destination) {
-      return;
-    }
-
-    // Update visual state IMMEDIATELY (no flash - this drives rendering)
-    if (type === "LIST") {
-      setVisualLists((prev) => {
-        if (!prev) return prev;
-        const updated = [...prev];
-        const [removed] = updated.splice(source.index, 1);
-        if (removed) updated.splice(destination.index, 0, removed);
-        return updated.map((list, idx) => ({ ...list, index: idx }));
-      });
-
-      // Fire mutation (backend update - visual already updated above)
-      updateListMutation.mutate({
-        listPublicId: draggableId,
-        index: destination.index,
-      });
-    }
-
-    if (type === "CARD") {
-      // Handle calendar drops (update dueDate)
-      const isCalendarDrop = destination.droppableId.startsWith("calendar-");
-      const isUnscheduledDrop = destination.droppableId === "unscheduled";
-
-      if (isCalendarDrop || isUnscheduledDrop) {
-        // Parse the date from droppableId (calendar-YYYY-MM-DD)
-        let newDueDate: Date | null = null;
-        let year = 0;
-        let month = 0;
-        let day = 0;
-
-        if (isCalendarDrop) {
-          const dateStr = destination.droppableId.replace("calendar-", "");
-          const parts = dateStr.split("-").map(Number);
-          year = parts[0] ?? 2024;
-          month = parts[1] ?? 1;
-          day = parts[2] ?? 1;
-          newDueDate = new Date(year, month - 1, day, 12, 0, 0, 0);
-        }
-
-        // Determine cards to move
-        const cardsToMove = selectedCardIds.has(draggableId)
-          ? getOrderedSelectedCards(draggableId)
-          : [draggableId];
-
-        // 1. Get all cards currently on the target date (excluding the ones being moved)
-        // We need this to calculate the new order relative to existing cards.
-        const allCards = listsToRender.flatMap((l, listIndex) =>
-          l.cards.map((c) => ({ ...c, listIndex })),
-        );
-        const targetCards = allCards
-          .filter((c) => {
-            if (cardsToMove.includes(c.publicId)) return false; // Exclude moving cards
-            if (isUnscheduledDrop) return !c.dueDate;
-            if (!c.dueDate) return false;
-            // Check if same day (using local time components to match logic above)
-            return (
-              c.dueDate.getFullYear() === year &&
-              c.dueDate.getMonth() === month - 1 &&
-              c.dueDate.getDate() === day
-            );
-          })
-          .sort((a, b) => {
-            // Sort by existing order (stable fallback using listIndex)
-            const aExt = a as CardWithCalendarOrder;
-            const bExt = b as CardWithCalendarOrder;
-            const orderA =
-              aExt.calendarOrder ??
-              a.listIndex * 100000 + (aExt.index ?? 0) * 1000;
-            const orderB =
-              bExt.calendarOrder ??
-              b.listIndex * 100000 + (bExt.index ?? 0) * 1000;
-            return orderA - orderB;
-          });
-
-        // 2. Insert moving cards at destination.index to determine new orders
-        // destination.index is the position in the *target list*.
-        // Since we filtered out moving cards, this index should be correct for insertion.
-        const prevCard = targetCards[destination.index - 1];
-        const nextCard = targetCards[destination.index];
-
-        const prevExt = prevCard as CardWithCalendarOrder | undefined;
-        const nextExt = nextCard as CardWithCalendarOrder | undefined;
-
-        const prevOrder =
-          prevExt?.calendarOrder ??
-          (prevCard?.listIndex !== undefined
-            ? prevCard.listIndex * 100000 + (prevExt?.index ?? 0) * 1000
-            : 0);
-        const nextOrder =
-          nextExt?.calendarOrder ??
-          (nextCard?.listIndex !== undefined
-            ? nextCard.listIndex * 100000 + (nextExt?.index ?? 0) * 1000
-            : prevOrder + 10000);
-
-        // Calculate step for distributing new orders
-        // If sorting sequentially: [prev, ...movers, next]
-        const step = (nextOrder - prevOrder) / (cardsToMove.length + 1);
-
-        const newOrders = new Map<string, number>();
-        cardsToMove.forEach((cardId, index) => {
-          newOrders.set(cardId, Math.round(prevOrder + step * (index + 1)));
-        });
-
-        // Update visual state immediately
-        setVisualLists((prev) => {
-          if (!prev) return prev;
-          return prev.map((list) => ({
-            ...list,
-            cards: list.cards.map((card) => {
-              if (cardsToMove.includes(card.publicId)) {
-                return {
-                  ...card,
-                  dueDate: newDueDate,
-                  calendarOrder:
-                    newOrders.get(card.publicId) ?? card.calendarOrder,
-                };
-              }
-              return card;
-            }),
-          }));
-        });
-
-        // Fire mutation to update due date AND order for each card
-        if (cardsToMove.length > 0) {
-          bulkUpdateCardMutation.mutate(
-            cardsToMove.map((cardId) => ({
-              cardPublicId: cardId,
-              dueDate: newDueDate,
-              calendarOrder: newOrders.get(cardId),
-            })),
-          );
-        }
-
-        // Clear selection after drop
-        setSelectedCardIds(new Set());
-        setLastSelectedCardId(null);
-
-        return;
-      }
-
-      // Determine cards to move (all selected if dragging selected, else just dragged)
-      const cardsToMove = selectedCardIds.has(draggableId)
-        ? getOrderedSelectedCards(draggableId)
-        : [draggableId];
-
-      setVisualLists((prev) => {
-        if (!prev) return prev;
-        // Deep copy lists and cards to avoid mutation
-        const updated = prev.map((list) => ({
-          ...list,
-          cards: [...list.cards],
-        }));
-
-        // Remove all cards to move from their source lists
-        const movedCards: (typeof updated)[0]["cards"] = [];
-        for (const list of updated) {
-          for (let i = list.cards.length - 1; i >= 0; i--) {
-            const cardId = list.cards[i]?.publicId;
-            if (cardId && cardsToMove.includes(cardId)) {
-              movedCards.push(...list.cards.splice(i, 1));
-            }
-          }
-        }
-
-        // Sort moved cards to maintain order (dragged first, then by original selection order)
-        movedCards.sort((a, b) => {
-          const aIdx = cardsToMove.indexOf(a.publicId);
-          const bIdx = cardsToMove.indexOf(b.publicId);
-          return aIdx - bIdx;
-        });
-
-        // Insert at destination
-        const destList = updated.find(
-          (l) => l.publicId === destination.droppableId,
-        );
-        if (destList) {
-          destList.cards.splice(destination.index, 0, ...movedCards);
-        }
-
-        // Update indices
-        return updated.map((list) => ({
-          ...list,
-          cards: list.cards.map((card, idx) => ({ ...card, index: idx })),
-        }));
-      });
-
-      // Fire mutation: single atomic bulkMove for multi-card, single update for one card
-      if (cardsToMove.length > 1) {
-        bulkMoveMutation.mutate({
-          cardPublicIds: cardsToMove,
-          listPublicId: destination.droppableId,
-          startIndex: destination.index,
-        });
-      } else {
-        updateCardMutation.mutate({
-          cardPublicId: draggableId,
-          listPublicId: destination.droppableId,
-          index: destination.index,
-        });
-      }
-
-      // Clear selection after drop
-      setSelectedCardIds(new Set());
-      setLastSelectedCardId(null);
-    }
-  };
-
   // ============================================================================
   // MODAL CONTENT
   // ============================================================================
 
-  const renderModalContent = () => {
-    return (
-      <>
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "DELETE_BOARD"}
-        >
-          <DeleteConfirmation
-            entityType={isTemplate ? "template" : "board"}
-            onConfirm={() => {
-              if (boardId) {
-                deleteBoardMutation.mutate({ boardPublicId: boardId });
-              }
-            }}
-            isLoading={deleteBoardMutation.isPending}
-          />
-        </Modal>
+  // ============================================================================
+  // RENDER MODALS
+  // ============================================================================
 
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "DELETE_LIST"}
-        >
-          <DeleteConfirmation
-            entityType="list"
-            onConfirm={() => {
-              deleteListMutation.mutate({ listPublicId: selectedPublicListId });
-              closeModal();
-            }}
-            isLoading={deleteListMutation.isPending}
-          />
-        </Modal>
-
-        <Modal
-          modalSize="md"
-          isVisible={isOpen && modalContentType === "NEW_CARD"}
-        >
-          <NewCardForm
-            isTemplate={!!isTemplate}
-            boardPublicId={boardId ?? ""}
-            listPublicId={selectedPublicListId}
-            queryParams={queryParams}
-          />
-        </Modal>
-
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "NEW_LIST"}
-        >
-          <NewListForm
-            boardPublicId={boardId ?? ""}
-            queryParams={queryParams}
-          />
-        </Modal>
-
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "NEW_WORKSPACE"}
-        >
-          <NewWorkspaceForm />
-        </Modal>
-
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "NEW_LABEL"}
-        >
-          <LabelForm boardPublicId={boardId ?? ""} refetch={refetchBoard} />
-        </Modal>
-
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "EDIT_LABEL"}
-        >
-          <LabelForm
-            boardPublicId={boardId ?? ""}
-            refetch={refetchBoard}
-            isEdit
-          />
-        </Modal>
-
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "DELETE_LABEL"}
-        >
-          <DeleteConfirmation
-            entityType="label"
-            onConfirm={() =>
-              deleteLabelMutation.mutate({ labelPublicId: entityId })
-            }
-            isLoading={deleteLabelMutation.isPending}
-          />
-        </Modal>
-
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "UPDATE_BOARD_SLUG"}
-        >
-          <UpdateBoardSlugForm
-            boardPublicId={boardId ?? ""}
-            workspaceSlug={workspace.slug ?? ""}
-            boardSlug={boardData?.slug ?? ""}
-            queryParams={queryParams}
-          />
-        </Modal>
-
-        <Modal
-          modalSize="sm"
-          isVisible={isOpen && modalContentType === "CREATE_TEMPLATE"}
-        >
-          <NewTemplateForm
-            workspacePublicId={workspace.publicId}
-            sourceBoardPublicId={boardId ?? ""}
-            sourceBoardName={boardData?.name ?? ""}
-          />
-        </Modal>
-      </>
-    );
-  };
+  const renderModals = () => (
+    <BoardModals
+      isTemplate={!!isTemplate}
+      boardId={boardId}
+      boardData={boardData}
+      workspace={workspace}
+      selectedPublicListId={selectedPublicListId}
+      queryParams={queryParams}
+      refetchBoard={refetchBoard}
+      mutations={mutations}
+    />
+  );
 
   // ============================================================================
   // RENDER
@@ -1453,7 +802,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
             ) : null}
           </div>
         </div>
-        {renderModalContent()}
+        {renderModals()}
 
         {/* Floating delete button - appears when items are selected (KANBAN ONLY) */}
         {hasSelection && viewMode === "kanban" && (

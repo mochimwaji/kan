@@ -25,7 +25,7 @@ export default function MemberSelector({
   cardPublicId,
   members,
   isLoading,
-   
+
   isCollapsed: _isCollapsed = false,
   children,
 }: MemberSelectorProps) {
@@ -86,6 +86,8 @@ export default function MemberSelector({
     },
     onSettled: async () => {
       await utils.card.byId.invalidate({ cardPublicId });
+      // Also invalidate board to refresh board view
+      await utils.board.byId.invalidate();
     },
   });
 

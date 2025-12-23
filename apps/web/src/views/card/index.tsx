@@ -2,359 +2,27 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  HiOutlineCalendar,
-  HiOutlineRectangleStack,
-  HiOutlineTag,
-  HiOutlineUsers,
-  HiXMark,
-} from "react-icons/hi2";
+import { HiXMark } from "react-icons/hi2";
 
-import Avatar from "~/components/Avatar";
 import { DeleteConfirmation } from "~/components/DeleteConfirmation";
 import Editor from "~/components/Editor";
 import { LabelForm } from "~/components/LabelForm";
-import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
 import { useTransitionState } from "~/hooks/useTransitionState";
 import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
-import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
-import { formatMemberDisplayName, getAvatarUrl } from "~/utils/helpers";
 import ActivityList from "./components/ActivityList";
 import { AttachmentThumbnails } from "./components/AttachmentThumbnails";
 import { AttachmentUpload } from "./components/AttachmentUpload";
+import { CardRightPanel } from "./components/CardRightPanel";
 import Checklists from "./components/Checklists";
-import { DueDateSelector } from "./components/DueDateSelector";
-import LabelSelector from "./components/LabelSelector";
-import ListSelector from "./components/ListSelector";
-import MemberSelector from "./components/MemberSelector";
 import { NewChecklistForm } from "./components/NewChecklistForm";
 import NewCommentForm from "./components/NewCommentForm";
-
-interface FormValues {
-  cardId: string;
-  title: string;
-  description: string;
-}
-
-function SidebarSectionHeader({
-  icon,
-  title,
-  isCollapsed,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  isCollapsed?: boolean;
-}) {
-  return (
-    <div
-      className={`flex h-[34px] w-full items-center gap-2 rounded-[5px] ${
-        isCollapsed ? "justify-center" : "pl-2"
-      } hover:bg-light-200 dark:hover:bg-dark-100`}
-    >
-      <div className="flex h-5 w-5 items-center justify-center">{icon}</div>
-      {!isCollapsed && <p className="text-sm font-medium">{title}</p>}
-    </div>
-  );
-}
-
-export function CardRightPanel({
-  isTemplate,
-  isCollapsed = false,
-}: {
-  isTemplate?: boolean;
-  isCollapsed?: boolean;
-}) {
-  const router = useRouter();
-
-  const cardId = Array.isArray(router.query.cardId)
-    ? router.query.cardId[0]
-    : router.query.cardId;
-
-  const { data: card } = api.card.byId.useQuery({
-    cardPublicId: cardId ?? "",
-  });
-
-  const board = card?.list.board;
-  const labels = board?.labels;
-  const workspaceMembers = board?.workspace.members;
-  const selectedLabels = card?.labels;
-  const selectedMembers = card?.members;
-
-  // Refs for keyboard shortcuts to programmatically click selectors
-  const listSelectorRef = useRef<HTMLDivElement>(null);
-  const labelSelectorRef = useRef<HTMLDivElement>(null);
-  const memberSelectorRef = useRef<HTMLDivElement>(null);
-  const dueDateSelectorRef = useRef<HTMLDivElement>(null);
-
-  // Card sidebar keyboard shortcuts: l=list, k=labels, j=members, d=due date
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "l" },
-    action: () => listSelectorRef.current?.click(),
-    description: "List selector",
-    group: "CARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "k" },
-    action: () => labelSelectorRef.current?.click(),
-    description: "Labels selector",
-    group: "CARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "j" },
-    action: () => memberSelectorRef.current?.click(),
-    description: "Members selector",
-    group: "CARD_VIEW",
-  });
-  useKeyboardShortcut({
-    type: "PRESS",
-    stroke: { key: "d" },
-    action: () => dueDateSelectorRef.current?.click(),
-    description: "Due date picker",
-    group: "CARD_VIEW",
-  });
-
-  const formattedLabels =
-    labels?.map((label) => {
-      const isSelected = selectedLabels?.some(
-        (selectedLabel) => selectedLabel.publicId === label.publicId,
-      );
-
-      return {
-        key: label.publicId,
-        value: label.name,
-        selected: isSelected ?? false,
-        leftIcon: <LabelIcon colourCode={label.colourCode} />,
-      };
-    }) ?? [];
-
-  const formattedLists =
-    board?.lists.map((list) => ({
-      key: list.publicId,
-      value: list.name,
-      selected: list.publicId === card?.list.publicId,
-    })) ?? [];
-
-  const formattedMembers =
-    workspaceMembers?.map((member) => {
-      const isSelected = selectedMembers?.some(
-        (assignedMember) => assignedMember.publicId === member.publicId,
-      );
-
-      return {
-        key: member.publicId,
-        value: formatMemberDisplayName(
-          member.user?.name ?? null,
-          member.user?.email ?? member.email,
-        ),
-        imageUrl: member.user?.image
-          ? getAvatarUrl(member.user.image)
-          : undefined,
-        selected: isSelected ?? false,
-        leftIcon: (
-          <Avatar
-            size="xs"
-            name={member.user?.name ?? ""}
-            imageUrl={
-              member.user?.image ? getAvatarUrl(member.user.image) : undefined
-            }
-            email={member.user?.email ?? member.email}
-          />
-        ),
-      };
-    }) ?? [];
-
-  // Collapsed view: mirrors left sidebar collapsed structure exactly
-  // Left sidebar collapsed has: divider (still visible with mb-4) > WorkspaceMenu (flex-col-reverse with h-9 icons) > navigation icons
-  // Note: Dashboard already provides the h-[45px] header with drawer toggle, so we don't duplicate it
-  if (isCollapsed) {
-    return (
-      <div
-        className="flex h-full w-full flex-col"
-        style={{
-          backgroundColor: "var(--kan-sidebar-bg)",
-          color: "var(--kan-sidebar-text)",
-        }}
-      >
-        {/* Visible divider bar - matches left sidebar divider (stays visible even when collapsed) */}
-        <div className="mx-1 mb-4 hidden w-auto border-b border-light-300 dark:border-dark-400 md:block" />
-
-        {/* Invisible WorkspaceMenu placeholder - matches collapsed WorkspaceMenu structure exactly */}
-        {/* WorkspaceMenu uses flex-col-reverse when collapsed, so search shows above workspace */}
-        <div className="relative inline-block w-full pb-3" aria-hidden="true">
-          <div className="flex flex-col-reverse items-center">
-            {/* Workspace button placeholder: md:h-9 md:w-9 md:mb-1.5 */}
-            <div className="mb-1.5 h-9 w-9" />
-            {/* Search button placeholder: md:h-9 md:w-9 md:mb-2 */}
-            <div className="mb-2 h-9 w-9" />
-          </div>
-        </div>
-
-        {/* Card action icons - matches left sidebar collapsed navigation pattern */}
-        <ul role="list" className="flex flex-col items-center space-y-1">
-          <li>
-            <ListSelector
-              cardPublicId={cardId ?? ""}
-              lists={formattedLists}
-              isLoading={!card}
-              isCollapsed
-            >
-              <SidebarSectionHeader
-                icon={<HiOutlineRectangleStack size={20} />}
-                title={"List"}
-                isCollapsed
-              />
-            </ListSelector>
-          </li>
-          <li>
-            <LabelSelector
-              cardPublicId={cardId ?? ""}
-              labels={formattedLabels}
-              isLoading={!card}
-              isCollapsed
-            >
-              <SidebarSectionHeader
-                icon={<HiOutlineTag size={20} />}
-                title={"Labels"}
-                isCollapsed
-              />
-            </LabelSelector>
-          </li>
-          {!isTemplate && (
-            <li>
-              <MemberSelector
-                cardPublicId={cardId ?? ""}
-                members={formattedMembers}
-                isLoading={!card}
-                isCollapsed
-              >
-                <SidebarSectionHeader
-                  icon={<HiOutlineUsers size={20} />}
-                  title={"Members"}
-                  isCollapsed
-                />
-              </MemberSelector>
-            </li>
-          )}
-          <li>
-            <DueDateSelector
-              cardPublicId={cardId ?? ""}
-              dueDate={card?.dueDate}
-              isLoading={!card}
-              isCollapsed
-            >
-              <SidebarSectionHeader
-                icon={<HiOutlineCalendar size={20} />}
-                title={"Due date"}
-                isCollapsed
-              />
-            </DueDateSelector>
-          </li>
-        </ul>
-      </div>
-    );
-  }
-
-  // Expanded view: mirrors left sidebar structure exactly for perfect alignment
-  // Left sidebar has: divider mb-4 > WorkspaceMenu (pb-3 with h-[34px] button + h-[34px] search side-by-side) > ul.space-y-1
-  // Note: Dashboard already provides the h-[45px] header with drawer toggle, so we don't duplicate it
-  return (
-    <div
-      className="h-full w-full"
-      style={{
-        backgroundColor: "var(--kan-sidebar-bg)",
-        color: "var(--kan-sidebar-text)",
-      }}
-    >
-      {/* Visible divider bar - matches left sidebar divider styling exactly */}
-      <div className="mx-1 mb-4 hidden w-auto border-b border-light-300 dark:border-dark-400 md:block" />
-
-      {/* Invisible WorkspaceMenu placeholder - matches WorkspaceMenu expanded structure */}
-      {/* In expanded mode, workspace button and search are side-by-side (flex-row with gap-1) */}
-      <div
-        className="relative inline-block w-full px-2 pb-3"
-        aria-hidden="true"
-      >
-        <div className="flex items-center justify-start gap-1">
-          {/* Workspace button placeholder: h-[34px] flex-1 + mb-1 */}
-          <div className="mb-1 h-[34px] flex-1" />
-          {/* Search button placeholder: h-[34px] w-[34px] + mb-1 */}
-          <div className="mb-1 h-[34px] w-[34px]" />
-        </div>
-      </div>
-
-      {/* Card action buttons - matches left sidebar ul.space-y-1 navigation */}
-      <ul role="list" className="space-y-1 px-2">
-        <li>
-          <ListSelector
-            cardPublicId={cardId ?? ""}
-            lists={formattedLists}
-            isLoading={!card}
-          >
-            <div ref={listSelectorRef}>
-              <SidebarSectionHeader
-                icon={<HiOutlineRectangleStack size={20} />}
-                title={"List"}
-              />
-            </div>
-          </ListSelector>
-        </li>
-        <li>
-          <LabelSelector
-            cardPublicId={cardId ?? ""}
-            labels={formattedLabels}
-            isLoading={!card}
-          >
-            <div ref={labelSelectorRef}>
-              <SidebarSectionHeader
-                icon={<HiOutlineTag size={20} />}
-                title={"Labels"}
-              />
-            </div>
-          </LabelSelector>
-        </li>
-        {!isTemplate && (
-          <li>
-            <MemberSelector
-              cardPublicId={cardId ?? ""}
-              members={formattedMembers}
-              isLoading={!card}
-            >
-              <div ref={memberSelectorRef}>
-                <SidebarSectionHeader
-                  icon={<HiOutlineUsers size={20} />}
-                  title={"Members"}
-                />
-              </div>
-            </MemberSelector>
-          </li>
-        )}
-        <li>
-          <DueDateSelector
-            cardPublicId={cardId ?? ""}
-            dueDate={card?.dueDate}
-            isLoading={!card}
-          >
-            <div ref={dueDateSelectorRef}>
-              <SidebarSectionHeader
-                icon={<HiOutlineCalendar size={20} />}
-                title={"Due date"}
-              />
-            </div>
-          </DueDateSelector>
-        </li>
-      </ul>
-    </div>
-  );
-}
+import { useCardActions } from "./hooks/useCardActions";
 
 export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   const router = useRouter();
@@ -364,14 +32,11 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     entityId,
 
     openModal: _openModal,
-    closeModal,
-    closeModals,
-    getModalState,
+    getModalState: _getModalState,
     clearModalState,
     isOpen,
     modalStates,
   } = useModal();
-  const { showPopup } = usePopup();
   const { workspace } = useWorkspace();
   const [activeChecklistForm, setActiveChecklistForm] = useState<string | null>(
     null,
@@ -421,143 +86,11 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     group: "CARD_VIEW",
   });
 
-  const updateCard = api.card.update.useMutation({
-    onError: () => {
-      showPopup({
-        header: "Unable to update card",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      await utils.card.byId.invalidate({ cardPublicId: cardId });
-    },
-  });
-
-  const addOrRemoveLabel = api.card.addOrRemoveLabel.useMutation({
-    onError: () => {
-      showPopup({
-        header: "Unable to add label",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      if (cardId) {
-        await utils.card.byId.invalidate({ cardPublicId: cardId });
-      }
-    },
-  });
-
-  // Delete card mutation - navigates to board on success
-  const deleteCardMutation = api.card.delete.useMutation({
-    onMutate: async () => {
-      await utils.board.byId.cancel();
-    },
-    onError: () => {
-      showPopup({
-        header: "Unable to delete card",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSuccess: () => {
-      closeModal();
-      void router.push(
-        isTemplate ? `/templates/${boardId}` : `/boards/${boardId}`,
-      );
-    },
-    onSettled: async () => {
-      if (boardId) {
-        await utils.board.byId.invalidate({ boardPublicId: boardId });
-      }
-    },
-  });
-
-  // Delete label mutation
-  const deleteLabelMutation = api.label.delete.useMutation({
-    onSuccess: async () => {
-      closeModals(2);
-      await utils.card.byId.invalidate({ cardPublicId: cardId });
-    },
-    onError: () => {
-      showPopup({
-        header: "Error deleting label",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-  });
-
-  // Delete checklist mutation
-  const deleteChecklistMutation = api.checklist.delete.useMutation({
-    onMutate: async () => {
-      await utils.card.byId.cancel({ cardPublicId: cardId ?? "" });
-      const previous = utils.card.byId.getData({ cardPublicId: cardId ?? "" });
-      utils.card.byId.setData({ cardPublicId: cardId ?? "" }, (old) => {
-        if (!old) return old as typeof previous;
-        const updatedChecklists = old.checklists.filter(
-          (cl) => cl.publicId !== entityId,
-        );
-        return { ...old, checklists: updatedChecklists } as typeof old;
-      });
-      return { previous };
-    },
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.previous)
-        utils.card.byId.setData({ cardPublicId: cardId ?? "" }, ctx.previous);
-      showPopup({
-        header: "Unable to delete checklist",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      closeModal();
-      await utils.card.byId.invalidate({ cardPublicId: cardId });
-    },
-  });
-
-  // Delete comment mutation
-  const deleteCommentMutation = api.card.deleteComment.useMutation({
-    onMutate: async () => {
-      closeModal();
-      await utils.card.byId.cancel();
-      const currentState = utils.card.byId.getData({
-        cardPublicId: cardId ?? "",
-      });
-      utils.card.byId.setData({ cardPublicId: cardId ?? "" }, (oldCard) => {
-        if (!oldCard) return oldCard;
-        const updatedActivities = oldCard.activities.filter(
-          (activity) => activity.comment?.publicId !== entityId,
-        );
-        return { ...oldCard, activities: updatedActivities };
-      });
-      return { previousState: currentState };
-    },
-    onError: (_error, _newList, context) => {
-      utils.card.byId.setData(
-        { cardPublicId: cardId ?? "" },
-        context?.previousState,
-      );
-      showPopup({
-        header: "Unable to delete comment",
-        message: "Please try again later, or contact customer support.",
-        icon: "error",
-      });
-    },
-    onSettled: async () => {
-      await utils.card.byId.invalidate({ cardPublicId: cardId ?? "" });
-    },
-  });
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-
-    watch: _watch,
-  } = useForm<FormValues>({
+  const { register, handleSubmit, setValue } = useForm<{
+    cardId: string;
+    title: string;
+    description: string;
+  }>({
     values: {
       cardId: cardId ?? "",
       title: card?.title ?? "",
@@ -565,7 +98,20 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
-  const onSubmit = (values: FormValues) => {
+  const {
+    updateCard,
+    addOrRemoveLabel,
+    deleteCardMutation,
+    deleteLabelMutation,
+    deleteChecklistMutation,
+    deleteCommentMutation,
+  } = useCardActions(cardId ?? "", boardId, isTemplate);
+
+  const onSubmit = (values: {
+    cardId: string;
+    title: string;
+    description: string;
+  }) => {
     updateCard.mutate({
       cardPublicId: values.cardId,
       title: values.title,
@@ -598,17 +144,21 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   ]);
 
   // Open the new item form after creating a new checklist
+  // Use direct modalStates access to avoid re-render cascade from getModalState
+  const processedChecklistRef = useRef<string | null>(null);
   useEffect(() => {
     if (!card) return;
-    const state = getModalState("ADD_CHECKLIST") as
+    const state = modalStates.ADD_CHECKLIST as
       | { createdChecklistId?: string }
       | undefined;
     const createdId: string | undefined = state?.createdChecklistId;
-    if (createdId) {
+    // Only process if we have a new ID that we haven't processed before
+    if (createdId && createdId !== processedChecklistRef.current) {
+      processedChecklistRef.current = createdId;
       setActiveChecklistForm(createdId);
       clearModalState("ADD_CHECKLIST");
     }
-  }, [card, getModalState, clearModalState]);
+  }, [card, modalStates, clearModalState]);
 
   // Auto-resize title textarea
   useEffect(() => {
@@ -877,3 +427,5 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     </>
   );
 }
+
+export { CardRightPanel };

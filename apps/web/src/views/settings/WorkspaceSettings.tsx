@@ -1,4 +1,3 @@
-
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
@@ -13,7 +12,16 @@ import UpdateWorkspaceUrlForm from "./components/UpdateWorkspaceUrlForm";
 
 export default function WorkspaceSettings() {
   const { modalContentType, openModal, isOpen } = useModal();
-  const { workspace } = useWorkspace();
+  const { workspace, isLoading } = useWorkspace();
+
+  if (isLoading) {
+    return (
+      <>
+        <PageHead title={"Settings | Workspace"} />
+        <div className="mb-8 border-t border-light-300 dark:border-dark-300" />
+      </>
+    );
+  }
 
   return (
     <>
@@ -65,7 +73,9 @@ export default function WorkspaceSettings() {
             className="mb-4 text-sm"
             style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
           >
-            {"Customize the appearance of your workspace with preset themes or custom colors."}
+            {
+              "Customize the appearance of your workspace with preset themes or custom colors."
+            }
           </p>
           <ColorSettings />
         </div>
@@ -81,7 +91,9 @@ export default function WorkspaceSettings() {
             className="mb-8 text-sm"
             style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
           >
-            {"Once you delete your workspace, there is no going back. This action cannot be undone."}
+            {
+              "Once you delete your workspace, there is no going back. This action cannot be undone."
+            }
           </p>
           <div className="mt-4">
             <Button

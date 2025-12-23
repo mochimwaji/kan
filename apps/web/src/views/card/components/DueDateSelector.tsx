@@ -78,9 +78,7 @@ export function DueDateSelector({
         return {
           ...oldCard,
           dueDate:
-            update.dueDate !== undefined
-              ? (update.dueDate)
-              : oldCard.dueDate,
+            update.dueDate !== undefined ? update.dueDate : oldCard.dueDate,
         };
       });
 
@@ -101,8 +99,32 @@ export function DueDateSelector({
   });
 
   const handleDateSelect = (date: Date | undefined) => {
-    // Only update local state, don't fire mutation
-    setPendingDate(date ?? null);
+    // Update local state
+    const newDate = date ?? null;
+    setPendingDate(newDate);
+
+    // Close popup and fire mutation immediately
+    setIsOpen(false);
+
+    // Check if date actually changed
+    const pendingIsNull = newDate === null;
+    const dueIsNull = dueDate === null || dueDate === undefined;
+
+    let dateChanged = false;
+    if (pendingIsNull && !dueIsNull) {
+      dateChanged = true;
+    } else if (!pendingIsNull && dueIsNull) {
+      dateChanged = true;
+    } else if (!pendingIsNull && !dueIsNull && dueDate instanceof Date) {
+      dateChanged = newDate.getTime() !== dueDate.getTime();
+    }
+
+    if (dateChanged) {
+      updateDueDate.mutate({
+        cardPublicId,
+        dueDate: newDate,
+      });
+    }
   };
 
   const handleBackdropClick = () => {
