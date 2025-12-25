@@ -75,14 +75,29 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
       });
     },
     onSettled: async (data, error, vars) => {
-      // Delay invalidation to allow form to render and focus
+      // Delay to allow form to render and focus
       if (!error) {
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
-      await utils.card.byId.invalidate({ cardPublicId: vars.cardPublicId });
-      // After invalidation, update modal state with real ID so activeChecklistForm gets updated
+
       if (!error && data?.publicId) {
+        // On success: update placeholder ID to real ID and set modal state
+        // Skip full invalidation to prevent flash - we already have the data
+        utils.card.byId.setData({ cardPublicId: vars.cardPublicId }, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            checklists: old.checklists.map((cl) =>
+              cl.publicId.startsWith("PLACEHOLDER_")
+                ? { ...cl, publicId: data.publicId }
+                : cl,
+            ),
+          };
+        });
         setModalState("ADD_CHECKLIST", { createdChecklistId: data.publicId });
+      } else {
+        // On error: do full invalidation to revert
+        await utils.card.byId.invalidate({ cardPublicId: vars.cardPublicId });
       }
     },
   });
