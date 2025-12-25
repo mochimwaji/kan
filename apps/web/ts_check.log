@@ -1,0 +1,46 @@
+src/views/board/components/NewCardForm.tsx(471,31): error TS2322: Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+src/views/board/hooks/useBoardMutations.ts(113,45): error TS2345: Argument of type '(old: { lists: { cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; color:...' is not assignable to parameter of type 'Updater<{ lists: { cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; colo...'.
+  Type '(old: { lists: { cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; color:...' is not assignable to type '(input: { lists: { cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; colo...'.
+    Type '{ lists: { cards: ({ labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; } | { ...; })[]; ... 4 more ...;...' is not assignable to type '{ lists: { cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; color: strin...'.
+      Type '{ lists: { cards: ({ labels: { name: string; publicId: string; colourCode: string | null; }[]; ... 10 more ...; attachments: { publicId: string; }[]; } | { ...; })[]; ... 4 more ...; color: string | null; }[]; ... 6 more ...; labels: { name: string; publicId: string; colourCode: string | null; }[]; }' is not assignable to type '{ lists: { cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; color: strin...'.
+        Types of property 'lists' are incompatible.
+          Type '{ cards: ({ labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; } | { ...; })[]; ... 4 more ...; color: s...' is not assignable to type '{ cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; color: string | null;...'.
+            Type '{ cards: ({ labels: { name: string; publicId: string; colourCode: string | null; }[]; ... 10 more ...; attachments: { publicId: string; }[]; } | { ...; })[]; ... 4 more ...; color: string | null; }' is not assignable to type '{ cards: { labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]; ... 4 more ...; color: string | null; }'.
+              Types of property 'cards' are incompatible.
+                Type '({ labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; } | { ...; })[]' is not assignable to type '{ labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }[]'.
+                  Type '{ labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; } | { ...; }' is not assignable to type '{ labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }'.
+                    Type '{ title: string; description: string | null; dueDate: Date | null; calendarOrder: number | null | undefined; cardPublicId: string; labels: { name: string; publicId: string; colourCode: string | null; }[]; ... 6 more ...; attachments: { publicId: string; }[]; }' is not assignable to type '{ labels: { name: string; publicId: string; colourCode: string | null; }[]; members: { email: string; publicId: string; deletedAt: Date | null; user: { name: string | null; email: string; image: string | null; } | null; }[]; ... 9 more ...; attachments: { ...; }[]; }'.
+                      Types of property 'calendarOrder' are incompatible.
+                        Type 'number | null | undefined' is not assignable to type 'number | null'.
+                          Type 'undefined' is not assignable to type 'number | null'.
+src/views/board/hooks/useBoardMutations.ts(315,31): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/views/board/hooks/useVisualLists.ts(24,24): error TS2304: Cannot find name 'useRef'.
+src/views/board/index.tsx(440,7): error TS2322: Type 'string | null | undefined' is not assignable to type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.
+src/views/card/components/CardRightPanel.tsx(165,26): error TS2304: Cannot find name 'openModal'.
+src/views/card/components/CardRightPanel.tsx(178,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/CardRightPanel.tsx(192,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/CardRightPanel.tsx(207,17): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/CardRightPanel.tsx(222,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/CardRightPanel.tsx(260,13): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/CardRightPanel.tsx(274,13): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/CardRightPanel.tsx(289,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/CardRightPanel.tsx(304,13): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/views/card/components/NewChecklistItemForm.tsx(192,13): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: ContentEditableProps): ContentEditable', gave the following error.
+    Type '(e: any) => void' is not assignable to type '() => void'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+  Overload 2 of 2, '(props: ContentEditableProps, context: any): ContentEditable', gave the following error.
+    Type '(e: any) => void' is not assignable to type '() => void'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+src/views/card/components/NewChecklistItemForm.tsx(192,22): error TS7006: Parameter 'e' implicitly has an 'any' type.

@@ -122,6 +122,9 @@ export function useBoardMutations(queryParams: {
             cards: list.cards.map((card) => {
               const update = updateMap.get(card.publicId);
               if (update) {
+                const cardCalendarOrder = (
+                  card as { calendarOrder?: number | null }
+                ).calendarOrder;
                 return {
                   ...card,
                   ...update,
@@ -132,8 +135,7 @@ export function useBoardMutations(queryParams: {
                       ? card.dueDate
                       : update.dueDate,
                   calendarOrder:
-                    update.calendarOrder ??
-                    (card as { calendarOrder?: number | null }).calendarOrder,
+                    update.calendarOrder ?? cardCalendarOrder ?? null,
                 };
               }
               return card;
@@ -312,7 +314,7 @@ export function useBoardMutations(queryParams: {
 
         const [removed] = updatedLists.splice(sourceIndex, 1);
         if (removed) {
-          updatedLists.splice(variables.index, 0, removed);
+          updatedLists.splice(variables.index ?? 0, 0, removed);
         }
 
         return {

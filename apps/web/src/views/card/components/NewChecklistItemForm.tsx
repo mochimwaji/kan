@@ -38,6 +38,8 @@ const NewChecklistItemForm = ({
 
   const editableRef = useRef<HTMLElement | null>(null);
   const keepOpenRef = useRef(false);
+  // Guard against blur during initial mount - Dialog focus restoration can steal focus
+  const justMountedRef = useRef(true);
 
   const refocusEditable = useCallback(() => {
     const el = editableRef.current;
@@ -149,6 +151,10 @@ const NewChecklistItemForm = ({
 
   const submitIfNotEmpty = (keepOpen: boolean) => {
     if (readOnly) return;
+    // Skip cancel if just mounted - Dialog focus restoration may steal focus
+    if (justMountedRef.current && !keepOpen) {
+      return;
+    }
     keepOpenRef.current = keepOpen;
     const currentHtml = getValues("title");
     const plain = sanitizeHtmlToPlainText(currentHtml);
@@ -164,6 +170,11 @@ const NewChecklistItemForm = ({
 
   useEffect(() => {
     refocusEditable();
+    // Clear mount guard after Dialog transition completes (300ms)
+    const timer = setTimeout(() => {
+      justMountedRef.current = false;
+    }, 300);
+    return () => clearTimeout(timer);
   }, [refocusEditable]);
 
   return (

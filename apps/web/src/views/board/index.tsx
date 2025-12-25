@@ -437,7 +437,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const renderModals = () => (
     <BoardModals
       isTemplate={!!isTemplate}
-      boardId={boardId}
+      boardId={boardId ?? null}
       boardData={boardData}
       workspace={workspace}
       selectedPublicListId={selectedPublicListId}

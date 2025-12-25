@@ -52,11 +52,12 @@ export function CardRightPanel({
     propCardPublicId ??
     (Array.isArray(router.query.cardId)
       ? router.query.cardId[0]
-      : router.query.cardId);
+      : router.query.cardId) ??
+    "";
 
   const { data: card } = api.card.byId.useQuery(
     {
-      cardPublicId: cardPublicId ?? "",
+      cardPublicId: cardPublicId,
     },
     { enabled: !!cardPublicId },
   );

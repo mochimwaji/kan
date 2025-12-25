@@ -50,18 +50,3 @@ The transition may not trigger because:
 | Tailwind v4 migration            | Low      | Tabled per user request                           |
 
 ---
-
----
-
-## Completed Simplifications
-
-The following have been removed to streamline the self-hosted deployment:
-
-- ✅ Lingui i18n (hardcoded English now)
-- ✅ Marketing pages (home, FAQs, testimonials)
-- ✅ Legal pages (privacy, terms)
-- ✅ S3 storage (local filesystem now)
-- ✅ PostHog analytics
-- ✅ Novu notifications
-- ✅ Stripe billing
-- ✅ Trello import

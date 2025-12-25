@@ -468,7 +468,7 @@ export function NewCardForm({
                         return (
                           <>
                             <svg
-                              fill={label?.colourCode}
+                              fill={label?.colourCode ?? undefined}
                               className="h-2 w-2"
                               viewBox="0 0 6 6"
                               aria-hidden="true"

@@ -74,12 +74,16 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
         icon: "error",
       });
     },
-    onSettled: async (_data, error, vars) => {
+    onSettled: async (data, error, vars) => {
       // Delay invalidation to allow form to render and focus
       if (!error) {
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
       await utils.card.byId.invalidate({ cardPublicId: vars.cardPublicId });
+      // After invalidation, update modal state with real ID so activeChecklistForm gets updated
+      if (!error && data?.publicId) {
+        setModalState("ADD_CHECKLIST", { createdChecklistId: data.publicId });
+      }
     },
   });
 

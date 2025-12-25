@@ -156,7 +156,11 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     if (createdId && createdId !== processedChecklistRef.current) {
       processedChecklistRef.current = createdId;
       setActiveChecklistForm(createdId);
-      clearModalState("ADD_CHECKLIST");
+      // Only clear modal state for real IDs, not placeholders
+      // This allows onSettled to update with the real ID later
+      if (!createdId.startsWith("PLACEHOLDER_")) {
+        clearModalState("ADD_CHECKLIST");
+      }
     }
   }, [card, modalStates, clearModalState]);
 
