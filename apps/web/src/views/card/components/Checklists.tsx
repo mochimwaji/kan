@@ -14,6 +14,7 @@ interface ChecklistItem {
 
 interface Checklist {
   publicId: string;
+  clientId?: string;
   name: string;
   items: ChecklistItem[];
 }
@@ -50,8 +51,19 @@ export default function Checklists({
               ? (completedItems.length / checklist.items.length) * 100
               : 2;
 
+          // Identify if this form should be active
+          // Match against publicId OR the stable clientId (placeholder)
+          const isActiveChecklistForm =
+            !viewOnly &&
+            (activeChecklistForm === checklist.publicId ||
+              (checklist.clientId &&
+                activeChecklistForm === checklist.clientId));
+
           return (
-            <div key={checklist.publicId} className="mb-4">
+            <div
+              key={checklist.clientId ?? checklist.publicId}
+              className="mb-4"
+            >
               <div
                 className="mb-2 flex items-center font-medium"
                 style={{ color: "var(--kan-pages-text)" }}
@@ -127,7 +139,7 @@ export default function Checklists({
                 ))}
               </div>
 
-              {activeChecklistForm === checklist.publicId && !viewOnly && (
+              {isActiveChecklistForm && (
                 <div className="ml-1">
                   <NewChecklistItemForm
                     checklistPublicId={checklist.publicId}

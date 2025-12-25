@@ -41,6 +41,7 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
         if (!old) return old;
         const placeholderChecklist = {
           publicId: placeholderId,
+          clientId: placeholderId,
           name: args.name,
           index: old.checklists.length,
           items: [] as {
@@ -57,7 +58,30 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
       });
       return { previous, placeholderId };
     },
-    onSuccess: (_data, _vars, ctx) => {
+    onSuccess: (data, vars, ctx) => {
+      // Manual cache update to avoid refetch/flash
+      // We manually verify validation was successful by checking if data exists
+      if (data) {
+        utils.card.byId.setData({ cardPublicId: vars.cardPublicId }, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            checklists: old.checklists.map((cl) =>
+              cl.publicId === ctx.placeholderId
+                ? {
+                    ...cl,
+                    ...data,
+                    // IMPORTANT: We must explicitly set publicId because data has it
+                    publicId: data.publicId,
+                    // IMPORTANT: We must preserve clientId to keep the React key stable
+                    clientId: ctx.placeholderId,
+                  }
+                : cl,
+            ),
+          } as typeof old;
+        });
+      }
+
       // Set modal state to PLACEHOLDER ID so activeChecklistForm matches
       // Don't update publicId - keep placeholder stable for visual state
       setModalState("ADD_CHECKLIST", { createdChecklistId: ctx.placeholderId });
@@ -74,29 +98,9 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
         icon: "error",
       });
     },
-    onSettled: async (data, error, vars) => {
-      // Delay to allow form to render and focus
-      if (!error) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-
-      if (!error && data?.publicId) {
-        // On success: update placeholder ID to real ID and set modal state
-        // Skip full invalidation to prevent flash - we already have the data
-        utils.card.byId.setData({ cardPublicId: vars.cardPublicId }, (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            checklists: old.checklists.map((cl) =>
-              cl.publicId.startsWith("PLACEHOLDER_")
-                ? { ...cl, publicId: data.publicId }
-                : cl,
-            ),
-          };
-        });
-        setModalState("ADD_CHECKLIST", { createdChecklistId: data.publicId });
-      } else {
-        // On error: do full invalidation to revert
+    onSettled: async (_data, error, vars) => {
+      // Only invalidate on error to restore consistency
+      if (error) {
         await utils.card.byId.invalidate({ cardPublicId: vars.cardPublicId });
       }
     },
