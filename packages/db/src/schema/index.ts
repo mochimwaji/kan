@@ -5,6 +5,7 @@ export * from "./cards";
 export * from "./checklists";
 export * from "./labels";
 export * from "./lists";
+export * from "./subscriptions";
 export * from "./users";
 export * from "./workspaces";
 export * from "./workspaceInviteLinks";

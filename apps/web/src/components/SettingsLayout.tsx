@@ -9,6 +9,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   HiChevronDown,
+  HiOutlineBell,
   HiOutlineCodeBracketSquare,
   HiOutlineRectangleGroup,
   HiOutlineUser,
@@ -67,6 +68,14 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     group: "SETTINGS",
   });
 
+  useKeyboardShortcut({
+    type: "PRESS",
+    stroke: { key: "4" },
+    action: () => void router.push("/settings/notifications"),
+    description: "Notification settings",
+    group: "SETTINGS",
+  });
+
   // Memoize availableTabs to prevent infinite re-renders
   const availableTabs = useMemo(() => {
     const settingsTabs = [
@@ -86,6 +95,12 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
         key: "api",
         icon: <HiOutlineCodeBracketSquare />,
         label: "API",
+        condition: true,
+      },
+      {
+        key: "notifications",
+        icon: <HiOutlineBell />,
+        label: "Notifications",
         condition: true,
       },
     ];
