@@ -267,7 +267,7 @@ export default function SubscriptionForm({
         </div>
 
         {/* List Filter (only shown when board is selected) */}
-        {selectedBoardPublicId && selectedBoard?.lists && (
+        {selectedBoardPublicId && selectedBoard && (
           <div>
             <label
               className="mb-1 block text-sm font-medium"
@@ -281,7 +281,7 @@ export default function SubscriptionForm({
               style={{ color: "var(--kan-pages-text)" }}
             >
               <option value="">All lists</option>
-              {selectedBoard.lists.map((list) => (
+              {selectedBoard.lists?.map((list) => (
                 <option key={list.publicId} value={list.publicId}>
                   {list.name}
                 </option>
@@ -291,7 +291,7 @@ export default function SubscriptionForm({
         )}
 
         {/* Label Filter (shown when board is selected) */}
-        {selectedBoardPublicId && selectedBoard?.labels && (
+        {selectedBoardPublicId && selectedBoard && (
           <div>
             <label
               className="mb-1 block text-sm font-medium"
@@ -305,7 +305,7 @@ export default function SubscriptionForm({
               style={{ color: "var(--kan-pages-text)" }}
             >
               <option value="">All labels</option>
-              {selectedBoard.labels.map((label) => (
+              {selectedBoard.labels?.map((label) => (
                 <option key={label.publicId} value={label.publicId}>
                   {label.name}
                 </option>
