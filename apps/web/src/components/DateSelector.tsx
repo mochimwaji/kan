@@ -114,7 +114,7 @@ const DateSelector = ({ selectedDate, onDateSelect }: DateSelectorProps) => {
             type="button"
             onClick={(e) => handleDateClick(day.dateObj, e)}
             className={twMerge(
-              "flex aspect-square items-center justify-center rounded-lg focus:z-10",
+              "mx-auto flex size-8 items-center justify-center rounded-lg focus:z-10",
               day.isSelected
                 ? "bg-light-1000 hover:bg-light-1000 dark:bg-dark-1000 dark:hover:bg-dark-1000"
                 : "bg-transparent hover:bg-light-200 dark:bg-transparent dark:hover:bg-dark-200",

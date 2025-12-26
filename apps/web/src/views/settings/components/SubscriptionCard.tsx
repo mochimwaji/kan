@@ -116,11 +116,12 @@ export default function SubscriptionCard({
 
   return (
     <div
-      className="flex items-center justify-between rounded-lg border border-light-300 p-4 dark:border-dark-300"
+      className="rounded-lg border border-light-300 p-4 dark:border-dark-300"
       style={{ backgroundColor: "var(--kan-bg-default)" }}
     >
-      <div className="flex-1">
-        <div className="mb-2 flex items-center gap-2">
+      {/* Row 1: Type with icons and action buttons */}
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
           {subscription.type === "digest" ? (
             <HiOutlineCalendarDays
               className="h-5 w-5"
@@ -151,59 +152,62 @@ export default function SubscriptionCard({
           </span>
         </div>
 
-        <p
-          className="mb-1 text-sm"
-          style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
-        >
-          {scheduleDesc}
-        </p>
-
-        {filters.length > 0 && (
-          <p
-            className="text-xs"
-            style={{ color: "var(--kan-pages-text)", opacity: 0.5 }}
-          >
-            Filters: {filters.join(" • ")}
-          </p>
-        )}
-      </div>
-
-      <div className="flex items-center gap-2">
-        {subscription.type === "digest" && (
+        {/* Action buttons */}
+        <div className="flex items-center gap-1">
+          {subscription.type === "digest" && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleTestDigest}
+              disabled={testDigestMutation.isPending}
+              title="Send test digest email"
+            >
+              {testDigestMutation.isPending ? (
+                "..."
+              ) : (
+                <HiOutlineEnvelope className="h-4 w-4" />
+              )}
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleTestDigest}
-            disabled={testDigestMutation.isPending}
-            title="Send test digest email"
+            onClick={handleToggle}
+            disabled={toggleMutation.isPending}
           >
-            {testDigestMutation.isPending ? (
-              "..."
-            ) : (
-              <HiOutlineEnvelope className="h-4 w-4" />
-            )}
+            {subscription.enabled ? "Pause" : "Resume"}
           </Button>
-        )}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleToggle}
-          disabled={toggleMutation.isPending}
-        >
-          {subscription.enabled ? "Pause" : "Resume"}
-        </Button>
-        <Button variant="ghost" size="sm" onClick={onEdit}>
-          <HiOutlinePencil className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleDelete}
-          disabled={deleteMutation.isPending}
-        >
-          <HiOutlineTrash className="h-4 w-4" />
-        </Button>
+          <Button variant="ghost" size="sm" onClick={onEdit}>
+            <HiOutlinePencil className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+          >
+            <HiOutlineTrash className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
+
+      {/* Row 2: Schedule */}
+      <p
+        className="mb-1 text-sm"
+        style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+      >
+        {scheduleDesc}
+      </p>
+
+      {/* Row 3: Filters */}
+      {filters.length > 0 && (
+        <p
+          className="text-xs"
+          style={{ color: "var(--kan-pages-text)", opacity: 0.5 }}
+        >
+          Filters: {filters.join(" • ")}
+        </p>
+      )}
     </div>
   );
 }
