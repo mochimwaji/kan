@@ -6,7 +6,7 @@ import { useModal } from "~/providers/modal";
 interface Props {
   children: React.ReactNode;
   modalSize?: "sm" | "md" | "lg";
-  positionFromTop?: "sm" | "md" | "lg";
+  positionFromTop?: "sm" | "md" | "lg" | "center";
   isVisible?: boolean;
   closeOnClickOutside?: boolean;
 }
@@ -38,7 +38,10 @@ const Modal: React.FC<Props> = ({
     sm: "mt-[12vh]",
     md: "mt-[25vh]",
     lg: "mt-[50vh]",
+    center: "",
   };
+
+  const isCentered = positionFromTop === "center";
 
   return (
     <Transition.Root show={shouldShow} as={Fragment}>
@@ -60,7 +63,9 @@ const Modal: React.FC<Props> = ({
         </Transition.Child>
 
         <div className="fixed inset-0 z-50 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-start justify-center p-4 text-center sm:items-start sm:p-0">
+          <div
+            className={`flex min-h-full ${isCentered ? "items-center" : "items-start"} justify-center p-4 text-center sm:p-0`}
+          >
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"

@@ -144,6 +144,7 @@ export default function NotificationSettings() {
       {/* Add/Edit Subscription Modal */}
       <Modal
         modalSize="md"
+        positionFromTop="center"
         isVisible={
           isOpen &&
           (modalContentType === "ADD_SUBSCRIPTION" ||
