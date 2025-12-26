@@ -118,104 +118,101 @@ export default function SubscriptionCard({
 
   return (
     <div
-      className="flex flex-col items-center rounded-lg border border-light-300 p-4 dark:border-dark-300"
+      className="rounded-lg border border-light-300 p-4 dark:border-dark-300"
       style={{ backgroundColor: "var(--kan-bg-default)" }}
     >
-      {/* Content wrapper for consistent width - all rows left-aligned */}
-      <div className="inline-flex flex-col items-start">
-        {/* Row 1: Type with icon and status badge */}
-        <div className="mb-2 flex items-center gap-2">
-          {subscription.type === "digest" ? (
-            <HiOutlineCalendarDays
-              className="h-5 w-5"
-              style={{ color: "var(--kan-pages-text)" }}
-            />
-          ) : (
-            <HiOutlineClock
-              className="h-5 w-5"
-              style={{ color: "var(--kan-pages-text)" }}
-            />
-          )}
-          <span
-            className="font-medium"
+      {/* Row 1: Type with icon and status badge */}
+      <div className="mb-2 flex items-center gap-2">
+        {subscription.type === "digest" ? (
+          <HiOutlineCalendarDays
+            className="h-5 w-5"
             style={{ color: "var(--kan-pages-text)" }}
-          >
-            {subscription.type === "digest"
-              ? "Digest Summary"
-              : "Change Notifications"}
-          </span>
-          <span
-            className={`rounded px-2 py-0.5 text-xs ${
-              subscription.enabled
-                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
-            }`}
-          >
-            {subscription.enabled ? "Active" : "Paused"}
-          </span>
-        </div>
-
-        {/* Row 2: Schedule */}
-        <p
-          className="mb-1 text-sm"
-          style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
-        >
-          {scheduleDesc}
-        </p>
-
-        {/* Row 3: Filters */}
-        {filters.length > 0 && (
-          <p
-            className="mb-3 text-xs"
-            style={{ color: "var(--kan-pages-text)", opacity: 0.5 }}
-          >
-            Filters: {filters.join(" • ")}
-          </p>
+          />
+        ) : (
+          <HiOutlineClock
+            className="h-5 w-5"
+            style={{ color: "var(--kan-pages-text)" }}
+          />
         )}
+        <span
+          className="font-medium"
+          style={{ color: "var(--kan-pages-text)" }}
+        >
+          {subscription.type === "digest"
+            ? "Digest Summary"
+            : "Change Notifications"}
+        </span>
+        <span
+          className={`rounded px-2 py-0.5 text-xs ${
+            subscription.enabled
+              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+              : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+          }`}
+        >
+          {subscription.enabled ? "Active" : "Paused"}
+        </span>
+      </div>
 
-        {/* Row 4: Action buttons */}
-        <div className="flex items-center gap-1">
-          {subscription.type === "digest" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleTestDigest}
-              disabled={testDigestMutation.isPending}
-              title="Send test digest email"
-            >
-              {testDigestMutation.isPending ? (
-                "..."
-              ) : (
-                <HiOutlineEnvelope className="h-4 w-4" />
-              )}
-            </Button>
-          )}
+      {/* Row 2: Schedule */}
+      <p
+        className="mb-1 text-sm"
+        style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+      >
+        {scheduleDesc}
+      </p>
+
+      {/* Row 3: Filters */}
+      {filters.length > 0 && (
+        <p
+          className="mb-3 text-xs"
+          style={{ color: "var(--kan-pages-text)", opacity: 0.5 }}
+        >
+          Filters: {filters.join(" • ")}
+        </p>
+      )}
+
+      {/* Row 4: Action buttons */}
+      <div className="flex items-center gap-1">
+        {subscription.type === "digest" && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleToggle}
-            disabled={toggleMutation.isPending}
-            title={subscription.enabled ? "Pause" : "Resume"}
+            onClick={handleTestDigest}
+            disabled={testDigestMutation.isPending}
+            title="Send test digest email"
           >
-            {subscription.enabled ? (
-              <HiOutlinePause className="h-4 w-4" />
+            {testDigestMutation.isPending ? (
+              "..."
             ) : (
-              <HiOutlinePlay className="h-4 w-4" />
+              <HiOutlineEnvelope className="h-4 w-4" />
             )}
           </Button>
-          <Button variant="ghost" size="sm" onClick={onEdit} title="Edit">
-            <HiOutlinePencil className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
-            title="Delete"
-          >
-            <HiOutlineTrash className="h-4 w-4" />
-          </Button>
-        </div>
+        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleToggle}
+          disabled={toggleMutation.isPending}
+          title={subscription.enabled ? "Pause" : "Resume"}
+        >
+          {subscription.enabled ? (
+            <HiOutlinePause className="h-4 w-4" />
+          ) : (
+            <HiOutlinePlay className="h-4 w-4" />
+          )}
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onEdit} title="Edit">
+          <HiOutlinePencil className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDelete}
+          disabled={deleteMutation.isPending}
+          title="Delete"
+        >
+          <HiOutlineTrash className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );
