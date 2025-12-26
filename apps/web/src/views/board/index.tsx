@@ -735,12 +735,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                           >
                                             {(provided) => (
                                               <Link
-                                                onClick={(e) =>
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
                                                   handleCardClick(
                                                     e,
                                                     card.publicId,
-                                                  )
-                                                }
+                                                  );
+                                                }}
                                                 key={card.publicId}
                                                 href={
                                                   isTemplate
