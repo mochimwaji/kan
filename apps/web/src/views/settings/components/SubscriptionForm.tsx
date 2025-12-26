@@ -314,6 +314,30 @@ export default function SubscriptionForm({
           </div>
         )}
 
+        {/* Member Filter (shown when board is selected) */}
+        {selectedBoardPublicId && selectedBoard && (
+          <div>
+            <label
+              className="mb-1 block text-sm font-medium"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
+              Filter by Member (optional)
+            </label>
+            <select
+              {...register("memberPublicId")}
+              className="w-full rounded-lg border border-light-300 bg-light-50 px-3 py-2 text-sm dark:border-dark-300 dark:bg-dark-50"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
+              <option value="">All members</option>
+              {selectedBoard.workspace?.members?.map((member) => (
+                <option key={member.publicId} value={member.publicId}>
+                  {member.user?.name || member.user?.email || member.email}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {/* Due Date Filter */}
         <div>
           <label
