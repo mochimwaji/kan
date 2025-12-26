@@ -1,6 +1,7 @@
 import {
   HiOutlineCalendarDays,
   HiOutlineClock,
+  HiOutlineEnvelope,
   HiOutlinePencil,
   HiOutlineTrash,
 } from "react-icons/hi2";
@@ -68,6 +69,28 @@ export default function SubscriptionCard({
       subscriptionPublicId: subscription.publicId,
       enabled: !subscription.enabled,
     });
+  };
+
+  // Test digest mutation
+  const testDigestMutation = api.notification.testDigest.useMutation({
+    onSuccess: (data) => {
+      showPopup({
+        header: "Test digest sent",
+        message: `Email sent to ${data.email} with ${data.cardCount} card(s)`,
+        icon: "success",
+      });
+    },
+    onError: (error) => {
+      showPopup({
+        header: "Test failed",
+        message: error.message,
+        icon: "error",
+      });
+    },
+  });
+
+  const handleTestDigest = () => {
+    testDigestMutation.mutate({ subscriptionPublicId: subscription.publicId });
   };
 
   // Build filter description
@@ -146,6 +169,21 @@ export default function SubscriptionCard({
       </div>
 
       <div className="flex items-center gap-2">
+        {subscription.type === "digest" && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleTestDigest}
+            disabled={testDigestMutation.isPending}
+            title="Send test digest email"
+          >
+            {testDigestMutation.isPending ? (
+              "..."
+            ) : (
+              <HiOutlineEnvelope className="h-4 w-4" />
+            )}
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="sm"

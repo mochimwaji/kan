@@ -343,4 +343,104 @@ export const notificationRouter = createTRPCRouter({
       });
     }
   }),
+
+  // Test digest by sending a real digest email for a subscription
+  testDigest: protectedProcedure
+    .input(z.object({ subscriptionPublicId: z.string().min(12) }))
+    .mutation(async ({ ctx, input }) => {
+      const subscription = await subscriptionRepo.getByPublicId(
+        ctx.db,
+        input.subscriptionPublicId,
+      );
+
+      if (!subscription) {
+        throw new TRPCError({
+          message: "Subscription not found",
+          code: "NOT_FOUND",
+        });
+      }
+
+      if (subscription.userId !== ctx.user.id) {
+        throw new TRPCError({
+          message: "Not authorized",
+          code: "FORBIDDEN",
+        });
+      }
+
+      const userEmail = ctx.user.email;
+      if (!userEmail) {
+        throw new TRPCError({
+          message: "No email address found for your account",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      // Dynamic imports
+      const { findMatchingCards } = await import(
+        "../services/notification.service"
+      );
+      const { sendDigestEmail } = await import("@kan/email");
+
+      try {
+        // Get workspace info
+        const workspace = await workspaceRepo.getById(
+          ctx.db,
+          subscription.workspaceId,
+        );
+
+        // Find matching cards
+        const matchingCards = await findMatchingCards(ctx.db, {
+          workspaceId: subscription.workspaceId,
+          boardId: subscription.boardId,
+          listId: subscription.listId,
+          labelId: subscription.labelId,
+          memberId: subscription.memberId,
+          dueDateWithinDays: subscription.dueDateWithinDays,
+        });
+
+        const baseUrl =
+          process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
+
+        // Build card data for email
+        const digestCards = matchingCards.map((card) => ({
+          title: card.title,
+          listName: card.listName,
+          dueDate: card.dueDate ? card.dueDate.toLocaleDateString() : undefined,
+          labels: card.labels,
+          url: `${baseUrl}/b/${card.boardSlug}/c/${card.publicId}`,
+        }));
+
+        // Build filter description
+        const filters: string[] = [];
+        if (subscription.boardId) {
+          filters.push("Board filter active");
+        }
+        if (subscription.dueDateWithinDays) {
+          filters.push(`Due within ${subscription.dueDateWithinDays} days`);
+        }
+
+        // Send the test email
+        await sendDigestEmail(userEmail, {
+          userName: ctx.user.name ?? "there",
+          workspaceName: workspace?.name ?? "Workspace",
+          boardName: undefined,
+          cards: digestCards,
+          filterDescription:
+            filters.length > 0 ? filters.join(", ") : undefined,
+        });
+
+        return {
+          success: true,
+          email: userEmail,
+          cardCount: digestCards.length,
+        };
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Unknown error occurred";
+        throw new TRPCError({
+          message: `Digest test failed: ${message}`,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
 });
