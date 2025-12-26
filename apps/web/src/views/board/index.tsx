@@ -73,6 +73,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [draggingCardId, _setDraggingCardId] = useState<string | null>(null);
+  const [draggingOverListId, setDraggingOverListId] = useState<string | null>(
+    null,
+  );
 
   // Quick delete toggle - skip confirmation when enabled
   const [quickDeleteEnabled, setQuickDeleteEnabled] = useState(() => {
@@ -646,7 +649,18 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 ) : (
                   <DragDropContext
                     onDragStart={onDragStart}
-                    onDragEnd={onDragEnd}
+                    onDragUpdate={(update) => {
+                      // Track which list cards are being dragged over
+                      if (update.destination && update.type === "CARD") {
+                        setDraggingOverListId(update.destination.droppableId);
+                      } else {
+                        setDraggingOverListId(null);
+                      }
+                    }}
+                    onDragEnd={(result) => {
+                      setDraggingOverListId(null);
+                      onDragEnd(result);
+                    }}
                   >
                     {viewMode === "calendar" ? (
                       <div
@@ -689,6 +703,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                     list.publicId,
                                   )}
                                   isDeleting={deletingIds.has(list.publicId)}
+                                  isDraggingOver={
+                                    draggingOverListId === list.publicId
+                                  }
                                   onToggleSelect={() =>
                                     toggleListSelection(list.publicId)
                                   }

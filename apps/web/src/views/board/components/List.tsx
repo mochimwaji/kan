@@ -7,6 +7,7 @@ import {
   HiChevronRight,
   HiEllipsisHorizontal,
   HiOutlinePaintBrush,
+  HiOutlinePencil,
   HiOutlinePlusSmall,
   HiOutlineSquaresPlus,
   HiOutlineTrash,
@@ -27,6 +28,7 @@ interface ListProps {
   cardCount: number;
   isSelected?: boolean;
   isDeleting?: boolean;
+  isDraggingOver?: boolean;
   onToggleSelect?: () => void;
   setSelectedPublicListId: (publicListId: PublicListId) => void;
 }
@@ -54,11 +56,13 @@ export default function List({
   cardCount,
   isSelected,
   isDeleting,
+  isDraggingOver,
   onToggleSelect,
   setSelectedPublicListId,
 }: ListProps) {
   const { openModal } = useModal();
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
 
   // Collapse state with localStorage persistence
   // Initialize directly from localStorage (SSR-safe) to prevent flash on remount
@@ -176,13 +180,21 @@ export default function List({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          onClick={(e) => {
+            // Click-to-select list (like cards)
+            if (onToggleSelect && !isRenaming) {
+              e.stopPropagation();
+              onToggleSelect();
+            }
+          }}
           className={twMerge(
-            "transition-dnd-safe mb-4 h-fit w-full rounded-md border py-2 pl-2 pr-1 md:mb-0 md:mr-5 md:min-w-[18rem] md:max-w-[18rem]",
+            "transition-dnd-safe mx-4 mb-4 h-fit w-[calc(100%-2rem)] cursor-pointer rounded-md border py-2 pl-2 pr-1 md:mx-0 md:mb-0 md:mr-5 md:w-auto md:min-w-[18rem] md:max-w-[18rem]",
             list.color
               ? "border-opacity-50"
               : "border-light-400 dark:border-dark-300",
             isSelected ? "selected-item-list" : "",
             isDeleting ? "delete-fade-out" : "",
+            isDraggingOver ? "ring-2 ring-blue-400 ring-offset-2" : "",
           )}
           style={{
             ...provided.draggableProps.style,
@@ -191,30 +203,12 @@ export default function List({
           }}
         >
           <div className="mb-2 flex items-center justify-between">
-            {/* Selection radio button */}
-            {onToggleSelect && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleSelect();
-                }}
-                className={`mr-1 h-4 w-4 flex-shrink-0 cursor-pointer rounded-full border-2 transition-all duration-150 ${
-                  isSelected
-                    ? "border-blue-500 bg-blue-500"
-                    : "border-gray-400 bg-transparent hover:border-blue-400"
-                }`}
-              >
-                {isSelected && (
-                  <span className="flex h-full w-full items-center justify-center">
-                    <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                  </span>
-                )}
-              </button>
-            )}
             {/* Collapse toggle button */}
             <button
-              onClick={toggleCollapse}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleCollapse();
+              }}
               className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded hover:bg-light-400 dark:hover:bg-dark-200"
               aria-label={isCollapsed ? "Expand list" : "Collapse list"}
             >
@@ -230,19 +224,38 @@ export default function List({
                 />
               )}
             </button>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="min-w-0 flex-1 focus-visible:outline-none"
-            >
-              <input
-                id="name"
-                type="text"
-                {...register("name")}
-                onBlur={handleSubmit(onSubmit)}
-                className="w-full border-0 bg-transparent px-2 pt-1 text-sm font-medium focus:ring-0 focus-visible:outline-none"
+            {/* List title - static display or rename form */}
+            {isRenaming ? (
+              <form
+                onSubmit={(e) => {
+                  e.stopPropagation();
+                  handleSubmit(onSubmit)(e);
+                  setIsRenaming(false);
+                }}
+                className="min-w-0 flex-1 focus-visible:outline-none"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <input
+                  id="name"
+                  type="text"
+                  {...register("name")}
+                  autoFocus
+                  onBlur={() => {
+                    handleSubmit(onSubmit)();
+                    setIsRenaming(false);
+                  }}
+                  className="w-full border-0 bg-transparent px-2 pt-1 text-sm font-medium focus:ring-0 focus-visible:outline-none"
+                  style={{ color: "inherit" }}
+                />
+              </form>
+            ) : (
+              <span
+                className="min-w-0 flex-1 truncate px-2 pt-1 text-sm font-medium"
                 style={{ color: "inherit" }}
-              />
-            </form>
+              >
+                {list.name}
+              </span>
+            )}
             {/* Card count badge - shown when collapsed */}
             {isCollapsed && cardCount > 0 && (
               <span
@@ -271,6 +284,16 @@ export default function List({
                       action: () => openNewCardForm(list.publicId),
                       icon: (
                         <HiOutlineSquaresPlus
+                          className="h-[18px] w-[18px]"
+                          style={{ color: "var(--kan-menu-text)" }}
+                        />
+                      ),
+                    },
+                    {
+                      label: "Rename list",
+                      action: () => setIsRenaming(true),
+                      icon: (
+                        <HiOutlinePencil
                           className="h-[18px] w-[18px]"
                           style={{ color: "var(--kan-menu-text)" }}
                         />
