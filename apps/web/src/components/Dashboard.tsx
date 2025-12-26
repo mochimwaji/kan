@@ -139,9 +139,9 @@ export default function Dashboard({
         className="relative flex h-screen flex-col md:p-3"
         style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
       >
-        {/* Mobile Header */}
+        {/* Mobile Header - z-50 to stay above sidebar */}
         <div
-          className="flex h-12 items-center justify-between border-b border-light-300 px-3 dark:border-dark-300 md:hidden"
+          className="relative z-50 flex h-12 items-center justify-between border-b border-light-300 px-3 dark:border-dark-300 md:hidden"
           style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
         >
           <button
@@ -184,16 +184,16 @@ export default function Dashboard({
         </div>
 
         <div className="flex h-[calc(100dvh-4.5rem)] min-h-0 w-full md:h-[calc(100dvh-1.5rem)]">
-          {/* Mobile sidebar backdrop */}
+          {/* Mobile sidebar backdrop - covers full screen including header */}
           {isSideNavOpen && (
             <div
-              className="fixed inset-0 top-12 z-30 bg-black/30 md:hidden"
+              className="fixed inset-0 z-40 bg-black/30 md:hidden"
               onClick={closeSideNav}
             />
           )}
           <div
             ref={sideNavRef}
-            className={`fixed top-12 z-40 h-[calc(100dvh-3rem)] w-[calc(100vw-1.5rem)] transform transition-transform duration-300 ease-in-out md:relative md:top-0 md:h-full md:w-auto md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}
+            className={`fixed left-0 top-12 z-40 h-[calc(100dvh-3rem)] w-[80vw] max-w-[300px] transform transition-transform duration-300 ease-in-out md:relative md:top-0 md:h-full md:w-auto md:max-w-none md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}
           >
             <SideNavigation
               user={{ email: session?.user.email, image: session?.user.image }}

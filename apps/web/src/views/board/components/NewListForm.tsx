@@ -93,10 +93,14 @@ export function NewListForm({
   });
 
   // Autofocus with delay to ensure modal transition completes
+  // iOS requires longer delay and may need select() after focus
   useEffect(() => {
     const timer = setTimeout(() => {
-      inputRef.current?.focus();
-    }, 50);
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      });
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 
