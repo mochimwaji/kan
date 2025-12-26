@@ -5,6 +5,7 @@ import type { AppProps, AppType } from "next/app";
 import type { ReactElement, ReactNode } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { useEffect } from "react";
 
 import { BoardTransitionProvider } from "~/providers/board-transition";
 import { KeyboardShortcutProvider } from "~/providers/keyboard-shortcuts";
@@ -43,6 +44,15 @@ type AppPropsWithLayout = AppProps & {
 
 const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
+
+  // Register service worker for PWA
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch((err) => {
+        console.warn("Service worker registration failed:", err);
+      });
+    }
+  }, []);
 
   return (
     <>

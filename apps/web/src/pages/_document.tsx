@@ -55,6 +55,16 @@ export default function Document() {
       <Head>
         {/* Blocking script to prevent theme flash */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+
+        {/* PWA Meta Tags */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0ea5e9" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.svg" />
       </Head>
       <body>
         <Main />
