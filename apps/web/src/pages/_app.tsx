@@ -27,8 +27,7 @@ export const metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  viewportFit: "cover", // For notched devices in PWA mode
 };
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<
