@@ -7,7 +7,7 @@
  * - queueChangeNotification: Called by card mutations to queue immediate notifications
  */
 
-import { and, eq, gte, inArray, isNull, lte, or } from "drizzle-orm";
+import { and, eq, gte, inArray, isNull, lte } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import type { DigestCard } from "@kan/email";
@@ -67,9 +67,13 @@ export async function findMatchingCards(
     const futureDate = new Date();
     futureDate.setDate(now.getDate() + subscription.dueDateWithinDays);
 
-    conditions.push(
-      and(gte(cards.dueDate, now), lte(cards.dueDate, futureDate))!,
+    const dueDateCondition = and(
+      gte(cards.dueDate, now),
+      lte(cards.dueDate, futureDate),
     );
+    if (dueDateCondition) {
+      conditions.push(dueDateCondition);
+    }
   }
 
   // Get cards with their list and board info
@@ -134,7 +138,10 @@ export async function findMatchingCards(
       labelsByCard.set(cardId, []);
     }
     if (labelName) {
-      labelsByCard.get(cardId)!.push(labelName);
+      const cardLabels = labelsByCard.get(cardId);
+      if (cardLabels) {
+        cardLabels.push(labelName);
+      }
     }
   }
 
@@ -219,10 +226,17 @@ export async function processDueDigests(
       }
 
       // Send the email
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript narrowing inconsistency
       if (subscription.user?.email) {
-        await sendDigestEmail(subscription.user.email, {
-          userName: subscription.user.name ?? "there",
-          workspaceName: subscription.workspace?.name ?? "Workspace",
+        const userEmail = subscription.user.email;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- name could be empty string
+        const userName = subscription.user.name || "there";
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        const workspaceName = subscription.workspace?.name || "Workspace";
+
+        await sendDigestEmail(userEmail, {
+          userName,
+          workspaceName,
           boardName: subscription.board?.name,
           cards: digestCards,
           filterDescription:
@@ -280,11 +294,18 @@ export async function processQueuedNotifications(
 
   for (const item of pending) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Defensive null check
       if (!item.subscription?.user?.email) {
         await subscriptionRepo.markQueueFailed(db, item.id, "No user email");
         errors++;
         continue;
       }
+
+      const userEmail = item.subscription.user.email;
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- name could be empty string
+      const userName = item.subscription.user.name || "there";
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      const workspaceName = item.subscription.workspace?.name || "Board";
 
       // Get card and activity details - use available fields
       if (item.activity) {
@@ -297,16 +318,16 @@ export async function processQueuedNotifications(
               ? "Comment added"
               : undefined;
 
-        await sendCardChangeEmail(item.subscription.user.email, {
-          userName: item.subscription.user.name ?? "there",
+        await sendCardChangeEmail(userEmail, {
+          userName,
           cardTitle: item.activity.toTitle ?? "Card",
           cardUrl: `${baseUrl}/card/${item.activity.cardId}`,
-          boardName: item.subscription.workspace?.name ?? "Board",
-          listName: "List", // Would need to join to get actual list name
+          boardName: workspaceName,
+          listName: "List",
           changeType: item.activity.type,
           changeDescription,
-          changedBy: "User", // Would need to join to get user name
-          timestamp: item.activity.createdAt?.toLocaleString(),
+          changedBy: "User",
+          timestamp: item.activity.createdAt.toLocaleString(),
         });
       }
 

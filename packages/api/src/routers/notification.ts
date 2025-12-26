@@ -421,7 +421,7 @@ export const notificationRouter = createTRPCRouter({
 
         // Send the test email
         await sendDigestEmail(userEmail, {
-          userName: ctx.user.name ?? "there",
+          userName: ctx.user.name || "there",
           workspaceName: workspace?.name ?? "Workspace",
           boardName: undefined,
           cards: digestCards,
