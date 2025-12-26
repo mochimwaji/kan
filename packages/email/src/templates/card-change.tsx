@@ -35,6 +35,7 @@ export const CardChangeTemplate = ({
   timestamp,
 }: CardChangeTemplateProps) => {
   const baseUrl = env("NEXT_PUBLIC_BASE_URL") ?? "http://localhost:3000";
+  const appName = env("EMAIL_APP_NAME") ?? "kan.bn";
 
   // Map change types to human-readable descriptions
   const getChangeTypeLabel = (type: string) => {
@@ -85,7 +86,7 @@ export const CardChangeTemplate = ({
               color: "#232323",
             }}
           >
-            kan.bn
+            {appName}
           </Heading>
 
           {/* Greeting */}
@@ -206,7 +207,7 @@ export const CardChangeTemplate = ({
           />
           <Text style={{ fontSize: "12px", color: "#999" }}>
             You received this email because you have an active notification
-            subscription in Kan. You can manage your subscriptions in{" "}
+            subscription. You can manage your subscriptions in{" "}
             <Link
               href={`${baseUrl}/settings/notifications`}
               style={{ color: "#999", textDecoration: "underline" }}
@@ -214,16 +215,6 @@ export const CardChangeTemplate = ({
               Settings
             </Link>
             .
-          </Text>
-          <Text style={{ fontSize: "12px", color: "#999", marginTop: "10px" }}>
-            <Link
-              href={baseUrl}
-              target="_blank"
-              style={{ color: "#999", textDecoration: "underline" }}
-            >
-              Kan
-            </Link>
-            , the open source Trello alternative.
           </Text>
         </Container>
       </Body>

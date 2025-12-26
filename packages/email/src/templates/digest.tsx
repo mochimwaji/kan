@@ -37,6 +37,7 @@ export const DigestTemplate = ({
   filterDescription,
 }: DigestTemplateProps) => {
   const baseUrl = env("NEXT_PUBLIC_BASE_URL") ?? "http://localhost:3000";
+  const appName = env("EMAIL_APP_NAME") ?? "kan.bn";
   const cardCount = cards.length;
 
   return (
@@ -67,7 +68,7 @@ export const DigestTemplate = ({
               color: "#232323",
             }}
           >
-            kan.bn
+            {appName}
           </Heading>
 
           {/* Greeting */}
@@ -192,7 +193,7 @@ export const DigestTemplate = ({
           />
           <Text style={{ fontSize: "12px", color: "#999" }}>
             You received this email because you have an active notification
-            subscription in Kan. You can manage your subscriptions in{" "}
+            subscription. You can manage your subscriptions in{" "}
             <Link
               href={`${baseUrl}/settings/notifications`}
               style={{ color: "#999", textDecoration: "underline" }}
@@ -200,16 +201,6 @@ export const DigestTemplate = ({
               Settings
             </Link>
             .
-          </Text>
-          <Text style={{ fontSize: "12px", color: "#999", marginTop: "10px" }}>
-            <Link
-              href={baseUrl}
-              target="_blank"
-              style={{ color: "#999", textDecoration: "underline" }}
-            >
-              Kan
-            </Link>
-            , the open source Trello alternative.
           </Text>
         </Container>
       </Body>
