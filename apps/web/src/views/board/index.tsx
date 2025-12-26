@@ -77,6 +77,15 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     null,
   );
 
+  // Track mobile viewport for responsive DnD direction
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Quick delete toggle - skip confirmation when enabled
   const [quickDeleteEnabled, setQuickDeleteEnabled] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -684,7 +693,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                       >
                         <Droppable
                           droppableId="all-lists"
-                          direction="horizontal"
+                          direction={isMobile ? "vertical" : "horizontal"}
                           type="LIST"
                         >
                           {(provided) => (
@@ -829,7 +838,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
 
         {/* Floating delete button - appears when items are selected (KANBAN ONLY) */}
         {hasSelection && viewMode === "kanban" && (
-          <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 animate-fade-in">
+          <div
+            className="fixed inset-x-0 bottom-8 z-50 flex animate-fade-in justify-center px-4"
+            style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+          >
             <div className="flex items-center gap-3 rounded-lg bg-red-600 px-4 py-3 text-white shadow-lg">
               <span className="text-sm font-medium">
                 {selectedCardIds.size + selectedListIds.size} selected
