@@ -16,6 +16,7 @@ A self-hosted Kanban board application for personal/team use. Forked from [kanbn
 - 📝 **Activity Log**: Track all card changes with detailed history
 - 📁 **Local File Storage**: Avatars and attachments stored locally (no S3 required)
 - ✨ **Enhanced Animations**: Smooth transitions for page navigation and sidebar toggles
+- 📧 **Email Notifications**: Configurable digest and change notifications via SMTP
 
 ## Quick Start (Docker)
 
@@ -85,6 +86,7 @@ pnpm dev
 | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`                   | GitHub OAuth                       | For GitHub login  |
 | `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`                 | Discord OAuth                      | For Discord login |
 | `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET`, `OIDC_DISCOVERY_URL` | Generic OIDC                       | For OIDC login    |
+| `EMAIL_APP_NAME`                                             | Custom branding for email header   | No                |
 
 See `.env.example` for the complete list.
 
@@ -115,7 +117,7 @@ See `.env.example` for the complete list.
 - ❌ Marketing pages (home, pricing, testimonials)
 - ❌ Legal pages (privacy, terms)
 - ❌ Analytics (PostHog, Umami)
-- ❌ Notifications (Novu)
+- ❌ Novu Notifications (replaced with custom SMTP-based system)
 - ❌ Billing (Stripe)
 - ❌ Trello import
 

@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Calendar View**: Month calendar view for boards (`v` shortcut) with drag-and-drop rescheduling.
 - **Local File Storage**: Replaced S3 with local filesystem storage for avatars and attachments.
 - **Multi-Drag Calendar Support**: Atomic updates when dragging multiple cards to calendar dates.
+- **Email Notification System**: Custom SMTP-based notification system replacing Novu:
+  - Notification subscription management in Settings UI
+  - Configurable digest emails (daily/weekly) with card matching and filters
+  - Immediate change notifications for card updates
+  - Configurable branding via `EMAIL_APP_NAME` environment variable
+  - Built-in SMTP test functionality
+  - Scheduler for automated digest processing (hourly) and queue handling
 
 #### 🛠️ Developer Experience (DX)
 
@@ -71,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Email Unsubscribe**: Removed `/unsubscribe` page and related functionality.
 - **S3 Storage**: Replaced with local filesystem storage (S3 support removed).
 - **PostHog Analytics**: Removed analytics integration.
-- **Novu Notifications**: Removed notification service integration.
+- **Novu Notifications**: Replaced with custom SMTP-based notification system (see New Features).
 - Removed deprecated `@lingui/babel-preset-react` (replaced by Lingui 5.x macro system).
 - Removed `StrictModeDroppable.tsx` wrapper (no longer needed with `@hello-pangea/dnd`).
 - **Stripe billing** - Removed entire `packages/stripe`, billing UI, subscription schema.
