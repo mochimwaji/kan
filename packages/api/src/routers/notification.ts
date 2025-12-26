@@ -303,6 +303,44 @@ const subscriptionRouter = createTRPCRouter({
 
       return { success: true };
     }),
+
+  // Public unsubscribe via token (subscription publicId)
+  unsubscribe: protectedProcedure
+    .input(
+      z.object({
+        token: z.string().min(12),
+      }),
+    )
+    .output(z.object({ success: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      // Token is the subscription publicId
+      const subscription = await subscriptionRepo.getByPublicId(
+        ctx.db,
+        input.token,
+      );
+
+      if (!subscription) {
+        throw new TRPCError({
+          message: "Invalid unsubscribe token",
+          code: "NOT_FOUND",
+        });
+      }
+
+      // For security, verify the user owns this subscription
+      if (subscription.userId !== ctx.user.id) {
+        throw new TRPCError({
+          message: "Not authorized to unsubscribe",
+          code: "FORBIDDEN",
+        });
+      }
+
+      // Disable the subscription
+      await subscriptionRepo.update(ctx.db, subscription.id, {
+        enabled: false,
+      });
+
+      return { success: true };
+    }),
 });
 
 // Main notification router

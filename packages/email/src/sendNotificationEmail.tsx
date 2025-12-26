@@ -44,6 +44,7 @@ export interface DigestEmailData {
   boardName?: string;
   cards: DigestCard[];
   filterDescription?: string;
+  unsubscribeUrl?: string;
 }
 
 // Types for card change emails
@@ -57,6 +58,7 @@ export interface CardChangeEmailData {
   changeDescription?: string;
   changedBy: string;
   timestamp?: string;
+  unsubscribeUrl?: string;
 }
 
 /**
@@ -81,6 +83,7 @@ export const sendDigestEmail = async (
         cards={data.cards}
         subscriptionType="digest"
         filterDescription={data.filterDescription}
+        unsubscribeUrl={data.unsubscribeUrl}
       />,
       { pretty: true },
     );
@@ -126,6 +129,7 @@ export const sendCardChangeEmail = async (
         changeDescription={data.changeDescription}
         changedBy={data.changedBy}
         timestamp={data.timestamp}
+        unsubscribeUrl={data.unsubscribeUrl}
       />,
       { pretty: true },
     );

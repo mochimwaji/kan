@@ -21,6 +21,7 @@ interface CardChangeTemplateProps {
   changeDescription?: string;
   changedBy?: string;
   timestamp?: string;
+  unsubscribeUrl?: string;
 }
 
 export const CardChangeTemplate = ({
@@ -33,6 +34,7 @@ export const CardChangeTemplate = ({
   changeDescription = "A card you're subscribed to was updated.",
   changedBy = "Someone",
   timestamp,
+  unsubscribeUrl,
 }: CardChangeTemplateProps) => {
   const baseUrl = env("NEXT_PUBLIC_BASE_URL") ?? "http://localhost:3000";
   const appName = env("EMAIL_APP_NAME") ?? "kan.bn";
@@ -214,6 +216,17 @@ export const CardChangeTemplate = ({
             >
               Settings
             </Link>
+            {unsubscribeUrl && (
+              <>
+                {" or "}
+                <Link
+                  href={unsubscribeUrl}
+                  style={{ color: "#999", textDecoration: "underline" }}
+                >
+                  unsubscribe
+                </Link>
+              </>
+            )}
             .
           </Text>
         </Container>

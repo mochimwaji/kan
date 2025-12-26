@@ -26,6 +26,7 @@ interface DigestTemplateProps {
   cards?: CardItem[];
   subscriptionType?: string;
   filterDescription?: string;
+  unsubscribeUrl?: string;
 }
 
 export const DigestTemplate = ({
@@ -35,6 +36,7 @@ export const DigestTemplate = ({
   cards = [],
   subscriptionType = "digest",
   filterDescription,
+  unsubscribeUrl,
 }: DigestTemplateProps) => {
   const baseUrl = env("NEXT_PUBLIC_BASE_URL") ?? "http://localhost:3000";
   const appName = env("EMAIL_APP_NAME") ?? "kan.bn";
@@ -200,6 +202,17 @@ export const DigestTemplate = ({
             >
               Settings
             </Link>
+            {unsubscribeUrl && (
+              <>
+                {" or "}
+                <Link
+                  href={unsubscribeUrl}
+                  style={{ color: "#999", textDecoration: "underline" }}
+                >
+                  unsubscribe
+                </Link>
+              </>
+            )}
             .
           </Text>
         </Container>
