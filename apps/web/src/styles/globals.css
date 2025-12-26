@@ -218,3 +218,55 @@ body {
 .animate-view-fade {
   animation: view-fade 200ms ease-out forwards;
 }
+
+/* =================================
+   Phase 3: Mobile UI Polish
+   ================================= */
+
+/* Minimum touch target size for accessibility (44x44px per WCAG) */
+@media (pointer: coarse) {
+  /* Interactive elements on touch devices */
+  button,
+  [role="button"],
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Exception: icon-only buttons can be smaller if they have padding */
+  button.icon-only-sm {
+    min-height: 32px;
+    min-width: 32px;
+    /* But add touch padding around them */
+    position: relative;
+  }
+
+  button.icon-only-sm::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+  }
+}
+
+/* Fullscreen modal on mobile for better UX */
+@media (max-width: 640px) {
+  .modal-mobile-fullscreen {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    min-height: 100vh;
+    min-height: 100dvh;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Better scrolling on mobile */
+@media (max-width: 768px) {
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
