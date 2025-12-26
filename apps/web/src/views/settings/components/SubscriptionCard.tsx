@@ -2,7 +2,9 @@ import {
   HiOutlineCalendarDays,
   HiOutlineClock,
   HiOutlineEnvelope,
+  HiOutlinePause,
   HiOutlinePencil,
+  HiOutlinePlay,
   HiOutlineTrash,
 } from "react-icons/hi2";
 
@@ -116,12 +118,13 @@ export default function SubscriptionCard({
 
   return (
     <div
-      className="rounded-lg border border-light-300 p-4 dark:border-dark-300"
+      className="flex flex-col items-center rounded-lg border border-light-300 p-4 dark:border-dark-300"
       style={{ backgroundColor: "var(--kan-bg-default)" }}
     >
-      {/* Row 1: Type with icons and action buttons */}
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
+      {/* Content wrapper for consistent width - all rows left-aligned */}
+      <div className="inline-flex flex-col items-start">
+        {/* Row 1: Type with icon and status badge */}
+        <div className="mb-2 flex items-center gap-2">
           {subscription.type === "digest" ? (
             <HiOutlineCalendarDays
               className="h-5 w-5"
@@ -152,7 +155,25 @@ export default function SubscriptionCard({
           </span>
         </div>
 
-        {/* Action buttons */}
+        {/* Row 2: Schedule */}
+        <p
+          className="mb-1 text-sm"
+          style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
+        >
+          {scheduleDesc}
+        </p>
+
+        {/* Row 3: Filters */}
+        {filters.length > 0 && (
+          <p
+            className="mb-3 text-xs"
+            style={{ color: "var(--kan-pages-text)", opacity: 0.5 }}
+          >
+            Filters: {filters.join(" • ")}
+          </p>
+        )}
+
+        {/* Row 4: Action buttons */}
         <div className="flex items-center gap-1">
           {subscription.type === "digest" && (
             <Button
@@ -174,10 +195,15 @@ export default function SubscriptionCard({
             size="sm"
             onClick={handleToggle}
             disabled={toggleMutation.isPending}
+            title={subscription.enabled ? "Pause" : "Resume"}
           >
-            {subscription.enabled ? "Pause" : "Resume"}
+            {subscription.enabled ? (
+              <HiOutlinePause className="h-4 w-4" />
+            ) : (
+              <HiOutlinePlay className="h-4 w-4" />
+            )}
           </Button>
-          <Button variant="ghost" size="sm" onClick={onEdit}>
+          <Button variant="ghost" size="sm" onClick={onEdit} title="Edit">
             <HiOutlinePencil className="h-4 w-4" />
           </Button>
           <Button
@@ -185,29 +211,12 @@ export default function SubscriptionCard({
             size="sm"
             onClick={handleDelete}
             disabled={deleteMutation.isPending}
+            title="Delete"
           >
             <HiOutlineTrash className="h-4 w-4" />
           </Button>
         </div>
       </div>
-
-      {/* Row 2: Schedule */}
-      <p
-        className="mb-1 text-sm"
-        style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
-      >
-        {scheduleDesc}
-      </p>
-
-      {/* Row 3: Filters */}
-      {filters.length > 0 && (
-        <p
-          className="text-xs"
-          style={{ color: "var(--kan-pages-text)", opacity: 0.5 }}
-        >
-          Filters: {filters.join(" • ")}
-        </p>
-      )}
     </div>
   );
 }

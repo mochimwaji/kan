@@ -247,6 +247,13 @@ export function AttachmentThumbnails({
                       e.preventDefault();
                       e.stopPropagation();
                     }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      deleteAttachment.mutate({
+                        attachmentPublicId: selectedAttachment.publicId,
+                      });
+                    }}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -254,11 +261,11 @@ export function AttachmentThumbnails({
                         attachmentPublicId: selectedAttachment.publicId,
                       });
                     }}
-                    className="rounded-full bg-light-50 p-1.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
+                    className="rounded-full bg-light-50 p-2.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
                     aria-label="Delete image"
                     disabled={deleteAttachment.isPending}
                   >
-                    <HiOutlineTrash className="h-4 w-4" />
+                    <HiOutlineTrash className="h-5 w-5" />
                   </button>
                 )}
                 <button
@@ -266,15 +273,20 @@ export function AttachmentThumbnails({
                     e.preventDefault();
                     e.stopPropagation();
                   }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleDownload(selectedAttachment);
+                  }}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     handleDownload(selectedAttachment);
                   }}
-                  className="rounded-full bg-light-50 p-1.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
+                  className="rounded-full bg-light-50 p-2.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
                   aria-label="Download image"
                 >
-                  <HiArrowDownTray className="h-4 w-4" />
+                  <HiArrowDownTray className="h-5 w-5" />
                 </button>
               </div>
             )}
@@ -286,10 +298,15 @@ export function AttachmentThumbnails({
                     e.stopPropagation();
                     goToPrevious();
                   }}
-                  className="rounded-full bg-light-50 p-1.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    goToPrevious();
+                  }}
+                  className="rounded-full bg-light-50 p-2.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
                   aria-label="Previous image"
                 >
-                  <HiChevronLeft className="h-4 w-4" />
+                  <HiChevronLeft className="h-5 w-5" />
                 </button>
               )}
 
@@ -299,10 +316,15 @@ export function AttachmentThumbnails({
                     e.stopPropagation();
                     goToNext();
                   }}
-                  className="rounded-full bg-light-50 p-1.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    goToNext();
+                  }}
+                  className="rounded-full bg-light-50 p-2.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
                   aria-label="Next image"
                 >
-                  <HiChevronRight className="h-4 w-4" />
+                  <HiChevronRight className="h-5 w-5" />
                 </button>
               )}
 
@@ -312,10 +334,15 @@ export function AttachmentThumbnails({
                     e.stopPropagation();
                     closeViewer();
                   }}
-                  className="rounded-full bg-light-50 p-1.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeViewer();
+                  }}
+                  className="rounded-full bg-light-50 p-2.5 text-light-1000 transition-colors hover:bg-light-100 focus:outline-none dark:bg-dark-50 dark:text-dark-1000 dark:hover:bg-dark-100"
                   aria-label="Close"
                 >
-                  <HiXMark className="h-4 w-4" />
+                  <HiXMark className="h-5 w-5" />
                 </button>
               )}
             </div>
