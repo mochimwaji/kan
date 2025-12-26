@@ -44,7 +44,6 @@ export default function Dashboard({
   rightPanel,
   hasRightPanel = false,
 }: DashboardProps) {
-   
   const { resolvedTheme: _resolvedTheme } = useTheme();
   const { openModal } = useModal();
   const { availableWorkspaces, hasLoaded } = useWorkspace();
@@ -185,6 +184,13 @@ export default function Dashboard({
         </div>
 
         <div className="flex h-[calc(100dvh-4.5rem)] min-h-0 w-full md:h-[calc(100dvh-1.5rem)]">
+          {/* Mobile sidebar backdrop */}
+          {isSideNavOpen && (
+            <div
+              className="fixed inset-0 top-12 z-30 bg-black/30 md:hidden"
+              onClick={closeSideNav}
+            />
+          )}
           <div
             ref={sideNavRef}
             className={`fixed top-12 z-40 h-[calc(100dvh-3rem)] w-[calc(100vw-1.5rem)] transform transition-transform duration-300 ease-in-out md:relative md:top-0 md:h-full md:w-auto md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}

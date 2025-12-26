@@ -247,3 +247,13 @@ body {
     overscroll-behavior: contain;
   }
 }
+
+/* Prevent iOS Safari from auto-zooming on input focus */
+/* iOS zooms when font-size is less than 16px */
+@supports (-webkit-touch-callout: none) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
