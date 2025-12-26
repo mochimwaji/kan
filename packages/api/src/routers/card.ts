@@ -8,6 +8,7 @@ import * as labelRepo from "@kan/db/repository/label.repo";
 import * as listRepo from "@kan/db/repository/list.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 
+import { queueChangeNotification } from "../services/notification.service";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { assertUserInWorkspace } from "../utils/auth";
 import { loggedProtectedProcedure as protectedProcedure } from "../utils/middleware";
@@ -194,13 +195,25 @@ export const cardRouter = createTRPCRouter({
           code: "INTERNAL_SERVER_ERROR",
         });
 
-      await cardActivityRepo.create(ctx.db, {
+      const activity = await cardActivityRepo.create(ctx.db, {
         type: "card.updated.comment.added" as const,
         cardId: card.id,
         commentId: newComment.id,
         toComment: newComment.comment,
         createdBy: userId,
       });
+
+      // Queue immediate notification (fire-and-forget)
+      if (activity?.id) {
+        queueChangeNotification(
+          ctx.db,
+          card.workspaceId,
+          activity.id,
+          {},
+        ).catch(() => {
+          /* fire-and-forget */
+        });
+      }
 
       return newComment;
     }),
@@ -402,12 +415,21 @@ export const cardRouter = createTRPCRouter({
             code: "INTERNAL_SERVER_ERROR",
           });
 
-        await cardActivityRepo.create(ctx.db, {
+        const removeActivity = await cardActivityRepo.create(ctx.db, {
           type: "card.updated.label.removed" as const,
           cardId: card.id,
           labelId: label.id,
           createdBy: userId,
         });
+
+        // Queue immediate notification
+        if (removeActivity?.id) {
+          queueChangeNotification(ctx.db, card.workspaceId, removeActivity.id, {
+            labelId: label.id,
+          }).catch(() => {
+            /* fire-and-forget */
+          });
+        }
 
         return { newLabel: false };
       }
@@ -421,12 +443,21 @@ export const cardRouter = createTRPCRouter({
           code: "INTERNAL_SERVER_ERROR",
         });
 
-      await cardActivityRepo.create(ctx.db, {
+      const addActivity = await cardActivityRepo.create(ctx.db, {
         type: "card.updated.label.added" as const,
         cardId: card.id,
         labelId: label.id,
         createdBy: userId,
       });
+
+      // Queue immediate notification
+      if (addActivity?.id) {
+        queueChangeNotification(ctx.db, card.workspaceId, addActivity.id, {
+          labelId: label.id,
+        }).catch(() => {
+          /* fire-and-forget */
+        });
+      }
 
       return { newLabel: true };
     }),
@@ -494,12 +525,21 @@ export const cardRouter = createTRPCRouter({
             code: "INTERNAL_SERVER_ERROR",
           });
 
-        await cardActivityRepo.create(ctx.db, {
+        const removeActivity = await cardActivityRepo.create(ctx.db, {
           type: "card.updated.member.removed" as const,
           cardId: card.id,
           workspaceMemberId: member.id,
           createdBy: userId,
         });
+
+        // Queue immediate notification
+        if (removeActivity?.id) {
+          queueChangeNotification(ctx.db, card.workspaceId, removeActivity.id, {
+            memberId: member.id,
+          }).catch(() => {
+            /* fire-and-forget */
+          });
+        }
 
         return { newMember: false };
       }
@@ -513,12 +553,21 @@ export const cardRouter = createTRPCRouter({
           code: "INTERNAL_SERVER_ERROR",
         });
 
-      await cardActivityRepo.create(ctx.db, {
+      const addActivity = await cardActivityRepo.create(ctx.db, {
         type: "card.updated.member.added" as const,
         cardId: card.id,
         workspaceMemberId: member.id,
         createdBy: userId,
       });
+
+      // Queue immediate notification
+      if (addActivity?.id) {
+        queueChangeNotification(ctx.db, card.workspaceId, addActivity.id, {
+          memberId: member.id,
+        }).catch(() => {
+          /* fire-and-forget */
+        });
+      }
 
       return { newMember: true };
     }),
@@ -777,7 +826,22 @@ export const cardRouter = createTRPCRouter({
       }
 
       if (activities.length > 0) {
-        await cardActivityRepo.bulkCreate(ctx.db, activities);
+        const createdActivities = await cardActivityRepo.bulkCreate(
+          ctx.db,
+          activities,
+        );
+
+        // Queue immediate notifications for each activity
+        for (const activity of createdActivities) {
+          queueChangeNotification(
+            ctx.db,
+            card.workspaceId,
+            activity.id,
+            {},
+          ).catch(() => {
+            /* fire-and-forget */
+          });
+        }
       }
 
       return result;
