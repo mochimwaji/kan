@@ -1,24 +1,17 @@
-"use client";
-
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { api } from "~/utils/api";
 
-interface UnsubscribePageProps {
-  params: Promise<{ token: string }>;
-}
+export default function UnsubscribePage() {
+  const router = useRouter();
+  const { token } = router.query;
 
-export default function UnsubscribePage({ params }: UnsubscribePageProps) {
-  const [token, setToken] = useState<string | null>(null);
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading",
   );
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    params.then((p) => setToken(p.token)).catch(() => setStatus("error"));
-  }, [params]);
 
   const unsubscribeMutation =
     api.notification.subscription.unsubscribe.useMutation({
@@ -26,7 +19,7 @@ export default function UnsubscribePage({ params }: UnsubscribePageProps) {
         setStatus("success");
         setMessage("You have been unsubscribed from these notifications.");
       },
-      onError: (error) => {
+      onError: (error: { message?: string }) => {
         setStatus("error");
         setMessage(
           error.message ||
@@ -36,7 +29,7 @@ export default function UnsubscribePage({ params }: UnsubscribePageProps) {
     });
 
   useEffect(() => {
-    if (token) {
+    if (typeof token === "string" && token.length > 0) {
       unsubscribeMutation.mutate({ token });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

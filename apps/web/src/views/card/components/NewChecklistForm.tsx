@@ -60,27 +60,24 @@ export function NewChecklistForm({ cardPublicId }: { cardPublicId: string }) {
     },
     onSuccess: (data, vars, ctx) => {
       // Manual cache update to avoid refetch/flash
-      // We manually verify validation was successful by checking if data exists
-      if (data) {
-        utils.card.byId.setData({ cardPublicId: vars.cardPublicId }, (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            checklists: old.checklists.map((cl) =>
-              cl.publicId === ctx.placeholderId
-                ? {
-                    ...cl,
-                    ...data,
-                    // IMPORTANT: We must explicitly set publicId because data has it
-                    publicId: data.publicId,
-                    // IMPORTANT: We must preserve clientId to keep the React key stable
-                    clientId: ctx.placeholderId,
-                  }
-                : cl,
-            ),
-          } as typeof old;
-        });
-      }
+      utils.card.byId.setData({ cardPublicId: vars.cardPublicId }, (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          checklists: old.checklists.map((cl) =>
+            cl.publicId === ctx.placeholderId
+              ? {
+                  ...cl,
+                  ...data,
+                  // IMPORTANT: We must explicitly set publicId because data has it
+                  publicId: data.publicId,
+                  // IMPORTANT: We must preserve clientId to keep the React key stable
+                  clientId: ctx.placeholderId,
+                }
+              : cl,
+          ),
+        } as typeof old;
+      });
 
       // Set modal state to PLACEHOLDER ID so activeChecklistForm matches
       // Don't update publicId - keep placeholder stable for visual state
