@@ -665,7 +665,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     ) : (
                       <div
                         key="kanban-view"
-                        className="animate-view-fade flex h-full"
+                        className="animate-view-fade flex h-full flex-col md:flex-row"
                       >
                         <Droppable
                           droppableId="all-lists"
@@ -674,11 +674,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                         >
                           {(provided) => (
                             <div
-                              className="flex"
+                              className="flex flex-col md:flex-row"
                               ref={provided.innerRef}
                               {...provided.droppableProps}
                             >
-                              <div className="min-w-[2rem]" />
+                              <div className="min-h-[1rem] min-w-[2rem]" />
                               {listsToRender.map((list, index) => (
                                 <List
                                   index={index}
@@ -700,11 +700,15 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                     droppableId={`${list.publicId}`}
                                     type="CARD"
                                   >
-                                    {(provided) => (
+                                    {(provided, snapshot) => (
                                       <div
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
-                                        className="scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-w-[8px] z-10 h-full max-h-[calc(100vh-225px)] min-h-[2rem] overflow-y-auto pr-1 scrollbar dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-600"
+                                        className={`scrollbar-track-rounded-[4px] scrollbar-thumb-rounded-[4px] scrollbar-w-[8px] z-10 h-full max-h-[calc(100vh-225px)] min-h-[2rem] overflow-y-auto pr-1 transition-all duration-200 scrollbar dark:scrollbar-track-dark-100 dark:scrollbar-thumb-dark-600 ${
+                                          snapshot.isDraggingOver
+                                            ? "rounded-md bg-blue-50/30 ring-2 ring-blue-400 ring-offset-2 dark:bg-blue-900/20"
+                                            : ""
+                                        }`}
                                       >
                                         {list.cards.map((card, index) => (
                                           <Draggable

@@ -177,7 +177,7 @@ export default function List({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={twMerge(
-            "transition-dnd-safe mr-5 h-fit min-w-[18rem] max-w-[18rem] rounded-md border py-2 pl-2 pr-1",
+            "transition-dnd-safe mb-4 h-fit w-full rounded-md border py-2 pl-2 pr-1 md:mb-0 md:mr-5 md:min-w-[18rem] md:max-w-[18rem]",
             list.color
               ? "border-opacity-50"
               : "border-light-400 dark:border-dark-300",
