@@ -74,7 +74,7 @@ export default function SubscriptionForm({
     handleSubmit,
     watch,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<FormData>({
     defaultValues: {
       type: "digest",
@@ -90,12 +90,24 @@ export default function SubscriptionForm({
   });
 
   const subscriptionType = watch("type");
+  const selectedBoardPublicId = watch("boardPublicId");
+
+  // Fetch selected board details for lists/labels
+  const { data: selectedBoard } = api.board.byId.useQuery(
+    {
+      boardPublicId: selectedBoardPublicId,
+      members: [],
+      labels: [],
+      lists: [],
+    },
+    { enabled: !!selectedBoardPublicId },
+  );
 
   // Populate form when editing
   useEffect(() => {
     if (existingSubscription) {
       reset({
-        type: existingSubscription.type as "digest" | "changes",
+        type: existingSubscription.type,
         boardPublicId: existingSubscription.board?.publicId ?? "",
         listPublicId: existingSubscription.list?.publicId ?? "",
         labelPublicId: existingSubscription.label?.publicId ?? "",
@@ -253,6 +265,54 @@ export default function SubscriptionForm({
             ))}
           </select>
         </div>
+
+        {/* List Filter (only shown when board is selected) */}
+        {selectedBoardPublicId && selectedBoard?.lists && (
+          <div>
+            <label
+              className="mb-1 block text-sm font-medium"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
+              Filter by List (optional)
+            </label>
+            <select
+              {...register("listPublicId")}
+              className="w-full rounded-lg border border-light-300 bg-light-50 px-3 py-2 text-sm dark:border-dark-300 dark:bg-dark-50"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
+              <option value="">All lists</option>
+              {selectedBoard.lists.map((list) => (
+                <option key={list.publicId} value={list.publicId}>
+                  {list.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Label Filter (shown when board is selected) */}
+        {selectedBoardPublicId && selectedBoard?.labels && (
+          <div>
+            <label
+              className="mb-1 block text-sm font-medium"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
+              Filter by Label (optional)
+            </label>
+            <select
+              {...register("labelPublicId")}
+              className="w-full rounded-lg border border-light-300 bg-light-50 px-3 py-2 text-sm dark:border-dark-300 dark:bg-dark-50"
+              style={{ color: "var(--kan-pages-text)" }}
+            >
+              <option value="">All labels</option>
+              {selectedBoard.labels.map((label) => (
+                <option key={label.publicId} value={label.publicId}>
+                  {label.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Due Date Filter */}
         <div>
