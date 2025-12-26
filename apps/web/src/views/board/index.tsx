@@ -660,6 +660,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     onDragEnd={(result) => {
                       setDraggingOverListId(null);
                       onDragEnd(result);
+                      clearSelection();
                     }}
                   >
                     {viewMode === "calendar" ? (
