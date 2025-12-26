@@ -32,6 +32,12 @@ interface UseColorWheelReturn {
   handleMouseMove: (e: React.MouseEvent<HTMLCanvasElement>) => void;
   /** Handle mouse leave to reset hover preview */
   handleMouseLeave: () => void;
+  /** Handle touch start for mobile drag */
+  handleTouchStart: (e: React.TouchEvent<HTMLCanvasElement>) => void;
+  /** Handle touch move for mobile drag preview */
+  handleTouchMove: (e: React.TouchEvent<HTMLCanvasElement>) => void;
+  /** Handle touch end to select color on mobile */
+  handleTouchEnd: (e: React.TouchEvent<HTMLCanvasElement>) => void;
   /** Handle lightness slider change */
   handleLightnessChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /** Callback ref for canvas initialization */
@@ -48,7 +54,7 @@ export function useColorWheel({
   initialColor,
   onColorSelect,
   onColorPreview,
-   
+
   canvasSize: _canvasSize = 100,
 }: UseColorWheelOptions): UseColorWheelReturn {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -197,6 +203,73 @@ export function useColorWheel({
     [selectedColor, onColorPreview],
   );
 
+  // Handle touch start for mobile
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLCanvasElement>) => {
+      e.preventDefault(); // Prevent scrolling
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+
+      const color = getColorAtPosition(x, y, canvas);
+      if (color) {
+        setHoverColor(color);
+        setSelectedColor(color);
+        onColorPreview?.(color);
+        drawColorWheel(canvas);
+      }
+    },
+    [getColorAtPosition, drawColorWheel, onColorPreview],
+  );
+
+  // Handle touch move for mobile drag preview
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent<HTMLCanvasElement>) => {
+      e.preventDefault(); // Prevent scrolling
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+
+      const color = getColorAtPosition(x, y, canvas);
+      if (color) {
+        setHoverColor(color);
+        setSelectedColor(color);
+        onColorPreview?.(color);
+        drawColorWheel(canvas);
+      }
+    },
+    [getColorAtPosition, drawColorWheel, onColorPreview],
+  );
+
+  // Handle touch end to finalize selection
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent<HTMLCanvasElement>) => {
+      e.preventDefault();
+      setHoverColor(null);
+      const canvas = canvasRef.current;
+      if (canvas) {
+        drawColorWheel(canvas);
+      }
+      // On touch end, if we have a selected color, confirm it
+      if (selectedColor) {
+        onColorSelect?.(selectedColor);
+      }
+    },
+    [drawColorWheel, selectedColor, onColorSelect],
+  );
+
   // Canvas ref callback for initialization
   const handleCanvasRef = useCallback(
     (canvas: HTMLCanvasElement | null) => {
@@ -216,6 +289,9 @@ export function useColorWheel({
     handleCanvasClick,
     handleMouseMove,
     handleMouseLeave,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     handleLightnessChange,
     handleCanvasRef,
     setSelectedColor,

@@ -28,6 +28,9 @@ export default function ListColorPicker({
     handleCanvasClick,
     handleMouseMove,
     handleMouseLeave,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     handleLightnessChange,
     handleCanvasRef,
   } = useColorWheel({
@@ -89,7 +92,10 @@ export default function ListColorPicker({
             onClick={handleCanvasClick}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="cursor-crosshair rounded-full"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className="cursor-crosshair touch-none rounded-full"
           />
 
           {/* Current color preview and hex input */}
