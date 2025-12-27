@@ -44,21 +44,28 @@ export default function ThemePresetSelector({
                   : "border-light-300 hover:border-light-500 dark:border-dark-400 dark:hover:border-dark-500",
               )}
             >
-              {/* Color preview */}
-              <div className="flex h-16 overflow-hidden">
-                <span
-                  className="block h-full w-1/4"
-                  style={{ backgroundColor: colors.sidebar }}
+              {/* Color preview - using SVG for iOS compatibility */}
+              <svg
+                className="h-16 w-full"
+                viewBox="0 0 100 64"
+                preserveAspectRatio="none"
+              >
+                <rect
+                  x="0"
+                  y="0"
+                  width="25"
+                  height="64"
+                  fill={colors.sidebar}
                 />
-                <span
-                  className="block h-full w-1/2"
-                  style={{ backgroundColor: colors.pages }}
+                <rect x="25" y="0" width="50" height="64" fill={colors.pages} />
+                <rect
+                  x="75"
+                  y="0"
+                  width="25"
+                  height="64"
+                  fill={colors.boardBackground}
                 />
-                <span
-                  className="block h-full w-1/4"
-                  style={{ backgroundColor: colors.boardBackground }}
-                />
-              </div>
+              </svg>
 
               {/* Label */}
               <div
