@@ -84,8 +84,10 @@ export default function MobileCalendarView({
   const containerRef = useRef<HTMLDivElement>(null);
   const todayRowRef = useRef<HTMLDivElement>(null);
   const hasScrolledToToday = useRef(false);
-  const prevPastDays = useRef(pastDays);
-  const pendingScrollAdjust = useRef(false);
+
+  // For scroll anchoring when prepending
+  const scrollHeightBeforeUpdate = useRef<number | null>(null);
+  const scrollTopBeforeUpdate = useRef<number>(0);
 
   // Generate the list of days to display (past + today + future)
   const visibleDays = useMemo(() => {
@@ -138,16 +140,15 @@ export default function MobileCalendarView({
 
   // Adjust scroll position after prepending past days
   useLayoutEffect(() => {
-    if (pendingScrollAdjust.current && containerRef.current) {
-      const addedDays = pastDays - prevPastDays.current;
-      if (addedDays > 0) {
-        // Each row is approximately 60px, adjust scroll by the number of added rows
-        const rowHeight = 60;
-        containerRef.current.scrollTop += addedDays * rowHeight;
-      }
-      pendingScrollAdjust.current = false;
+    const container = containerRef.current;
+    if (container && scrollHeightBeforeUpdate.current !== null) {
+      // Calculate how much content was added at the top
+      const heightDiff =
+        container.scrollHeight - scrollHeightBeforeUpdate.current;
+      // Restore scroll position by adding the height difference
+      container.scrollTop = scrollTopBeforeUpdate.current + heightDiff;
+      scrollHeightBeforeUpdate.current = null;
     }
-    prevPastDays.current = pastDays;
   }, [pastDays]);
 
   // Scroll to today on initial mount
@@ -179,7 +180,9 @@ export default function MobileCalendarView({
 
     // Check if we need to load more past days (within buffer of top)
     if (container.scrollTop < BUFFER_THRESHOLD * 60) {
-      pendingScrollAdjust.current = true;
+      // Save current scroll state BEFORE updating
+      scrollHeightBeforeUpdate.current = container.scrollHeight;
+      scrollTopBeforeUpdate.current = container.scrollTop;
       setPastDays((prev) => prev + LOAD_MORE_DAYS);
     }
 
