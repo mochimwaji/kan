@@ -149,8 +149,7 @@ export default function MobileCalendarRow({
                     {...dragProvided.dragHandleProps}
                     onClick={(e) => onCardClick(e, card.publicId)}
                     className={twMerge(
-                      "transition-dnd-safe group relative flex flex-shrink-0 items-center rounded-lg px-3 py-2 text-xs",
-                      "max-w-[200px]",
+                      "transition-dnd-safe group relative flex w-[120px] flex-shrink-0 items-center rounded-lg px-3 py-2 text-xs",
                       listColor
                         ? ""
                         : "bg-light-200 hover:bg-light-300 dark:bg-dark-200 dark:hover:bg-dark-300",

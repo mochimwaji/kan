@@ -40,14 +40,12 @@ interface MobileUnscheduledRowProps {
 }
 
 /**
- * Horizontal scrollable row for unscheduled cards on mobile.
- * Cards are displayed as pill-shaped elements with truncated titles.
- * The entire row is a droppable area.
+ * Sticky horizontal scrollable row for unscheduled cards on mobile.
+ * Fixed above the calendar, not affected by calendar scroll.
  */
 export default function MobileUnscheduledRow({
   cards,
   onCardClick,
-  onExpandCard,
   selectedCardIds,
   deletingIds,
   draggingCardId,
@@ -63,12 +61,12 @@ export default function MobileUnscheduledRow({
           ref={provided.innerRef}
           {...provided.droppableProps}
           className={twMerge(
-            "border-b border-light-200 dark:border-dark-300",
+            "flex-shrink-0 border-b border-light-200 bg-light-50 px-6 dark:border-dark-300 dark:bg-dark-50",
             snapshot.isDraggingOver && "bg-blue-50 dark:bg-blue-900/20",
           )}
         >
           {/* Header */}
-          <div className="flex items-center gap-2 px-4 py-2">
+          <div className="flex items-center gap-2 py-2">
             <HiOutlineClipboardDocumentList
               className="h-4 w-4"
               style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
@@ -81,8 +79,8 @@ export default function MobileUnscheduledRow({
             </span>
           </div>
 
-          {/* Horizontal scrollable cards */}
-          <div className="flex min-h-[44px] gap-2 overflow-x-auto px-4 pb-3">
+          {/* Horizontal scrollable cards - fixed width pills */}
+          <div className="flex min-h-[44px] gap-2 overflow-x-auto pb-3">
             {cards.length === 0 ? (
               <span
                 className="py-2 text-xs italic"
@@ -126,8 +124,7 @@ export default function MobileUnscheduledRow({
                         {...dragProvided.dragHandleProps}
                         onClick={(e) => onCardClick(e, card.publicId)}
                         className={twMerge(
-                          "transition-dnd-safe relative flex flex-shrink-0 items-center rounded-full px-3 py-1.5 text-xs",
-                          "max-w-[150px]",
+                          "transition-dnd-safe relative flex w-[120px] flex-shrink-0 items-center rounded-full px-3 py-1.5 text-xs",
                           listColor
                             ? ""
                             : "bg-light-200 hover:bg-light-300 dark:bg-dark-200 dark:hover:bg-dark-300",
