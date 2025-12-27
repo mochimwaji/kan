@@ -36,7 +36,7 @@ export default function Dropdown({
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items
-              className="fixed inset-x-4 top-1/2 z-50 w-auto -translate-y-1/2 rounded-md border border-light-200 p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-dark-400 md:absolute md:inset-x-auto md:right-0 md:top-auto md:mt-2 md:w-56 md:translate-y-0"
+              className="fixed left-1/2 top-auto z-50 mt-2 w-56 -translate-x-1/2 rounded-md border border-light-200 p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-dark-400 md:absolute md:left-auto md:right-0 md:translate-x-0"
               style={{ backgroundColor: "var(--kan-menu-bg)" }}
             >
               <div className="flex flex-col">

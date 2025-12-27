@@ -50,12 +50,16 @@ export default function ThemePresetSelector({
                   className="w-1/4 flex-shrink-0"
                   style={{ backgroundColor: colors.sidebar, minHeight: "4rem" }}
                   title={"Sidebar"}
-                />
+                >
+                  &nbsp;
+                </div>
                 <div
                   className="w-1/2 flex-shrink-0"
                   style={{ backgroundColor: colors.pages, minHeight: "4rem" }}
                   title={"Pages"}
-                />
+                >
+                  &nbsp;
+                </div>
                 <div
                   className="w-1/4 flex-shrink-0"
                   style={{
@@ -63,7 +67,9 @@ export default function ThemePresetSelector({
                     minHeight: "4rem",
                   }}
                   title={"Board"}
-                />
+                >
+                  &nbsp;
+                </div>
               </div>
 
               {/* Label */}
