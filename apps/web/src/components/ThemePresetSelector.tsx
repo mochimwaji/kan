@@ -45,31 +45,19 @@ export default function ThemePresetSelector({
               )}
             >
               {/* Color preview */}
-              <div className="flex h-16 min-h-[4rem]">
-                <div
-                  className="w-1/4 flex-shrink-0"
-                  style={{ backgroundColor: colors.sidebar, minHeight: "4rem" }}
-                  title={"Sidebar"}
-                >
-                  &nbsp;
-                </div>
-                <div
-                  className="w-1/2 flex-shrink-0"
-                  style={{ backgroundColor: colors.pages, minHeight: "4rem" }}
-                  title={"Pages"}
-                >
-                  &nbsp;
-                </div>
-                <div
-                  className="w-1/4 flex-shrink-0"
-                  style={{
-                    backgroundColor: colors.boardBackground,
-                    minHeight: "4rem",
-                  }}
-                  title={"Board"}
-                >
-                  &nbsp;
-                </div>
+              <div className="flex h-16 overflow-hidden">
+                <span
+                  className="block h-full w-1/4"
+                  style={{ backgroundColor: colors.sidebar }}
+                />
+                <span
+                  className="block h-full w-1/2"
+                  style={{ backgroundColor: colors.pages }}
+                />
+                <span
+                  className="block h-full w-1/4"
+                  style={{ backgroundColor: colors.boardBackground }}
+                />
               </div>
 
               {/* Label */}
