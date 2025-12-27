@@ -139,9 +139,9 @@ export default function Dashboard({
         className="relative flex h-screen flex-col md:p-3"
         style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
       >
-        {/* Mobile Header - z-50 to stay above sidebar */}
+        {/* Mobile Header */}
         <div
-          className="relative z-50 flex h-12 items-center justify-between border-b border-light-300 px-3 dark:border-dark-300 md:hidden"
+          className="flex h-12 items-center justify-between border-b border-light-300 px-3 dark:border-dark-300 md:hidden"
           style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
         >
           <button
@@ -184,10 +184,10 @@ export default function Dashboard({
         </div>
 
         <div className="flex h-[calc(100dvh-4.5rem)] min-h-0 w-full md:h-[calc(100dvh-1.5rem)]">
-          {/* Mobile sidebar backdrop - covers full screen including header */}
+          {/* Mobile sidebar backdrop */}
           {isSideNavOpen && (
             <div
-              className="fixed inset-0 z-40 bg-black/30 md:hidden"
+              className="fixed inset-0 z-30 bg-black/30 md:hidden"
               onClick={closeSideNav}
             />
           )}
