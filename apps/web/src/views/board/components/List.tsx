@@ -276,10 +276,7 @@ export default function List({
                   aria-hidden="true"
                 />
               </button>
-              <div
-                className="relative mr-1 inline-block"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <div className="relative mr-1 inline-block">
                 <Dropdown
                   items={[
                     {

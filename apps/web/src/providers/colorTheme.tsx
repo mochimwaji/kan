@@ -106,16 +106,6 @@ export const ColorThemeProvider: React.FC<{ children: ReactNode }> = ({
   // Apply colors when they change or theme mode changes
   useEffect(() => {
     applyColorsToDocument(themeColors, activeTheme === "dark");
-
-    // Update meta theme-color for mobile status bar
-    const colors =
-      themeColors.preset === "custom"
-        ? themeColors
-        : getPresetColors(themeColors.preset, activeTheme);
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
-      metaThemeColor.setAttribute("content", colors.sidebar);
-    }
   }, [themeColors, activeTheme]);
 
   const setThemeColors = useCallback((colors: ThemeColors) => {

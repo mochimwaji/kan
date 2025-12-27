@@ -139,9 +139,9 @@ export default function Dashboard({
         className="relative flex h-screen flex-col md:p-3"
         style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
       >
-        {/* Mobile Header */}
+        {/* Mobile Header - z-50 to stay above sidebar */}
         <div
-          className="flex h-12 items-center justify-between border-b border-light-300 px-3 dark:border-dark-300 md:hidden"
+          className="relative z-50 flex h-12 items-center justify-between border-b border-light-300 px-3 dark:border-dark-300 md:hidden"
           style={{ backgroundColor: "var(--kan-sidebar-bg)" }}
         >
           <button
@@ -184,17 +184,16 @@ export default function Dashboard({
         </div>
 
         <div className="flex h-[calc(100dvh-4.5rem)] min-h-0 w-full md:h-[calc(100dvh-1.5rem)]">
-          {/* Mobile sidebar backdrop */}
+          {/* Mobile sidebar backdrop - covers full screen including header */}
           {isSideNavOpen && (
             <div
-              className="fixed inset-0 z-30 bg-black/30 md:hidden"
+              className="fixed inset-0 z-40 md:hidden"
               onClick={closeSideNav}
             />
           )}
-          {/* Mobile Left Sidebar - matches Mobile Right Panel structure */}
           <div
             ref={sideNavRef}
-            className={`fixed left-0 top-12 z-40 h-[calc(100dvh-3rem)] w-80 transform border-r border-light-300 bg-light-200 transition-transform duration-300 ease-in-out dark:border-dark-300 dark:bg-dark-100 md:relative md:top-0 md:h-full md:w-auto md:translate-x-0 md:border-r-0 md:bg-transparent md:dark:bg-transparent ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+            className={`fixed left-0 top-12 z-40 h-[calc(100dvh-3rem)] w-[80vw] max-w-[300px] transform transition-transform duration-300 ease-in-out md:relative md:top-0 md:h-full md:w-auto md:max-w-none md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}
           >
             <SideNavigation
               user={{ email: session?.user.email, image: session?.user.image }}

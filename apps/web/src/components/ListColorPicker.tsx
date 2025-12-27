@@ -65,10 +65,7 @@ export default function ListColorPicker({
   return (
     <>
       {/* Mobile overlay backdrop */}
-      <div
-        className="fixed inset-0 z-40 bg-black/20 md:hidden"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 z-40 md:hidden" onClick={onClose} />
       <div className="fixed inset-x-4 top-1/2 z-50 w-auto -translate-y-1/2 rounded-lg border border-light-300 bg-light-50 p-3 shadow-lg dark:border-dark-400 dark:bg-dark-200 md:absolute md:inset-x-auto md:left-0 md:top-full md:mt-1 md:w-56 md:translate-y-0">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs font-medium text-neutral-700 dark:text-dark-900">
