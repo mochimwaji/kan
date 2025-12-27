@@ -1,5 +1,5 @@
 import { Droppable } from "@hello-pangea/dnd";
-import { addDays, format, isSameDay } from "date-fns";
+import { addDays, format, isSameDay, subDays } from "date-fns";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 
@@ -49,12 +49,13 @@ interface MobileCalendarViewProps {
   draggingCardId: string | null;
 }
 
-const INITIAL_DAYS = 7;
+const INITIAL_PAST_DAYS = 7;
+const INITIAL_FUTURE_DAYS = 7;
 const LOAD_MORE_DAYS = 7;
 
 /**
- * Mobile calendar view with downward infinite scroll.
- * Starts from today and loads more future days as user scrolls down.
+ * Mobile calendar view with bi-directional infinite scroll.
+ * Shows past and future days, centered on today.
  */
 export default function MobileCalendarView({
   lists,
@@ -66,19 +67,27 @@ export default function MobileCalendarView({
 }: MobileCalendarViewProps) {
   const { dateLocale } = useLocalisation();
   const today = useMemo(() => new Date(), []);
-  const [daysToShow, setDaysToShow] = useState(INITIAL_DAYS);
+  const [pastDays, setPastDays] = useState(INITIAL_PAST_DAYS);
+  const [futureDays, setFutureDays] = useState(INITIAL_FUTURE_DAYS);
   const [headerDate, setHeaderDate] = useState(today);
   const containerRef = useRef<HTMLDivElement>(null);
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const topSentinelRef = useRef<HTMLDivElement>(null);
+  const bottomSentinelRef = useRef<HTMLDivElement>(null);
+  const todayRowRef = useRef<HTMLDivElement>(null);
 
-  // Generate the list of days to display
+  // Generate the list of days to display (past + today + future)
   const visibleDays = useMemo(() => {
     const days: Date[] = [];
-    for (let i = 0; i < daysToShow; i++) {
+    // Add past days (oldest first)
+    for (let i = pastDays; i > 0; i--) {
+      days.push(subDays(today, i));
+    }
+    // Add today and future days
+    for (let i = 0; i < futureDays; i++) {
       days.push(addDays(today, i));
     }
     return days;
-  }, [today, daysToShow]);
+  }, [today, pastDays, futureDays]);
 
   // Build a map of date -> cards for quick lookup
   const cardsByDate = useMemo(() => {
@@ -115,20 +124,25 @@ export default function MobileCalendarView({
     return map;
   }, [lists]);
 
-  // Load more days when sentinel is visible
-  const loadMoreDays = useCallback(() => {
-    setDaysToShow((prev) => prev + LOAD_MORE_DAYS);
+  // Load more past days
+  const loadMorePastDays = useCallback(() => {
+    setPastDays((prev) => prev + LOAD_MORE_DAYS);
   }, []);
 
-  // Intersection observer for infinite scroll
+  // Load more future days
+  const loadMoreFutureDays = useCallback(() => {
+    setFutureDays((prev) => prev + LOAD_MORE_DAYS);
+  }, []);
+
+  // Intersection observer for top sentinel (past days)
   useEffect(() => {
-    const sentinel = sentinelRef.current;
+    const sentinel = topSentinelRef.current;
     if (!sentinel) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting) {
-          loadMoreDays();
+          loadMorePastDays();
         }
       },
       { rootMargin: "100px" },
@@ -136,7 +150,25 @@ export default function MobileCalendarView({
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [loadMoreDays]);
+  }, [loadMorePastDays]);
+
+  // Intersection observer for bottom sentinel (future days)
+  useEffect(() => {
+    const sentinel = bottomSentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          loadMoreFutureDays();
+        }
+      },
+      { rootMargin: "100px" },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMoreFutureDays]);
 
   // Track scroll to update header date
   useEffect(() => {
@@ -164,17 +196,16 @@ export default function MobileCalendarView({
 
   // Scroll to today
   const scrollToToday = useCallback(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.scrollTo({ top: 0, behavior: "smooth" });
-      setHeaderDate(today);
+    const todayRow = todayRowRef.current;
+    if (todayRow) {
+      todayRow.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [today]);
+  }, []);
 
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-light-200 px-4 py-3 dark:border-dark-300">
+      <div className="flex items-center justify-between border-b border-light-200 px-2 py-3 dark:border-dark-300">
         <div className="flex items-center gap-2">
           <HiOutlineCalendarDays className="h-5 w-5 text-light-600 dark:text-dark-800" />
           <h2
@@ -186,7 +217,7 @@ export default function MobileCalendarView({
         </div>
         <button
           onClick={scrollToToday}
-          className="rounded px-2 py-1 text-sm hover:bg-light-300 dark:hover:bg-dark-200"
+          className="rounded px-2 py-1 text-sm active:bg-light-300 dark:active:bg-dark-200"
           style={{ color: "var(--kan-pages-text)" }}
         >
           Today
@@ -195,6 +226,9 @@ export default function MobileCalendarView({
 
       {/* Scrollable day rows */}
       <div ref={containerRef} className="flex-1 overflow-y-auto">
+        {/* Top sentinel for loading past days */}
+        <div ref={topSentinelRef} className="h-1" />
+
         {visibleDays.map((day) => {
           const dateKey = format(day, "yyyy-MM-dd");
           const cardsForDay = cardsByDate.get(dateKey) ?? [];
@@ -207,7 +241,10 @@ export default function MobileCalendarView({
               type="CARD"
             >
               {(provided, snapshot) => (
-                <div data-date={dateKey}>
+                <div
+                  data-date={dateKey}
+                  ref={isToday ? todayRowRef : undefined}
+                >
                   <MobileCalendarRow
                     day={day}
                     cards={cardsForDay}
@@ -227,8 +264,8 @@ export default function MobileCalendarView({
           );
         })}
 
-        {/* Sentinel for infinite scroll */}
-        <div ref={sentinelRef} className="h-4" />
+        {/* Bottom sentinel for loading future days */}
+        <div ref={bottomSentinelRef} className="h-4" />
       </div>
     </div>
   );

@@ -148,11 +148,6 @@ export default function MobileCalendarRow({
                     {...dragProvided.draggableProps}
                     {...dragProvided.dragHandleProps}
                     onClick={(e) => onCardClick(e, card.publicId)}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onExpandCard(card.publicId);
-                    }}
                     className={twMerge(
                       "transition-dnd-safe group relative flex flex-shrink-0 items-center rounded-lg px-3 py-2 text-xs",
                       "max-w-[200px]",

@@ -52,7 +52,7 @@ export default function MobileUnscheduledRow({
   draggingCardId,
 }: MobileUnscheduledRowProps) {
   return (
-    <div className="border-t border-light-200 dark:border-dark-300">
+    <div className="border-b border-light-200 dark:border-dark-300">
       {/* Header */}
       <div className="flex items-center gap-2 px-4 py-2">
         <HiOutlineClipboardDocumentList
@@ -122,11 +122,6 @@ export default function MobileUnscheduledRow({
                         {...dragProvided.draggableProps}
                         {...dragProvided.dragHandleProps}
                         onClick={(e) => onCardClick(e, card.publicId)}
-                        onTouchEnd={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          onExpandCard(card.publicId);
-                        }}
                         className={twMerge(
                           "transition-dnd-safe relative flex flex-shrink-0 items-center rounded-full px-3 py-1.5 text-xs",
                           "max-w-[150px]",
