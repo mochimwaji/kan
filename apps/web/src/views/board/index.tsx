@@ -592,20 +592,21 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 </Tooltip>
               )}
               <Tooltip content={createListShortcutTooltipContent}>
-                <Button
-                  iconLeft={
-                    <HiOutlinePlusSmall
-                      className="-mr-0.5 h-5 w-5"
-                      aria-hidden="true"
-                    />
-                  }
+                <button
                   onClick={() => {
                     if (boardId) openNewListForm(boardId);
                   }}
                   disabled={!boardData}
+                  className="inline-flex items-center justify-center rounded-md border border-light-300 p-2 text-sm font-semibold shadow-sm transition-colors hover:opacity-80 disabled:opacity-50 dark:border-dark-300"
+                  style={{ backgroundColor: "var(--kan-button-bg)" }}
+                  aria-label="Add new list"
                 >
-                  {"New list"}
-                </Button>
+                  <HiOutlinePlusSmall
+                    className="h-5 w-5"
+                    style={{ color: "var(--kan-button-text)" }}
+                    aria-hidden="true"
+                  />
+                </button>
               </Tooltip>
               <BoardDropdown
                 isTemplate={!!isTemplate}
