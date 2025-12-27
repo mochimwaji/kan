@@ -520,7 +520,80 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 {`${isTemplate ? "Template" : "Board"} not found`}
               </p>
             )}
-            <div className="order-1 mb-4 flex items-center justify-end space-x-2 md:order-2 md:mb-0">
+
+            {/* Mobile toolbar - fixed bar below header */}
+            <div className="fixed inset-x-0 top-12 z-30 flex items-center justify-center gap-2 border-b border-light-300 bg-light-50 px-4 py-2 dark:border-dark-300 dark:bg-dark-50 md:hidden">
+              {!isTemplate && boardData && (
+                <>
+                  <VisibilityButton
+                    visibility={boardData.visibility ?? "private"}
+                    boardPublicId={boardId ?? ""}
+                    boardSlug={boardData.slug ?? ""}
+                    queryParams={queryParams}
+                    isLoading={!boardData}
+                    isAdmin={workspace.role === "admin"}
+                  />
+                  <Filters
+                    labels={boardData.labels}
+                    members={boardData.workspace.members.filter(
+                      (member) => member.user !== null,
+                    )}
+                    lists={boardData.allLists}
+                    position="left"
+                    isLoading={!boardData}
+                  />
+                </>
+              )}
+              {boardData && (
+                <button
+                  onClick={toggleViewMode}
+                  className="inline-flex items-center justify-center rounded-md border border-light-300 p-2 text-sm font-semibold shadow-sm transition-colors hover:opacity-80 dark:border-dark-300"
+                  style={{ backgroundColor: "var(--kan-button-bg)" }}
+                  aria-label={
+                    viewMode === "kanban"
+                      ? "Switch to Calendar view"
+                      : "Switch to Kanban view"
+                  }
+                >
+                  {viewMode === "kanban" ? (
+                    <HiOutlineCalendarDays
+                      className="h-5 w-5"
+                      style={{ color: "var(--kan-button-text)" }}
+                    />
+                  ) : (
+                    <HiBars4
+                      className="h-5 w-5"
+                      style={{ color: "var(--kan-button-text)" }}
+                    />
+                  )}
+                </button>
+              )}
+              <Button
+                iconLeft={
+                  <HiOutlinePlusSmall
+                    className="-mr-0.5 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                }
+                onClick={() => {
+                  if (boardId) openNewListForm(boardId);
+                }}
+                disabled={!boardData}
+              >
+                {"New list"}
+              </Button>
+              <BoardDropdown
+                isTemplate={!!isTemplate}
+                isLoading={!boardData}
+                boardPublicId={boardId ?? ""}
+                workspacePublicId={workspace.publicId}
+                quickDeleteEnabled={quickDeleteEnabled}
+                onToggleQuickDelete={toggleQuickDelete}
+              />
+            </div>
+
+            {/* Desktop toolbar - hidden on mobile */}
+            <div className="order-1 mb-4 hidden items-center justify-end space-x-2 md:order-2 md:mb-0 md:flex">
               {isTemplate && (
                 <div className="inline-flex cursor-default items-center justify-center whitespace-nowrap rounded-md border-[1px] border-light-300 bg-light-50 px-3 py-2 text-sm font-semibold text-light-950 shadow-sm dark:border-dark-300 dark:bg-dark-50 dark:text-dark-950">
                   <span className="mr-2">
