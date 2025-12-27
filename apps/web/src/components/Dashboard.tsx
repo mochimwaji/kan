@@ -193,7 +193,7 @@ export default function Dashboard({
           )}
           <div
             ref={sideNavRef}
-            className={`fixed left-0 top-12 z-40 h-[calc(100dvh-3rem)] w-[80vw] max-w-[300px] transform transition-transform duration-300 ease-in-out md:relative md:top-0 md:h-full md:w-auto md:max-w-none md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}
+            className={`fixed left-0 top-12 z-50 h-[calc(100dvh-3rem)] w-[80vw] max-w-[300px] transform transition-transform duration-300 ease-in-out md:relative md:top-0 md:z-auto md:h-full md:w-auto md:max-w-none md:translate-x-0 ${isSideNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} `}
           >
             <SideNavigation
               user={{ email: session?.user.email, image: session?.user.image }}
