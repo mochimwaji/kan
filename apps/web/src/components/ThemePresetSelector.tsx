@@ -112,7 +112,17 @@ export default function ThemePresetSelector({
           )}
         >
           {/* Custom preview with gradient */}
-          <div className="flex h-16 items-center justify-center bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 dark:from-pink-600 dark:via-purple-600 dark:to-indigo-600">
+          <div
+            style={{
+              width: "100%",
+              height: "4rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background:
+                "linear-gradient(to right, #f9a8d4, #c4b5fd, #a5b4fc)",
+            }}
+          >
             <span className="text-sm font-medium text-white drop-shadow-md">
               {"Custom"}
             </span>
