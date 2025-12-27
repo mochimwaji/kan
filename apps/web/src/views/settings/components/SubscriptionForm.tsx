@@ -196,7 +196,7 @@ export default function SubscriptionForm({
 
   return (
     <div
-      className="rounded-lg p-6"
+      className="rounded-lg p-4 sm:p-6"
       style={{ backgroundColor: "var(--kan-bg-default)" }}
     >
       <div className="mb-6 flex items-center justify-between">
@@ -204,7 +204,7 @@ export default function SubscriptionForm({
           className="text-lg font-semibold"
           style={{ color: "var(--kan-pages-text)" }}
         >
-          {isEditing ? "Edit Subscription" : "New Notification Subscription"}
+          {isEditing ? "Edit Subscription" : "New Subscription"}
         </h2>
         <button
           onClick={handleClose}
@@ -346,7 +346,7 @@ export default function SubscriptionForm({
           >
             Due Date Filter (optional)
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span
               className="text-sm"
               style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
@@ -359,7 +359,7 @@ export default function SubscriptionForm({
               placeholder="7"
               min="1"
               max="365"
-              className="w-20 rounded-lg border border-light-300 bg-light-50 px-3 py-2 text-sm dark:border-dark-300 dark:bg-dark-50"
+              className="w-16 rounded-lg border border-light-300 bg-light-50 px-2 py-2 text-sm dark:border-dark-300 dark:bg-dark-50 sm:w-20 sm:px-3"
               style={{ color: "var(--kan-pages-text)" }}
             />
             <span
@@ -382,7 +382,7 @@ export default function SubscriptionForm({
                 Schedule
               </h3>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label
                     className="mb-1 block text-sm"
@@ -431,7 +431,7 @@ export default function SubscriptionForm({
                 >
                   Frequency
                 </label>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span
                     className="text-sm"
                     style={{ color: "var(--kan-pages-text)", opacity: 0.7 }}
@@ -440,7 +440,7 @@ export default function SubscriptionForm({
                   </span>
                   <select
                     {...register("frequencyDays")}
-                    className="w-24 rounded-lg border border-light-300 bg-light-50 px-3 py-2 text-sm dark:border-dark-300 dark:bg-dark-50"
+                    className="w-20 rounded-lg border border-light-300 bg-light-50 px-2 py-2 text-sm dark:border-dark-300 dark:bg-dark-50 sm:w-24 sm:px-3"
                     style={{ color: "var(--kan-pages-text)" }}
                   >
                     <option value="1">1 day</option>
@@ -456,7 +456,7 @@ export default function SubscriptionForm({
         )}
 
         {/* Submit Buttons */}
-        <div className="flex justify-end gap-3 border-t border-light-300 pt-4 dark:border-dark-300">
+        <div className="flex flex-wrap justify-end gap-3 border-t border-light-300 pt-4 dark:border-dark-300">
           <Button type="button" variant="secondary" onClick={handleClose}>
             Cancel
           </Button>
