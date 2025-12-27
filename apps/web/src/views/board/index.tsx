@@ -520,7 +520,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 {`${isTemplate ? "Template" : "Board"} not found`}
               </p>
             )}
-            <div className="order-1 mb-4 flex items-center justify-center gap-1 overflow-x-auto md:order-2 md:mb-0 md:justify-end md:gap-0 md:space-x-2">
+            <div className="order-1 mb-4 flex flex-wrap items-center justify-center gap-1 md:order-2 md:mb-0 md:flex-nowrap md:justify-end md:gap-0 md:space-x-2">
               {isTemplate && (
                 <div className="inline-flex cursor-default items-center justify-center whitespace-nowrap rounded-md border-[1px] border-light-300 bg-light-50 px-3 py-2 text-sm font-semibold text-light-950 shadow-sm dark:border-dark-300 dark:bg-dark-50 dark:text-dark-950">
                   <span className="mr-2">

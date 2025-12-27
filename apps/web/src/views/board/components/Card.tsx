@@ -159,6 +159,11 @@ const Card = ({
             e.stopPropagation();
             onExpand();
           }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onExpand();
+          }}
           className={twMerge(
             "absolute right-1.5 top-1.5 z-10 rounded p-1 opacity-0 transition-opacity duration-150",
             "hover:bg-light-300 dark:hover:bg-dark-400",

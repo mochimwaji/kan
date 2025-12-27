@@ -11,7 +11,11 @@ export default function Dropdown({
   disabled?: boolean;
 }) {
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu
+      as="div"
+      className="relative inline-block text-left"
+      onClick={(e: React.MouseEvent) => e.stopPropagation()}
+    >
       <div>
         <Menu.Button
           disabled={disabled}
