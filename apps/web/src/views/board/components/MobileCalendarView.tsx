@@ -210,8 +210,8 @@ export default function MobileCalendarView({
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      {/* Header - aligned with board title padding */}
-      <div className="flex items-center justify-between px-6 py-3">
+      {/* Header */}
+      <div className="flex items-center justify-between py-3">
         <div className="flex items-center gap-2">
           <HiOutlineCalendarDays className="h-5 w-5 text-light-600 dark:text-dark-800" />
           <h2
@@ -231,7 +231,7 @@ export default function MobileCalendarView({
       </div>
 
       {/* Scrollable day rows */}
-      <div ref={containerRef} className="flex-1 overflow-y-auto px-6">
+      <div ref={containerRef} className="flex-1 overflow-y-auto">
         {visibleDays.map((day) => {
           const dateKey = format(day, "yyyy-MM-dd");
           const cardsForDay = cardsByDate.get(dateKey) ?? [];
@@ -242,6 +242,7 @@ export default function MobileCalendarView({
               key={dateKey}
               droppableId={`calendar-${dateKey}`}
               type="CARD"
+              direction="horizontal"
             >
               {(provided, snapshot) => (
                 <div

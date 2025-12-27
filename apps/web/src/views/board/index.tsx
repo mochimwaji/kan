@@ -676,7 +676,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                     {viewMode === "calendar" ? (
                       <div
                         key="calendar-view"
-                        className="animate-view-fade h-full px-8 pb-4"
+                        className="animate-view-fade h-full px-6 pb-4"
                       >
                         <CalendarView
                           lists={listsToRender}

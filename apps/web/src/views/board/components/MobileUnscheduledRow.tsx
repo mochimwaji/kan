@@ -42,6 +42,7 @@ interface MobileUnscheduledRowProps {
 /**
  * Sticky horizontal scrollable row for unscheduled cards on mobile.
  * Fixed above the calendar, not affected by calendar scroll.
+ * Themed to match app design with rounded corners.
  */
 export default function MobileUnscheduledRow({
   cards,
@@ -61,12 +62,19 @@ export default function MobileUnscheduledRow({
           ref={provided.innerRef}
           {...provided.droppableProps}
           className={twMerge(
-            "flex-shrink-0 border-b border-light-200 bg-light-50 px-6 dark:border-dark-300 dark:bg-dark-50",
-            snapshot.isDraggingOver && "bg-blue-50 dark:bg-blue-900/20",
+            "mb-3 flex-shrink-0 rounded-lg border border-light-200 dark:border-dark-300",
+            snapshot.isDraggingOver
+              ? "bg-blue-50 dark:bg-blue-900/20"
+              : "bg-light-100 dark:bg-dark-100",
           )}
+          style={{
+            backgroundColor: snapshot.isDraggingOver
+              ? undefined
+              : "var(--kan-board-bg)",
+          }}
         >
           {/* Header */}
-          <div className="flex items-center gap-2 py-2">
+          <div className="flex items-center gap-2 px-3 py-2">
             <HiOutlineClipboardDocumentList
               className="h-4 w-4"
               style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
@@ -80,7 +88,7 @@ export default function MobileUnscheduledRow({
           </div>
 
           {/* Horizontal scrollable cards - fixed width pills */}
-          <div className="flex min-h-[44px] gap-2 overflow-x-auto pb-3">
+          <div className="flex min-h-[44px] gap-2 overflow-x-auto px-3 pb-3">
             {cards.length === 0 ? (
               <span
                 className="py-2 text-xs italic"
