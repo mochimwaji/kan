@@ -1,33 +1,19 @@
-# Audit of /root/.gemini/antigravity/brain/afbef75c-00a8-4d7a-a56e-c7997cdf9fe2/implementation_plan.md.resolved
+# Audit of Implementation Plan
 
-## Critical Issues
+## Critical Findings
 
-### 1. Accessibility Violation: Viewport Zoom Disabled
-**Location:** Phase 2.1, `_app.tsx`, `viewport` object.
-**Issue:** Setting `userScalable: false` and `maximumScale: 1` prevents users from zooming. This violates WCAG 1.4.4 (Resize Text) and significantly degrades accessibility for visually impaired users.
-**Recommendation:** Remove these properties or set `userScalable: true` and `maximumScale: 5`. Modern mobile browsers handle zoom on inputs properly without these restrictions if `width=device-width` is set.
+### 1. Missing Data Fetching Strategy for Infinite Scroll
+**Issue:** The plan describes an infinite scroll UI that loads more days as the user scrolls, but it fails to address how *card data* will be fetched for these new days.
+**Impact:** The existing `CalendarView` likely fetches data in month-blocks based on a single "current date" or view range. A continuous infinite scroll across month boundaries requires a different fetching strategy (e.g., fetching ranges dynamically as they approach the viewport or triggering standard month fetches). Without this, the infinite scroll will render empty days without card data.
 
-### 2. High Risk: Service Worker Caching Strategy
-**Location:** Phase 4.2 / Phase 1.3
-**Issue:** A "Cache-first" strategy for the "App Shell" usually includes the main HTML document (`index.html` or `/`). If the HTML file is served Cache-First, users may never receive updates to the app (including new JS/CSS hashes) because the Service Worker will serve the old HTML from the cache indefinitely until the SW itself is updated and activated (which the old HTML might not trigger effectively if the check logic is cached).
-**Recommendation:** The HTML entry point navigation request should ALWAYS be **Network-First** or **Stale-While-Revalidate** (with a UI prompt to reload). Only hashed assets (JS, CSS chunks, images) should be Cache-First.
+### 2. Bi-directional Infinite Scroll Complexity
+**Issue:** The plan proposes scrolling "up/down" (bi-directional) starting from "Today".
+**Impact:** Prepending items (scrolling up to past days) in a scroll container changes the total scroll height, causing the user's viewport position to visibly "jump" unless the scroll offset is adjusted synchronously. The plan treats this as a generic "load more days" task. This is a significant technical risk that typically requires careful scroll position anchoring.
 
-### 3. UX Restriction: Orientation Lock
-**Location:** Phase 1.1, `manifest.json`
-**Issue:** `orientation: "portrait-primary"` locks the application to portrait mode.
-**Impact:** Kanban boards inherently require horizontal space for columns. Locking orientation prevents users on tablets or larger phones from rotating the device to view more columns, which is a critical use case for this specific application type.
-**Recommendation:** Remove the `orientation` property or change it to `any` to allow user preference.
+### 3. Drag and Drop Handler (`onDragEnd`) Compatibility
+**Issue:** The plan mentions adding new `Droppable` zones for mobile steps but excludes any updates to the `onDragEnd` handler code.
+**Impact:** Drag and drop is the core interaction. If the existing `onDragEnd` logic expects specific ID formats or container structures from the grid layout, the new lists will fail to persist moves. The plan must ensure the new droppable IDs are compatible with the existing logic, or explicit updates to the handler must be planned.
 
-## High Impact Implementation Notes
-
-### 4. Invalid JSON in Plan
-**Location:** Phase 1.1, `manifest.json`
-**Issue:** The plan shows comments inside the JSON array: `"icons": [/* 192x192, 512x512, maskable */]`.
-**Impact:** `JSON.parse` will fail if this is copied directly. Standard JSON does not support comments.
-**Recommendation:** Ensure the implementation uses a valid JSON array or explicitly notes this is pseudo-code.
-
-### 5. Layout Stability: Body Padding
-**Location:** Phase 2.2, `globals.css`
-**Issue:** `padding-top: env(safe-area-inset-top)` on `body`.
-**Impact:** If the app uses a fixed-position header (common in PWA/App-like layouts), adding padding to the body might not affect the header (which stays behind the notch) or might cause double-spacing if the header is relative.
-**Recommendation:** Verify if the padding should be applied to a specific layout container or if the fixed header needs the `padding-top` (or `top: env(safe-area-inset-top)`).
+### 4. Hydration Mismatches with Responsive Rendering
+**Issue:** The plan utilizes conditional rendering based on a "mobile breakpoint" check in `CalendarView.tsx`.
+**Impact:** If the application relies on Server-Side Rendering (SSR) (common in `apps/web` stacks), accessing `window` or media queries during the initial render will cause hydration mismatches between the server (which doesn't know the screen size) and the client. The plan needs to verify usage of a hydration-safe hook or use CSS-based hiding (`display: none` on desktop/mobile classes) to avoid this crash-prone error.

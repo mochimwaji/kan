@@ -11,7 +11,7 @@ import {
   startOfWeek,
   subMonths,
 } from "date-fns";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -21,6 +21,8 @@ import {
 import { useLocalisation } from "~/hooks/useLocalisation";
 import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import CalendarDay from "./CalendarDay";
+import MobileCalendarView from "./MobileCalendarView";
+import MobileUnscheduledRow from "./MobileUnscheduledRow";
 import UnscheduledSidebar from "./UnscheduledSidebar";
 
 interface CardData {
@@ -76,6 +78,18 @@ export default function CalendarView({
 }: CalendarViewProps) {
   const { dateLocale } = useLocalisation();
   const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Hydration-safe mobile detection
+  const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Navigation handlers
   const goToPreviousMonth = useCallback(() => {
@@ -203,6 +217,31 @@ export default function CalendarView({
 
   const today = new Date();
 
+  // Render mobile layout after hydration
+  if (isMounted && isMobile) {
+    return (
+      <div className="flex h-full flex-col">
+        <MobileCalendarView
+          lists={lists}
+          onCardClick={onCardClick}
+          onExpandCard={onExpandCard}
+          selectedCardIds={selectedCardIds}
+          deletingIds={deletingIds}
+          draggingCardId={draggingCardId}
+        />
+        <MobileUnscheduledRow
+          cards={unscheduledCards}
+          onCardClick={onCardClick}
+          onExpandCard={onExpandCard}
+          selectedCardIds={selectedCardIds}
+          deletingIds={deletingIds}
+          draggingCardId={draggingCardId}
+        />
+      </div>
+    );
+  }
+
+  // Desktop layout (also rendered on server for SSR)
   return (
     <div className="flex h-full gap-4">
       {/* Main Calendar Grid */}
