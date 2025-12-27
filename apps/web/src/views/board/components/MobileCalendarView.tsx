@@ -49,13 +49,15 @@ interface MobileCalendarViewProps {
   draggingCardId: string | null;
 }
 
-const INITIAL_PAST_DAYS = 7;
-const INITIAL_FUTURE_DAYS = 7;
-const LOAD_MORE_DAYS = 7;
+// Cache 2 months (60 days) in each direction initially
+const INITIAL_PAST_DAYS = 60;
+const INITIAL_FUTURE_DAYS = 60;
+// Load 1 month (30 days) more when approaching the edge
+const LOAD_MORE_DAYS = 30;
 
 /**
  * Mobile calendar view with bi-directional infinite scroll.
- * Shows past and future days, centered on today.
+ * Caches 2 months in each direction for smooth scrolling.
  */
 export default function MobileCalendarView({
   lists,
@@ -74,6 +76,7 @@ export default function MobileCalendarView({
   const topSentinelRef = useRef<HTMLDivElement>(null);
   const bottomSentinelRef = useRef<HTMLDivElement>(null);
   const todayRowRef = useRef<HTMLDivElement>(null);
+  const hasScrolledToToday = useRef(false);
 
   // Generate the list of days to display (past + today + future)
   const visibleDays = useMemo(() => {
@@ -134,6 +137,14 @@ export default function MobileCalendarView({
     setFutureDays((prev) => prev + LOAD_MORE_DAYS);
   }, []);
 
+  // Scroll to today on initial mount
+  useEffect(() => {
+    if (!hasScrolledToToday.current && todayRowRef.current) {
+      todayRowRef.current.scrollIntoView({ block: "start" });
+      hasScrolledToToday.current = true;
+    }
+  }, [visibleDays]);
+
   // Intersection observer for top sentinel (past days)
   useEffect(() => {
     const sentinel = topSentinelRef.current;
@@ -145,7 +156,7 @@ export default function MobileCalendarView({
           loadMorePastDays();
         }
       },
-      { rootMargin: "100px" },
+      { rootMargin: "200px" },
     );
 
     observer.observe(sentinel);
@@ -163,7 +174,7 @@ export default function MobileCalendarView({
           loadMoreFutureDays();
         }
       },
-      { rootMargin: "100px" },
+      { rootMargin: "200px" },
     );
 
     observer.observe(sentinel);
@@ -205,7 +216,7 @@ export default function MobileCalendarView({
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-light-200 px-2 py-3 dark:border-dark-300">
+      <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
           <HiOutlineCalendarDays className="h-5 w-5 text-light-600 dark:text-dark-800" />
           <h2

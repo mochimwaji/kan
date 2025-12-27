@@ -42,6 +42,7 @@ interface MobileUnscheduledRowProps {
 /**
  * Horizontal scrollable row for unscheduled cards on mobile.
  * Cards are displayed as pill-shaped elements with truncated titles.
+ * The entire row is a droppable area.
  */
 export default function MobileUnscheduledRow({
   cards,
@@ -52,42 +53,44 @@ export default function MobileUnscheduledRow({
   draggingCardId,
 }: MobileUnscheduledRowProps) {
   return (
-    <div className="border-b border-light-200 dark:border-dark-300">
-      {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-2">
-        <HiOutlineClipboardDocumentList
-          className="h-4 w-4"
-          style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
-        />
-        <span
-          className="text-xs font-medium"
-          style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
+    <Droppable
+      droppableId="calendar-unscheduled"
+      type="CARD"
+      direction="horizontal"
+    >
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          className={twMerge(
+            "border-b border-light-200 dark:border-dark-300",
+            snapshot.isDraggingOver && "bg-blue-50 dark:bg-blue-900/20",
+          )}
         >
-          Unscheduled ({cards.length})
-        </span>
-      </div>
+          {/* Header */}
+          <div className="flex items-center gap-2 px-4 py-2">
+            <HiOutlineClipboardDocumentList
+              className="h-4 w-4"
+              style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
+            />
+            <span
+              className="text-xs font-medium"
+              style={{ color: "var(--kan-pages-text)", opacity: 0.6 }}
+            >
+              Unscheduled ({cards.length})
+            </span>
+          </div>
 
-      {/* Horizontal scrollable cards */}
-      <Droppable
-        droppableId="calendar-unscheduled"
-        type="CARD"
-        direction="horizontal"
-      >
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className={twMerge(
-              "flex gap-2 overflow-x-auto px-4 pb-3",
-              snapshot.isDraggingOver && "bg-blue-50 dark:bg-blue-900/20",
-            )}
-          >
+          {/* Horizontal scrollable cards */}
+          <div className="flex min-h-[44px] gap-2 overflow-x-auto px-4 pb-3">
             {cards.length === 0 ? (
               <span
                 className="py-2 text-xs italic"
                 style={{ color: "var(--kan-pages-text)", opacity: 0.4 }}
               >
-                No unscheduled cards
+                {snapshot.isDraggingOver
+                  ? "Drop here to unschedule"
+                  : "No unscheduled cards"}
               </span>
             ) : (
               cards.map(({ card, listColor }, index) => {
@@ -156,8 +159,8 @@ export default function MobileUnscheduledRow({
             )}
             {provided.placeholder}
           </div>
-        )}
-      </Droppable>
-    </div>
+        </div>
+      )}
+    </Droppable>
   );
 }

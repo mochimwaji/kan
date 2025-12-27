@@ -100,8 +100,11 @@ export function useBoardDragAndDrop({
         return;
       }
 
-      const isCalendarDrop = destination.droppableId.startsWith("calendar-");
-      const isUnscheduledDrop = destination.droppableId === "unscheduled";
+      const isUnscheduledDrop =
+        destination.droppableId === "unscheduled" ||
+        destination.droppableId === "calendar-unscheduled";
+      const isCalendarDrop =
+        destination.droppableId.startsWith("calendar-") && !isUnscheduledDrop;
 
       if (isCalendarDrop || isUnscheduledDrop) {
         let newDueDate: Date | null = null;

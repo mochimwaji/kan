@@ -220,7 +220,7 @@ export default function CalendarView({
   // Render mobile layout after hydration
   if (isMounted && isMobile) {
     return (
-      <div className="flex h-full flex-col px-2">
+      <div className="flex h-full flex-col">
         <MobileUnscheduledRow
           cards={unscheduledCards}
           onCardClick={onCardClick}
