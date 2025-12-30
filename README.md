@@ -17,6 +17,7 @@ A self-hosted Kanban board application for personal/team use. Forked from [kanbn
 - 📁 **Local File Storage**: Avatars and attachments stored locally (no S3 required)
 - ✨ **Enhanced Animations**: Smooth transitions for page navigation and sidebar toggles
 - 📧 **Email Notifications**: Configurable digest and change notifications via SMTP
+- 📱 **Mobile & PWA**: Installable as PWA with touch-optimized calendar and offline support
 
 ## Quick Start (Docker)
 
@@ -109,6 +110,8 @@ See `.env.example` for the complete list.
 - ✅ **Theme Presets** - 7 predefined color themes
 - ✅ **Board Transitions** - Smooth animations between boards
 - ✅ **Multi-Card Drag** - Bulk update cards in calendar view
+- ✅ **Mobile Calendar** - Touch-optimized vertical day-row layout
+- ✅ **PWA Support** - Installable app with offline page and service worker
 
 ### Removed (for simpler self-hosting)
 

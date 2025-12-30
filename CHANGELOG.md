@@ -23,6 +23,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Calendar View**: Month calendar view for boards (`v` shortcut) with drag-and-drop rescheduling.
 - **Local File Storage**: Replaced S3 with local filesystem storage for avatars and attachments.
 - **Multi-Drag Calendar Support**: Atomic updates when dragging multiple cards to calendar dates.
+
+#### 📱 PWA & Mobile
+
+- **Progressive Web App (PWA)**: Installable app with service worker, offline page, and app icons.
+  - Network-first strategy for HTML, stale-while-revalidate for static assets
+  - Standalone display mode with custom theme color
+  - Apple touch icon and maskable icons for home screen
+- **Mobile Calendar View**: Vertical day-row layout optimized for mobile with bi-directional infinite scroll.
+- **Mobile Toolbar**: Floating toolbar for board view actions on mobile devices.
+- **Touch Drag Support**: Touch-friendly drag-and-drop for color wheel, lists, and cards.
+- **iOS Safe Area Support**: Proper padding for notched devices using `env(safe-area-inset-*)`.
+- **iOS Theme Color Fixes**: Dynamic status bar color matching theme presets.
+- **Pull-to-Refresh**: Native-feeling refresh on mobile notification views.
+- **Mobile List Selection**: Tap-to-select lists with visual feedback on mobile.
+- **Responsive Sidebar**: Collapsible sidebars optimized for mobile viewports.
 - **Email Notification System**: Custom SMTP-based notification system replacing Novu:
   - Notification subscription management in Settings UI
   - Configurable digest emails (daily/weekly) with card matching and filters

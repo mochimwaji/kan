@@ -236,6 +236,24 @@ const { opacity, triggerExit } = useTransitionState(300);
 
 **Note**: Do NOT use in board view (use `BoardTransitionProvider` instead).
 
+#### Mobile Views
+
+The application provides separate mobile-optimized views for calendar functionality:
+
+| Component              | Location                                      | Description                                   |
+| ---------------------- | --------------------------------------------- | --------------------------------------------- |
+| `MobileCalendarView`   | `views/board/components/MobileCalendarView`   | Vertical day-row layout with infinite scroll  |
+| `MobileCalendarRow`    | `views/board/components/MobileCalendarRow`    | Single day row with horizontal card scrolling |
+| `MobileUnscheduledRow` | `views/board/components/MobileUnscheduledRow` | Unscheduled cards row for mobile              |
+
+**Detecting Mobile**: Use the `useMediaQuery` hook:
+
+```typescript
+import { useMediaQuery } from "~/hooks/useMediaQuery";
+
+const isMobile = useMediaQuery("(max-width: 768px)");
+```
+
 #### Optimistic Update Helpers
 
 Use factory functions to create standardized tRPC mutation callbacks:
@@ -598,3 +616,6 @@ apps/web → @kan/api → @kan/db → @kan/shared
 | Theme Presets     | `apps/web/src/utils/themePresets.ts`          |
 | Color Utilities   | `apps/web/src/utils/colorUtils.ts`            |
 | Board Transitions | `apps/web/src/providers/board-transition.tsx` |
+| PWA Manifest      | `apps/web/public/manifest.json`               |
+| Service Worker    | `apps/web/public/sw.js`                       |
+| Offline Page      | `apps/web/public/offline.html`                |
